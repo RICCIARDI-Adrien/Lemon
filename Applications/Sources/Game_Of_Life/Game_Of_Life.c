@@ -153,22 +153,12 @@ static void ComputeNextWorldGeneration(void)
 	else MemoryCopyArea(Next_World, Current_World, sizeof(Current_World)); // Update current world
 }
 
-/** Wait for Periods_Count * 50ms.
- * @param Periods_Count How many periods of 50ms to wait.
- */
-/*static void Wait(int Periods_Count)
-{
-	time_t Final_Time = time(NULL) + Periods_Count;
-
-	while (time(NULL) < Final_Time);
-}*/
-
 //-------------------------------------------------------------------------------------------------
 // Public functions
 //-------------------------------------------------------------------------------------------------
 int main(void)
 {
-	int Wait_Time = 2; // 100ms
+	int Wait_Time = 2; // 100 ms
 
 	RandomInitialize();
 	CreateNewWorld();
@@ -209,6 +199,6 @@ int main(void)
 			}
 		}
 
-		if (Wait_Time > 0) SystemWait(Wait_Time); // Avoid a system call if there is no need to wait //Wait(Wait_Time);
+		if (Wait_Time > 0) SystemWait(Wait_Time); // Avoid a system call if there is no need to wait
 	}
 }
