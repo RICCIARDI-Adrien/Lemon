@@ -17,13 +17,13 @@ extern volatile unsigned int Timer_Counter;
 //------------------------------------------------------------------------------------------------------------------------------------
 // Public functions
 //------------------------------------------------------------------------------------------------------------------------------------
-/** Configure the timer 0 to generate an interrupt at a 50ms period rate. */
+/** Configure the timer 0 to generate an interrupt at a 50 ms period rate. */
 void TimerInitialize(void);
 
-/** Pause system and running application for the specified seconds. Maximum time jitter is 50ms.
- * @param Seconds_Count How many seconds to sleep.
+/** Pause system and running application for the specified periods of 50 ms.
+ * @param Periods_Count How many periods of 50 ms to wait.
  */
-void TimerSleep(unsigned int Seconds_Count);
+void TimerWait(unsigned int Periods_Count);
 
 /** Interrupt handler's interface, which is called directly by the kernel. */
 void TimerInterruptHandler(void);

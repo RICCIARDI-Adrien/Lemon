@@ -14,14 +14,14 @@
 /** Timer data port. */
 #define TIMER_PORT_DATA 0x40
 
-/** Frequency divider value to achieve a 50ms interrupt rate period. */
+/** Frequency divider value to achieve a 50 ms interrupt rate period. */
 #define TIMER_PERIOD_50_MS 59660
 
 //-------------------------------------------------------------------------------------------------------------------------------
 // Private variables
 //-------------------------------------------------------------------------------------------------------------------------------
-static volatile unsigned int Timer_Sleep_Counter;
-static volatile int Timer_Is_Sleep_Enabled = 0;
+static volatile unsigned int Timer_Wait_Counter;
+static volatile int Timer_Is_Wait_Enabled = 0;
 
 //-------------------------------------------------------------------------------------------------------------------------------
 // Public variable
@@ -46,11 +46,11 @@ void TimerInitialize(void)
 	ArchitectureIODelay();
 }
 
-void TimerSleep(unsigned int Seconds_Count)
+void TimerWait(unsigned int Periods_Count)
 {
 	unsigned int Current_Counter_Value;
 	
-	if (Seconds_Count > 0)
+	if (Periods_Count > 0)
 	{
 		// Interrupts are disabled when entering the interrupt vector
 		asm("sti");
@@ -60,10 +60,10 @@ void TimerSleep(unsigned int Seconds_Count)
 		while (Timer_Counter == Current_Counter_Value);
 		
 		// Enable sleeping counter
-		Timer_Sleep_Counter = Seconds_Count * 20; // Convert seconds to milliseconds assuming the timer is configured at a 50ms interrupt generation rate
-		Timer_Is_Sleep_Enabled = 1;
+		Timer_Wait_Counter = Periods_Count;
+		Timer_Is_Wait_Enabled = 1;
 		
-		while (Timer_Is_Sleep_Enabled);
+		while (Timer_Is_Wait_Enabled);
 	}
 }
 
@@ -72,9 +72,9 @@ void TimerInterruptHandler(void)
 	Timer_Counter++;
 	
 	// Handle sleeping remaining time
-	if (Timer_Is_Sleep_Enabled)
+	if (Timer_Is_Wait_Enabled)
 	{
-		Timer_Sleep_Counter--;
-		if (Timer_Sleep_Counter == 0) Timer_Is_Sleep_Enabled = 0;
+		Timer_Wait_Counter--;
+		if (Timer_Wait_Counter == 0) Timer_Is_Wait_Enabled = 0;
 	}
 }

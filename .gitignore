@@ -4,3 +4,4 @@
 *.img
 *.iso
 *.out
+Installer/Sources/Shell/Embedded_Files_Data.h

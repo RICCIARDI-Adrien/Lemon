@@ -48,15 +48,15 @@ typedef enum
 	 */
 	SYSTEM_CALL_TIMER_READ_VALUE,
 
-	/** Pause system and running application for the specified seconds. Maximum time jitter is 50ms.
+	/** Pause system and running application for the specified periods of 50 ms.
 	 * @param eax = 3
-	 * @param ebx = How many seconds to sleep.
+	 * @param ebx = How many periods of 50 ms to wait.
 	 * @param ecx = don't care
 	 * @param edx = don't care
 	 * @param esi = don't care
 	 * @return Nothing.
 	 */
-	SYSTEM_CALL_TIMER_SLEEP,
+	SYSTEM_CALL_TIMER_WAIT,
 
 	// UART
 	/** Initialize the Universal Asynchronous Receiver Transmitter (serial port) 0.

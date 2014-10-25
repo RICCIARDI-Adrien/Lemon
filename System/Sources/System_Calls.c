@@ -46,9 +46,9 @@ void SystemCallTimerReadValue(void)
 	Return_Value = Timer_Counter;
 }
 
-void SystemCallTimerSleep(void)
+void SystemCallTimerWait(void)
 {
-	TimerSleep(Integer_1);
+	TimerWait(Integer_1);
 }
 
 void SystemCallUARTInit(void)
@@ -179,7 +179,7 @@ TSystemCallHandler System_Calls_Handlers[] =
 	KernelStartShell, // SYSTEM_CALL_SYSTEM_EXIT_PROGRAM
 	SystemCallSystemGetUserMemorySize, // SYSTEM_CALL_SYSTEM_GET_USER_MEMORY_SIZE
 	SystemCallTimerReadValue, // SYSTEM_CALL_TIMER_READ_VALUE
-	SystemCallTimerSleep, // SYSTEM_CALL_TIMER_SLEEP
+	SystemCallTimerWait, // SYSTEM_CALL_TIMER_WAIT
 	SystemCallUARTInit, // SYSTEM_CALL_UART_INIT
 	SystemCallUARTReadByte, // SYSTEM_CALL_UART_READ_BYTE
 	SystemCallUARTWriteByte, // SYSTEM_CALL_UART_WRITE_BYTE

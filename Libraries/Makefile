@@ -12,13 +12,14 @@ OBJECTS_PATH = Objects
 SOURCES_PATH = Sources
 
 OBJECTS_FILE = $(OBJECTS_PATH)/File_Exists.o $(OBJECTS_PATH)/File_List_Initialize.o $(OBJECTS_PATH)/File_List_Next.o $(OBJECTS_PATH)/File_Size.o
-OBJECTS_KEYBOARD = $(OBJECTS_PATH)/Keyboard_Is_Key_Available.o $(OBJECTS_PATH)/Keyboard_Read_Char.o
+OBJECTS_KEYBOARD = $(OBJECTS_PATH)/Keyboard_Is_Key_Available.o $(OBJECTS_PATH)/Keyboard_Read_Character.o
+OBJECTS_MEMORY = $(OBJECTS_PATH)/Memory_Copy_Area.o $(OBJECTS_PATH)/Memory_Set_Area_Value.o
 OBJECTS_RANDOM = $(OBJECTS_PATH)/Random_Generate_Number.o $(OBJECTS_PATH)/Random_Initialize.o
 OBJECTS_SCREEN = $(OBJECTS_PATH)/Screen_Clear.o $(OBJECTS_PATH)/Screen_Display_Buffer.o $(OBJECTS_PATH)/Screen_Get_Cursor_Position.o $(OBJECTS_PATH)/Screen_Set_Background_Color.o $(OBJECTS_PATH)/Screen_Set_Cursor_Position.o $(OBJECTS_PATH)/Screen_Set_Font_Color.o $(OBJECTS_PATH)/Screen_Write_Character.o $(OBJECTS_PATH)/Screen_Write_Integer.o $(OBJECTS_PATH)/Screen_Write_String.o
 OBJECTS_STRING = $(OBJECTS_PATH)/String_Compare.o $(OBJECTS_PATH)/String_Convert_String_To_Unsigned_Integer.o $(OBJECTS_PATH)/String_Copy.o
-OBJECTS_SYSTEM = $(OBJECTS_PATH)/System_Program_Entry_Point.o
+OBJECTS_SYSTEM = $(OBJECTS_PATH)/System_Program_Entry_Point.o $(OBJECTS_PATH)/System_Wait.o
 OBJECTS_UART = $(OBJECTS_PATH)/UART_Initialize.o $(OBJECTS_PATH)/UART_Is_Data_Received.o $(OBJECTS_PATH)/UART_Read_Byte.o $(OBJECTS_PATH)/UART_Write_Byte.o
-OBJECTS = $(OBJECTS_FILE) $(OBJECTS_KEYBOARD) $(OBJECTS_RANDOM) $(OBJECTS_SCREEN) $(OBJECTS_STRING) $(OBJECTS_SYSTEM) $(OBJECTS_UART)
+OBJECTS = $(OBJECTS_FILE) $(OBJECTS_KEYBOARD) $(OBJECTS_MEMORY) $(OBJECTS_RANDOM) $(OBJECTS_SCREEN) $(OBJECTS_STRING) $(OBJECTS_SYSTEM) $(OBJECTS_UART)
 
 CC = gcc
 
@@ -51,8 +52,17 @@ $(OBJECTS_PATH)/File_Size.o: $(SOURCES_PATH)/File/File_Size.c $(INCLUDES_PATH)/F
 $(OBJECTS_PATH)/Keyboard_Is_Key_Available.o: $(SOURCES_PATH)/Keyboard/Keyboard_Is_Key_Available.c $(INCLUDES_PATH)/Keyboard.h $(INCLUDES_PATH)/System.h
 	$(CC) $(CCFLAGS) $(SOURCES_PATH)/Keyboard/Keyboard_Is_Key_Available.c -o $(OBJECTS_PATH)/Keyboard_Is_Key_Available.o
 
-$(OBJECTS_PATH)/Keyboard_Read_Char.o: $(SOURCES_PATH)/Keyboard/Keyboard_Read_Char.c $(INCLUDES_PATH)/Keyboard.h $(INCLUDES_PATH)/System.h
-	$(CC) $(CCFLAGS) $(SOURCES_PATH)/Keyboard/Keyboard_Read_Char.c -o $(OBJECTS_PATH)/Keyboard_Read_Char.o
+$(OBJECTS_PATH)/Keyboard_Read_Character.o: $(SOURCES_PATH)/Keyboard/Keyboard_Read_Character.c $(INCLUDES_PATH)/Keyboard.h $(INCLUDES_PATH)/System.h
+	$(CC) $(CCFLAGS) $(SOURCES_PATH)/Keyboard/Keyboard_Read_Character.c -o $(OBJECTS_PATH)/Keyboard_Read_Character.o
+	
+#--------------------------------------------------------------------------------------------------
+# Memory
+#--------------------------------------------------------------------------------------------------
+$(OBJECTS_PATH)/Memory_Copy_Area.o: $(SOURCES_PATH)/Memory/Memory_Copy_Area.c $(INCLUDES_PATH)/Memory.h $(INCLUDES_PATH)/System.h
+	$(CC) $(CCFLAGS) $(SOURCES_PATH)/Memory/Memory_Copy_Area.c -o $(OBJECTS_PATH)/Memory_Copy_Area.o
+	
+$(OBJECTS_PATH)/Memory_Set_Area_Value.o: $(SOURCES_PATH)/Memory/Memory_Set_Area_Value.c $(INCLUDES_PATH)/Memory.h $(INCLUDES_PATH)/System.h
+	$(CC) $(CCFLAGS) $(SOURCES_PATH)/Memory/Memory_Set_Area_Value.c -o $(OBJECTS_PATH)/Memory_Set_Area_Value.o
 
 #--------------------------------------------------------------------------------------------------
 # Random
@@ -111,6 +121,9 @@ $(OBJECTS_PATH)/Screen_Write_String.o: $(SOURCES_PATH)/Screen/Screen_Write_Strin
 # This is the equivalent of the C runtime code, it must not be optimized out to preserve the system executable magic number (which is the beginning of the stack frame)
 $(OBJECTS_PATH)/System_Program_Entry_Point.o: $(SOURCES_PATH)/System/System_Program_Entry_Point.c $(INCLUDES_PATH)/System.h
 	$(CC) $(CCFLAGS) -O0 $(SOURCES_PATH)/System/System_Program_Entry_Point.c -o $(OBJECTS_PATH)/System_Program_Entry_Point.o
+	
+$(OBJECTS_PATH)/System_Wait.o: $(SOURCES_PATH)/System/System_Wait.c $(INCLUDES_PATH)/System.h
+	$(CC) $(CCFLAGS) $(SOURCES_PATH)/System/System_Wait.c -o $(OBJECTS_PATH)/System_Wait.o
 
 #--------------------------------------------------------------------------------------------------
 # UART

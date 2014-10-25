@@ -81,7 +81,7 @@ int KeyboardIsKeyAvailable(void);
  * @note This function is blocking.
  * @note The read character is not echoed on the terminal.
  */
-int KeyboardReadChar(void);
+int KeyboardReadCharacter(void);
 
 // TODO
 // KeyboardReadString

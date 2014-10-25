@@ -106,7 +106,7 @@ static int ReadUserNumber(void)
 	
 	while (1)
 	{
-		Character = KeyboardReadChar();
+		Character = KeyboardReadCharacter();
 		
 		// Backspace, delete last digit if possible
 		if (Character == '\b')

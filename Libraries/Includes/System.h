@@ -9,6 +9,7 @@
 // Gather all the includes the system provides, so there is no need to include them in a program
 #include <File.h>
 #include <Keyboard.h>
+#include <Memory.h>
 #include <Random.h>
 #include <Screen.h>
 #include <String.h>
@@ -72,5 +73,10 @@
  * @see System_Calls.h for all services description.
  */
 int SystemCall(TSystemCall Request_Code, int Integer_1, int Integer_2, void *Pointer_1, void *Pointer_2);
+
+/** Wait for a multiple of 50 ms.
+ * @param Periods_Count How many period of 50 ms to wait.
+ */
+void SystemWait(unsigned int Periods_Count);
 
 #endif

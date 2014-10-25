@@ -5,11 +5,7 @@
  * @version 1.1 : 16/06/2014, added oscillators and stable world detections.
  * @version 1.2 : 17/06/2014, optimized oscillators detection (can detect all two-state oscillators) and added faster and slower keys.
  */
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
 #include <System.h>
-#include <time.h>
 
 //-------------------------------------------------------------------------------------------------
 // Private constants
@@ -45,7 +41,7 @@ static void CreateNewWorld(void)
 	{
 		for (Column = 0; Column < WORLD_COLUMNS_COUNT; Column++)
 		{
-			if (rand() % 7 == 2) Cell_State = CELL_STATE_ALIVE;
+			if (RandomGenerateNumber() % 7 == 2) Cell_State = CELL_STATE_ALIVE;
 			else Cell_State = CELL_STATE_DEAD;
 
 			Current_World[Row][Column] = Cell_State;
@@ -53,7 +49,7 @@ static void CreateNewWorld(void)
 	}
 	
 	// Reset previous world to avoid erroneous comparisons
-	memset(Previous_World, 0, sizeof(Previous_World));
+	MemorySetAreaValue(Previous_World, sizeof(Previous_World), 0);
 }
 
 /** Display the current world. */
@@ -134,7 +130,7 @@ static void ComputeNextWorldGeneration(void)
 	{
 		for (Column = 0; Column < WORLD_COLUMNS_COUNT; Column++)
 		{
-			// Count cell neightbors
+			// Count cell neighbors
 			Alive_Cell_Neighbors_Count = GetAliveCellNeighborsCount(Row, Column);
 
 			// Decide whether the cell will be dead or alive
@@ -154,18 +150,18 @@ static void ComputeNextWorldGeneration(void)
 	
 	// Generate a new world if the current one is stable
 	if ((!Is_Old_Generation_Different) || (!Is_New_Generation_Different)) CreateNewWorld();
-	else memcpy(Current_World, Next_World, sizeof(Current_World)); // Update current world
+	else MemoryCopyArea(Next_World, Current_World, sizeof(Current_World)); // Update current world
 }
 
 /** Wait for Periods_Count * 50ms.
  * @param Periods_Count How many periods of 50ms to wait.
  */
-static void Wait(int Periods_Count)
+/*static void Wait(int Periods_Count)
 {
 	time_t Final_Time = time(NULL) + Periods_Count;
 
 	while (time(NULL) < Final_Time);
-}
+}*/
 
 //-------------------------------------------------------------------------------------------------
 // Public functions
@@ -174,7 +170,7 @@ int main(void)
 {
 	int Wait_Time = 2; // 100ms
 
-	srand(time(NULL));
+	RandomInitialize();
 	CreateNewWorld();
 	DisplayWorld();
 
@@ -186,12 +182,12 @@ int main(void)
 		// Did the user hit a key
 		if (KeyboardIsKeyAvailable())
 		{
-			switch (getchar())
+			switch (KeyboardReadCharacter())
 			{
 				// Exit program
 				case KEYBOARD_KEY_CODE_ESCAPE:
 					ScreenClear();
-					return EXIT_SUCCESS;
+					return 0;
 					
 				// Display the world faster
 				case 'f':
@@ -213,6 +209,6 @@ int main(void)
 			}
 		}
 
-		if (Wait_Time > 0) Wait(Wait_Time);
+		if (Wait_Time > 0) SystemWait(Wait_Time); // Avoid a system call if there is no need to wait //Wait(Wait_Time);
 	}
 }
