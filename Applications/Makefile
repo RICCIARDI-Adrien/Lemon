@@ -13,7 +13,7 @@ LD = ld
 SERIAL_PORT_SERVER = $(TOOLS_PATH)/Serial_Port_Server.out
 
 CCFLAGS += -nostdlib -fno-builtin -masm=intel -m32 -W -Wall -I$(LIBRARIES_PATH)/Includes -I$(SYSTEM_PATH)/Includes
-LDFLAGS = -T $(TOOLS_PATH)/Linker_Script.ld --strip-all -s -L$(LIBRARIES_PATH)/Binaries -lc -l:Libraries.a
+LDFLAGS = -T $(TOOLS_PATH)/Linker_Script.ld --strip-all -s -L$(LIBRARIES_PATH)/Binaries -l:Libraries.a
 SERIAL_PORT_SERVER_FLAGS = /tmp/Lemon_Serial_Port_Pipe 1
 
 # The following variables are shared by all sub-makefiles

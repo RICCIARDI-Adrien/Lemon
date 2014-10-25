@@ -123,9 +123,9 @@ typedef enum
 	 */
 	SYSTEM_CALL_SCREEN_WRITE_CHARACTER,
 
-	/** Write up to the specified number of characters to the kernel console screen.
+	/** Write an ASCIIZ string of characters to the kernel console screen.
 	 * @param eax = 0x12
-	 * @param ebx = Length of the string in bytes (including or not the terminating zero).
+	 * @param ebx = don't care
 	 * @param ecx = don't care
 	 * @param edx = Pointer on the string.
 	 * @param esi = don't care

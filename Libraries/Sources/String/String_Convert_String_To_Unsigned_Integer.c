@@ -1,15 +1,22 @@
-/** @file Random_Initialize.c
+/** @file String_Convert_String_To_Unsigned_Integer.c
  * @author Adrien RICCIARDI
  * @version 1.0 : 25/10/2014
  */
 #include <System.h>
 
-extern unsigned int Random_Libraries_Seed;
-
 //-------------------------------------------------------------------------------------------------
 // Public functions
 //-------------------------------------------------------------------------------------------------
-void RandomInitialize(void)
+unsigned int StringConvertStringToUnsignedInteger(char *String)
 {
-	Random_Libraries_Seed = SystemCall(SYSTEM_CALL_TIMER_READ_VALUE, 0, 0, NULL, NULL);
+	unsigned int Result = 0;
+	
+	while (*String != 0)
+	{
+		Result *= 10;
+		Result = Result + (*String - 48);
+		String++;
+	}
+	
+	return Result;
 }

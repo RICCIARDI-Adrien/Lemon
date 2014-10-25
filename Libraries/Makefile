@@ -14,10 +14,11 @@ SOURCES_PATH = Sources
 OBJECTS_FILE = $(OBJECTS_PATH)/File_Exists.o $(OBJECTS_PATH)/File_List_Initialize.o $(OBJECTS_PATH)/File_List_Next.o $(OBJECTS_PATH)/File_Size.o
 OBJECTS_KEYBOARD = $(OBJECTS_PATH)/Keyboard_Is_Key_Available.o $(OBJECTS_PATH)/Keyboard_Read_Char.o
 OBJECTS_RANDOM = $(OBJECTS_PATH)/Random_Generate_Number.o $(OBJECTS_PATH)/Random_Initialize.o
-OBJECTS_SCREEN = $(OBJECTS_PATH)/Screen_Clear.o $(OBJECTS_PATH)/Screen_Display_Buffer.o $(OBJECTS_PATH)/Screen_Get_Cursor_Position.o $(OBJECTS_PATH)/Screen_Set_Background_Color.o $(OBJECTS_PATH)/Screen_Set_Cursor_Position.o $(OBJECTS_PATH)/Screen_Set_Font_Color.o
+OBJECTS_SCREEN = $(OBJECTS_PATH)/Screen_Clear.o $(OBJECTS_PATH)/Screen_Display_Buffer.o $(OBJECTS_PATH)/Screen_Get_Cursor_Position.o $(OBJECTS_PATH)/Screen_Set_Background_Color.o $(OBJECTS_PATH)/Screen_Set_Cursor_Position.o $(OBJECTS_PATH)/Screen_Set_Font_Color.o $(OBJECTS_PATH)/Screen_Write_Character.o $(OBJECTS_PATH)/Screen_Write_Integer.o $(OBJECTS_PATH)/Screen_Write_String.o
+OBJECTS_STRING = $(OBJECTS_PATH)/String_Compare.o $(OBJECTS_PATH)/String_Convert_String_To_Unsigned_Integer.o $(OBJECTS_PATH)/String_Copy.o
 OBJECTS_SYSTEM = $(OBJECTS_PATH)/System_Program_Entry_Point.o
 OBJECTS_UART = $(OBJECTS_PATH)/UART_Initialize.o $(OBJECTS_PATH)/UART_Is_Data_Received.o $(OBJECTS_PATH)/UART_Read_Byte.o $(OBJECTS_PATH)/UART_Write_Byte.o
-OBJECTS = $(OBJECTS_FILE) $(OBJECTS_KEYBOARD) $(OBJECTS_SCREEN) $(OBJECTS_SYSTEM) $(OBJECTS_UART)
+OBJECTS = $(OBJECTS_FILE) $(OBJECTS_KEYBOARD) $(OBJECTS_RANDOM) $(OBJECTS_SCREEN) $(OBJECTS_STRING) $(OBJECTS_SYSTEM) $(OBJECTS_UART)
 
 CC = gcc
 
@@ -63,6 +64,18 @@ $(OBJECTS_PATH)/Random_Initialize.o: $(SOURCES_PATH)/Random/Random_Initialize.c 
 	$(CC) $(CCFLAGS) $(SOURCES_PATH)/Random/Random_Initialize.c -o $(OBJECTS_PATH)/Random_Initialize.o
 	
 #--------------------------------------------------------------------------------------------------
+# String
+#--------------------------------------------------------------------------------------------------
+$(OBJECTS_PATH)/String_Compare.o: $(SOURCES_PATH)/String/String_Compare.c $(INCLUDES_PATH)/String.h $(INCLUDES_PATH)/System.h
+	$(CC) $(CCFLAGS) $(SOURCES_PATH)/String/String_Compare.c -o $(OBJECTS_PATH)/String_Compare.o
+	
+$(OBJECTS_PATH)/String_Convert_String_To_Unsigned_Integer.o: $(SOURCES_PATH)/String/String_Convert_String_To_Unsigned_Integer.c $(INCLUDES_PATH)/String.h $(INCLUDES_PATH)/System.h
+	$(CC) $(CCFLAGS) $(SOURCES_PATH)/String/String_Convert_String_To_Unsigned_Integer.c -o $(OBJECTS_PATH)/String_Convert_String_To_Unsigned_Integer.o
+
+$(OBJECTS_PATH)/String_Copy.o: $(SOURCES_PATH)/String/String_Copy.c $(INCLUDES_PATH)/String.h $(INCLUDES_PATH)/System.h
+	$(CC) $(CCFLAGS) $(SOURCES_PATH)/String/String_Copy.c -o $(OBJECTS_PATH)/String_Copy.o
+	
+#--------------------------------------------------------------------------------------------------
 # Screen
 #--------------------------------------------------------------------------------------------------
 $(OBJECTS_PATH)/Screen_Clear.o: $(SOURCES_PATH)/Screen/Screen_Clear.c $(INCLUDES_PATH)/Screen.h $(INCLUDES_PATH)/System.h
@@ -82,6 +95,15 @@ $(OBJECTS_PATH)/Screen_Set_Cursor_Position.o: $(SOURCES_PATH)/Screen/Screen_Set_
 
 $(OBJECTS_PATH)/Screen_Set_Font_Color.o: $(SOURCES_PATH)/Screen/Screen_Set_Font_Color.c $(INCLUDES_PATH)/Screen.h $(INCLUDES_PATH)/System.h
 	$(CC) $(CCFLAGS) $(SOURCES_PATH)/Screen/Screen_Set_Font_Color.c -o $(OBJECTS_PATH)/Screen_Set_Font_Color.o
+	
+$(OBJECTS_PATH)/Screen_Write_Character.o: $(SOURCES_PATH)/Screen/Screen_Write_Character.c $(INCLUDES_PATH)/Screen.h $(INCLUDES_PATH)/System.h
+	$(CC) $(CCFLAGS) $(SOURCES_PATH)/Screen/Screen_Write_Character.c -o $(OBJECTS_PATH)/Screen_Write_Character.o
+	
+$(OBJECTS_PATH)/Screen_Write_Integer.o: $(SOURCES_PATH)/Screen/Screen_Write_Integer.c $(INCLUDES_PATH)/Screen.h $(INCLUDES_PATH)/System.h
+	$(CC) $(CCFLAGS) $(SOURCES_PATH)/Screen/Screen_Write_Integer.c -o $(OBJECTS_PATH)/Screen_Write_Integer.o
+	
+$(OBJECTS_PATH)/Screen_Write_String.o: $(SOURCES_PATH)/Screen/Screen_Write_String.c $(INCLUDES_PATH)/Screen.h $(INCLUDES_PATH)/System.h
+	$(CC) $(CCFLAGS) $(SOURCES_PATH)/Screen/Screen_Write_String.c -o $(OBJECTS_PATH)/Screen_Write_String.o
 
 #--------------------------------------------------------------------------------------------------
 # System

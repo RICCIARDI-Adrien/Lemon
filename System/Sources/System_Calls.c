@@ -81,14 +81,7 @@ void SystemCallScreenWriteCharacter(void)
 
 void SystemCallScreenWriteString(void)
 {
-	char *String = Pointer_1;
-	
-	while (Integer_1 > 0)
-	{
-		ScreenWriteChar(*String);
-		String++;
-		Integer_1--;
-	}
+	ScreenWriteString(Pointer_1);
 }
 
 void SystemCallScreenGetColor(void)

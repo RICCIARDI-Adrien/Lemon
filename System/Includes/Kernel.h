@@ -36,7 +36,7 @@
 // Userspace and user programs stuff
 /** Amount of RAM allowed to user space. */
 #define KERNEL_USER_SPACE_SIZE ((CONFIGURATION_SYSTEM_TOTAL_RAM_SIZE_MEGA_BYTES - 1) * 1024 * 1024)
-/** User space base address. This reserves the first MB of RAM for the kernel and the second for the shell. */
+/** User space base address. This reserves the first MB of RAM for the kernel. */
 #define KERNEL_USER_SPACE_ADDRESS 0x100000
 /** Instruction pointer start address for user program. */
 #define KERNEL_PROGRAM_ENTRY_POINT 0x100

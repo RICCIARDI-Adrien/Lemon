@@ -1,14 +1,19 @@
-/** @file UART_Write_Byte.c
- * Write a byte to the serial port.
+/** @file String_Compare.c
  * @author Adrien RICCIARDI
- * @version 1.0 : 24/12/2012
+ * @version 1.0 : 25/10/2014
  */
 #include <System.h>
 
 //-------------------------------------------------------------------------------------------------
 // Public functions
 //-------------------------------------------------------------------------------------------------
-void UARTWriteByte(unsigned char Byte)
+int StringCompare(char *String_1, char *String_2)
 {
-	SystemCall(SYSTEM_CALL_UART_WRITE_BYTE, Byte, 0, NULL, NULL);
+	while (*String_1 != 0)
+	{
+		if (*String_1 != *String_2) return 0;
+		String_1++;
+		String_2++;
+	}
+	return 1;
 }

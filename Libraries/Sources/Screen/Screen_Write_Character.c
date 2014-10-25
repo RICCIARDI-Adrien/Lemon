@@ -1,14 +1,13 @@
-/** @file UART_Write_Byte.c
- * Write a byte to the serial port.
+/** @file Screen_Write_Character.c
  * @author Adrien RICCIARDI
- * @version 1.0 : 24/12/2012
+ * @version 1.0 : 25/10/2014
  */
 #include <System.h>
 
 //-------------------------------------------------------------------------------------------------
 // Public functions
 //-------------------------------------------------------------------------------------------------
-void UARTWriteByte(unsigned char Byte)
+void ScreenWriteCharacter(char Character)
 {
-	SystemCall(SYSTEM_CALL_UART_WRITE_BYTE, Byte, 0, NULL, NULL);
+	SystemCall(SYSTEM_CALL_SCREEN_WRITE_CHARACTER, Character, 0, NULL, NULL);
 }

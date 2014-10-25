@@ -1,14 +1,18 @@
-/** @file UART_Write_Byte.c
- * Write a byte to the serial port.
+/** @file String_Copy.c
  * @author Adrien RICCIARDI
- * @version 1.0 : 24/12/2012
+ * @version 1.0 : 25/10/2014
  */
 #include <System.h>
 
 //-------------------------------------------------------------------------------------------------
 // Public functions
 //-------------------------------------------------------------------------------------------------
-void UARTWriteByte(unsigned char Byte)
+void StringCopy(char *String_Source, char *String_Destination)
 {
-	SystemCall(SYSTEM_CALL_UART_WRITE_BYTE, Byte, 0, NULL, NULL);
+	while (*String_Source != 0)
+	{
+		*String_Destination = *String_Source;
+		String_Destination++;
+		String_Source++;
+	}
 }

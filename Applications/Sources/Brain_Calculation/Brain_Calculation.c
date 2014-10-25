@@ -5,15 +5,16 @@
 #include <System.h>
 #include "Brain_Calculation.h"
 
-//-------------------------------------------------------------------------------------------------------------------------------
+//-------------------------------------------------------------------------------------------------
 // Private constants
-//-------------------------------------------------------------------------------------------------------------------------------
+//-------------------------------------------------------------------------------------------------
 /** This value can't be issued by the user input function. */
 #define BRAIN_CALCULATION_EXIT_CODE -1
 
-//-------------------------------------------------------------------------------------------------------------------------------
+//-------------------------------------------------------------------------------------------------
 // Private types
-//-------------------------------------------------------------------------------------------------------------------------------
+//-------------------------------------------------------------------------------------------------
+/** All the available game difficulties. */
 typedef enum
 {
 	Easy, Medium, Hard
@@ -22,6 +23,7 @@ typedef enum
 //-------------------------------------------------------------------------------------------------------------------------------
 // Private variables
 //-------------------------------------------------------------------------------------------------------------------------------
+/** The chosen difficulty level. */
 static TDifficultyLevel Difficulty_Level;
 
 //-------------------------------------------------------------------------------------------------------------------------------
@@ -76,7 +78,7 @@ static void ChooseCalculus(int *Pointer_First_Number, char *Pointer_Operator, in
 		*Pointer_Second_Number = RandomNumberRange(Minimum_Value, Maximum_Value);
 		
 		// Choose operator and compute calculus
-		switch (rand() % 3)
+		switch (RandomGenerateNumber() % 3)
 		{
 			case 0:
 				*Pointer_Operator = '+';
@@ -112,7 +114,7 @@ static int ReadUserNumber(void)
 			if (Digits_Count <= 0) continue;
 			Digits_Count--;
 			String[Digits_Count] = 0;
-			putchar('\b');
+			ScreenWriteCharacter('\b');
 		}
 		
 		// Enter, convert and return number only if user entered almost one digit
@@ -122,8 +124,8 @@ static int ReadUserNumber(void)
 			if (Digits_Count == 0) continue;
 			
 			String[Digits_Count] = 0;
-			putchar('\n');
-			return atoi(String);
+			ScreenWriteCharacter('\n');
+			return (int) StringConvertStringToUnsignedInteger(String);
 		}
 		
 		// Escape key, return exit code
@@ -134,8 +136,7 @@ static int ReadUserNumber(void)
 		{
 			String[Digits_Count] = Character;
 			Digits_Count++;
-			putchar(Character);
-			fflush(stdout);
+			ScreenWriteCharacter(Character);
 		}
 	}
 }
@@ -151,24 +152,29 @@ int main(int argc, char *argv[])
 	// Use selected difficulty level or select medium difficulty if user did not specify a difficulty
 	if (argc == 2)
 	{
-		if (strcmp(argv[1], "-e") == 0) Difficulty_Level = Easy;
-		else if (strcmp(argv[1], "-h") == 0) Difficulty_Level = Hard;
+		if (StringCompare(argv[1], "-e")) Difficulty_Level = Easy;
+		else if (StringCompare(argv[1], "-h")) Difficulty_Level = Hard;
 		else Difficulty_Level = Medium;
 	}
 	else Difficulty_Level = Medium;
 	
-	srand(time(NULL));
+	RandomInitialize();
 	
 	// Show instructions
-	printf(STRING_INSTRUCTIONS);
+	ScreenWriteString(STRING_INSTRUCTIONS);
 	
 	while (1)
 	{
 		// Show calculus
 		ChooseCalculus(&First_Number, &Operator, &Second_Number, &Result);
 		ScreenSetFontColor(SCREEN_COLOR_LIGHT_BLUE);
-		printf("   %d %c %d  =  ", First_Number, Operator, Second_Number);
-		fflush(stdout);
+		ScreenWriteString("   ");
+		ScreenWriteInteger(First_Number);
+		ScreenWriteCharacter(' ');
+		ScreenWriteCharacter(Operator);
+		ScreenWriteCharacter(' ');
+		ScreenWriteInteger(Second_Number);
+		ScreenWriteString("  =  ");
 		ScreenSetFontColor(SCREEN_COLOR_BLUE);
 		
 		// Get user's number
@@ -177,16 +183,18 @@ int main(int argc, char *argv[])
 		// Does the user want to exit program ?
 		if (Number == BRAIN_CALCULATION_EXIT_CODE)
 		{
-			putchar('\n');
-			printf(STRING_CORRECT_ANSWERS_COUNT, Correct_Results_Count);
-			return EXIT_SUCCESS;
+			ScreenWriteCharacter('\n');
+			ScreenWriteString(STRING_CORRECT_ANSWERS_COUNT_1);
+			ScreenWriteInteger(Correct_Results_Count);
+			ScreenWriteString(STRING_CORRECT_ANSWERS_COUNT_2);
+			return 0;
 		}
 		
 		// Check if user's result is correct
 		if (Number == Result)
 		{
 			ScreenSetFontColor(SCREEN_COLOR_GREEN);
-			printf(STRING_GOOD_RESULT);
+			ScreenWriteString(STRING_GOOD_RESULT);
 			ScreenSetFontColor(SCREEN_COLOR_BLUE);
 			
 			Correct_Results_Count++;
@@ -194,13 +202,17 @@ int main(int argc, char *argv[])
 		else
 		{
 			ScreenSetFontColor(SCREEN_COLOR_RED);
-			printf(STRING_BAD_RESULT, Result);
+			ScreenWriteString(STRING_BAD_RESULT_1);
+			ScreenWriteInteger(Result);
+			ScreenWriteString(STRING_BAD_RESULT_2);
 			
 			ScreenSetFontColor(SCREEN_COLOR_BLUE);
-			printf(STRING_CORRECT_ANSWERS_COUNT, Correct_Results_Count);
-			return EXIT_SUCCESS;
+			ScreenWriteString(STRING_CORRECT_ANSWERS_COUNT_1);
+			ScreenWriteInteger(Correct_Results_Count);
+			ScreenWriteString(STRING_CORRECT_ANSWERS_COUNT_2);
+			return 0;
 		}
 	}
 	
-	return EXIT_SUCCESS;
+	return 0;
 }

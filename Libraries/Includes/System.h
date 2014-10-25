@@ -11,6 +11,7 @@
 #include <Keyboard.h>
 #include <Random.h>
 #include <Screen.h>
+#include <String.h>
 #include <System_Calls.h> // System calls codes imported directly from kernel
 #include <UART.h>
 

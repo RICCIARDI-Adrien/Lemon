@@ -94,10 +94,22 @@ void ScreenSetCursorPosition(unsigned int Row, unsigned int Column);
  */
 void ScreenDisplayBuffer(unsigned char *Pointer_Buffer);
 
+/** Display a single character.
+ * @param Character The character to display.
+ */
+void ScreenWriteCharacter(char Character);
+
+/** Display an ASCIIZ string.
+ * @param String The string to display.
+ */
+void ScreenWriteString(char *String);
+
+/** Display the string representation of a signed integer.
+ * @param Integer The integer number to display.
+ */
+void ScreenWriteInteger(int Integer);
+
 // TODO
-// ScreenWriteCharacter
-// ScreenWriteInteger
 // ScreenWriteUnsignedInteger
-// ScreenWriteString
 
 #endif
