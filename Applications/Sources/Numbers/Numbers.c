@@ -2,10 +2,7 @@
  * @see Numbers.h for description.
  * @author Adrien RICCIARDI
  */
-#include <stdio.h>
-#include <stdlib.h>
 #include <System.h>
-#include <time.h>
 #include "Numbers.h"
 
 //-------------------------------------------------------------------------------------------------------------------------------
@@ -27,7 +24,7 @@ static int ReadUserNumber(void)
 	
 	while (1)
 	{
-		Character = KeyboardReadChar();
+		Character = KeyboardReadCharacter();
 		
 		// Backspace, delete last digit if possible
 		if (Character == '\b')
@@ -35,7 +32,7 @@ static int ReadUserNumber(void)
 			if (Digits_Count <= 0) continue;
 			Digits_Count--;
 			String[Digits_Count] = 0;
-			putchar('\b');
+			ScreenWriteCharacter('\b');
 		}
 		
 		// Enter, convert and return number only if user entered almost one digit
@@ -45,8 +42,8 @@ static int ReadUserNumber(void)
 			if (Digits_Count == 0) continue;
 			
 			String[Digits_Count] = 0;
-			putchar('\n');
-			return atoi(String);
+			ScreenWriteCharacter('\n');
+			return (int) StringConvertStringToUnsignedInteger(String);
 		}
 		
 		// Escape key, return exit code
@@ -57,8 +54,7 @@ static int ReadUserNumber(void)
 		{
 			String[Digits_Count] = Character;
 			Digits_Count++;
-			putchar(Character);
-			fflush(stdout);
+			ScreenWriteCharacter(Character);
 		}
 	}
 }
@@ -71,57 +67,66 @@ int main(void)
 	int Computer_Number, Player_Number, Attempts = 0;
 		
 	// Choose number
-	srand(time(NULL));
-	Computer_Number = rand() % MAXIMUM_NUMBER_VALUE + 1;
+	RandomInitialize();
+	Computer_Number = RandomGenerateNumber() % MAXIMUM_NUMBER_VALUE + 1;
 	
 	// Show instructions
-	printf(STRING_INSTRUCTIONS, MAXIMUM_NUMBER_VALUE, ATTEMPTS_COUNT);
+	ScreenWriteString(STRING_INSTRUCTIONS_1);
+	ScreenWriteInteger(MAXIMUM_NUMBER_VALUE);
+	ScreenWriteString(STRING_INSTRUCTIONS_2);
+	ScreenWriteInteger(ATTEMPTS_COUNT);
+	ScreenWriteString(STRING_INSTRUCTIONS_3);
 			
 	while (Attempts < ATTEMPTS_COUNT)
 	{
 		// Get player's number
 		ScreenSetFontColor(SCREEN_COLOR_LIGHT_BLUE);
-		printf(STRING_INSERT_NUMBER);
-		fflush(stdout);
+		ScreenWriteString(STRING_INSERT_NUMBER);
 		ScreenSetFontColor(SCREEN_COLOR_BLUE);
 		Player_Number = ReadUserNumber();
 				
 		// Quit game ?
 		if (Player_Number == NUMBERS_EXIT_CODE)
 		{
-			putchar('\n');
-			return EXIT_SUCCESS;
+			ScreenWriteCharacter('\n');
+			return 0;
 		}
 		
 		Attempts++;
 		if (Attempts >= ATTEMPTS_COUNT)
 		{
 			ScreenSetFontColor(SCREEN_COLOR_RED);
-			printf(STRING_PLAYER_LOST, Computer_Number);
-			return EXIT_SUCCESS;
+			ScreenWriteString(STRING_PLAYER_LOST_1);
+			ScreenWriteInteger(Computer_Number);
+			ScreenWriteString(STRING_PLAYER_LOST_2);
+			return 0;
 		}
 		
 		// Compare to computer number
 		if (Player_Number == Computer_Number) // Player won
 		{
 			ScreenSetFontColor(SCREEN_COLOR_GREEN);
-			printf(STRING_PLAYER_WON, Attempts);
-			return EXIT_SUCCESS;
+			ScreenWriteString(STRING_PLAYER_WON_1);
+			ScreenWriteInteger(Attempts);
+			ScreenWriteString(STRING_PLAYER_WON_2);
+			return 0;
 		}
 		else if (Player_Number < Computer_Number) // Too small
 		{
 			ScreenSetFontColor(SCREEN_COLOR_RED);
-			printf(STRING_NUMBER_TOO_SMALL);
+			ScreenWriteString(STRING_NUMBER_TOO_SMALL);
 		}
 		else // Too big
 		{
 			ScreenSetFontColor(SCREEN_COLOR_RED);
-			printf(STRING_NUMBER_TOO_BIG);
+			ScreenWriteString(STRING_NUMBER_TOO_BIG);
 		}
 
 		// Show remaining attempts
 		ScreenSetFontColor(SCREEN_COLOR_BLUE);
-		printf(STRING_REMAINING_ATTEMPTS, ATTEMPTS_COUNT - Attempts);
+		ScreenWriteString(STRING_REMAINING_ATTEMPTS_1);
+		ScreenWriteInteger(ATTEMPTS_COUNT - Attempts);
+		ScreenWriteString(STRING_REMAINING_ATTEMPTS_2);
 	}		
-	return EXIT_SUCCESS;
+	return 0;
 }

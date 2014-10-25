@@ -22,17 +22,22 @@
 	#error "TODO"
 // French strings
 #else
-	#define STRING_INSTRUCTIONS "Vous devez trouver un nombre compris entre 1 et %d.\n" \
-								"Pour cela, vous ne disposerez que de %d tentatives.\n" \
-								"Lorsque vous proposez un nombre, le jeu vous indique s'il est plus petit\n" \
-								"ou plus grand que celui recherch\202.\n" \
-								"Appuyez sur Echap pour quitter.\n\n"
+	#define STRING_INSTRUCTIONS_1 "Vous devez trouver un nombre compris entre 1 et "
+	#define STRING_INSTRUCTIONS_2 ".\n" \
+								  "Pour cela, vous ne disposerez que de "
+	#define STRING_INSTRUCTIONS_3 " tentatives.\n" \
+								  "Lorsque vous proposez un nombre, le jeu vous indique s'il est plus petit\n" \
+								  "ou plus grand que celui recherch\202.\n" \
+								  "Appuyez sur Echap pour quitter.\n\n"
 	#define STRING_INSERT_NUMBER "Votre nombre : "
-	#define STRING_PLAYER_LOST "Vous avez perdu ! Le nombre \202tait %d.\n"
-	#define STRING_PLAYER_WON "F\202licitations, vous avez gagn\202 en %d tentative(s) !\n"
+	#define STRING_PLAYER_LOST_1 "Vous avez perdu ! Le nombre \202tait "
+	#define STRING_PLAYER_LOST_2 ".\n"
+	#define STRING_PLAYER_WON_1 "F\202licitations, vous avez gagn\202 en "
+	#define STRING_PLAYER_WON_2 " tentative(s) !\n"
 	#define STRING_NUMBER_TOO_SMALL "Trop petit !\n"
 	#define STRING_NUMBER_TOO_BIG "Trop grand !\n"
-	#define STRING_REMAINING_ATTEMPTS "Il vous reste %d tentative(s).\n\n"
+	#define STRING_REMAINING_ATTEMPTS_1 "Il vous reste "
+	#define STRING_REMAINING_ATTEMPTS_2 " tentative(s).\n\n"
 #endif
 
 #endif
