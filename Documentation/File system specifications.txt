@@ -1,0 +1,12 @@
+File system specifications
+--------------------------
+
+Document author : Adrien RICCIARDI
+Document version : 1.0, 15/08/2013
+
+Specifications :
+----------------
+
+- Automatic file blocks allocation (fragmentation allowed).
+- Several files can be opened from the userspace in the same time, with different opening modes (read or write).
+- 

@@ -1,0 +1,5 @@
+- Pour supprimer le support des fichiers de taille supérieure à 2 Go (large 64 file) :
+  Commenter la ligne #define __LARGE64_FILE 1 située dans le fichier newlib/libc/include/sys/config.h
+
+- Pour compiler la bibliothèque :
+  Lancer le script Clean.sh présent dans le dossier de NewLib puis le script Compile.sh situé dans le même dossier.

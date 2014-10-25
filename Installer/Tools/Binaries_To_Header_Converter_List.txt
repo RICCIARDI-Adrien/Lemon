@@ -1,0 +1,16 @@
+../System/Objects/MBR.32b
+MBR
+../System/Objects/Kernel.32b
+Kernel
+../Applications/Binaries/Brain_Calculation.32b
+brain
+../Applications/Binaries/No_Match_Dealer.32b
+deal
+../Applications/Binaries/Game_Of_Life.32b
+life
+../Applications/Binaries/Numbers.32b
+numbers
+../Applications/Binaries/Rain.32b
+rain
+../Applications/Binaries/Text_Viewer.32b
+text

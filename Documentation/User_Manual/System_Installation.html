@@ -1,0 +1,62 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+	   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+	<head>
+		<title>System Installation</title>
+		<meta http-equiv="content-type" content="text/html;charset=utf-8" />
+	</head>
+
+	<body>
+		<h1 align="center">System Installation</h1>
+
+		<h2 id="ID_Virtual_Machine_Configuration">1. Configuring the virtual machine</h2>
+		<p>
+			All the above examples will use the <a href="https://www.virtualbox.org">Oracle VirtualBox</a> virtual machine emulator. You can of course use another virtual machine emulator, like <a href="http://wiki.qemu.org/Main_Page">qemu</a> or <a href="http://bochs.sourceforge.net">Bosch</a>, but you will have to find by yourself how to configure it.
+		</p>
+		<ol>
+			<li>Install and start <b>Oracle VirtualBox</b>.</li>
+			<li>Create a new virtual machine called <b>Lemon</b> :
+				<ul>
+					<li>Type : <b>Other</b></li>
+					<li>Version : <b>Other/Unknown</b></li>
+				</ul>
+			</li>
+			<li>Choose a <b>16 MB</b> RAM size.</li>
+			<li>Create a new virtual hard disk :
+				<ul>
+					<li>Hard drive file type : <b>VDI</b></li>
+					<li>Hard drive allocation mode : <b>dynamic</b></li>
+					<li>Hard disk size : <b>64 MB</b></li>
+				</ul>
+				The machine has been successfully created. It's time to configure it.
+			</li>
+			<li>Choose a video memory size of <b>2 MB</b>.</li>
+			<li>Click on the <b>Serial Ports</b> tab and enable the <b>serial port 1</b>.</li>
+			<li>Configure the following parameters :
+				<ul>
+					<li>Port Number : <b>COM1</b></li>
+					<li>Port Mode : <b>Host pipe</b></li>
+					<li>Check the <b>Create pipe</b> box</li>
+					<li>Port/File Path : <b>/tmp/Lemon_Serial_Port_Pipe</b></li>
+				</ul>
+			</li>
+			<li><b>ATTENTION : </b>be sure that the hard disk controller is an <b>IDE</b> one or Lemon won't be able to access to the hard disk.</li>
+		</ol>
+		<p>
+			The virtual machine is now fully operational.
+		</p>
+
+		<hr />
+		<h2 id="ID_System_Installation">2. Installing the system</h2>
+		<ol>
+			<li>Start the machine and use the <b>Lemon_Installer_CD_Image.iso</b> image when asked to insert a CDROM.</li>
+			<li>The installer will start. Install the system by typing <b>y</b> followed by the <b>Enter</b> key.</li>
+			<li>Remove the CDROM when the installer tells you to do that and reboot the virtual machine.</li>
+			<li>Lemon is now installed. Welcome !</li>
+		</ol>
+
+		<p>
+			<a href="../Manual.html">Return to main page</a>
+		</p>
+	</body>
+</html>

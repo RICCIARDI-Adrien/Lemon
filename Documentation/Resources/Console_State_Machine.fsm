@@ -1,0 +1,149 @@
+<?xml version='1.0'?>
+<!DOCTYPE qfsmproject SYSTEM 'qfsm.dtd'>
+<qfsmproject version="0.53" author="Qfsm">
+  <machine nummooreout="0" transfontitalic="0" draw_it="1" statefontsize="8" transfont="Helvetica" statefontitalic="0" author="" description="" version="" name="FSM" arrowtype="1" numbits="4" statefontweight="50" statefont="Helvetica" numin="0" transfontsize="8" transfontweight="50" type="2" numout="0" initialstate="0">
+    <outputnames_moore></outputnames_moore>
+    <inputnames></inputnames>
+    <outputnames></outputnames>
+    <itransition ypos="219" endx="355" xpos="295" endy="219"/>
+    <state pencolor="0" radius="40" description="" finalstate="0" moore_outputs="" ypos="219" code="0" xpos="395" linewidth="1">Receive character</state>
+    <state pencolor="0" radius="40" description="" finalstate="0" moore_outputs="" ypos="160" code="1" xpos="650" linewidth="1">Column = 0</state>
+    <state pencolor="0" radius="40" description="" finalstate="0" moore_outputs="" ypos="130" code="2" xpos="250" linewidth="1">Column=0; Row++</state>
+    <state pencolor="0" radius="40" description="" finalstate="0" moore_outputs="" ypos="130" code="4" xpos="90" linewidth="1">Scrolling;    Row=MAX_ROWS-1</state>
+    <state pencolor="0" radius="40" description="" finalstate="0" moore_outputs="" ypos="340" code="6" xpos="490" linewidth="1">Check superior bound</state>
+    <state pencolor="0" radius="40" description="" finalstate="0" moore_outputs="" ypos="340" code="5" xpos="670" linewidth="1">Check cursor location</state>
+    <state pencolor="0" radius="40" description="" finalstate="0" moore_outputs="" ypos="460" code="8" xpos="760" linewidth="1">Column--</state>
+    <state pencolor="0" radius="40" description="" finalstate="0" moore_outputs="" ypos="460" code="7" xpos="590" linewidth="1">Column=MAX_COLUMNS-1;      Row--</state>
+    <state pencolor="0" radius="40" description="" finalstate="0" moore_outputs="" ypos="550" code="11" xpos="670" linewidth="1">Display space character</state>
+    <state pencolor="0" radius="40" description="" finalstate="0" moore_outputs="" ypos="280" code="13" xpos="100" linewidth="1">Display character</state>
+    <state pencolor="0" radius="40" description="" finalstate="0" moore_outputs="" ypos="400" code="12" xpos="60" linewidth="1">Column++</state>
+    <state pencolor="0" radius="40" description="" finalstate="0" moore_outputs="" ypos="550" code="14" xpos="90" linewidth="1">Column=0; Row++</state>
+    <state pencolor="0" radius="40" description="" finalstate="0" moore_outputs="" ypos="560" code="15" xpos="250" linewidth="1">Scrolling;   Row=MAX_ROWS-1</state>
+    <transition c1x="462,5037904600854" c2y="99,84196418660107" c1y="149,4610160131988" description="" straight="0" type="2" ypos="185,0800678397965" endx="632,1114561800017" xpos="416,1999576001272" endy="124,2229123600034" c2x="549,8076233200435">
+      <from>0</from>
+      <to>1</to>
+      <inputs default="0" any="0" invert="0">\r</inputs>
+      <outputs></outputs>
+    </transition>
+    <transition c1x="327,3041292120149" c2y="178,4569449901551" c1y="188,1081899744968" description="" straight="1" type="2" ypos="197,7594349588386" endx="259,7014250014533" xpos="361,1054813172957" endy="168,8057000058133" c2x="293,5027771067341">
+      <from>0</from>
+      <to>2</to>
+      <inputs default="0" any="0" invert="0">\n</inputs>
+      <outputs></outputs>
+    </transition>
+    <transition c1x="283,8759448566401" c2y="255,2316141960896" c1y="243,1123390328527" description="" straight="1" type="2" ypos="230,9930638696158" endx="137,9473319220206" xpos="356,8402513239498" endy="267,3508893593265" c2x="210,9116383893303">
+      <from>0</from>
+      <to>13</to>
+      <inputs default="0" any="0" invert="0">not (\r or \n or \b)</inputs>
+      <outputs></outputs>
+    </transition>
+    <transition c1x="443,5702967456684" c2y="282,6752183123693" c1y="261,1275242647352" description="" straight="1" type="2" ypos="239,5798302171011" endx="472,1114561800017" xpos="429,2997170285018" endy="304,2229123600034" c2x="457,8408764628351">
+      <from>0</from>
+      <to>6</to>
+      <inputs default="0" any="0" invert="0">\b</inputs>
+      <outputs></outputs>
+    </transition>
+    <transition c1x="551,5978376602573" c2y="201,8796292145343" c1y="180,2173947826392" description="" straight="1" type="2" ypos="158,5551603507442" endx="434,7413069062562" xpos="610,0261030372577" endy="223,5418636464293" c2x="493,1695722832567">
+      <from>1</from>
+      <to>0</to>
+      <inputs default="0" any="0" invert="0"></inputs>
+      <outputs></outputs>
+    </transition>
+    <transition c1x="209,2706640503303" c2y="36,71798822648626" c1y="36,71798822648626" description="" straight="0" type="2" ypos="96,71798822648626" endx="112,1880078490092" xpos="227,8119921509908" endy="96,71798822648626" c2x="120,7293359496697">
+      <from>2</from>
+      <to>4</to>
+      <inputs default="0" any="0" invert="0">Row>=MAX_ROWS</inputs>
+      <outputs></outputs>
+    </transition>
+    <transition c1x="357,5059156963635" c2y="131,4311593022835" c1y="79,39102433080501" description="" straight="0" type="2" ypos="117,3508893593265" endx="376,6230832450493" xpos="287,9473319220206" endy="183,4712942737621" c2x="397,0644994707064">
+      <from>2</from>
+      <to>0</to>
+      <inputs default="0" any="0" invert="0">Row&lt;MAX_ROWS</inputs>
+      <outputs></outputs>
+    </transition>
+    <transition c1x="204,3524873314474" c2y="196,4271837239252" c1y="193,8160090402751" description="" straight="0" type="2" ypos="141,204834356625" endx="356,260282696126" xpos="128,3985896491081" endy="209,0383584075753" c2x="280,3063850137867">
+      <from>4</from>
+      <to>0</to>
+      <inputs default="0" any="0" invert="0"></inputs>
+      <outputs></outputs>
+    </transition>
+    <transition c1x="525,5726627421622" c2y="265,2079947673272" c1y="282,6039973836636" description="" straight="0" type="2" ypos="340" endx="636,7179882264862" xpos="530" endy="317,8119921509908" c2x="591,1453254843241">
+      <from>6</from>
+      <to>5</to>
+      <inputs default="0" any="0" invert="0">Cursor &lt;> (0,0)</inputs>
+      <outputs></outputs>
+    </transition>
+    <transition c1x="409,3745929653773" c2y="296,0735548102404" c1y="329,1050328634404" description="" straight="0" type="2" ypos="349,7014250014533" endx="408,7432612505413" xpos="451,1942999941867" endy="256,5649140848128" c2x="399,2981471871091">
+      <from>6</from>
+      <to>0</to>
+      <inputs default="0" any="0" invert="0">Cursor = (0,0)</inputs>
+      <outputs></outputs>
+    </transition>
+    <transition c1x="758,4502183763649" c2y="390,0897157212411" c1y="349,7457144634578" description="" straight="0" type="2" ypos="373,2820117735138" endx="760,000001" xpos="692,1880078490092" endy="420" c2x="753,988970639947">
+      <from>5</from>
+      <to>8</to>
+      <inputs default="0" any="0" invert="0">Column>0</inputs>
+      <outputs></outputs>
+    </transition>
+    <transition c1x="598,5640204513977" c2y="386,0342984123411" c1y="365,9116000057912" description="" straight="0" type="2" ypos="368,2842712474619" endx="580,2985749985467" xpos="641,7157287525381" endy="421,1942999941867" c2x="575,5472761683131">
+      <from>5</from>
+      <to>7</to>
+      <inputs default="0" any="0" invert="0">Column=0</inputs>
+      <outputs></outputs>
+    </transition>
+    <transition c1x="720,5719095841794" c2y="510,5719095841794" c1y="499,4280904158206" description="" straight="1" type="2" ypos="488,2842712474619" endx="698,2842712474619" xpos="731,7157287525381" endy="521,7157287525381" c2x="709,4280904158206">
+      <from>8</from>
+      <to>11</to>
+      <inputs default="0" any="0" invert="0"></inputs>
+      <outputs></outputs>
+    </transition>
+    <transition c1x="624,9549452863106" c2y="511,1092767508075" c1y="500,502824749077" description="" straight="1" type="2" ypos="489,8963727473464" endx="641,7157287525381" xpos="616,5745535531968" endy="521,7157287525381" c2x="633,3353370194243">
+      <from>7</from>
+      <to>11</to>
+      <inputs default="0" any="0" invert="0"></inputs>
+      <outputs></outputs>
+    </transition>
+    <transition c1x="499,458830827409" c2y="312,1326287749816" c1y="569,1364789948473" description="" straight="0" type="2" ypos="559,7014250014533" endx="390,1578249875584" xpos="631,1942999941867" endy="258,7058351020211" c2x="276,8290453048785">
+      <from>11</from>
+      <to>0</to>
+      <inputs default="0" any="0" invert="0"></inputs>
+      <outputs></outputs>
+    </transition>
+    <transition c1x="73,89727695962915" c2y="345,0386076388585" c1y="330,0772152777169" description="" straight="1" type="2" ypos="315,1158229165754" endx="60,00000133333333" xpos="80,84591477277706" endy="360" c2x="66,94863914648124">
+      <from>13</from>
+      <to>12</to>
+      <inputs default="0" any="0" invert="0"></inputs>
+      <outputs></outputs>
+    </transition>
+    <transition c1x="183,6946429658376" c2y="286,7151903374661" c1y="333,8505504578311" description="" straight="1" type="2" ypos="380,9859105781961" endx="360,7002829714982" xpos="95,19182296300725" endy="239,5798302171011" c2x="272,1974629686679">
+      <from>12</from>
+      <to>0</to>
+      <inputs default="0" any="0" invert="0">Column&lt;MAX_COLUMNS</inputs>
+      <outputs></outputs>
+    </transition>
+    <transition c1x="70,5047687276361" c2y="489,0838415752734" c1y="463,9447707905434" description="" straight="1" type="2" ypos="438,8057000058133" endx="72,11145618000168" xpos="69,70142500145332" endy="514,2229123600034" c2x="71,30811245381889">
+      <from>12</from>
+      <to>14</to>
+      <inputs default="0" any="0" invert="0">Column>=MAX_COLUMNS</inputs>
+      <outputs></outputs>
+    </transition>
+    <transition c1x="199,755728275593" c2y="337,2089476979779" c1y="428,8964855841066" description="" straight="1" type="2" ypos="520,5840234702353" endx="365,0564727930735" xpos="117,1053560168527" endy="245,5214098118492" c2x="282,4061005343332">
+      <from>14</from>
+      <to>0</to>
+      <inputs default="0" any="0" invert="0">Row&lt;MAX_ROWS</inputs>
+      <outputs></outputs>
+    </transition>
+    <transition c1x="145,8309387975116" c2y="647,4485433783068" c1y="636,6128155091517" description="" straight="0" type="2" ypos="585,7770876399966" endx="221,7157287525381" xpos="107,8885438199983" endy="588,2842712474619" c2x="173,7733337750248">
+      <from>14</from>
+      <to>15</to>
+      <inputs default="0" any="0" invert="0">Rows>=MAX_ROWS</inputs>
+      <outputs></outputs>
+    </transition>
+    <transition c1x="300,3982891987408" c2y="341,1542404957324" c1y="432,1719594124517" description="" straight="1" type="2" ypos="523,1896783291709" endx="369,8899019524087" xpos="265,6524828219068" endy="250,1365215790132" c2x="335,1440955755747">
+      <from>15</from>
+      <to>0</to>
+      <inputs default="0" any="0" invert="0"></inputs>
+      <outputs></outputs>
+    </transition>
+  </machine>
+</qfsmproject>
