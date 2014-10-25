@@ -11,10 +11,10 @@
 // Constants
 //-------------------------------------------------------------------------------------------------------------------------------
 // Raining speed
-#define RAINING_SPEED_SLOW 20
-#define RAINING_SPEED_NORMAL 10
-#define RAINING_SPEED_FAST 4
-#define RAINING_SPEED_ULTRAFAST 1
+#define RAINING_SPEED_SLOW 10
+#define RAINING_SPEED_NORMAL 4
+#define RAINING_SPEED_FAST 1
+#define RAINING_SPEED_ULTRAFAST 0
 
 // Speed command line parameters value
 #define PARAMETER_RAINING_SPEED_SLOW "-slow"
@@ -27,8 +27,10 @@
 	#error "TODO"
 // French strings
 #else
-	#define STRING_USAGE "Erreur : mauvais param\212tres.\nUtilisation : %s " PARAMETER_RAINING_SPEED_SLOW " | " PARAMETER_RAINING_SPEED_NORMAL " | " PARAMETER_RAINING_SPEED_FAST " | " PARAMETER_RAINING_SPEED_ULTRAFAST "\n"
-	#define STRING_STATISTICS "Gouttes de pluie %u ; Boucles %u"
+	#define STRING_USAGE_1 "Erreur : mauvais param\212tres.\nUtilisation : "
+	#define STRING_USAGE_2 " " PARAMETER_RAINING_SPEED_SLOW " | " PARAMETER_RAINING_SPEED_NORMAL " | " PARAMETER_RAINING_SPEED_FAST " | " PARAMETER_RAINING_SPEED_ULTRAFAST "\n"
+	#define STRING_STATISTICS_1 "Gouttes de pluie "
+	#define STRING_STATISTICS_2 " ; Boucles "
 #endif
 
 #endif
