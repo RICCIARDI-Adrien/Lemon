@@ -9,6 +9,7 @@
 // Gather all the includes the system provides, so there is no need to include them in a program
 #include <File.h>
 #include <Keyboard.h>
+#include <Random.h>
 #include <Screen.h>
 #include <System_Calls.h> // System calls codes imported directly from kernel
 #include <UART.h>

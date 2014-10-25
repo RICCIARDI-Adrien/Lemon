@@ -2,11 +2,7 @@
  * @see Brain_Calculation.h for description.
  * @author Adrien RICCIARDI
  */
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
 #include <System.h>
-#include <time.h>
 #include "Brain_Calculation.h"
 
 //-------------------------------------------------------------------------------------------------------------------------------
@@ -42,7 +38,7 @@ static int RandomNumberRange(int Minimum, int Maximum)
 	
 	do
 	{
-		Number = rand() % Maximum;
+		Number = RandomGenerateNumber() % Maximum;
 	} while (Number < Minimum);
 	
 	return Number;
