@@ -16,7 +16,7 @@ OBJECTS_KEYBOARD = $(OBJECTS_PATH)/Keyboard_Is_Key_Available.o $(OBJECTS_PATH)/K
 OBJECTS_MEMORY = $(OBJECTS_PATH)/Memory_Copy_Area.o $(OBJECTS_PATH)/Memory_Set_Area_Value.o
 OBJECTS_RANDOM = $(OBJECTS_PATH)/Random_Generate_Number.o $(OBJECTS_PATH)/Random_Initialize.o
 OBJECTS_SCREEN = $(OBJECTS_PATH)/Screen_Clear.o $(OBJECTS_PATH)/Screen_Display_Buffer.o $(OBJECTS_PATH)/Screen_Get_Cursor_Position.o $(OBJECTS_PATH)/Screen_Set_Background_Color.o $(OBJECTS_PATH)/Screen_Set_Cursor_Position.o $(OBJECTS_PATH)/Screen_Set_Font_Color.o $(OBJECTS_PATH)/Screen_Write_Character.o $(OBJECTS_PATH)/Screen_Write_Integer.o $(OBJECTS_PATH)/Screen_Write_String.o $(OBJECTS_PATH)/Screen_Write_Unsigned_Integer.o
-OBJECTS_STRING = $(OBJECTS_PATH)/String_Compare.o $(OBJECTS_PATH)/String_Convert_String_To_Unsigned_Integer.o $(OBJECTS_PATH)/String_Copy.o
+OBJECTS_STRING = $(OBJECTS_PATH)/String_Compare.o $(OBJECTS_PATH)/String_Convert_String_To_Unsigned_Integer.o $(OBJECTS_PATH)/String_Copy.o $(OBJECTS_PATH)/String_Size.o
 OBJECTS_SYSTEM = $(OBJECTS_PATH)/System_Program_Entry_Point.o $(OBJECTS_PATH)/System_Wait.o
 OBJECTS_UART = $(OBJECTS_PATH)/UART_Initialize.o $(OBJECTS_PATH)/UART_Is_Data_Received.o $(OBJECTS_PATH)/UART_Read_Byte.o $(OBJECTS_PATH)/UART_Write_Byte.o
 OBJECTS = $(OBJECTS_FILE) $(OBJECTS_KEYBOARD) $(OBJECTS_MEMORY) $(OBJECTS_RANDOM) $(OBJECTS_SCREEN) $(OBJECTS_STRING) $(OBJECTS_SYSTEM) $(OBJECTS_UART)
@@ -96,7 +96,10 @@ $(OBJECTS_PATH)/String_Convert_String_To_Unsigned_Integer.o: $(SOURCES_PATH)/Str
 
 $(OBJECTS_PATH)/String_Copy.o: $(SOURCES_PATH)/String/String_Copy.c $(INCLUDES_PATH)/String.h $(INCLUDES_PATH)/System.h
 	$(CC) $(CCFLAGS) $(SOURCES_PATH)/String/String_Copy.c -o $(OBJECTS_PATH)/String_Copy.o
-	
+
+$(OBJECTS_PATH)/String_Size.o: $(SOURCES_PATH)/String/String_Size.c $(INCLUDES_PATH)/String.h $(INCLUDES_PATH)/System.h
+	$(CC) $(CCFLAGS) $(SOURCES_PATH)/String/String_Size.c -o $(OBJECTS_PATH)/String_Size.o
+
 #--------------------------------------------------------------------------------------------------
 # Screen
 #--------------------------------------------------------------------------------------------------

@@ -28,4 +28,10 @@ void StringCopy(char *String_Source, char *String_Destination);
  */
 unsigned int StringConvertStringToUnsignedInteger(char *String);
 
+/** Retrieve the characters count in a string.
+ * @param String The string to get size.
+ * @return The size of the string in characters (not including the terminating zero).
+ */
+unsigned int StringSize(char *String);
+
 #endif

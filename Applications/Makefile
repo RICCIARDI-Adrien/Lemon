@@ -32,9 +32,9 @@ export LDFLAGS
 # Global rules
 #------------------------------------------------------------------------------------------------------------------------------
 #all: brain_calculation game_of_life no_match_dealer numbers rain tests text_viewer
-all: brain_calculation game_of_life no_match_dealer numbers rain text_viewer
+all: brain_calculation game_of_life help no_match_dealer numbers rain text_viewer
 
-clean: brain_calculation_clean game_of_life_clean no_match_dealer_clean numbers_clean rain_clean tests_clean text_viewer_clean
+clean: brain_calculation_clean game_of_life_clean help_clean no_match_dealer_clean numbers_clean rain_clean tests_clean text_viewer_clean
 
 # Compile the server program if it is not done yet
 $(SERIAL_PORT_SERVER): $(TOOLS_PATH)/Serial_Port_Server.c
@@ -65,6 +65,19 @@ game_of_life_clean:
 
 game_of_life_download: $(SERIAL_PORT_SERVER)
 	@$(SERIAL_PORT_SERVER) $(SERIAL_PORT_SERVER_FLAGS) $(BINARIES_PATH)/Game_Of_Life.32b
+
+#------------------------------------------------------------------------------------------------------------------------------
+# Help
+#------------------------------------------------------------------------------------------------------------------------------
+help:
+	@$(ECHO) "\033[33mCompiling Help...\033[0m"
+	@cd $(SOURCES_PATH)/Help && $(MAKE)
+
+help_clean:
+	@cd $(SOURCES_PATH)/Help && $(MAKE) clean
+
+help_download: $(SERIAL_PORT_SERVER)
+	@$(SERIAL_PORT_SERVER) $(SERIAL_PORT_SERVER_FLAGS) $(BINARIES_PATH)/Help.32b
 
 #------------------------------------------------------------------------------------------------------------------------------
 # No match dealer
