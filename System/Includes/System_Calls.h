@@ -69,7 +69,7 @@ typedef enum
 	 * @return ERROR_CODE_BAD_UART_PARAMETERS if bad parameters were provided.
 	 * @see Driver_UART.h for precisions about parity mode and baud rate constants.
 	 */
-	SYSTEM_CALL_UART_INIT,
+	SYSTEM_CALL_UART_INITIALIZE,
 
 	/** Read a byte from the UART.
 	 * @param eax = 5

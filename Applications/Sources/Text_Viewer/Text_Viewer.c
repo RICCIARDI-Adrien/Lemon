@@ -2,44 +2,38 @@
  * @see Text_Viewer.h for description.
  * @author Adrien RICCIARDI
  */
-#include <err.h>
-#include <stdio.h>
-#include <stdlib.h>
 #include <System.h>
-#include <unistd.h>
 #include "Text_Viewer.h"
 
-//-------------------------------------------------------------------------------------------------------------------------------
+//-------------------------------------------------------------------------------------------------
 // Private constants
-//-------------------------------------------------------------------------------------------------------------------------------
+//-------------------------------------------------------------------------------------------------
 /** The End Of Line arbitrary character. */
 #define TEXT_VIEWER_END_OF_LINE_CHARACTER 1 // Smiley character, so it's easy to find it if it is displayed
 
-//-------------------------------------------------------------------------------------------------------------------------------
+//-------------------------------------------------------------------------------------------------
 // Private variables
-//-------------------------------------------------------------------------------------------------------------------------------
+//-------------------------------------------------------------------------------------------------
 static char Buffer[TEXT_VIEWER_BUFFER_SIZE_BYTES];
 static unsigned int Current_Offset, File_Size_Bytes;
 
-//-------------------------------------------------------------------------------------------------------------------------------
+//-------------------------------------------------------------------------------------------------
 // Private functions
-//-------------------------------------------------------------------------------------------------------------------------------
+//-------------------------------------------------------------------------------------------------
 /** Try to load the whole file in memory and add new line markers where needed.
  * @param String_File_Name Name of the file to load.
  * @return 0 if the file was successfully loaded,
  * @return 1 if the file was not found,
  * @return 2 if the file is too big to fit in memory,
- * @return 3 if an error occured when reading the file.
+ * @return 3 if an error occurred when reading the file.
  */
 static int LoadFile(char *String_File_Name)
 {
-	FILE *File;
-	unsigned int i, Characters_Count = 0;
+	unsigned int File_ID, i, Characters_Count = 0, Read_Bytes_Count;
 	char Character;
 	
 	// Open the file
-	File = fopen(String_File_Name, "r");
-	if (File == NULL) return 1;
+	if (FileOpen(String_File_Name, FILE_OPENING_MODE_READ, &File_ID) != ERROR_CODE_NO_ERROR) return 1;
 	
 	// Get file size
 	File_Size_Bytes = FileSize(String_File_Name);
@@ -51,14 +45,14 @@ static int LoadFile(char *String_File_Name)
 		// Is there enough room in buffer to store the character ?
 		if (Current_Offset >= TEXT_VIEWER_BUFFER_SIZE_BYTES)
 		{
-			fclose(File);
+			FileClose(File_ID);
 			return 2;
 		}
 		
 		// Read a single character
-		if (fread(&Character, 1, 1, File) != 1)
+		if (FileRead(File_ID, &Character, 1, &Read_Bytes_Count) != ERROR_CODE_NO_ERROR)
 		{
-			fclose(File);
+			FileClose(File_ID);
 			return 3;
 		}
 		Characters_Count++;
@@ -85,7 +79,7 @@ static int LoadFile(char *String_File_Name)
 	File_Size_Bytes = Current_Offset;
 	Current_Offset = 0; // Reset buffer offset to display the text from the beginning
 	
-	fclose(File);
+	FileClose(File_ID);
 	return 0;
 }
 
@@ -135,7 +129,7 @@ static void DisplayNextLine(void)
 		{
 			// Exit if a new line has been found
 			case '\n':
-				putchar('\n');
+				ScreenWriteCharacter('\n');
 				return;
 				
 			// Ignore end of line markers has they are located after the SCREEN_WIDTH'th character, so they will appear at the beginning of the next line
@@ -144,17 +138,16 @@ static void DisplayNextLine(void)
 			
 			// Show the character
 			default:
-				putchar(Character);
+				ScreenWriteCharacter(Character);
 				Characters_Count++;
 				break;
 		}
 	}
-	fflush(stdout);
 }
 
-//-------------------------------------------------------------------------------------------------------------------------------
+//-------------------------------------------------------------------------------------------------
 // Public functions
-//-------------------------------------------------------------------------------------------------------------------------------
+//-------------------------------------------------------------------------------------------------
 int main(int argc, char *argv[])
 {
 	int i;
@@ -164,7 +157,9 @@ int main(int argc, char *argv[])
 	// Check parameters
 	if (argc != 2)
 	{
-		printf(STRING_ERROR_BAD_PARAMETERS, argv[0]);
+		ScreenWriteString(STRING_USAGE_1);
+		ScreenWriteString(argv[0]);
+		ScreenWriteString(STRING_USAGE_2);
 		return -1;
 	}
 	String_File_Name = argv[1];
@@ -173,16 +168,20 @@ int main(int argc, char *argv[])
 	switch (LoadFile(String_File_Name))
 	{
 		case 1:
-			printf(STRING_ERROR_FILE_NOT_FOUND, String_File_Name);
-			return EXIT_FAILURE;
+			ScreenWriteString(STRING_ERROR_FILE_NOT_FOUND_1);
+			ScreenWriteString(String_File_Name);
+			ScreenWriteString(STRING_ERROR_FILE_NOT_FOUND_2);
+			return -1;
 			
 		case 2:
-			printf(STRING_ERROR_FILE_TOO_BIG, sizeof(Buffer));
-			return EXIT_FAILURE;
+			ScreenWriteString(STRING_ERROR_FILE_TOO_BIG_1);
+			ScreenWriteUnsignedInteger(sizeof(Buffer));
+			ScreenWriteString(STRING_ERROR_FILE_TOO_BIG_2);
+			return -1;
 			
 		case 3:
-			printf(STRING_ERROR_READ_FAILED);
-			return EXIT_FAILURE;
+			ScreenWriteString(STRING_ERROR_READ_FAILED);
+			return -1;
 	}
 	
 	// Display the first lines
@@ -191,7 +190,7 @@ int main(int argc, char *argv[])
 	// Display text
 	while (1)
 	{
-		switch (KeyboardReadChar())
+		switch (KeyboardReadCharacter())
 		{
 			// Display next line
 			case KEYBOARD_KEY_CODE_ARROW_DOWN:
@@ -216,7 +215,7 @@ int main(int argc, char *argv[])
 			case KEYBOARD_KEY_CODE_ESCAPE:
 				// Go to next line if needed
 				ScreenGetCursorPosition(&Row, &Column);
-				if (Column > 0) putchar('\n');
+				if (Column > 0) ScreenWriteCharacter('\n');
 				return 0;
 		}
 	}

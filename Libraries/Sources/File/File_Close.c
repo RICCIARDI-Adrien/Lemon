@@ -1,14 +1,13 @@
-/** @file UART_Initialize.c
- * Initialize the RS-232 serial port.
+/** @file File_Close.c
  * @author Adrien RICCIARDI
- * @version 1.0 : 24/12/2012
+ * @version 1.0 : 26/10/2014
  */
 #include <System.h>
 
 //-------------------------------------------------------------------------------------------------
 // Public functions
 //-------------------------------------------------------------------------------------------------
-int UARTInitialize(unsigned char Frame_Format, unsigned short Data_Rate_Bauds)
+void FileClose(unsigned int File_ID)
 {
-	return SystemCall(SYSTEM_CALL_UART_INITIALIZE, Frame_Format, Data_Rate_Bauds, NULL, NULL);
+	SystemCall(SYSTEM_CALL_FILE_CLOSE, File_ID, 0, NULL, NULL);
 }

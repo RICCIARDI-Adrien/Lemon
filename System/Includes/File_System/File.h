@@ -91,7 +91,7 @@ int FileOpen(char *File_Name, char Opening_Mode, unsigned int *File_Descriptor_I
 
 /** Read data from a previously opened file.
  * @param File_Descriptor_Index The file descriptor identifying the file.
- * @param Buffer The buffer in which to store read data.
+ * @param Pointer_Buffer The buffer to store read data to.
  * @param Bytes_Count How many bytes to read. If the supplied number is larger than the file size, less bytes will be read.
  * @param Pointer_Bytes_Read On output, will contain the real number of read bytes.
  * @return ERROR_CODE_NO_ERROR if one or more bytes were successfully read or if 0 byte was requested to read,
@@ -99,11 +99,11 @@ int FileOpen(char *File_Name, char Opening_Mode, unsigned int *File_Descriptor_I
  * @return ERROR_CODE_FILE_NOT_OPENED if the file is not opened,
  * @return ERROR_CODE_BAD_OPENING_MODE if the file is not opened in read mode.
  */
-int FileRead(unsigned int File_Descriptor_Index, unsigned char *Buffer, unsigned int Bytes_Count, unsigned int *Pointer_Bytes_Read);
+int FileRead(unsigned int File_Descriptor_Index, unsigned char *Pointer_Buffer, unsigned int Bytes_Count, unsigned int *Pointer_Bytes_Read);
 
 /** Write data to an opened file.
  * @param File_Descriptor_Index The file descriptor identifying the file.
- * @param Buffer The buffer containing the data to write.
+ * @param Pointer_Buffer The buffer containing the data to write.
  * @param Bytes_Count How many bytes to write.
  * @return ERROR_CODE_NO_ERROR if all bytes were successfully written,
  * @return ERROR_CODE_BAD_FILE_DESCRIPTOR if the supplied file descriptor exceeds the maximum number of files that the kernel can open at the same time,
@@ -111,7 +111,7 @@ int FileRead(unsigned int File_Descriptor_Index, unsigned char *Buffer, unsigned
  * @return ERROR_CODE_BAD_OPENING_MODE if the file is not opened in write mode,
  * @return ERROR_CODE_BAT_FULL if there no more free blocks in BAT and the data could not be written.
  */
-int FileWrite(unsigned int File_Descriptor_Index, unsigned char *Buffer, unsigned int Bytes_Count);
+int FileWrite(unsigned int File_Descriptor_Index, unsigned char *Pointer_Buffer, unsigned int Bytes_Count);
 
 /** Close a file. 
  * @param File_Descriptor_Index Index of the opened file (do nothing if the file was not opened).

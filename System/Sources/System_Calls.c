@@ -51,9 +51,9 @@ void SystemCallTimerWait(void)
 	TimerWait(Integer_1);
 }
 
-void SystemCallUARTInit(void)
+void SystemCallUARTInitialize(void)
 {
-	Return_Value = UARTInit(Integer_1, Integer_2);
+	Return_Value = UARTInitialize(Integer_1, Integer_2);
 }
 
 void SystemCallUARTReadByte(void)
@@ -180,7 +180,7 @@ TSystemCallHandler System_Calls_Handlers[] =
 	SystemCallSystemGetUserMemorySize, // SYSTEM_CALL_SYSTEM_GET_USER_MEMORY_SIZE
 	SystemCallTimerReadValue, // SYSTEM_CALL_TIMER_READ_VALUE
 	SystemCallTimerWait, // SYSTEM_CALL_TIMER_WAIT
-	SystemCallUARTInit, // SYSTEM_CALL_UART_INIT
+	SystemCallUARTInitialize, // SYSTEM_CALL_UART_INITIALIZE
 	SystemCallUARTReadByte, // SYSTEM_CALL_UART_READ_BYTE
 	SystemCallUARTWriteByte, // SYSTEM_CALL_UART_WRITE_BYTE
 	SystemCallUARTIsDataReceived, // SYSTEM_CALL_UART_IS_DATA_RECEIVED

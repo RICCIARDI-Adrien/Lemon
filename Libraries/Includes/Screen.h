@@ -109,7 +109,9 @@ void ScreenWriteString(char *String);
  */
 void ScreenWriteInteger(int Integer);
 
-// TODO
-// ScreenWriteUnsignedInteger
+/** Display the string representation of an unsigned integer.
+ * @param Unsigned_Integer The unsigned integer number to display.
+ */
+void ScreenWriteUnsignedInteger(unsigned int Unsigned_Integer);
 
 #endif

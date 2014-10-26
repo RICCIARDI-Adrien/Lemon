@@ -9,7 +9,7 @@
 //-------------------------------------------------------------------------------------------------
 void ScreenWriteInteger(int Integer)
 {
-	char String_Number[12]; // The minus sign + 10 digits (the maximum digits count for a 32-bit number) + termi$
+	char String_Number[12]; // The minus sign + 10 digits (the maximum digits count for a 32-bit number) + terminating zero
 	int Temp, Display_Index = 0, Is_Number_Negative = 0;
 	
 	// Avoid conversion if the number is zero
@@ -30,12 +30,12 @@ void ScreenWriteInteger(int Integer)
 		}
 		
 		// Convert number
-		Display_Index = sizeof(String_Number) - 1; // Start from the end of the string as the following loop$
+		Display_Index = sizeof(String_Number) - 1; // Start from the end of the string as the following loop will reverse the digits
 		while (Integer > 0)
 		{
 			Display_Index--; // Decrement first to make the loop stops on an existing character
 			Temp = Integer / 10; // Integer division
-			String_Number[Display_Index] = (Integer - (Temp * 10)) + 48; // Convert last character to AS$
+			String_Number[Display_Index] = (Integer - (Temp * 10)) + 48; // Convert last character to ASCII
 			Integer = Temp;
 		}
 		

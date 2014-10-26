@@ -9,9 +9,9 @@
 #ifndef H_DRIVER_UART_H
 #define H_DRIVER_UART_H
 
-//------------------------------------------------------------------------------------------------------------------------------------
+//-------------------------------------------------------------------------------------------------
 // Constants
-//------------------------------------------------------------------------------------------------------------------------------------
+//-------------------------------------------------------------------------------------------------
 /** Disable parity when initializing UART. */
 #define UART_DISABLE_PARITY 0x00
 /** Set odd parity (parity must be enabled to use this flag). */
@@ -36,16 +36,16 @@
 /** Baud rate at 115200 bit/s. */
 #define UART_BAUD_RATE_115200 1
 
-//------------------------------------------------------------------------------------------------------------------------------------
-// Public functions
-//------------------------------------------------------------------------------------------------------------------------------------
+//-------------------------------------------------------------------------------------------------
+// Functions
+//-------------------------------------------------------------------------------------------------
 /** Initialize the UART with the specified frame format and baud rate.
  * @param Frame_Format The format of the RS-232 frame. Use a OR combination of UART_DISABLE_PARITY, UART_EVEN_PARITY and UART_ODD_PARITY to configure serial port.
  * @param Data_Rate_Bauds The data rate from a UART_BAUD_RATE_XX constant.
  * @return ERROR_CODE_NO_ERROR if the UART was correctly initialized,
  * @return ERROR_CODE_BAD_UART_PARAMETERS if the provided parameters did not come from UART_XXX contants.
  */
-int UARTInit(unsigned char Frame_Format, unsigned short Data_Rate_Bauds);
+int UARTInitialize(unsigned char Frame_Format, unsigned short Data_Rate_Bauds);
 
 /** Receive a byte from the serial port.
  * @return The received byte.

@@ -306,7 +306,7 @@ int FileOpen(char *String_File_Name, char Opening_Mode, unsigned int *Pointer_Fi
 	return ERROR_CODE_NO_ERROR;
 }
 
-int FileRead(unsigned int File_Descriptor_Index, unsigned char *Buffer, unsigned int Bytes_Count, unsigned int *Pointer_Bytes_Read)
+int FileRead(unsigned int File_Descriptor_Index, unsigned char *Pointer_Buffer, unsigned int Bytes_Count, unsigned int *Pointer_Bytes_Read)
 {
 	TFileDescriptor *Pointer_File_Descriptor;
 	unsigned int Bytes_To_Read;
@@ -348,8 +348,8 @@ int FileRead(unsigned int File_Descriptor_Index, unsigned char *Buffer, unsigned
 		}
 	
 		// Copy bytes one at a time into the destination buffer
-		*Buffer = Pointer_File_Descriptor->Buffer[Pointer_File_Descriptor->Offset_Buffer];
-		Buffer++;
+		*Pointer_Buffer = Pointer_File_Descriptor->Buffer[Pointer_File_Descriptor->Offset_Buffer];
+		Pointer_Buffer++;
 		Pointer_File_Descriptor->Offset_Buffer++;
 		Bytes_Count--;
 	}
@@ -360,7 +360,7 @@ int FileRead(unsigned int File_Descriptor_Index, unsigned char *Buffer, unsigned
 	return ERROR_CODE_NO_ERROR;
 }
 
-int FileWrite(unsigned int File_Descriptor_Index, unsigned char *Buffer, unsigned int Bytes_Count)
+int FileWrite(unsigned int File_Descriptor_Index, unsigned char *Pointer_Buffer, unsigned int Bytes_Count)
 {
 	TFileDescriptor *Pointer_File_Descriptor;
 	unsigned int New_Block, Written_Bytes_Count;
@@ -399,9 +399,9 @@ int FileWrite(unsigned int File_Descriptor_Index, unsigned char *Buffer, unsigne
 		}
 		
 		// Copy the byte to the cache
-		Pointer_File_Descriptor->Buffer[Pointer_File_Descriptor->Offset_Buffer] = *Buffer;
+		Pointer_File_Descriptor->Buffer[Pointer_File_Descriptor->Offset_Buffer] = *Pointer_Buffer;
 		Pointer_File_Descriptor->Offset_Buffer++;
-		Buffer++;
+		Pointer_Buffer++;
 		Bytes_Count--;
 	}
 	

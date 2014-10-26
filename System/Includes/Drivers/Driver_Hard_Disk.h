@@ -11,9 +11,9 @@
 #ifndef H_DRIVER_HARD_DISK_H
 #define H_DRIVER_HARD_DISK_H
 
-//-------------------------------------------------------------------------------------------------------------------------------
-// Public functions
-//-------------------------------------------------------------------------------------------------------------------------------
+//-------------------------------------------------------------------------------------------------
+// Functions
+//-------------------------------------------------------------------------------------------------
 /** Read a logical sector (512 bytes width) from the first IDE hard drive.
  * @param Logical_Sector_Number The LBA sector to read.
  * @param Pointer_Buffer A pointer on a 512 bytes buffer where the data will be stored.

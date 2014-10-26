@@ -5,9 +5,9 @@
 #include <Drivers/Driver_Hard_Disk.h>
 #include <Hardware_Functions.h> // To have inb() and outb()
 
-//-------------------------------------------------------------------------------------------------------------------------------
+//-------------------------------------------------------------------------------------------------
 // Private constants and macros
-//-------------------------------------------------------------------------------------------------------------------------------
+//-------------------------------------------------------------------------------------------------
 /** The port used to read or to write data to the hard disk controller. */
 #define HARD_DISK_PORT_DATA 0x01F0
 /** Hold the number of sectors to read or to write. */
@@ -33,9 +33,9 @@
 /** Wait until the controller signals it is ready. */
 #define WAIT_BUSY_CONTROLLER() while (inb(HARD_DISK_PORT_STATUS) & 0x80)
 
-//-------------------------------------------------------------------------------------------------------------------------------
+//-------------------------------------------------------------------------------------------------
 // Public functions
-//-------------------------------------------------------------------------------------------------------------------------------
+//-------------------------------------------------------------------------------------------------
 void HardDiskReadSector(unsigned int Logical_Sector_Number, unsigned char *Pointer_Buffer)
 {
 	// Wait for the controller to be ready
@@ -50,7 +50,7 @@ void HardDiskReadSector(unsigned int Logical_Sector_Number, unsigned char *Point
 	outb(HARD_DISK_PORT_LBA_ADDRESS_MIDDLE, Logical_Sector_Number >> 8);
 	outb(HARD_DISK_PORT_LBA_ADDRESS_LOW, Logical_Sector_Number);
 	
-	// Send the sectors count to read (always 1 to avoid issues with the 400ns delay between sectors)
+	// Send the sectors count to read (always 1 to avoid issues with the 400 ns delay between sectors)
 	outb(HARD_DISK_PORT_SECTOR_COUNT, 1);
 	
 	// Send read command with automatic retries
@@ -92,7 +92,7 @@ void HardDiskWriteSector(unsigned int Logical_Sector_Number, unsigned char *Poin
 	outb(HARD_DISK_PORT_LBA_ADDRESS_MIDDLE, Logical_Sector_Number >> 8);
 	outb(HARD_DISK_PORT_LBA_ADDRESS_LOW, Logical_Sector_Number);
 	
-	// Send the sectors count to write (always 1 to avoid issues with the 400ns delay between sectors)
+	// Send the sectors count to write (always 1 to avoid issues with the 400 ns delay between sectors)
 	outb(HARD_DISK_PORT_SECTOR_COUNT, 1);
 	
 	// Send write command with automatic retries

@@ -36,7 +36,7 @@ void ShellCommandDownload(void)
 	unsigned char *Pointer_Downloaded_Data;
 	
 	// Configure the UART every time (to avoid problem if an other application modifies UART settings)
-	UARTInit(UART_DISABLE_PARITY, UART_BAUD_RATE_115200);
+	UARTInitialize(UART_DISABLE_PARITY, UART_BAUD_RATE_115200);
 	ScreenWriteString(STRING_SHELL_DOWNLOAD_WAITING_FOR_SERVER);
 			
 	// Send special code to tell server that we are ready for download

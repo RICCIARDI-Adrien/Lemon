@@ -1,6 +1,6 @@
 # Applications main makefile.
-# Author : Adrien RICCIARDI
-# Version 1.0 : 02/05/2014
+# Author : Adrien RICCIARDI
+# Version 1.0 : 02/05/2014
 BINARIES_PATH = $(realpath Binaries)
 LIBRARIES_PATH = $(realpath ../Libraries)
 OBJECTS_PATH = $(realpath Objects)
@@ -11,6 +11,8 @@ TOOLS_PATH = $(realpath Tools)
 CC = gcc
 LD = ld
 SERIAL_PORT_SERVER = $(TOOLS_PATH)/Serial_Port_Server.out
+# Some systems want "echo -e" to display colors, some do not want
+ECHO = echo -e
 
 CCFLAGS += -nostdlib -fno-builtin -masm=intel -m32 -W -Wall -I$(LIBRARIES_PATH)/Includes -I$(SYSTEM_PATH)/Includes
 LDFLAGS = -T $(TOOLS_PATH)/Linker_Script.ld --strip-all -s -L$(LIBRARIES_PATH)/Binaries -l:Libraries.a
@@ -42,7 +44,7 @@ $(SERIAL_PORT_SERVER): $(TOOLS_PATH)/Serial_Port_Server.c
 # Brain calculation
 #------------------------------------------------------------------------------------------------------------------------------
 brain_calculation:
-	@echo "\033[33mCompiling Brain Calculation...\033[0m"
+	@$(ECHO) "\033[33mCompiling Brain Calculation...\033[0m"
 	@cd $(SOURCES_PATH)/Brain_Calculation && $(MAKE)
 
 brain_calculation_clean:
@@ -55,7 +57,7 @@ brain_calculation_download: $(SERIAL_PORT_SERVER)
 # Game of Life
 #------------------------------------------------------------------------------------------------------------------------------
 game_of_life:
-	@echo "\033[33mCompiling Game of Life...\033[0m"
+	@$(ECHO) "\033[33mCompiling Game of Life...\033[0m"
 	@cd $(SOURCES_PATH)/Game_Of_Life && $(MAKE)
 
 game_of_life_clean:
@@ -68,7 +70,7 @@ game_of_life_download: $(SERIAL_PORT_SERVER)
 # No match dealer
 #------------------------------------------------------------------------------------------------------------------------------
 no_match_dealer:
-	@echo "\033[33mCompiling No match dealer...\033[0m"
+	@$(ECHO) "\033[33mCompiling No match dealer...\033[0m"
 	@cd $(SOURCES_PATH)/No_Match_Dealer && $(MAKE)
 
 no_match_dealer_clean:
@@ -81,7 +83,7 @@ no_match_dealer_download: $(SERIAL_PORT_SERVER)
 # Numbers
 #------------------------------------------------------------------------------------------------------------------------------
 numbers:
-	@echo "\033[33mCompiling Numbers...\033[0m"
+	@$(ECHO) "\033[33mCompiling Numbers...\033[0m"
 	@cd $(SOURCES_PATH)/Numbers && $(MAKE)
 
 numbers_clean:
@@ -94,7 +96,7 @@ numbers_download: $(SERIAL_PORT_SERVER)
 # Rain
 #------------------------------------------------------------------------------------------------------------------------------
 rain:
-	@echo "\033[33mCompiling Rain...\033[0m"
+	@$(ECHO) "\033[33mCompiling Rain...\033[0m"
 	@cd $(SOURCES_PATH)/Rain && $(MAKE)
 
 rain_clean:
@@ -107,7 +109,7 @@ rain_download: $(SERIAL_PORT_SERVER)
 # Tests
 #------------------------------------------------------------------------------------------------------------------------------
 tests:
-	@echo "\033[33mCompiling Tests...\033[0m"
+	@$(ECHO) "\033[33mCompiling Tests...\033[0m"
 	@cd $(SOURCES_PATH)/Tests && $(MAKE)
 
 tests_clean:
@@ -126,7 +128,7 @@ tests_download: $(SERIAL_PORT_SERVER)
 # Text viewer
 #------------------------------------------------------------------------------------------------------------------------------
 text_viewer:
-	@echo "\033[33mCompiling Text viewer...\033[0m"
+	@$(ECHO) "\033[33mCompiling Text viewer...\033[0m"
 	@cd $(SOURCES_PATH)/Text_Viewer && $(MAKE)
 
 text_viewer_clean:
