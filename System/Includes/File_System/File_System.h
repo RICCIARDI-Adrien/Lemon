@@ -12,9 +12,9 @@
 
 #include <Configuration.h>
 
-//------------------------------------------------------------------------------------------------------------------------------------
+//-------------------------------------------------------------------------------------------------
 // Constants
-//------------------------------------------------------------------------------------------------------------------------------------
+//-------------------------------------------------------------------------------------------------
 /** Hard disk physical sector size in bytes. */
 #define FILE_SYSTEM_SECTOR_SIZE_BYTES 512
 /** Hard disk logical block size in bytes. */
@@ -26,9 +26,9 @@
 /** Tell that the BAT has no more free block. */
 #define FILE_SYSTEM_BAT_FULL_CODE 0xFFFFFFFF
 
-//------------------------------------------------------------------------------------------------------------------------------------
+//-------------------------------------------------------------------------------------------------
 // Types
-//------------------------------------------------------------------------------------------------------------------------------------
+//-------------------------------------------------------------------------------------------------
 /** This structure is stored at the end of the MBR sector. It is initialized by system installer and never modified. */
 typedef struct __attribute__((packed))
 {
@@ -42,12 +42,12 @@ typedef struct __attribute__((packed))
 {
 	char Name[CONFIGURATION_FILE_NAME_LENGTH]; //! File name with up to 12 ASCII characters.
 	unsigned int Start_Block; //! ID of the first block of the file. This is the beginning of the chained list into the BAT.
-	unsigned int Size_Bytes; //! Size of the file in bytes. Yes, maximum file size is limited to 4GB...
+	unsigned int Size_Bytes; //! Size of the file in bytes. Yes, maximum file size is limited to 4 GB...
 } TFileListEntry;
 
-//------------------------------------------------------------------------------------------------------------------------------------
+//-------------------------------------------------------------------------------------------------
 // Public variables
-//------------------------------------------------------------------------------------------------------------------------------------
+//-------------------------------------------------------------------------------------------------
 /** Informations about the currently mounted file system. */
 extern TFileSystemInformations File_System_Informations;
 /** Linked-list of all the blocks holding the files data. */
@@ -55,9 +55,9 @@ extern unsigned int Block_Allocation_Table[];
 /** Contain each existing file name and properties. */
 extern TFileListEntry Files_List[];
 
-//------------------------------------------------------------------------------------------------------------------------------------
+//-------------------------------------------------------------------------------------------------
 // Functions
-//------------------------------------------------------------------------------------------------------------------------------------
+//-------------------------------------------------------------------------------------------------
 /** Load file system from the hard disk and initialize it.
  * @return 1 if all operations were done successfully,
  * @return 0 if there were a problem.

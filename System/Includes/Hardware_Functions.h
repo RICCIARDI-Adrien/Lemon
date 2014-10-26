@@ -8,6 +8,9 @@
 #ifndef H_HARDWARE_FUNCTIONS_H
 #define H_HARDWARE_FUNCTIONS_H
 
+//-------------------------------------------------------------------------------------------------
+// Functions
+//-------------------------------------------------------------------------------------------------
 /** Write a byte to the specified port on the system bus.
  * @param Port The port number.
  * @param Byte The byte to write.

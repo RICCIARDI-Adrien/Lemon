@@ -12,15 +12,15 @@
 #include <Standard_Functions.h>
 #include <Strings.h>
 
-//-------------------------------------------------------------------------------------------------------------------------------
+//-------------------------------------------------------------------------------------------------
 // Private constants and macros
-//-------------------------------------------------------------------------------------------------------------------------------
+//-------------------------------------------------------------------------------------------------
 /** Offset of the Arguments_Value field in the TCommandLineArguments structure. */
 #define ARGUMENTS_VALUE_OFFSET (sizeof(int) + (sizeof(char *) * SHELL_MAXIMUM_ARGUMENTS_COUNT))
 
-//-------------------------------------------------------------------------------------------------------------------------------
+//-------------------------------------------------------------------------------------------------
 // Private types
-//-------------------------------------------------------------------------------------------------------------------------------
+//-------------------------------------------------------------------------------------------------
 /** Describe the command line format given to the program. */
 typedef struct __attribute__((packed))
 {
@@ -29,18 +29,18 @@ typedef struct __attribute__((packed))
 	char Arguments_Value[KERNEL_PROGRAM_ENTRY_POINT - ARGUMENTS_VALUE_OFFSET]; //! Hold arguments values. Fill the remaining bytes of the 256-byte area before program beginning.
 } TCommandLineArguments;
 
-//-------------------------------------------------------------------------------------------------------------------------------
+//-------------------------------------------------------------------------------------------------
 // Private variables
-//-------------------------------------------------------------------------------------------------------------------------------
+//-------------------------------------------------------------------------------------------------
 /** This boolean tells if the shell was previously launched or not. */
 static char Is_First_Launch = 1;
 
 /** The command line arguments in kernel memory. */
 static TCommandLineArguments Command_Line_Arguments;
 
-//-------------------------------------------------------------------------------------------------------------------------------
+//-------------------------------------------------------------------------------------------------
 // Private functions
-//-------------------------------------------------------------------------------------------------------------------------------
+//-------------------------------------------------------------------------------------------------
 /** Read the command line and add support for some special keys.
  * @param Pointer_Buffer The buffer used to store the command line (must me large enough).
  * @note The function automatically stop getting input when it reaches the end of the line.
@@ -151,9 +151,9 @@ static inline void ShellSplitCommandLine(char *Pointer_Buffer)
 	} while ((*Pointer_Buffer != 0) && (Command_Line_Arguments.Arguments_Count < SHELL_MAXIMUM_ARGUMENTS_COUNT));
 }
 
-//-------------------------------------------------------------------------------------------------------------------------------
+//-------------------------------------------------------------------------------------------------
 // Public functions
-//-------------------------------------------------------------------------------------------------------------------------------
+//-------------------------------------------------------------------------------------------------
 void Shell(void)
 {
 	char String_Buffer[SHELL_MAXIMUM_LINE_LENGTH + 1]; // Length of a console line + 1
@@ -251,9 +251,9 @@ void Shell(void)
 		//====================================================================================================================
 		else if (strcmp(Command_Line_Arguments.Pointer_Arguments[0], SHELL_COMMAND_DOWNLOAD_FILE) == 0) ShellCommandDownload();
 		//====================================================================================================================
-		// Show commands provided by the shell
+		// Show the system version
 		//====================================================================================================================
-		else if (strcmp(Command_Line_Arguments.Pointer_Arguments[0], SHELL_COMMAND_HELP) == 0) ShellCommandHelp();
+		else if (strcmp(Command_Line_Arguments.Pointer_Arguments[0], SHELL_COMMAND_VERSION) == 0) ScreenWriteString(STRING_SHELL_VERSION);
 		//====================================================================================================================
 		// Execute a program or tell the user that the command is unknown
 		//====================================================================================================================

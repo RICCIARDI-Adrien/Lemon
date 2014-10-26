@@ -8,17 +8,17 @@
 #include <Kernel.h> // For error codes
 #include <Standard_Functions.h>
 
-//-------------------------------------------------------------------------------------------------------------------------------
+//-------------------------------------------------------------------------------------------------
 // Private constants and macros
-//-------------------------------------------------------------------------------------------------------------------------------
+//-------------------------------------------------------------------------------------------------
 /** Tell if a correct file system is stored on the disk or not. */
 #define FILE_SYSTEM_MAGIC_NUMBER 0x12345678
 /** Offset into the MBR sector where file system informations are stored. */
 #define FILE_SYSTEM_INFORMATIONS_OFFSET (510 - sizeof(TFileSystemInformations)) // The "-2" is to bypass MBR magic number
 
-//-------------------------------------------------------------------------------------------------------------------------------
+//-------------------------------------------------------------------------------------------------
 // Private variables
-//-------------------------------------------------------------------------------------------------------------------------------
+//-------------------------------------------------------------------------------------------------
 /** The Block Allocation Table size in hard disk sectors. */
 static unsigned int Block_Allocation_Table_Size_Sectors;
 /** The ID of the first hard disk sector containing the Files List. */
@@ -32,16 +32,16 @@ static unsigned int Files_List_First_Sector_Number;
 /** First sector dedicated to data, located right after the file system. */
 static unsigned int File_System_First_Data_Sector;
 
-//-------------------------------------------------------------------------------------------------------------------------------
+//-------------------------------------------------------------------------------------------------
 // Public variables
-//-------------------------------------------------------------------------------------------------------------------------------
+//-------------------------------------------------------------------------------------------------
 TFileSystemInformations File_System_Informations;
 unsigned int Block_Allocation_Table[CONFIGURATION_FILE_SYSTEM_MAXIMUM_BLOCK_ALLOCATION_TABLE_ENTRIES];
 TFileListEntry Files_List[CONFIGURATION_FILE_SYSTEM_MAXIMUM_FILES_LIST_ENTRIES];
 
-//-------------------------------------------------------------------------------------------------------------------------------
+//-------------------------------------------------------------------------------------------------
 // Private functions
-//-------------------------------------------------------------------------------------------------------------------------------
+//-------------------------------------------------------------------------------------------------
 /** Read several sectors from the hard disk.
  * @param First_Sector_Number The sector to start reading from.
  * @param Sectors_Count How many sectors to read.
@@ -74,9 +74,9 @@ static void FileSystemWriteSectors(unsigned int First_Sector_Number, unsigned in
 	}
 }
 
-//-------------------------------------------------------------------------------------------------------------------------------
+//-------------------------------------------------------------------------------------------------
 // Public functions
-//-------------------------------------------------------------------------------------------------------------------------------
+//-------------------------------------------------------------------------------------------------
 int FileSystemInit(void)
 {
 	unsigned char Sector_Temp[FILE_SYSTEM_SECTOR_SIZE_BYTES];

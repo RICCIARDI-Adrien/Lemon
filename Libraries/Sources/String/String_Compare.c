@@ -15,5 +15,7 @@ int StringCompare(char *String_1, char *String_2)
 		String_1++;
 		String_2++;
 	}
+	
+	if (*String_2 != 0) return 0; // Strings are not the same length
 	return 1;
 }

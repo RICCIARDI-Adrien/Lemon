@@ -6,9 +6,9 @@
 #ifndef H_STRINGS_H
 #define H_STRINGS_H
 
-//-------------------------------------------------------------------------------------------------------------------------------
+//-------------------------------------------------------------------------------------------------
 // Constants
-//-------------------------------------------------------------------------------------------------------------------------------
+//-------------------------------------------------------------------------------------------------
 // English
 #ifdef LEMON_LANGUAGE_ENGLISH
 	// TODO
@@ -42,19 +42,6 @@
 	#define STRING_SHELL_DOWNLOAD_BAD_FILE_NAME "Erreur : nom de fichier incorrect.\n"
 	#define STRING_SHELL_DOWNLOAD_FILE_SAVE_FAILED "Echec de la sauvegarde ! Le syst\212me de fichiers est plein !\n"
 
-	// Shell help command
-	#define STRING_SHELL_HELP_TITLE "Liste des commandes valides :\n"
-	#define STRING_SHELL_HELP_COMMAND_CLEAR    "clear      Efface l'\202cran."
-	#define STRING_SHELL_HELP_COMMAND_COPY     "copy       Copie un fichier."
-	#define STRING_SHELL_HELP_COMMAND_DELETE   "delete     Supprime un fichier."
-	#define STRING_SHELL_HELP_COMMAND_DOWNLOAD "download   T\202l\202charge un fichier depuis le port s\202rie."
-	#define STRING_SHELL_HELP_COMMAND_HELP     "help       Affiche cet \202cran."
-	#define STRING_SHELL_HELP_COMMAND_LIST     "list       Liste les fichiers pr\202sents sur le disque dur."
-	#define STRING_SHELL_HELP_COMMAND_RENAME   "rename     Renomme un fichier existant."
-	#define STRING_SHELL_HELP_COMMAND_SIZE     "size       Affiche la taille d'un fichier en octets."
-	#define STRING_SHELL_HELP_COMMAND_TEXT     "text       Affiche le contenu d'un fichier texte."
-	#define STRING_SHELL_HELP_SYSTEM_VERSION "\nVersion du syst\212me : 2.1.4 (" __DATE__ ", " __TIME__ ")\n"
-
 	// Shell delete command
 	#define STRING_SHELL_DELETE_FILE_BAD_PARAMETERS_COUNT "Erreur : mauvais nombre de param\212tres.\nUtilisation : delete Nom_Fichier\n"
 	#define STRING_SHELL_DELETE_FILE_SUCCESS "Suppression r\202ussie.\n"
@@ -84,6 +71,9 @@
 	#define STRING_SHELL_COPY_FILE_NOT_ENOUGH_ROOM "Erreur : il n'y a pas assez de place sur le syst\212me de fichiers.\n"
 	#define STRING_SHELL_COPY_FILE_STARTING_COPY "Copie en cours...\n"
 	#define STRING_SHELL_COPY_FILE_SUCCESS "Copie r\202ussie.\n"
+	
+	// Shell version command
+	#define STRING_SHELL_VERSION "Version du syst\212me : 2.1.5 (" __DATE__ ", " __TIME__ ")\n"
 
 	// Shell error strings
 	#define STRING_SHELL_ERROR_FILE_NOT_EXECUTABLE "Ce fichier n'est pas un programme !\n"

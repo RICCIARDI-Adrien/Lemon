@@ -7,14 +7,15 @@
 #ifndef H_SHELL_COMMANDS_H
 #define H_SHELL_COMMANDS_H
 
+//-------------------------------------------------------------------------------------------------
+// Constants
+//-------------------------------------------------------------------------------------------------
 /** Clear the screen. */
 #define SHELL_COMMAND_CLEAR_SCREEN "clear"
 /** List existing files. */
 #define SHELL_COMMAND_LIST_FILES "list"
 /** Download a file from the serial port. */
 #define SHELL_COMMAND_DOWNLOAD_FILE "download"
-/** Show a list of available shell commands. */
-#define SHELL_COMMAND_HELP "help"
 /** Delete an existing file. */
 #define SHELL_COMMAND_DELETE_FILE "delete"
 /** Rename an existing file. */
@@ -23,15 +24,17 @@
 #define SHELL_COMMAND_FILE_SIZE "size"
 /** Copy the content of an existing file into a new one. */
 #define SHELL_COMMAND_COPY_FILE "copy"
+/** Show the system version. */
+#define SHELL_COMMAND_VERSION "version"
 
+//-------------------------------------------------------------------------------------------------
+// Functions
+//-------------------------------------------------------------------------------------------------
 /** List existing files. */
 void ShellCommandList(void);
 
 /** Download a file from the serial port and store it into the user space. */
 void ShellCommandDownload(void);
-
-/** Show a list of available shell commands. */
-void ShellCommandHelp(void);
 
 /** Delete an existing file.
  * @param String_File_Name The name of the file to delete.

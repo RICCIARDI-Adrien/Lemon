@@ -7,9 +7,9 @@ brain
 ../Applications/Binaries/No_Match_Dealer.32b
 deal
 ../Applications/Binaries/Game_Of_Life.32b
-help
-../Applications/Binaries/Help.32b
 life
+../Applications/Binaries/Help.32b
+help
 ../Applications/Binaries/Numbers.32b
 numbers
 ../Applications/Binaries/Rain.32b

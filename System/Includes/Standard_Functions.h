@@ -9,6 +9,9 @@
 #ifndef H_STANDARD_FUNCTIONS_H
 #define H_STANDARD_FUNCTIONS_H
 
+//-------------------------------------------------------------------------------------------------
+// Public functions
+//-------------------------------------------------------------------------------------------------
 /** Compare String_1 to String_2.
  * @return 0 if the strings are equal,
  * @return -1 if String_1 < String_2,

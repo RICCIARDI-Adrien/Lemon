@@ -10,9 +10,9 @@
 #include <Shell/Shell_Commands.h>
 #include <Strings.h>
 
-//-------------------------------------------------------------------------------------------------------------------------------
+//-------------------------------------------------------------------------------------------------
 // Public functions
-//-------------------------------------------------------------------------------------------------------------------------------
+//-------------------------------------------------------------------------------------------------
 void ShellCommandCopyFile(char *String_File_Name_Source, char *String_File_Name_Destination)
 {
 	unsigned int Free_Bytes_Count, Next_Block_To_Read, Current_Block_To_Write, Next_Block_To_Write, File_Size_Bytes, Blocks_Count;

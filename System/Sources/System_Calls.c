@@ -10,9 +10,9 @@
 #include <Kernel.h>
 #include <System_Calls.h>
 
-//-------------------------------------------------------------------------------------------------------------------------------
+//-------------------------------------------------------------------------------------------------
 // Private types
-//-------------------------------------------------------------------------------------------------------------------------------
+//-------------------------------------------------------------------------------------------------
 // Maybe use this in future to avoid multiple casts
 /*typedef union
 {
@@ -25,48 +25,51 @@
 /** A system call handler. */
 typedef void (*TSystemCallHandler)(void);
 
-//-------------------------------------------------------------------------------------------------------------------------------
+//-------------------------------------------------------------------------------------------------
 // Private variables
-//-------------------------------------------------------------------------------------------------------------------------------
+//-------------------------------------------------------------------------------------------------
 // System call parameters
 static TSystemCall Call_Code;
 static int Integer_1, Integer_2, Return_Value;
 static void *Pointer_1, *Pointer_2;
 
+//-------------------------------------------------------------------------------------------------
+// Private functions
+//-------------------------------------------------------------------------------------------------
 //====================================================================================================================
 // Kernel / system calls
 //====================================================================================================================
-void SystemCallSystemGetUserMemorySize(void)
+static void SystemCallSystemGetUserMemorySize(void)
 {
 	Return_Value = KERNEL_USER_SPACE_SIZE;
 }
 
-void SystemCallTimerReadValue(void)
+static void SystemCallTimerReadValue(void)
 {
 	Return_Value = Timer_Counter;
 }
 
-void SystemCallTimerWait(void)
+static void SystemCallTimerWait(void)
 {
 	TimerWait(Integer_1);
 }
 
-void SystemCallUARTInitialize(void)
+static void SystemCallUARTInitialize(void)
 {
 	Return_Value = UARTInitialize(Integer_1, Integer_2);
 }
 
-void SystemCallUARTReadByte(void)
+static void SystemCallUARTReadByte(void)
 {
 	Return_Value = UARTReadByte();
 }
 
-void SystemCallUARTWriteByte(void)
+static void SystemCallUARTWriteByte(void)
 {
 	UARTWriteByte(Integer_1);
 }
 
-void SystemCallUARTIsDataReceived(void)
+static void SystemCallUARTIsDataReceived(void)
 {
 	Return_Value = UARTIsDataReceived();
 }
@@ -74,37 +77,37 @@ void SystemCallUARTIsDataReceived(void)
 //====================================================================================================================
 // Screen calls
 //====================================================================================================================
-void SystemCallScreenWriteCharacter(void)
+static void SystemCallScreenWriteCharacter(void)
 {
 	ScreenWriteChar((char) Integer_1);
 }
 
-void SystemCallScreenWriteString(void)
+static void SystemCallScreenWriteString(void)
 {
 	ScreenWriteString(Pointer_1);
 }
 
-void SystemCallScreenGetColor(void)
+static void SystemCallScreenGetColor(void)
 {
 	Return_Value = ScreenGetColor();
 }
 
-void SystemCallScreenSetColor(void)
+static void SystemCallScreenSetColor(void)
 {
 	ScreenSetColor(Integer_1);
 }
 
-void SystemCallScreenGetCursorPosition(void)
+static void SystemCallScreenGetCursorPosition(void)
 {
 	ScreenGetCursorPosition(Pointer_1, Pointer_2);
 }
 
-void SystemCallScreenSetCursorPosition(void)
+static void SystemCallScreenSetCursorPosition(void)
 {
 	ScreenSetCursorPosition(Integer_1, Integer_2);
 }
 
-void SystemCallScreenDisplayBuffer(void)
+static void SystemCallScreenDisplayBuffer(void)
 {
 	ScreenDisplayBuffer(Pointer_1);
 }
@@ -112,13 +115,13 @@ void SystemCallScreenDisplayBuffer(void)
 //====================================================================================================================
 // Keyboard calls
 //====================================================================================================================
-void SystemCallKeyboardReadCharacter(void)
+static void SystemCallKeyboardReadCharacter(void)
 {
 	asm("sti");
 	Return_Value = KeyboardReadChar();
 }
 
-void SystemCallKeyboardIsKeyAvailable(void)
+static void SystemCallKeyboardIsKeyAvailable(void)
 {
 	Return_Value = KeyboardIsKeyAvailable();
 }
@@ -126,47 +129,47 @@ void SystemCallKeyboardIsKeyAvailable(void)
 //====================================================================================================================
 // File system calls
 //====================================================================================================================
-void SystemCallFileExists(void)
+static void SystemCallFileExists(void)
 {
 	Return_Value = FileExists(Pointer_1);
 }
 
-void SystemCallFileSize(void)
+static void SystemCallFileSize(void)
 {
 	Return_Value = FileSize(Pointer_1);
 }
 
-void SystemCallFileListNext(void)
+static void SystemCallFileListNext(void)
 {
 	FileListNext(Pointer_1);
 }
 
-void SystemCallFileDelete(void)
+static void SystemCallFileDelete(void)
 {
 	Return_Value = FileDelete(Pointer_1);
 }
 
-void SystemCallFileRename(void)
+static void SystemCallFileRename(void)
 {
 	Return_Value = FileRename(Pointer_1, Pointer_2);
 }
 
-void SystemCallFileOpen(void)
+static void SystemCallFileOpen(void)
 {
 	Return_Value = FileOpen(Pointer_1, (char) Integer_1, Pointer_2);
 }
 
-void SystemCallFileRead(void)
+static void SystemCallFileRead(void)
 {
 	Return_Value = FileRead((unsigned int) Integer_1, Pointer_1, (unsigned int) Integer_2, Pointer_2); 
 }
 
-void SystemCallFileWrite(void)
+static void SystemCallFileWrite(void)
 {
 	Return_Value = FileWrite((unsigned int) Integer_1, Pointer_1, (unsigned int) Integer_2);
 }
 
-void SystemCallFileClose(void)
+static void SystemCallFileClose(void)
 {
 	FileClose(Integer_1);
 }
@@ -206,6 +209,9 @@ TSystemCallHandler System_Calls_Handlers[] =
 	SystemCallFileClose, // SYSTEM_CALL_FILE_CLOSE
 };
 
+//-------------------------------------------------------------------------------------------------
+// Public functions
+//-------------------------------------------------------------------------------------------------
 int SystemCalls(void)
 {
 	// Get call parameters

@@ -26,6 +26,7 @@ static char *String_Commands[] =
 	"rename",
 	"size",
 	"text",
+	"version",
 	NULL
 };
 
@@ -40,7 +41,8 @@ static char *String_Command_Short_Descriptions[] =
 	STRING_COMMAND_SHORT_DESCRIPTION_LIST,
 	STRING_COMMAND_SHORT_DESCRIPTION_RENAME,
 	STRING_COMMAND_SHORT_DESCRIPTION_SIZE,
-	STRING_COMMAND_SHORT_DESCRIPTION_TEXT
+	STRING_COMMAND_SHORT_DESCRIPTION_TEXT,
+	STRING_COMMAND_SHORT_DESCRIPTION_VERSION
 };
 
 /** Commands full description. */
@@ -54,7 +56,8 @@ static char *String_Command_Full_Descriptions[] =
 	STRING_COMMAND_SHORT_DESCRIPTION_LIST,
 	STRING_COMMAND_SHORT_DESCRIPTION_RENAME,
 	STRING_COMMAND_SHORT_DESCRIPTION_SIZE,
-	STRING_COMMAND_FULL_DESCRIPTION_TEXT
+	STRING_COMMAND_FULL_DESCRIPTION_TEXT,
+	STRING_COMMAND_SHORT_DESCRIPTION_VERSION
 };
 	
 //-------------------------------------------------------------------------------------------------

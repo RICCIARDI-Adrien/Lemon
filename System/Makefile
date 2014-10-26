@@ -20,7 +20,7 @@ MBR_FLAGS = -DSECTORS_TO_LOAD_COUNT=64
 OBJECTS_CORE = $(OBJECTS_PATH)/Architecture.o $(OBJECTS_PATH)/Hardware_Functions.o $(OBJECTS_PATH)/Kernel.o $(OBJECTS_PATH)/Standard_Functions.o $(OBJECTS_PATH)/System_Calls.o
 OBJECTS_DRIVERS = $(OBJECTS_PATH)/Driver_Keyboard.o $(OBJECTS_PATH)/Driver_Hard_Disk.o $(OBJECTS_PATH)/Driver_UART.o $(OBJECTS_PATH)/Driver_Timer.o $(OBJECTS_PATH)/Driver_Screen.o $(OBJECTS_PATH)/Driver_PIC.o
 OBJECTS_FILE_SYSTEM = $(OBJECTS_PATH)/File_System.o $(OBJECTS_PATH)/File.o
-OBJECTS_SHELL = $(OBJECTS_PATH)/Shell.o $(OBJECTS_PATH)/Shell_Command_List.o $(OBJECTS_PATH)/Shell_Command_Download.o $(OBJECTS_PATH)/Shell_Command_Delete_File.o $(OBJECTS_PATH)/Shell_Command_Rename_File.o $(OBJECTS_PATH)/Shell_Command_File_Size.o $(OBJECTS_PATH)/Shell_Command_Help.o $(OBJECTS_PATH)/Shell_Command_Copy_File.o
+OBJECTS_SHELL = $(OBJECTS_PATH)/Shell.o $(OBJECTS_PATH)/Shell_Command_List.o $(OBJECTS_PATH)/Shell_Command_Download.o $(OBJECTS_PATH)/Shell_Command_Delete_File.o $(OBJECTS_PATH)/Shell_Command_Rename_File.o $(OBJECTS_PATH)/Shell_Command_File_Size.o $(OBJECTS_PATH)/Shell_Command_Copy_File.o
 OBJECTS = $(OBJECTS_CORE) $(OBJECTS_DRIVERS) $(OBJECTS_FILE_SYSTEM) $(OBJECTS_SHELL)
 
 all: clean $(OBJECTS_PATH)/MBR.32b $(OBJECTS)
@@ -110,9 +110,6 @@ $(OBJECTS_PATH)/Shell_Command_Rename_File.o: $(SOURCES_PATH)/Shell/Shell_Command
 
 $(OBJECTS_PATH)/Shell_Command_File_Size.o: $(SOURCES_PATH)/Shell/Shell_Command_File_Size.c
 	$(CC) $(CCFLAGS) -c $(SOURCES_PATH)/Shell/Shell_Command_File_Size.c -o $(OBJECTS_PATH)/Shell_Command_File_Size.o
-
-$(OBJECTS_PATH)/Shell_Command_Help.o: $(SOURCES_PATH)/Shell/Shell_Command_Help.c
-	$(CC) $(CCFLAGS) -c $(SOURCES_PATH)/Shell/Shell_Command_Help.c -o $(OBJECTS_PATH)/Shell_Command_Help.o
 
 $(OBJECTS_PATH)/Shell_Command_Copy_File.o: $(SOURCES_PATH)/Shell/Shell_Command_Copy_File.c
 	$(CC) $(CCFLAGS) -c $(SOURCES_PATH)/Shell/Shell_Command_Copy_File.c -o $(OBJECTS_PATH)/Shell_Command_Copy_File.o

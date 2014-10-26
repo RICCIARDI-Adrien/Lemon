@@ -32,6 +32,7 @@
 	#define STRING_COMMAND_SHORT_DESCRIPTION_RENAME "Renomme un fichier existant."
 	#define STRING_COMMAND_SHORT_DESCRIPTION_SIZE "Affiche la taille d'un fichier en octets."
 	#define STRING_COMMAND_SHORT_DESCRIPTION_TEXT "Affiche le contenu d'un fichier texte."
+	#define STRING_COMMAND_SHORT_DESCRIPTION_VERSION "Affiche la version et la date de compilation du syst\212me."
 	
 	// Commands full description
 	#define STRING_COMMAND_FULL_DESCRIPTION_HELP "Appel\202e sans argument, la commande 'help' affiche une liste et une br\212ve\ndescription de toutes les commandes disponibles.\n" \

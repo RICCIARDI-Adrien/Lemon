@@ -13,20 +13,22 @@
  * @version 2.1.1 : 12/12/2013, removed Console module and created Screen module where drawing functions are now located, keyboard input functions previously located in Console are now in Keyboard.
  * @version 2.1.2 : 26/04/2014, added Includes directory, global source code reorganization and improvements.
  * @version 2.1.3 : 13/05/2014, cleaned and optimized memory protection code and interrupt code.
+ * @version 2.1.4 : 07/06/2014, the system is now able to compile on 64-bit development system, file system is terminated.
+ * @version 2.1.5 : 26/10/2014, removed 'help' command and added 'version' command.
  */
 #ifndef H_KERNEL_H
 #define H_KERNEL_H
 
 #include <Configuration.h>
 
-//-------------------------------------------------------------------------------------------------------------------------------
+//-------------------------------------------------------------------------------------------------
 // Types
-//-------------------------------------------------------------------------------------------------------------------------------
+//-------------------------------------------------------------------------------------------------
 #define NULL ((void *) 0)
 
-//-------------------------------------------------------------------------------------------------------------------------------
+//-------------------------------------------------------------------------------------------------
 // Constants
-//-------------------------------------------------------------------------------------------------------------------------------
+//-------------------------------------------------------------------------------------------------
 // Kernel memory areas
 /** The MBR stores file system informations. */
 #define KERNEL_MBR_ADDRESS 0x7C00
@@ -77,9 +79,9 @@
 /** The file is not an executable program. */
 #define ERROR_CODE_FILE_NOT_EXECUTABLE 14
 
-//-------------------------------------------------------------------------------------------------------------------------------
+//-------------------------------------------------------------------------------------------------
 // Functions
-//-------------------------------------------------------------------------------------------------------------------------------
+//-------------------------------------------------------------------------------------------------
 /** Clear the kernel stack and jump to shell. */
 void KernelStartShell(void);
 

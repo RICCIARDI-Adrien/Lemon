@@ -10,9 +10,9 @@
 #include <Standard_Functions.h> // To have memset()
 #include <System_Calls.h> // To have the system calls interrupt handler
 
-//-------------------------------------------------------------------------------------------------------------------------------
+//-------------------------------------------------------------------------------------------------
 // Private constants and macros
-//-------------------------------------------------------------------------------------------------------------------------------
+//-------------------------------------------------------------------------------------------------
 /** Code exec-read, accessed, protection level 0. */
 #define ARCHITECTURE_MEMORY_PROTECTION_SEGMENT_TYPE_KERNEL_CODE 0x9B
 /** Data read-write, accessed, protection level 0. */
@@ -76,9 +76,9 @@
 		: "eax" \
 	)
 
-//-------------------------------------------------------------------------------------------------------------------------------
+//-------------------------------------------------------------------------------------------------
 // Private types
-//-------------------------------------------------------------------------------------------------------------------------------
+//-------------------------------------------------------------------------------------------------
 /** A GDT segment descriptor. */
 struct TSegmentDescriptor
 {
@@ -140,9 +140,9 @@ struct TTaskStateSegment
 	unsigned short Debug_Flag, IO_Map_Base_Address;
 } __attribute__((packed));
 
-//-------------------------------------------------------------------------------------------------------------------------------
+//-------------------------------------------------------------------------------------------------
 // Private variables
-//-------------------------------------------------------------------------------------------------------------------------------
+//-------------------------------------------------------------------------------------------------
 /** The GDT. */
 static volatile struct TSegmentDescriptor Global_Descriptor_Table[256] __attribute__((aligned(8))); // Should give better performances by aligning on cache boundary
 /** The GDTR content. */
@@ -156,9 +156,9 @@ static volatile struct TInterruptDescriptorTableRegister Interrupt_Descriptor_Ta
 /** The TSS involved in context switching. */
 static volatile struct TTaskStateSegment Kernel_Task_State_Segment;
 
-//-------------------------------------------------------------------------------------------------------------------------------
+//-------------------------------------------------------------------------------------------------
 // Function prototypes
-//-------------------------------------------------------------------------------------------------------------------------------
+//-------------------------------------------------------------------------------------------------
 // The following prototypes are mandatory because the corresponding assembly labels can't be seen by the C compiler
 // Moreover, this functions can't be static as they must be linked with the assembly code
 void ArchitectureInterruptLauncherDivisionErrorException(void);
@@ -169,9 +169,9 @@ void ArchitectureInterruptLauncherKeyboard(void);
 void ArchitectureInterruptLauncherSystemCalls(void);
 void ArchitectureInterruptExit(void);
 
-//-------------------------------------------------------------------------------------------------------------------------------
+//-------------------------------------------------------------------------------------------------
 // Private functions
-//-------------------------------------------------------------------------------------------------------------------------------
+//-------------------------------------------------------------------------------------------------
 /** Add a segment descriptor to the Global Descriptor Table.
  * @param Index The segment index in the GDT.
  * @param Base_Address The segment base address in bytes.
@@ -364,9 +364,9 @@ static void __attribute__((used)) ArchitectureInterruptLaunchers(void)
 	);
 }
 
-//-------------------------------------------------------------------------------------------------------------------------------
+//-------------------------------------------------------------------------------------------------
 // Public functions
-//-------------------------------------------------------------------------------------------------------------------------------
+//-------------------------------------------------------------------------------------------------
 void ArchitectureInitializeMemoryProtection(void)
 {
 	ArchitectureInitializeGlobalDescriptorTable();
