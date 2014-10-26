@@ -15,7 +15,7 @@
 // Private variables
 //-------------------------------------------------------------------------------------------------
 static char Buffer[TEXT_VIEWER_BUFFER_SIZE_BYTES];
-static unsigned int Current_Offset, File_Size_Bytes;
+static unsigned int Current_Offset, File_Size_Bytes, Line_Number = 0;
 
 //-------------------------------------------------------------------------------------------------
 // Private functions
@@ -56,6 +56,17 @@ static int LoadFile(char *String_File_Name)
 			return 3;
 		}
 		Characters_Count++;
+		
+		// Translate the character if needed
+		switch (Character)
+		{
+			// Tabulation character, replace with 2 spaces
+			case '\t':
+				Character = ' ';
+				Buffer[Current_Offset] = ' '; // Add the first space
+				Current_Offset++;
+				break;
+		};
 		
 		// Add the character to the buffer
 		Buffer[Current_Offset] = Character;
@@ -109,8 +120,11 @@ static void MoveToPreviousLine(void)
 	}
 }
 
-/** Display the next file line. */
-static void DisplayNextLine(void)
+/** Display the next file line.
+ * @return 0 if the last line is reached,
+ * @return 1 if the last line is not reached.
+ */
+static int DisplayNextLine(void)
 {
 	unsigned int Characters_Count = 0;
 	char Character;
@@ -119,7 +133,7 @@ static void DisplayNextLine(void)
 	while (Characters_Count < TEXT_VIEWER_SCREEN_WIDTH)
 	{
 		// Is end of file reached ?
-		if (Current_Offset >= File_Size_Bytes) return;
+		if (Current_Offset >= File_Size_Bytes) return 0;
 		
 		// Get the next character to display
 		Character = Buffer[Current_Offset];
@@ -130,7 +144,8 @@ static void DisplayNextLine(void)
 			// Exit if a new line has been found
 			case '\n':
 				ScreenWriteCharacter('\n');
-				return;
+				if (Current_Offset >= File_Size_Bytes) return 0;
+				return 1;
 				
 			// Ignore end of line markers has they are located after the SCREEN_WIDTH'th character, so they will appear at the beginning of the next line
 			case TEXT_VIEWER_END_OF_LINE_CHARACTER:
@@ -143,6 +158,9 @@ static void DisplayNextLine(void)
 				break;
 		}
 	}
+	
+	if (Current_Offset >= File_Size_Bytes) return 0;
+	return 1;
 }
 
 //-------------------------------------------------------------------------------------------------
@@ -194,12 +212,12 @@ int main(int argc, char *argv[])
 		{
 			// Display next line
 			case KEYBOARD_KEY_CODE_ARROW_DOWN:
-				DisplayNextLine();
+				if (DisplayNextLine()) Line_Number++;
 				break;
 			
 			case KEYBOARD_KEY_CODE_ARROW_UP:
 				// Go up only if the top of the screen is not reached (to avoid flickering effects)
-				if (Current_Offset > 0)
+				if (Line_Number > 0)
 				{
 					ScreenClear();
 				
@@ -208,6 +226,8 @@ int main(int argc, char *argv[])
 					
 					// Display this line and the following
 					for (i = 0; i < TEXT_VIEWER_SCREEN_HEIGHT - 1; i++) DisplayNextLine();
+					
+					Line_Number--;
 				}
 				break;
 			

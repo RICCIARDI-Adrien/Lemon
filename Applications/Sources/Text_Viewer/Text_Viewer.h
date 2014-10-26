@@ -4,6 +4,7 @@
  * @version 1.0 : 23/12/2013
  * @version 1.1 : 24/05/2014, ported to Lemon.
  * @version 1.2 : 06/06/2014, optimized code and enabled previous lines displaying.
+ * @version 1.3 : 26/10/2014, tabulation characters are now correctly displayed, avoided flickering effect when displaying the beginning of the text.
  */
 #ifndef H_TEXT_VIEWER_H
 #define H_TEXT_VIEWER_H
