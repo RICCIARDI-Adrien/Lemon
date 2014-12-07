@@ -78,7 +78,7 @@ static void DisplayCommandsList(void)
 		ScreenSetFontColor(SCREEN_COLOR_BLUE);
 		
 		// Display as many spaces as needed to align the command description on the requested column
-		Spaces_Count = HELP_SHORT_DESCRIPTION_STARTING_COLUMN - StringSize(String_Commands[i]);
+		Spaces_Count = HELP_SHORT_DESCRIPTION_STARTING_COLUMN - StringGetSize(String_Commands[i]);
 		while (Spaces_Count > 0)
 		{
 			ScreenWriteCharacter(' ');

@@ -32,6 +32,6 @@ unsigned int StringConvertStringToUnsignedInteger(char *String);
  * @param String The string to get size.
  * @return The size of the string in characters (not including the terminating zero).
  */
-unsigned int StringSize(char *String);
+unsigned int StringGetSize(char *String);
 
 #endif

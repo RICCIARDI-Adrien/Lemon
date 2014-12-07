@@ -1,14 +1,21 @@
-/** @file FileSize.c
+/** @file String_Get_Size.c
  * @author Adrien RICCIARDI
- * @version 1.0 : 11/12/2011
- * @version 1.1 : 27/04/2012
+ * @version 1.0 : 26/10/2014
  */
 #include <System.h>
 
 //-------------------------------------------------------------------------------------------------
 // Public functions
 //-------------------------------------------------------------------------------------------------
-unsigned int FileSize(char *String_File_Name)
+unsigned int StringGetSize(char *String)
 {
-	return SystemCall(SYSTEM_CALL_FILE_SIZE, 0, 0, String_File_Name, NULL);
+	unsigned int Size = 0;
+	
+	while (*String != 0)
+	{
+		Size++;
+		String++;
+	}
+	
+	return Size;
 }

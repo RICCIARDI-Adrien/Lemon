@@ -34,10 +34,10 @@ int FileExists(char *String_File_Name);
 
 /** Tell the size of a file.
  * @param String_File_Name Name of the file.
- * @return The file size in 512-byte sectors if the file exists.
+ * @return The file size in bytes if the file exists.
  * @return 0 if the file doesn't exist.
  */
-unsigned int FileSize(char *String_File_Name);
+unsigned int FileGetSize(char *String_File_Name);
 
 /** Start a file listing. */
 void FileListBegin(void);

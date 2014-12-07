@@ -1,7 +1,8 @@
-*.o
-*.a
 *.32b
+*.a
+*.d
 *.img
 *.iso
+*.o
 *.out
 Installer/Sources/Shell/Embedded_Files_Data.h

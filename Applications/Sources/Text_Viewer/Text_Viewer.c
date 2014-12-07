@@ -36,7 +36,7 @@ static int LoadFile(char *String_File_Name)
 	if (FileOpen(String_File_Name, FILE_OPENING_MODE_READ, &File_ID) != ERROR_CODE_NO_ERROR) return 1;
 	
 	// Get file size
-	File_Size_Bytes = FileSize(String_File_Name);
+	File_Size_Bytes = FileGetSize(String_File_Name);
 	
 	// Load file line after line
 	Current_Offset = 0;

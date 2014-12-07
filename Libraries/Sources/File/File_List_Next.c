@@ -1,4 +1,4 @@
-/** @file FileListNext.c
+/** @file File_List_Next.c
  * @author Adrien RICCIARDI
  * @version 1.0 : 14/09/2012
  */
