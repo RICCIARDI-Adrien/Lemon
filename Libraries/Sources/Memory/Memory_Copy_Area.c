@@ -27,7 +27,7 @@ void MemoryCopyArea(void *Pointer_Source_Area, void *Pointer_Destination_Area, u
 	
 	// Copy the remaining bytes
 	Pointer_Source_Area_Byte = (unsigned char *) Pointer_Source_Area_Dword;
-	Pointer_Destination_Area_Byte = (unsigned char *) Pointer_Destination_Area;
+	Pointer_Destination_Area_Byte = (unsigned char *) Pointer_Destination_Area_Dword;
 	
 	while (Bytes_Count > 0)
 	{
