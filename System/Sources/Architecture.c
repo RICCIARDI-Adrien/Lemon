@@ -223,8 +223,8 @@ static inline __attribute__((always_inline)) void ArchitectureInitializeGlobalDe
 	ArchitectureMemoryProtectionAddSegmentDescriptor(ARCHITECTURE_MEMORY_PROTECTION_SEGMENT_INDEX_KERNEL_STACK, 0, 0, ARCHITECTURE_MEMORY_PROTECTION_SEGMENT_TYPE_KERNEL_STACK, 0x0C);
 	
 	// Add user's task segments
-	ArchitectureMemoryProtectionAddSegmentDescriptor(ARCHITECTURE_MEMORY_PROTECTION_SEGMENT_INDEX_USER_CODE, KERNEL_USER_SPACE_ADDRESS, CONFIGURATION_SYSTEM_TOTAL_RAM_SIZE_MEGA_BYTES << 8, ARCHITECTURE_MEMORY_PROTECTION_SEGMENT_TYPE_USER_CODE, 0x0C); // Left shift is 8 because minimum value is 4096 (= 2^12) and the specified size is in MB (= 2^20), so we need to shift 8 because 2^(20-12) = 2^8 ; 0x0C is for 32-bit instructions and to enable 4KB granularity
-	ArchitectureMemoryProtectionAddSegmentDescriptor(ARCHITECTURE_MEMORY_PROTECTION_SEGMENT_INDEX_USER_DATA, KERNEL_USER_SPACE_ADDRESS, CONFIGURATION_SYSTEM_TOTAL_RAM_SIZE_MEGA_BYTES << 8, ARCHITECTURE_MEMORY_PROTECTION_SEGMENT_TYPE_USER_DATA, 0x0C);
+	ArchitectureMemoryProtectionAddSegmentDescriptor(ARCHITECTURE_MEMORY_PROTECTION_SEGMENT_INDEX_USER_CODE, KERNEL_USER_SPACE_ADDRESS, KERNEL_USER_SPACE_SIZE >> 12, ARCHITECTURE_MEMORY_PROTECTION_SEGMENT_TYPE_USER_CODE, 0x0C); // The limit size must be expressed in 4096-byte pages, 0x0C is for 32-bit instructions and to enable 4KB granularity
+	ArchitectureMemoryProtectionAddSegmentDescriptor(ARCHITECTURE_MEMORY_PROTECTION_SEGMENT_INDEX_USER_DATA, KERNEL_USER_SPACE_ADDRESS, KERNEL_USER_SPACE_SIZE >> 12, ARCHITECTURE_MEMORY_PROTECTION_SEGMENT_TYPE_USER_DATA, 0x0C);
 	
 	// Add kernel TSS descriptor
 	ArchitectureMemoryProtectionAddSegmentDescriptor(ARCHITECTURE_MEMORY_PROTECTION_SEGMENT_INDEX_TASK_STATE_SEGMENT, (unsigned int) &Kernel_Task_State_Segment, sizeof(struct TTaskStateSegment) - 1, ARCHITECTURE_MEMORY_PROTECTION_SEGMENT_TYPE_TASK_STATE_SEGMENT, 0);
