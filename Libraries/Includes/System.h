@@ -79,4 +79,7 @@ int SystemCall(TSystemCall Request_Code, int Integer_1, int Integer_2, void *Poi
  */
 void SystemWait(unsigned int Periods_Count);
 
+/** Abort the current program and return to the system. */
+void SystemExitProgram(void);
+
 #endif
