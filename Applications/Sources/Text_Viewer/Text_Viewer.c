@@ -86,7 +86,7 @@ static int LoadFile(char *String_File_Name)
 		}
 	}
 
-	// Adjust the file size to take into account of the added end of line characters
+	// Adjust the file size to take into account the added end of line characters
 	File_Size_Bytes = Current_Offset;
 	Current_Offset = 0; // Reset buffer offset to display the text from the beginning
 	
