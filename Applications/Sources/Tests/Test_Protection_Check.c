@@ -2,8 +2,8 @@
  * @brief Several tests to ensure that Intel memory protection is correctly enabled.
  * @author Adrien RICCIARDI
  * @version 1.0 : 08/12/2012
+ * @version 1.1 : 07/12/2014, ported to new Libraries version.
  */
-#include <stdio.h>
 #include <System.h>
 
 void StackOverflow(void)
@@ -14,7 +14,8 @@ void StackOverflow(void)
 	j++;
 	if (j >= 100000)
 	{
-		printf("%u\n", i);
+		ScreenWriteUnsignedInteger(i);
+		ScreenWriteCharacter('\n');
 		j = 0;
 	}
 	
@@ -23,55 +24,56 @@ void StackOverflow(void)
 
 int main(void)
 {
-	unsigned int *Pointer;
+	volatile unsigned int *Pointer;
 	volatile unsigned int Divided = 1234, Divisor = 0;
 	
-	puts("--- Protection check ---");
-	puts("All tests must generate an error handled by the system to success.\n");
+	ScreenWriteString("--- Protection check ---\n");
+	ScreenWriteString("All tests must generate an error handled by the system to success.\n\n");
 	
-	puts("    1. Test privileged instructions");
-	puts("    2. Test I/O instructions");
-	puts("    3. Test stack overflow");
-	puts("    4. Test out of bounds memory access");
-	puts("    5. Test division by zero");
-	puts("    Other. Quit\n");
+	ScreenWriteString("    1. Test privileged instructions\n");
+	ScreenWriteString("    2. Test I/O instructions\n");
+	ScreenWriteString("    3. Test stack overflow\n");
+	ScreenWriteString("    4. Test out of bounds memory access\n");
+	ScreenWriteString("    5. Test division by zero\n");
+	ScreenWriteString("    Other. Quit\n\n");
 
-	switch (getchar())
+	switch (KeyboardReadCharacter())
 	{
 		case '1':
-			puts("-> Privileged instructions test.");
+			ScreenWriteString("-> Privileged instructions test.\n");
 			asm("cli");
-			puts("-> Test failed !");
+			ScreenWriteString("-> Test failed !\n");
 			break;
 			
 		case '2':
-			puts("-> I/O instructions test.");
+			ScreenWriteString("-> I/O instructions test.\n");
 			asm("mov dx, 0x3F2");
 			asm("in ax, dx");
-			puts("-> Test failed !");
+			ScreenWriteString("-> Test failed !\n");
 			break;
 			
 		case '3':
-			puts("-> Stack overflow test.");
+			ScreenWriteString("-> Stack overflow test.\n");
 			StackOverflow();
-			puts("-> Test failed !");
+			ScreenWriteString("-> Test failed !\n");
 			break;
 		
 		case '4':
-			puts("-> Out of bounds memory access (the system must have less than 4GB of RAM).");
+			ScreenWriteString("-> Out of bounds memory access (the system must have less than 4GB of RAM).\n");
 			Pointer = (unsigned int *) 0xF0000000; // Go to end of memory
 			*Pointer = 0x12345678;
-			printf("Read value : %u (= 305 419 896)\n", *Pointer);
-			puts("-> Test failed !");
+			ScreenWriteString("Read value : ");
+			ScreenWriteUnsignedInteger(*Pointer);
+			ScreenWriteString("(= 305 419 896)\n");
+			ScreenWriteString("-> Test failed !\n");
 			break;
 			
 		case '5':
-			puts("-> Division per zero test.");
+			ScreenWriteString("-> Division per zero test.\n");
 			Divided = Divided / Divisor;
-			puts("-> Test failed !");
+			ScreenWriteString("-> Test failed !\n");
 			break;
 	}
 	
 	return 0;
 }
-	

@@ -147,9 +147,6 @@ int FileDelete(char *String_File_Name)
 	Pointer_FL_Entry = FileSystemReadFLEntry(String_File_Name);
 	if (Pointer_FL_Entry == NULL) return ERROR_CODE_FILE_NOT_FOUND;
 	
-	// Free file entry
-	Pointer_FL_Entry->Name[0] = 0;
-	
 	// Free BAT blocks
 	Block = Pointer_FL_Entry->Start_Block;
 	while (Block != FILE_SYSTEM_BAT_BLOCK_EOF)
@@ -161,6 +158,9 @@ int FileDelete(char *String_File_Name)
 		// Go to next block
 		Block = Next_Block;
 	}
+	
+	// Free the file entry after having freed the allocated blocks, so if the system is powered off during the blocks freeing step the file system won't be corrupted : the file list entry is still existing
+	Pointer_FL_Entry->Name[0] = 0;
 	
 	FileSystemSave();
 	

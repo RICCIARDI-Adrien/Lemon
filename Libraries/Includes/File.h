@@ -91,6 +91,13 @@ int FileWrite(unsigned int File_ID, void *Pointer_Buffer, unsigned int Bytes_Cou
  */
 void FileClose(unsigned int File_ID);
 
+/** Delete an existing file.
+ * @param String_File_Name The file to delete.
+ * @return ERROR_CODE_NO_ERROR if the file has been successfully deleted,
+ * @return ERROR_CODE_FILE_NOT_FOUND if the file is not existing.
+ */
+int FileDelete(char *String_File_Name);
+
 // TODO
 /** Rename an existing file.
  * @param Current_File_Name The current file name.
@@ -102,12 +109,7 @@ void FileClose(unsigned int File_ID);
  */
 //int FileRename(char *Current_File_Name, char *New_File_Name); // TODO à refaire
 
-// FileDelete
 // FileCopy (avec calcul espace restant disque avant copie)
-// FileOpen
-// FileRead
-// FileWrite
-// FileClose
 
 
 #endif

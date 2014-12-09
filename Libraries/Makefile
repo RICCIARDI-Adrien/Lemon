@@ -12,7 +12,7 @@ PATH_INCLUDES = Includes
 PATH_OBJECTS = Objects
 PATH_SOURCES = Sources
 
-OBJECTS_FILE = $(PATH_OBJECTS)/File_Close.o $(PATH_OBJECTS)/File_Exists.o $(PATH_OBJECTS)/File_Get_Size.o $(PATH_OBJECTS)/File_List_Initialize.o $(PATH_OBJECTS)/File_List_Next.o $(PATH_OBJECTS)/File_Open.o $(PATH_OBJECTS)/File_Read.o $(PATH_OBJECTS)/File_Write.o
+OBJECTS_FILE = $(PATH_OBJECTS)/File_Close.o $(PATH_OBJECTS)/File_Delete.o $(PATH_OBJECTS)/File_Exists.o $(PATH_OBJECTS)/File_Get_Size.o $(PATH_OBJECTS)/File_List_Initialize.o $(PATH_OBJECTS)/File_List_Next.o $(PATH_OBJECTS)/File_Open.o $(PATH_OBJECTS)/File_Read.o $(PATH_OBJECTS)/File_Write.o
 OBJECTS_KEYBOARD = $(PATH_OBJECTS)/Keyboard_Is_Key_Available.o $(PATH_OBJECTS)/Keyboard_Read_Character.o
 OBJECTS_MEMORY = $(PATH_OBJECTS)/Memory_Copy_Area.o $(PATH_OBJECTS)/Memory_Set_Area_Value.o
 OBJECTS_RANDOM = $(PATH_OBJECTS)/Random_Generate_Number.o $(PATH_OBJECTS)/Random_Initialize.o
@@ -42,6 +42,11 @@ $(PATH_OBJECTS)/File_Close.d: $(PATH_SOURCES)/File/File_Close.c
 	$(CC) $(CCFLAGS) -MM $(PATH_SOURCES)/File/File_Close.c -MF $(PATH_OBJECTS)/File_Close.d
 $(PATH_OBJECTS)/File_Close.o: $(PATH_OBJECTS)/File_Close.d
 	$(CC) $(CCFLAGS) $(PATH_SOURCES)/File/File_Close.c -o $(PATH_OBJECTS)/File_Close.o
+
+$(PATH_OBJECTS)/File_Delete.d: $(PATH_SOURCES)/File/File_Delete.c
+	$(CC) $(CCFLAGS) -MM $(PATH_SOURCES)/File/File_Delete.c -MF $(PATH_OBJECTS)/File_Delete.d
+$(PATH_OBJECTS)/File_Delete.o: $(PATH_OBJECTS)/File_Delete.d
+	$(CC) $(CCFLAGS) $(PATH_SOURCES)/File/File_Delete.c -o $(PATH_OBJECTS)/File_Delete.o
 
 $(PATH_OBJECTS)/File_Exists.d: $(PATH_SOURCES)/File/File_Exists.c
 	$(CC) $(CCFLAGS) -MM $(PATH_SOURCES)/File/File_Exists.c -MF $(PATH_OBJECTS)/File_Exists.d

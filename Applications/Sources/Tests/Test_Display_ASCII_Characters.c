@@ -2,10 +2,8 @@
  * Display all the ASCII characters the video card can generate.
  * @author Adrien RICCIARDI
  * @version 1.0 : 15/05/2014
+ * @version 1.1 : 07/12/2014, ported to new Libraries version.
  */
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
 #include <System.h>
 
 //-------------------------------------------------------------------------------------------------------------------------------
@@ -46,8 +44,8 @@ int main(void)
 	}
 	
 	ScreenDisplayBuffer(Video_Buffer);
-	getchar();
+	KeyboardReadCharacter();
 	
 	ScreenClear();
-	return EXIT_SUCCESS;
+	return 0;
 }

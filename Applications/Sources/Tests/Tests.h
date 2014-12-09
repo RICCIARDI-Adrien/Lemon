@@ -9,15 +9,22 @@
 //-------------------------------------------------------------------------------------------------------------------------------
 // Functions
 //-------------------------------------------------------------------------------------------------------------------------------
-/** Check the assert() macro.
- * @note The program will crash if the test is successful.
+/** Get the text signification of a Lemon-specific error code.
+ * @param Error_Code The error code.
+ * @return The corresponding string.
  */
-void TestsAssert(void);
+char *TestsGetErrorString(int Error_Code);
 
-/** Check the whole ctype library.
- * @return 1 if the tests were successful,
- * @return 0 if a test failed.
+/** Test all Libraries File functions.
+ * @return 0 if all the tests were successful,
+ * @return 1 if a test failed.
  */
-int TestsCtype(void);
+int TestsFile(void);
+
+/** Test the Libraries Memory functions.
+ * @return 0 if all the tests were successful,
+ * @return 1 if a test failed.
+ */
+int TestsMemory(void);
 
 #endif
