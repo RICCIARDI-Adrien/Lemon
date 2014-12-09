@@ -28,10 +28,22 @@ void StringCopy(char *String_Source, char *String_Destination);
  */
 unsigned int StringConvertStringToUnsignedInteger(char *String);
 
+/** Convert a number into its string representation.
+ * @param Number The number to convert.
+ * @param String_Destination On output, contain the converted number. Be sure that the string has room enough for the number.
+ */
+void StringConvertUnsignedIntegerToString(unsigned int Number, char *String_Destination);
+
 /** Retrieve the characters count in a string.
  * @param String The string to get size.
  * @return The size of the string in characters (not including the terminating zero).
  */
 unsigned int StringGetSize(char *String);
+
+/** Concatenate a string at the end of another string.
+ * @param String_Destination The string to concatenate to.
+ * @param String_To_Append The string to append to the other string.
+ */
+void StringConcatenate(char *String_Destination, char *String_To_Append);
 
 #endif

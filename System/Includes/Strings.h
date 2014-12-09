@@ -73,7 +73,7 @@
 	#define STRING_SHELL_COPY_FILE_SUCCESS "Copie r\202ussie.\n"
 	
 	// Shell version command
-	#define STRING_SHELL_VERSION "Version du syst\212me : 2.1.5 (" __DATE__ ", " __TIME__ ")\n"
+	#define STRING_SHELL_VERSION "Version du syst\212me : 2.1.6 (" __DATE__ ", " __TIME__ ")\n"
 
 	// Shell error strings
 	#define STRING_SHELL_ERROR_FILE_NOT_EXECUTABLE "Ce fichier n'est pas un programme !\n"

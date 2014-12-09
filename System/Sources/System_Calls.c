@@ -2,11 +2,13 @@
  * @see System_Calls.h for description.
  * @author Adrien RICCIARDI
  */
+#include <Configuration.h>
 #include <Drivers/Driver_Keyboard.h>
 #include <Drivers/Driver_Screen.h>
 #include <Drivers/Driver_Timer.h>
 #include <Drivers/Driver_UART.h>
 #include <File_System/File.h>
+#include <File_System/File_System.h>
 #include <Kernel.h>
 #include <System_Calls.h>
 
@@ -39,9 +41,53 @@ static void *Pointer_1, *Pointer_2;
 //====================================================================================================================
 // Kernel / system calls
 //====================================================================================================================
-static void SystemCallSystemGetUserMemorySize(void)
+static void SystemCallSystemGetParameter(void)
 {
-	Return_Value = KERNEL_USER_SPACE_SIZE;
+	unsigned int *Pointer_Result;
+	
+	Return_Value = 0;
+	Pointer_Result = Pointer_1;
+	
+	// Handle all parameters
+	switch (Integer_1)
+	{
+		case SYSTEM_CALL_SYSTEM_PARAMETER_ID_MEMORY_TOTAL_SIZE:
+			*Pointer_Result = CONFIGURATION_SYSTEM_TOTAL_RAM_SIZE_MEGA_BYTES;
+			break;
+			
+		case SYSTEM_CALL_SYSTEM_PARAMETER_ID_MEMORY_USER_SIZE:
+			*Pointer_Result = CONFIGURATION_SYSTEM_TOTAL_RAM_SIZE_MEGA_BYTES - 1;
+			break;
+			
+		case SYSTEM_CALL_SYSTEM_PARAMETER_ID_FILE_MAXIMUM_OPENED_FILES_COUNT:
+			*Pointer_Result = CONFIGURATION_FILE_SYSTEM_MAXIMUM_OPENED_FILES_COUNT;
+			break;
+			
+		case SYSTEM_CALL_SYSTEM_PARAMETER_ID_FILE_SYSTEM_BLOCK_SIZE:
+			*Pointer_Result = CONFIGURATION_FILE_SYSTEM_BLOCK_SIZE_BYTES;
+			break;
+			
+		case SYSTEM_CALL_SYSTEM_PARAMETER_ID_FILE_SYSTEM_MAXIMUM_FILE_LIST_ENTRIES_COUNT:
+			*Pointer_Result = CONFIGURATION_FILE_SYSTEM_MAXIMUM_FILES_LIST_ENTRIES;
+			break;
+			
+		case SYSTEM_CALL_SYSTEM_PARAMETER_ID_FILE_SYSTEM_MAXIMUM_BLOCK_ALLOCATION_TABLE_ENTRIES_COUNT:
+			*Pointer_Result = CONFIGURATION_FILE_SYSTEM_MAXIMUM_BLOCK_ALLOCATION_TABLE_ENTRIES;
+			break;
+			
+		case SYSTEM_CALL_SYSTEM_PARAMETER_ID_FILE_SYSTEM_FREE_FILE_LIST_ENTRIES_COUNT:
+			*Pointer_Result = FileSystemGetFreeFileListEntriesCount();
+			break;
+			
+		case SYSTEM_CALL_SYSTEM_PARAMETER_ID_FILE_SYSTEM_FREE_BLOCK_ALLOCATION_TABLE_ENTRIES_COUNT:
+			*Pointer_Result = FileSystemGetFreeBlocksCount();
+			break;
+			
+		// Unknown parameter
+		default:
+			Return_Value = 1;
+			break;
+	}
 }
 
 static void SystemCallTimerReadValue(void)
@@ -180,7 +226,7 @@ static void SystemCallFileClose(void)
 TSystemCallHandler System_Calls_Handlers[] =
 {
 	KernelStartShell, // SYSTEM_CALL_SYSTEM_EXIT_PROGRAM
-	SystemCallSystemGetUserMemorySize, // SYSTEM_CALL_SYSTEM_GET_USER_MEMORY_SIZE
+	SystemCallSystemGetParameter, // SYSTEM_CALL_SYSTEM_GET_PARAMETER
 	SystemCallTimerReadValue, // SYSTEM_CALL_TIMER_READ_VALUE
 	SystemCallTimerWait, // SYSTEM_CALL_TIMER_WAIT
 	SystemCallUARTInitialize, // SYSTEM_CALL_UART_INITIALIZE

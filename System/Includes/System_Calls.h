@@ -5,6 +5,7 @@
  * @version 1.1 : 12/09/2012
  * @version 1.2 : 13/12/2013, made system calls names clearer, reorganized them and optimized code.
  * @version 1.3 : 07/06/2014, used an enum to list the system calls (and removed never used system calls groups).
+ * @version 1.4 : 09/12/2014, added the system parameters feature.
  */
 #ifndef H_SYSTEM_CALLS_H
 #define H_SYSTEM_CALLS_H
@@ -12,6 +13,20 @@
 //-------------------------------------------------------------------------------------------------
 // Types
 //-------------------------------------------------------------------------------------------------
+/** All the available system parameters. */
+typedef enum
+{
+	SYSTEM_CALL_SYSTEM_PARAMETER_ID_MEMORY_TOTAL_SIZE, //! How many RAM the system can address (in mega bytes).
+	SYSTEM_CALL_SYSTEM_PARAMETER_ID_MEMORY_USER_SIZE, //! How many RAM a user program can access (in mega bytes).
+	SYSTEM_CALL_SYSTEM_PARAMETER_ID_FILE_MAXIMUM_OPENED_FILES_COUNT, //! How many files can be opened in the same time.
+	SYSTEM_CALL_SYSTEM_PARAMETER_ID_FILE_SYSTEM_BLOCK_SIZE, //! A block size in bytes.
+	SYSTEM_CALL_SYSTEM_PARAMETER_ID_FILE_SYSTEM_MAXIMUM_FILE_LIST_ENTRIES_COUNT, //! Maximum number of entries in the file system File List (i.e. the maximum number of files that can be stored in the file system).
+	SYSTEM_CALL_SYSTEM_PARAMETER_ID_FILE_SYSTEM_MAXIMUM_BLOCK_ALLOCATION_TABLE_ENTRIES_COUNT, //! Maximum number of file system blocks.
+	SYSTEM_CALL_SYSTEM_PARAMETER_ID_FILE_SYSTEM_FREE_FILE_LIST_ENTRIES_COUNT, //! How many FL entries are available.
+	SYSTEM_CALL_SYSTEM_PARAMETER_ID_FILE_SYSTEM_FREE_BLOCK_ALLOCATION_TABLE_ENTRIES_COUNT, //! How many BAT entries are available.
+	SYSTEM_CALL_SYSTEM_PARAMETER_IDS_COUNT //! The total number of parameters.
+} TSystemCallSystemParameterID;
+
 /** All the available system calls. */
 typedef enum
 {
@@ -26,16 +41,16 @@ typedef enum
 	 */
 	SYSTEM_CALL_SYSTEM_EXIT_PROGRAM,
 
-	/** Get the amount of RAM memory available for user.
-	 * To find out the total RAM installed on the system add 1 MB (1048576) to the result of this system call.
+	/** Get a specific system parameter.
 	 * @param eax = 1
-	 * @param ebx = don't care
+	 * @param ebx = The parameter ID (see TSystemCallSystemParameterID).
 	 * @param ecx = don't care
-	 * @param edx = don't care
+	 * @param edx = Pointer on parameter output data (type may change according to requested parameter).
 	 * @param esi = don't care
-	 * @return Amount of memory available for user in bytes.
+	 * @return 0 if the parameter was successfully retrieved,
+	 * @return 1 if the parameter does not exists.
 	 */
-	SYSTEM_CALL_SYSTEM_GET_USER_MEMORY_SIZE,
+	SYSTEM_CALL_SYSTEM_GET_PARAMETER,
 
 	// Timer
 	/** Read the hardware timer 0 counter.

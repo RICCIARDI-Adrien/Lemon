@@ -15,6 +15,7 @@
  * @version 2.1.3 : 13/05/2014, cleaned and optimized memory protection code and interrupt code.
  * @version 2.1.4 : 07/06/2014, the system is now able to compile on 64-bit development system, file system is terminated.
  * @version 2.1.5 : 26/10/2014, removed 'help' command and added 'version' command.
+ * @version 2.1.6 : 07/12/2014, fixed the memory protection limit bug.
  */
 #ifndef H_KERNEL_H
 #define H_KERNEL_H

@@ -15,14 +15,25 @@
  */
 char *TestsGetErrorString(int Error_Code);
 
+/** Display the next test to do.
+ * @param String_Message The message to display.
+ */
+void TestsDisplayMessageTestStarting(char *String_Message);
+
+/** Display a success message. */
+void TestsDisplayMessageTestSuccessful(void);
+
+/** Halt the program after displaying an error message. */
+void TestsDisplayMessageTestFailed(void);
+
 /** Test all Libraries File functions.
- * @return 0 if all the tests were successful,
+ * @return 0 if the tests were successful,
  * @return 1 if a test failed.
  */
 int TestsFile(void);
 
 /** Test the Libraries Memory functions.
- * @return 0 if all the tests were successful,
+ * @return 0 if all tests were successful,
  * @return 1 if a test failed.
  */
 int TestsMemory(void);

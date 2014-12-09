@@ -6,9 +6,16 @@
  * @version 1.2 : 11/06/2014, added ctype tests.
  * @version 1.3 : 12/06/2014, added assert() tests.
  * @version 1.4 : 07/12/2014, removed libc stuff to keep only Lemon-specific tests.
+ * @version 1.5 : 09/12/2014, multiple optimizations.
  */
 #include <System.h>
 #include "Tests.h"
+
+//-------------------------------------------------------------------------------------------------
+// Private types
+//-------------------------------------------------------------------------------------------------
+/** A test function. */
+typedef int (*TTestFunction)(void);
 
 //-------------------------------------------------------------------------------------------------
 // Private variables
@@ -33,35 +40,13 @@ static char *String_Error_Codes[] =
 	"File not executable"
 };
 
-//-------------------------------------------------------------------------------------------------
-// Private functions
-//-------------------------------------------------------------------------------------------------
-/** Display the next test to do.
- * @param String_Message The message to display.
- */
-static void MessageStartingTest(char *String_Message)
+/** All the tests. */
+static TTestFunction Test_Functions[] =
 {
-	ScreenWriteString("--- Testing ");
-	ScreenWriteString(String_Message);
-	ScreenWriteString(" ---\n");
-}
-
-/** Display a success message. */
-static void MessageTestSuccessful(void)
-{
-	ScreenSetFontColor(SCREEN_COLOR_GREEN);
-	ScreenWriteString("Test successful\n\n");
-	ScreenSetFontColor(SCREEN_COLOR_BLUE);
-}
-
-/** Halt the program after displaying an error message. */
-static void MessageTestFailed(void)
-{
-	ScreenSetFontColor(SCREEN_COLOR_RED);
-	ScreenWriteString("Test failed\n");
-	ScreenSetFontColor(SCREEN_COLOR_BLUE);
-	SystemExitProgram();
-}
+	TestsFile,
+	TestsMemory,
+	NULL
+};
 
 //-------------------------------------------------------------------------------------------------
 // Public functions
@@ -71,22 +56,48 @@ char *TestsGetErrorString(int Error_Code)
 	return String_Error_Codes[Error_Code];
 }
 
+void TestsDisplayMessageTestStarting(char *String_Message)
+{
+	ScreenWriteString("--- Testing ");
+	ScreenWriteString(String_Message);
+	ScreenWriteString(" ---\n");
+}
+
+void TestsDisplayMessageTestSuccessful(void)
+{
+	ScreenSetFontColor(SCREEN_COLOR_GREEN);
+	ScreenWriteString("Test successful\n\n");
+	ScreenSetFontColor(SCREEN_COLOR_BLUE);
+}
+
+void TestsDisplayMessageTestFailed(void)
+{
+	ScreenSetFontColor(SCREEN_COLOR_RED);
+	ScreenWriteString("Test failed\n");
+	ScreenSetFontColor(SCREEN_COLOR_BLUE);
+	SystemExitProgram();
+}
+
 //-------------------------------------------------------------------------------------------------
 // Entry point
 //-------------------------------------------------------------------------------------------------
 int main(void)
 {
+	int i = 0;
+	
 	RandomInitialize();
 	
 	ScreenWriteString("### Automated tests ###\n\n");
 	
-	MessageStartingTest("Libraries File functions");
-	if (TestsFile()) MessageTestSuccessful();
-	else MessageTestFailed();
-
-	MessageStartingTest("Libraries Memory functions");
-	if (TestsMemory() == 0) MessageTestSuccessful();
-	else MessageTestFailed();
+	while (Test_Functions[i] != NULL)
+	{
+		if (Test_Functions[i]() != 0)
+		{
+			TestsDisplayMessageTestFailed();
+			break;
+		}
+		i++;
+	}
 
 	return 0;
 }

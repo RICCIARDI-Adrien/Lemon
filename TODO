@@ -4,11 +4,6 @@
 
 Système
 -------
-- ajouter support timer 2 (timer programmable) pour avoir base à 60Hz pour jeux
-- ajouter support souris pour interface graphique
-
-fixer le problème de MMU (la limite est ignorée)
-amélioration de la limite des segments de code et de données de l'utilisateur pour qu'un programme utilisateur ne puisse pas accéder à de la mémoire qui n'existe pas
 
 optimiser cadre d'appel du point d'entrée des interruptions système (peut-être n'utiliser que eax et pusher edi une seule fois)
 
@@ -33,3 +28,7 @@ modif bibliothèques pour gérer nouveaux codes touches
 
 - bibliothèque userspace qui gère les fenêtres en ASCII art en exploitant le syscall de copie de buffer vidéo
 
+Commandes
+---------
+
+- faire en sorte que Text Viewer n'ouvre pas les fichiers binaires (utile ?)

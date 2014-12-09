@@ -12,6 +12,9 @@
 /** Length of a file name string (it does not include the terminating zero). */
 #define FILE_NAME_LENGTH 12
 
+/** How many files can be opened in the same time. */
+#define FILE_MAXIMUM_OPENED_COUNT 8
+
 //-------------------------------------------------------------------------------------------------
 // Types
 //-------------------------------------------------------------------------------------------------

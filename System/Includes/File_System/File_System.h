@@ -72,6 +72,11 @@ void FileSystemSave(void);
  */
 unsigned int FileSystemGetFreeBlocksCount(void);
 
+/** Get the free FL entries count.
+ * @return The free FL entries count.
+ */
+unsigned int FileSystemGetFreeFileListEntriesCount(void);
+
 /** Get the first free block found. 
  * @return The block index value if a free block was found,
  * @return FILE_SYSTEM_BAT_FULL_CODE if the BAT is full.

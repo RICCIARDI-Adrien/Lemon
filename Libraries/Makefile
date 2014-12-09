@@ -17,8 +17,8 @@ OBJECTS_KEYBOARD = $(PATH_OBJECTS)/Keyboard_Is_Key_Available.o $(PATH_OBJECTS)/K
 OBJECTS_MEMORY = $(PATH_OBJECTS)/Memory_Copy_Area.o $(PATH_OBJECTS)/Memory_Set_Area_Value.o
 OBJECTS_RANDOM = $(PATH_OBJECTS)/Random_Generate_Number.o $(PATH_OBJECTS)/Random_Initialize.o
 OBJECTS_SCREEN = $(PATH_OBJECTS)/Screen_Clear.o $(PATH_OBJECTS)/Screen_Display_Buffer.o $(PATH_OBJECTS)/Screen_Get_Cursor_Position.o $(PATH_OBJECTS)/Screen_Set_Background_Color.o $(PATH_OBJECTS)/Screen_Set_Cursor_Position.o $(PATH_OBJECTS)/Screen_Set_Font_Color.o $(PATH_OBJECTS)/Screen_Write_Character.o $(PATH_OBJECTS)/Screen_Write_Integer.o $(PATH_OBJECTS)/Screen_Write_String.o $(PATH_OBJECTS)/Screen_Write_Unsigned_Integer.o
-OBJECTS_STRING = $(PATH_OBJECTS)/String_Compare.o $(PATH_OBJECTS)/String_Convert_String_To_Unsigned_Integer.o $(PATH_OBJECTS)/String_Copy.o $(PATH_OBJECTS)/String_Get_Size.o
-OBJECTS_SYSTEM = $(PATH_OBJECTS)/System_Program_Entry_Point.o $(PATH_OBJECTS)/System_Exit_Program.o $(PATH_OBJECTS)/System_Wait.o
+OBJECTS_STRING = $(PATH_OBJECTS)/String_Compare.o $(PATH_OBJECTS)/String_Concatenate.o $(PATH_OBJECTS)/String_Convert_String_To_Unsigned_Integer.o $(PATH_OBJECTS)/String_Convert_Unsigned_Integer_To_String.o $(PATH_OBJECTS)/String_Copy.o $(PATH_OBJECTS)/String_Get_Size.o
+OBJECTS_SYSTEM = $(PATH_OBJECTS)/System_Exit_Program.o $(PATH_OBJECTS)/System_Get_File_System_Total_Size.o $(PATH_OBJECTS)/System_Program_Entry_Point.o $(PATH_OBJECTS)/System_Wait.o
 OBJECTS_UART = $(PATH_OBJECTS)/UART_Initialize.o $(PATH_OBJECTS)/UART_Is_Data_Received.o $(PATH_OBJECTS)/UART_Read_Byte.o $(PATH_OBJECTS)/UART_Write_Byte.o
 OBJECTS = $(OBJECTS_FILE) $(OBJECTS_KEYBOARD) $(OBJECTS_MEMORY) $(OBJECTS_RANDOM) $(OBJECTS_SCREEN) $(OBJECTS_STRING) $(OBJECTS_SYSTEM) $(OBJECTS_UART)
 
@@ -183,10 +183,20 @@ $(PATH_OBJECTS)/String_Compare.d: $(PATH_SOURCES)/String/String_Compare.c
 $(PATH_OBJECTS)/String_Compare.o: $(PATH_OBJECTS)/String_Compare.d
 	$(CC) $(CCFLAGS) $(PATH_SOURCES)/String/String_Compare.c -o $(PATH_OBJECTS)/String_Compare.o
 
+$(PATH_OBJECTS)/String_Concatenate.d: $(PATH_SOURCES)/String/String_Concatenate.c
+	$(CC) $(CCFLAGS) -MM $(PATH_SOURCES)/String/String_Concatenate.c -MF $(PATH_OBJECTS)/String_Concatenate.d
+$(PATH_OBJECTS)/String_Concatenate.o: $(PATH_OBJECTS)/String_Concatenate.d
+	$(CC) $(CCFLAGS) $(PATH_SOURCES)/String/String_Concatenate.c -o $(PATH_OBJECTS)/String_Concatenate.o
+
 $(PATH_OBJECTS)/String_Convert_String_To_Unsigned_Integer.d: $(PATH_SOURCES)/String/String_Convert_String_To_Unsigned_Integer.c
 	$(CC) $(CCFLAGS) -MM $(PATH_SOURCES)/String/String_Convert_String_To_Unsigned_Integer.c -MF $(PATH_OBJECTS)/String_Convert_String_To_Unsigned_Integer.d
 $(PATH_OBJECTS)/String_Convert_String_To_Unsigned_Integer.o: $(PATH_OBJECTS)/String_Convert_String_To_Unsigned_Integer.d
 	$(CC) $(CCFLAGS) $(PATH_SOURCES)/String/String_Convert_String_To_Unsigned_Integer.c -o $(PATH_OBJECTS)/String_Convert_String_To_Unsigned_Integer.o
+
+$(PATH_OBJECTS)/String_Convert_Unsigned_Integer_To_String.d: $(PATH_SOURCES)/String/String_Convert_Unsigned_Integer_To_String.c
+	$(CC) $(CCFLAGS) -MM $(PATH_SOURCES)/String/String_Convert_Unsigned_Integer_To_String.c -MF $(PATH_OBJECTS)/String_Convert_Unsigned_Integer_To_String.d
+$(PATH_OBJECTS)/String_Convert_Unsigned_Integer_To_String.o: $(PATH_OBJECTS)/String_Convert_Unsigned_Integer_To_String.d
+	$(CC) $(CCFLAGS) $(PATH_SOURCES)/String/String_Convert_Unsigned_Integer_To_String.c -o $(PATH_OBJECTS)/String_Convert_Unsigned_Integer_To_String.o
 
 $(PATH_OBJECTS)/String_Copy.d: $(PATH_SOURCES)/String/String_Copy.c
 	$(CC) $(CCFLAGS) -MM $(PATH_SOURCES)/String/String_Copy.c -MF $(PATH_OBJECTS)/String_Copy.d
@@ -201,16 +211,21 @@ $(PATH_OBJECTS)/String_Get_Size.o: $(PATH_OBJECTS)/String_Get_Size.d
 #--------------------------------------------------------------------------------------------------
 # System
 #--------------------------------------------------------------------------------------------------
+$(PATH_OBJECTS)/System_Exit_Program.d: $(PATH_SOURCES)/System/System_Exit_Program.c
+	$(CC) $(CCFLAGS) -MM $(PATH_SOURCES)/System/System_Exit_Program.c -MF $(PATH_OBJECTS)/System_Exit_Program.d
+$(PATH_OBJECTS)/System_Exit_Program.o: $(PATH_OBJECTS)/System_Exit_Program.d
+	$(CC) $(CCFLAGS) $(PATH_SOURCES)/System/System_Exit_Program.c -o $(PATH_OBJECTS)/System_Exit_Program.o
+
+$(PATH_OBJECTS)/System_Get_File_System_Total_Size.d: $(PATH_SOURCES)/System/System_Get_File_System_Total_Size.c
+	$(CC) $(CCFLAGS) -MM $(PATH_SOURCES)/System/System_Get_File_System_Total_Size.c -MF $(PATH_OBJECTS)/System_Get_File_System_Total_Size.d
+$(PATH_OBJECTS)/System_Get_File_System_Total_Size.o: $(PATH_OBJECTS)/System_Get_File_System_Total_Size.d
+	$(CC) $(CCFLAGS) $(PATH_SOURCES)/System/System_Get_File_System_Total_Size.c -o $(PATH_OBJECTS)/System_Get_File_System_Total_Size.o
+
 # This is the equivalent of the C runtime code, it must not be optimized out to preserve the system executable magic number (which is the beginning of the stack frame)
 $(PATH_OBJECTS)/System_Program_Entry_Point.d: $(PATH_SOURCES)/System/System_Program_Entry_Point.c
 	$(CC) $(CCFLAGS) -MM $(PATH_SOURCES)/System/System_Program_Entry_Point.c -MF $(PATH_OBJECTS)/System_Program_Entry_Point.d
 $(PATH_OBJECTS)/System_Program_Entry_Point.o: $(PATH_OBJECTS)/System_Program_Entry_Point.d
 	$(CC) $(CCFLAGS) -O0 $(PATH_SOURCES)/System/System_Program_Entry_Point.c -o $(PATH_OBJECTS)/System_Program_Entry_Point.o
-	
-$(PATH_OBJECTS)/System_Exit_Program.d: $(PATH_SOURCES)/System/System_Exit_Program.c
-	$(CC) $(CCFLAGS) -MM $(PATH_SOURCES)/System/System_Exit_Program.c -MF $(PATH_OBJECTS)/System_Exit_Program.d
-$(PATH_OBJECTS)/System_Exit_Program.o: $(PATH_OBJECTS)/System_Exit_Program.d
-	$(CC) $(CCFLAGS) $(PATH_SOURCES)/System/System_Exit_Program.c -o $(PATH_OBJECTS)/System_Exit_Program.o
 
 $(PATH_OBJECTS)/System_Wait.d: $(PATH_SOURCES)/System/System_Wait.c
 	$(CC) $(CCFLAGS) -MM $(PATH_SOURCES)/System/System_Wait.c -MF $(PATH_OBJECTS)/System_Wait.d

@@ -16,6 +16,7 @@
 //-------------------------------------------------------------------------------------------------
 // Private variables
 //-------------------------------------------------------------------------------------------------
+/** Store the file data. */
 static unsigned char Buffer[TESTS_FILE_BUFFER_SIZE];
 
 //-------------------------------------------------------------------------------------------------
@@ -28,7 +29,7 @@ static unsigned char Buffer[TESTS_FILE_BUFFER_SIZE];
 static int TestsFileSystemCalls(void)
 {
 	unsigned int File_Size_Bytes, Written_Data_CRC, Read_Data_CRC, i, CRC_Seed, File_Descriptor, Read_Bytes_Count;
-	int Return_Code;
+	int Return_Value;
 
 	// Choose a random file size between 100 KB and 3 MB
 	File_Size_Bytes = ((RandomGenerateNumber() % 32) + 1) * 1024 * 100;
@@ -49,22 +50,22 @@ static int TestsFileSystemCalls(void)
 
 	ScreenWriteString("Writing data to file... ");
 	// Open the file
-	Return_Code = SystemCall(SYSTEM_CALL_FILE_OPEN, 'w', 0, "_test_", &File_Descriptor);
-	if (Return_Code != ERROR_CODE_NO_ERROR)
+	Return_Value = SystemCall(SYSTEM_CALL_FILE_OPEN, 'w', 0, "_test_", &File_Descriptor);
+	if (Return_Value != ERROR_CODE_NO_ERROR)
 	{
 		ScreenWriteString("Error when opening the file in write mode : ");
-		ScreenWriteString(TestsGetErrorString(Return_Code));
+		ScreenWriteString(TestsGetErrorString(Return_Value));
 		ScreenWriteCharacter('\n');
-		return 0;
+		return 1;
 	}
 	// Write data
-	Return_Code = SystemCall(SYSTEM_CALL_FILE_WRITE, File_Descriptor, File_Size_Bytes, Buffer, NULL);
-	if (Return_Code != ERROR_CODE_NO_ERROR)
+	Return_Value = SystemCall(SYSTEM_CALL_FILE_WRITE, File_Descriptor, File_Size_Bytes, Buffer, NULL);
+	if (Return_Value != ERROR_CODE_NO_ERROR)
 	{
 		ScreenWriteString("Error when writing to the file : ");
-		ScreenWriteString(TestsGetErrorString(Return_Code));
+		ScreenWriteString(TestsGetErrorString(Return_Value));
 		ScreenWriteCharacter('\n');
-		return 0;
+		return 1;
 	}
 	// Close the file
 	SystemCall(SYSTEM_CALL_FILE_CLOSE, File_Descriptor, 0, NULL, NULL);
@@ -75,22 +76,22 @@ static int TestsFileSystemCalls(void)
 
 	ScreenWriteString("Reading data from file... ");
 	// Open the file
-	Return_Code = SystemCall(SYSTEM_CALL_FILE_OPEN, 'r', 0, "_test_", &File_Descriptor);
-	if (Return_Code != ERROR_CODE_NO_ERROR)
+	Return_Value = SystemCall(SYSTEM_CALL_FILE_OPEN, 'r', 0, "_test_", &File_Descriptor);
+	if (Return_Value != ERROR_CODE_NO_ERROR)
 	{
 		ScreenWriteString("Error when opening the file in read mode : ");
-		ScreenWriteString(TestsGetErrorString(Return_Code));
+		ScreenWriteString(TestsGetErrorString(Return_Value));
 		ScreenWriteCharacter('\n');
-		return 0;
+		return 1;
 	}
 	// Read data
-	Return_Code = SystemCall(SYSTEM_CALL_FILE_READ, File_Descriptor, File_Size_Bytes, Buffer, &Read_Bytes_Count);
-	if (Return_Code != ERROR_CODE_NO_ERROR)
+	Return_Value = SystemCall(SYSTEM_CALL_FILE_READ, File_Descriptor, File_Size_Bytes, Buffer, &Read_Bytes_Count);
+	if (Return_Value != ERROR_CODE_NO_ERROR)
 	{
 		ScreenWriteString("Error when reading from the file : ");
-		ScreenWriteString(TestsGetErrorString(Return_Code));
+		ScreenWriteString(TestsGetErrorString(Return_Value));
 		ScreenWriteCharacter('\n');
-		return 0;
+		return 1;
 	}
 	// Close the file
 	SystemCall(SYSTEM_CALL_FILE_CLOSE, File_Descriptor, 0, NULL, NULL);
@@ -105,16 +106,63 @@ static int TestsFileSystemCalls(void)
 	ScreenWriteString(")\n");
 
 	// Delete the file
-	Return_Code = FileDelete("_test_");
-	if (Return_Code != ERROR_CODE_NO_ERROR)
+	Return_Value = FileDelete("_test_");
+	if (Return_Value != ERROR_CODE_NO_ERROR)
 	{
 		ScreenWriteString("Error when deleting the file : ");
-		ScreenWriteString(TestsGetErrorString(Return_Code));
+		ScreenWriteString(TestsGetErrorString(Return_Value));
 		ScreenWriteCharacter('\n');
-		return 0;
+		return 1;
 	}
 
-	if (Read_Data_CRC == Written_Data_CRC) return 1;
+	if (Read_Data_CRC == Written_Data_CRC) return 0;
+	return 1;
+}
+
+/** Try to open more than the maximum allowed number of files. The FileOpen() function must fail when the limit is reached.
+ * @return 0 if test was successful,
+ * @return 1 if the test failed.
+ */
+static int TestsFileMaximumOpenedFiles(void)
+{
+	unsigned int File_Descriptors[FILE_MAXIMUM_OPENED_COUNT + 1];
+	int i, Return_Value;
+	char String_File_Name[FILE_NAME_LENGTH + 1], String_Number[11];
+	
+	// Open the maximum number of files
+	ScreenWriteString("Opening as many files as possible...\n");
+	for (i = 0; i < FILE_MAXIMUM_OPENED_COUNT; i++)
+	{
+		// Create the file name
+		StringConvertUnsignedIntegerToString(i, String_Number);
+		StringCopy("!*test", String_File_Name);
+		StringConcatenate(String_File_Name, String_Number);
+		
+		// Open the file in write mode so the file has not exist yet
+		Return_Value = FileOpen(String_File_Name, 'w', &File_Descriptors[i]);
+		if (Return_Value != ERROR_CODE_NO_ERROR)
+		{
+			ScreenWriteString("Error while opening the files allowed count : ");
+			ScreenWriteString(TestsGetErrorString(Return_Value));
+			ScreenWriteCharacter('\n');
+			return 1;
+		}
+	}
+	
+	// Opening one more file
+	ScreenWriteString("Opening one more file...\n");
+	Return_Value = FileOpen("!!!test", 'w', &File_Descriptors[FILE_MAXIMUM_OPENED_COUNT]);
+	if (Return_Value != ERROR_CODE_CANT_OPEN_MORE_FILES)
+	{
+		ScreenWriteString("Not expected error while opening too much files in the same time : ");
+		ScreenWriteString(TestsGetErrorString(Return_Value));
+		ScreenWriteCharacter('\n');
+		return 1;
+	}
+	
+	// Close all files
+	for (i = 0; i < FILE_MAXIMUM_OPENED_COUNT; i++) FileClose(File_Descriptors[i]);
+	
 	return 0;
 }
 
@@ -123,6 +171,13 @@ static int TestsFileSystemCalls(void)
 //-------------------------------------------------------------------------------------------------
 int TestsFile(void)
 {
+	TestsDisplayMessageTestStarting("Libraries File system calls");
 	if (TestsFileSystemCalls()) return 1;
+	TestsDisplayMessageTestSuccessful();
+	
+	TestsDisplayMessageTestStarting("System maximum opened files limit");
+	if (TestsFileMaximumOpenedFiles()) return 1;
+	TestsDisplayMessageTestSuccessful();
+	
 	return 0;
 }

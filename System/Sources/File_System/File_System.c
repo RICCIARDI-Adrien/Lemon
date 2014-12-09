@@ -132,6 +132,17 @@ unsigned int FileSystemGetFreeBlocksCount(void)
 	return Free_Blocks_Count;
 }
 
+unsigned int FileSystemGetFreeFileListEntriesCount(void)
+{
+	unsigned int i, File_List_Entries_Count = 0;
+	
+	for (i = 0; i < File_System_Informations.Total_Files_Count; i++)
+	{
+		if (Files_List[i].Name[0] == 0) File_List_Entries_Count++;
+	}
+	return File_List_Entries_Count;
+}
+
 unsigned int FileSystemGetFirstFreeBlock(void)
 {
 	unsigned int i;
