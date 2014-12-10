@@ -1,4 +1,4 @@
-OBJECTS_TESTS = $(OBJECTS_PATH)/Tests/crc32.o $(OBJECTS_PATH)/Tests/Tests.o $(OBJECTS_PATH)/Tests/Tests_File.o $(OBJECTS_PATH)/Tests/Tests_Memory.o
+OBJECTS_TESTS = $(OBJECTS_PATH)/Tests/crc32.o $(OBJECTS_PATH)/Tests/Display_Message.o $(OBJECTS_PATH)/Tests/Tests.o $(OBJECTS_PATH)/Tests/Tests_File.o $(OBJECTS_PATH)/Tests/Tests_Memory.o
 OBJECTS = $(OBJECTS_PATH)/Tests/Test_Display_ASCII_Characters.o $(OBJECTS_PATH)/Tests/Test_Protection_Check.o $(OBJECTS_TESTS)
 
 all: $(OBJECTS)
@@ -11,14 +11,17 @@ clean:
 
 $(OBJECTS_PATH)/Tests/crc32.o: crc32.c crc32.h
 	$(CC) $(CCFLAGS) -c crc32.c -o $(OBJECTS_PATH)/Tests/crc32.o
+	
+$(OBJECTS_PATH)/Tests/Display_Message.o: Display_Message.c Display_Message.h
+	$(CC) $(CCFLAGS) -c Display_Message.c -o $(OBJECTS_PATH)/Tests/Display_Message.o
 
-$(OBJECTS_PATH)/Tests/Tests.o: Tests.c Tests.h
+$(OBJECTS_PATH)/Tests/Tests.o: Tests.c Display_Message.h Tests.h
 	$(CC) $(CCFLAGS) -c Tests.c -o $(OBJECTS_PATH)/Tests/Tests.o
 
-$(OBJECTS_PATH)/Tests/Tests_File.o: Tests_File.c crc32.h Tests.h
+$(OBJECTS_PATH)/Tests/Tests_File.o: Tests_File.c crc32.h Display_Message.h Tests.h
 	$(CC) $(CCFLAGS) -c Tests_File.c -o $(OBJECTS_PATH)/Tests/Tests_File.o
 	
-$(OBJECTS_PATH)/Tests/Tests_Memory.o: Tests_Memory.c Tests.h
+$(OBJECTS_PATH)/Tests/Tests_Memory.o: Tests_Memory.c Display_Message.h Tests.h
 	$(CC) $(CCFLAGS) -c Tests_Memory.c -o $(OBJECTS_PATH)/Tests/Tests_Memory.o
 
 # The following objects will be linked as separate executables, but this can't be done in one time as a custom linker script must be used

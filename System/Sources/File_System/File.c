@@ -237,7 +237,7 @@ int FileOpen(char *String_File_Name, char Opening_Mode, unsigned int *Pointer_Fi
 	TFileDescriptor *Pointer_File_Descriptor;
 	
 	// Check if file name is valid
-	if (String_File_Name[0] == 0) return ERROR_CODE_BAD_FILE_NAME;
+	if (String_File_Name == NULL) return ERROR_CODE_BAD_FILE_NAME;
 	
 	// Check if the file is not opened yet (as there is only one application running, the same application must not open the same file several times)
 	for (i = 0; i < CONFIGURATION_FILE_SYSTEM_MAXIMUM_OPENED_FILES_COUNT; i++)

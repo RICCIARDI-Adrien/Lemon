@@ -4,6 +4,7 @@
  * @version 1.0 : 07/12/2014
  */
 #include <System.h>
+#include "Display_Message.h"
 #include "Tests.h"
 
 //-------------------------------------------------------------------------------------------------
@@ -82,7 +83,7 @@ int TestsMemory(void)
 	unsigned int i;
 	unsigned char Value;
 
-	TestsDisplayMessageTestStarting("Libraries MemoryCopyArea()");
+	DisplayMessageTestStarting("Libraries MemoryCopyArea()");
 	// Use a small area (< 4 bytes) to bypass the "copy by 4 bytes" part of the function
 	ScreenWriteString("Testing MemoryCopyArea() with a small area size...\n");
 	for (i = 0; i < 3; i++) Source_Buffer[i] = (unsigned char) RandomGenerateNumber(); // Fill the buffer with random data
@@ -94,9 +95,9 @@ int TestsMemory(void)
 	for (i = 0; i < TESTS_MEMORY_BUFFER_SIZE; i++) Source_Buffer[i] = (unsigned char) RandomGenerateNumber(); // Fill the buffer with random data
 	MemoryCopyArea(Source_Buffer, Destination_Buffer, TESTS_MEMORY_BUFFER_SIZE);
 	if (!TestsMemoryAreAreasEqual(Source_Buffer, Destination_Buffer, TESTS_MEMORY_BUFFER_SIZE)) return 1;
-	TestsDisplayMessageTestSuccessful();
+	DisplayMessageTestSuccessful();
 	
-	TestsDisplayMessageTestStarting("Libraries MemorySetAreaValue()");
+	DisplayMessageTestStarting("Libraries MemorySetAreaValue()");
 	// Use a small area (< 4 bytes) to bypass the "copy by 4 bytes" part of the function
 	ScreenWriteString("Testing MemorySetAreaValue() with a small area size...\n");
 	Value = (unsigned char) RandomGenerateNumber(); // Get a random value
@@ -108,7 +109,7 @@ int TestsMemory(void)
 	Value = (unsigned char) RandomGenerateNumber(); // Get a random value
 	MemorySetAreaValue(Source_Buffer, TESTS_MEMORY_BUFFER_SIZE, Value);
 	if (!TestsMemoryCheckAreaValue(Source_Buffer, Value, TESTS_MEMORY_BUFFER_SIZE)) return 1;
-	TestsDisplayMessageTestSuccessful();
+	DisplayMessageTestSuccessful();
 	
 	return 0;
 }

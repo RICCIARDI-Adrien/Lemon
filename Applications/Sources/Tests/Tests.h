@@ -9,23 +9,6 @@
 //-------------------------------------------------------------------------------------------------------------------------------
 // Functions
 //-------------------------------------------------------------------------------------------------------------------------------
-/** Get the text signification of a Lemon-specific error code.
- * @param Error_Code The error code.
- * @return The corresponding string.
- */
-char *TestsGetErrorString(int Error_Code);
-
-/** Display the next test to do.
- * @param String_Message The message to display.
- */
-void TestsDisplayMessageTestStarting(char *String_Message);
-
-/** Display a success message. */
-void TestsDisplayMessageTestSuccessful(void);
-
-/** Halt the program after displaying an error message. */
-void TestsDisplayMessageTestFailed(void);
-
 /** Test all Libraries File functions.
  * @return 0 if the tests were successful,
  * @return 1 if a test failed.

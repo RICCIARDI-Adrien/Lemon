@@ -9,6 +9,7 @@
  * @version 1.5 : 09/12/2014, multiple optimizations.
  */
 #include <System.h>
+#include "Display_Message.h"
 #include "Tests.h"
 
 //-------------------------------------------------------------------------------------------------
@@ -20,26 +21,6 @@ typedef int (*TTestFunction)(void);
 //-------------------------------------------------------------------------------------------------
 // Private variables
 //-------------------------------------------------------------------------------------------------
-/** All the system errors description. */
-static char *String_Error_Codes[] =
-{
-	"No error",
-	"Files List is full",
-	"Block Allocation Table is full",
-	"Bad file name",
-	"File not found",
-	"File already existing",
-	"Can't open more files",
-	"File opened yet",
-	"Unknown file opening mode",
-	"The file is not opened",
-	"Bad file opening mode",
-	"Bad file descriptor (greater than the maximum number of simultaneous opened files)",
-	"Bad UART parameters",
-	"File to download is larger than RAM",
-	"File not executable"
-};
-
 /** All the tests. */
 static TTestFunction Test_Functions[] =
 {
@@ -47,36 +28,6 @@ static TTestFunction Test_Functions[] =
 	TestsMemory,
 	NULL
 };
-
-//-------------------------------------------------------------------------------------------------
-// Public functions
-//-------------------------------------------------------------------------------------------------
-char *TestsGetErrorString(int Error_Code)
-{
-	return String_Error_Codes[Error_Code];
-}
-
-void TestsDisplayMessageTestStarting(char *String_Message)
-{
-	ScreenWriteString("--- Testing ");
-	ScreenWriteString(String_Message);
-	ScreenWriteString(" ---\n");
-}
-
-void TestsDisplayMessageTestSuccessful(void)
-{
-	ScreenSetFontColor(SCREEN_COLOR_GREEN);
-	ScreenWriteString("Test successful\n\n");
-	ScreenSetFontColor(SCREEN_COLOR_BLUE);
-}
-
-void TestsDisplayMessageTestFailed(void)
-{
-	ScreenSetFontColor(SCREEN_COLOR_RED);
-	ScreenWriteString("Test failed\n");
-	ScreenSetFontColor(SCREEN_COLOR_BLUE);
-	SystemExitProgram();
-}
 
 //-------------------------------------------------------------------------------------------------
 // Entry point
@@ -93,7 +44,7 @@ int main(void)
 	{
 		if (Test_Functions[i]() != 0)
 		{
-			TestsDisplayMessageTestFailed();
+			DisplayMessageTestFailed();
 			break;
 		}
 		i++;

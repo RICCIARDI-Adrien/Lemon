@@ -10,7 +10,7 @@
 // Functions
 //-------------------------------------------------------------------------------------------------
 /** Create a new file in one operation.
- * @param File_Name Name of the file. If the files already exists it is overwritten by the new one.
+ * @param String_File_Name Name of the file. If the files already exists it is overwritten by the new one.
  * @param Buffer A pointer to a buffer holding the whole file content.
  * @param Buffer_Size_Bytes Size of the buffer in bytes.
  * @return ERROR_CODE_BAD_FILE_NAME if the file name's string is empty,
@@ -19,14 +19,14 @@
  * @return ERROR_CODE_NO_ERROR if the file was successfully created.
  * @note If the file already exists and the new file is bigger than the previous and there is not enough room on disk, the old file version is preserved.
  */
-int FileCreate(char *File_Name, unsigned char *Buffer, unsigned int Buffer_Size_Bytes);
+int FileCreate(char *String_File_Name, unsigned char *Buffer, unsigned int Buffer_Size_Bytes);
 
 /** Tell if a file exists or not in hard disk's file system.
- * @param File_Name Name of the file.
+ * @param String_File_Name Name of the file.
  * @return 1 if the file exists,
  * @return 0 if the file doesn't exist.
  */
-int FileExists(char *File_Name);
+int FileExists(char *String_File_Name);
 
 /** Begin a file listing.
  * @warning This function must be called one time only before calling FileListNext();
@@ -34,31 +34,35 @@ int FileExists(char *File_Name);
 void FileListInitialize(void);
 
 /** Get list file names.
- * @param File_Name A pointer on a buffer which will receive the file name (this buffer must be 13-byte wide).
- * @note The end of the listing is reached when File_Name holds an empty string.
+ * @param String_File_Name A pointer on a buffer which will receive the file name (this buffer must be 13-byte wide).
+ * @note The end of the listing is reached when String_File_Name holds an empty string.
  * @warning The file listing must have been initialized by calling FileListInitialize() before any call to this function.
  */
-void FileListNext(char *File_Name);
+void FileListNext(char *String_File_Name);
 
 /** Rename an existing file.
+ * @param String_Current_File_Name The file to rename.
+ * @param String_New_File_Name The new name to give to the file.
  * @return ERROR_CODE_NO_ERROR if the file was correctly renamed,
  * @return ERROR_CODE_BAD_FILENAME if New_File_Name is an empty string,
  * @return ERROR_CODE_FILE_NOT_FOUND if the file was not found,
  * @return ERROR_CODE_FILE_ALREADY_EXISTS if the new name is attributed to an existing file.
  */
-int FileRename(char *Current_File_Name, char *New_File_Name);
+int FileRename(char *String_Current_File_Name, char *String_New_File_Name);
 
 /** Delete a file from the file system.
+ * @param String_File_Name The file to delete.
  * @return ERROR_CODE_NO_ERROR if the file was correctly deleted,
  * @return ERROR_CODE_FILE_NOT_FOUND if the file was not found.
  */
-int FileDelete(char *File_Name);
+int FileDelete(char *String_File_Name);
 
 /** Retrieve the size of a file in bytes.
+ * @param String_File_Name The file to find size.
  * @return 0 if the file was not found,
  * @return a value different from zero is file size.
  */
-unsigned int FileSize(char *File_Name);
+unsigned int FileSize(char *String_File_Name);
 
 /** Load a whole file into memory.
  * @param String_File_Name The name of the file to load.
@@ -75,7 +79,7 @@ int FileLoad(char *String_File_Name, unsigned char *Buffer, int Is_Executable_Ch
 void FileResetFileDescriptors(void);
 
 /** Open a file.
- * @param File_Name A pointer to an ASCIIZ string containing the file name.
+ * @param String_File_Name A pointer to an ASCIIZ string containing the file name.
  * @param Opening_Mode Opening mode of the file : 'r' to read only or 'w' to write only.
  * @param File_Descriptor_Index A pointer on an unsigned int which will receive the file descriptor index if the function succeed.
  * @return ERROR_CODE_BAD_FILE_NAME if File_Name is an empty string,
@@ -87,7 +91,7 @@ void FileResetFileDescriptors(void);
  * @return ERROR_CODE_BAT_FULL if the file was opened in write mode an there is no more room in BAT,
  * @return ERROR_CODE_NO_ERROR if the file was correctly opened.
  */
-int FileOpen(char *File_Name, char Opening_Mode, unsigned int *File_Descriptor_Index);
+int FileOpen(char *String_File_Name, char Opening_Mode, unsigned int *File_Descriptor_Index);
 
 /** Read data from a previously opened file.
  * @param File_Descriptor_Index The file descriptor identifying the file.

@@ -276,10 +276,10 @@ int SystemCalls(void)
 	// Is the system call implemented ?
 	if (Call_Code >= SYSTEM_CALLS_COUNT) return -1; // Arbitrary value
 	
-	// Adjust string pointers according to user segment base into GDT
-	Pointer_1 += KERNEL_USER_SPACE_ADDRESS;
-	Pointer_2 += KERNEL_USER_SPACE_ADDRESS;
-		
+	// Adjust string pointers according to user segment base into GDT, but preserve NULL
+	if (Pointer_1 != NULL) Pointer_1 += KERNEL_USER_SPACE_ADDRESS;
+	if (Pointer_2 != NULL) Pointer_2 += KERNEL_USER_SPACE_ADDRESS;
+	
 	// Execute requested call
 	System_Calls_Handlers[Call_Code]();
 	return Return_Value;
