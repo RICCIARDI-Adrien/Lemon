@@ -24,6 +24,8 @@ CCFLAGS += -masm=intel -m32 -fno-builtin -finline-functions-called-once -nostdli
 LDFLAGS = -T ../System/Linker_Script.ld --strip-all -nostdlib -nostartfile
 MBR_FLAGS = -DSECTORS_TO_LOAD_COUNT=512
 
+BINARIES_TO_HEADER_CONVERTER = Tools/Binaries_To_Header_Converter.out
+
 all: clean Tools/Binaries_To_Header_Converter.out Convert_Files $(OBJECTS_PATH)/MBR.32b $(OBJECTS)
 	######## Link installer ########
 	$(LD) $(LDFLAGS) $(OBJECTS) -o $(OBJECTS_PATH)/Kernel.32b
@@ -42,17 +44,17 @@ all: clean Tools/Binaries_To_Header_Converter.out Convert_Files $(OBJECTS_PATH)/
 	@ls -l $(OBJECTS_PATH)/Kernel.32b | awk '{print $$5 + 512}'
 
 clean:
-	rm -f $(BINARIES_PATH)/* $(OBJECTS_PATH)/* $(SOURCES_PATH)/Shell/Embedded_Files_Data.h
+	rm -f $(BINARIES_PATH)/* $(OBJECTS_PATH)/* $(SOURCES_PATH)/Shell/Embedded_Files_Data.h $(BINARIES_TO_HEADER_CONVERTER)
 
 #------------------------------------------------------------------------------------------------------------------------------
 # Converter tool program
 #------------------------------------------------------------------------------------------------------------------------------
-Tools/Binaries_To_Header_Converter.out: Tools/Binaries_To_Header_Converter.c
-	gcc -W -Wall Tools/Binaries_To_Header_Converter.c -o Tools/Binaries_To_Header_Converter.out
+$(BINARIES_TO_HEADER_CONVERTER): Tools/Binaries_To_Header_Converter.c
+	gcc -W -Wall Tools/Binaries_To_Header_Converter.c -o $(BINARIES_TO_HEADER_CONVERTER)
 
 Convert_Files:
 	######## Embed applications data into installer image ########
-	@Tools/Binaries_To_Header_Converter.out Tools/Binaries_To_Header_Converter_List.txt $(SOURCES_PATH)/Shell/Embedded_Files_Data.h
+	@$(BINARIES_TO_HEADER_CONVERTER) Tools/Binaries_To_Header_Converter_List.txt $(SOURCES_PATH)/Shell/Embedded_Files_Data.h
 
 #------------------------------------------------------------------------------------------------------------------------------
 # System core

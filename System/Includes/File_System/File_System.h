@@ -84,30 +84,35 @@ unsigned int FileSystemGetFreeFileListEntriesCount(void);
 unsigned int FileSystemGetFirstFreeBlock(void);
 
 /** Read Blocks_Count blocks from Starting_Block and store data to Buffer.
+ * @param Start_Block The block to start reading from.
+ * @param Blocks_Count How many blocks to read.
  * @return The next block to read (it can be FILE_SYSTEM_BAT_BLOCK_EOF if end of file is reached).
  */
-unsigned int FileSystemReadBlocks(unsigned int Start_Block, unsigned int Blocks_Count, unsigned char *Buffer);
+unsigned int FileSystemReadBlocks(unsigned int Start_Block, unsigned int Blocks_Count, unsigned char *Pointer_Buffer);
 
 /** Write Blocks_Count blocks from Starting_Block and store data from Buffer.
+ * @param Start_Block The block to start writing to.
+ * @param Blocks_Count How many blocks to write.
  * @return The last block written.
  * @warning This function does not check if the BAT is full or not, you must be sure that there are enough free blocks to write the data before calling this function.
  * @note This function automatically adds the EOF code to the last BAT written block.
  */
-unsigned int FileSystemWriteBlocks(unsigned int Start_Block, unsigned int Blocks_Count, unsigned char *Buffer);
+unsigned int FileSystemWriteBlocks(unsigned int Start_Block, unsigned int Blocks_Count, unsigned char *Pointer_Buffer);
 
 /** Create a new entry in the FL.
- * @param File_Name The name of the file to be created.
- * @param New_Entry On output, a pointer on the newly created FL entry.
+ * @param String_File_Name The name of the file to be created.
+ * @param Pointer_Pointer_New_Entry On output, a pointer on the newly created FL entry.
  * @return ERROR_CODE_NO_ERROR if no error happened,
  * @return ERROR_CODE_FL_FULL if there is no room left in FL.
  */
-int FileSystemWriteFLEntry(char *File_Name, TFileListEntry **New_Entry);
+int FileSystemWriteFLEntry(char *String_File_Name, TFileListEntry **Pointer_Pointer_New_Entry);
 
-/** Try to find the FL entry corresponding to the File_Name.
+/** Try to find the FL entry corresponding to the provided file name.
+ * @param String_File_Name The file to search.
  * @return A pointer on the FL entry if it was found,
  * @return NULL if the requested file was not found.
  */
-TFileListEntry *FileSystemReadFLEntry(char *File_Name);
+TFileListEntry *FileSystemReadFLEntry(char *String_File_Name);
 
 /** "Reserve" a free block by writing a false value into it.
  * @return The allocated block index or ERROR_CODE_BAT_FULL if there is no more free block.

@@ -33,12 +33,19 @@ static int TestsFileFunctionsInputParameters(void)
 	int Return_Value;
 	
 	// Testing FileOpen()
-	// Bad filename
+	// Bad filename (empty string, checked by kernel)
 	ScreenWriteString("Checking FileOpen()...\n");
-	Return_Value = FileOpen(NULL, 'r', &File_ID);
+	Return_Value = FileOpen("\0", 'r', &File_ID);
 	if (Return_Value != ERROR_CODE_BAD_FILE_NAME)
 	{
 		DisplayMessageError("when given a bad file name", Return_Value);
+		return 1;
+	}
+	// Bad filename (NULL string, checked by Libraries)
+	Return_Value = FileOpen(NULL, 'r', &File_ID);
+	if (Return_Value != ERROR_CODE_BAD_FILE_NAME)
+	{
+		DisplayMessageError("when given a NULL file name", Return_Value);
 		return 1;
 	}
 	// File not found
@@ -55,6 +62,19 @@ static int TestsFileFunctionsInputParameters(void)
 		DisplayMessageError("when given a bad opening mode", Return_Value);
 		return 1;
 	}
+
+	// TODO
+	// Testing FileRead()
+	// Open a file 
+	// Bad file ID
+	/*ScreenWriteString("Checking FileRead()...\n");
+	Return_Value = FileRead(123456, );
+	if (Return_Value != ERROR_CODE_FILE_NOT_FOUND)
+	{
+		DisplayMessageError("when given an unexisting file", Return_Value);
+		return 1;
+	}*/
+	// Bad opening mode
 	
 	return 0;
 }

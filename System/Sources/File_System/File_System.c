@@ -155,7 +155,7 @@ unsigned int FileSystemGetFirstFreeBlock(void)
 	return FILE_SYSTEM_BAT_FULL_CODE;
 }
 
-unsigned int FileSystemReadBlocks(unsigned int Start_Block, unsigned int Blocks_Count, unsigned char *Buffer)
+unsigned int FileSystemReadBlocks(unsigned int Start_Block, unsigned int Blocks_Count, unsigned char *Pointer_Buffer)
 {
 	unsigned int i, j, Block, Sector;
 	
@@ -169,9 +169,9 @@ unsigned int FileSystemReadBlocks(unsigned int Start_Block, unsigned int Blocks_
 		Sector = (Block * (FILE_SYSTEM_BLOCK_SIZE_BYTES / FILE_SYSTEM_SECTOR_SIZE_BYTES)) + File_System_First_Data_Sector;
 		for (j = 0; j < FILE_SYSTEM_BLOCK_SIZE_BYTES / FILE_SYSTEM_SECTOR_SIZE_BYTES; j++)
 		{
-			HardDiskReadSector(Sector, Buffer);
+			HardDiskReadSector(Sector, Pointer_Buffer);
 			Sector++;
-			Buffer += FILE_SYSTEM_SECTOR_SIZE_BYTES;
+			Pointer_Buffer += FILE_SYSTEM_SECTOR_SIZE_BYTES;
 		}
 
 		// Next block
@@ -182,7 +182,7 @@ unsigned int FileSystemReadBlocks(unsigned int Start_Block, unsigned int Blocks_
 	return Block;
 }
 
-unsigned int FileSystemWriteBlocks(unsigned int Start_Block, unsigned int Blocks_Count, unsigned char *Buffer)
+unsigned int FileSystemWriteBlocks(unsigned int Start_Block, unsigned int Blocks_Count, unsigned char *Pointer_Buffer)
 {
 	unsigned int i, j, Block, Next_Block, Sector;
 	
@@ -194,9 +194,9 @@ unsigned int FileSystemWriteBlocks(unsigned int Start_Block, unsigned int Blocks
 		Sector = (Block * (FILE_SYSTEM_BLOCK_SIZE_BYTES / FILE_SYSTEM_SECTOR_SIZE_BYTES)) + File_System_First_Data_Sector;
 		for (j = 0; j < FILE_SYSTEM_BLOCK_SIZE_BYTES / FILE_SYSTEM_SECTOR_SIZE_BYTES; j++)
 		{
-			HardDiskWriteSector(Sector, Buffer);
+			HardDiskWriteSector(Sector, Pointer_Buffer);
 			Sector++;
-			Buffer += FILE_SYSTEM_SECTOR_SIZE_BYTES;
+			Pointer_Buffer += FILE_SYSTEM_SECTOR_SIZE_BYTES;
 		}
 		
 		// Write end-of-file in the last block
@@ -216,19 +216,19 @@ unsigned int FileSystemWriteBlocks(unsigned int Start_Block, unsigned int Blocks
 	return Block;
 }
 
-TFileListEntry *FileSystemReadFLEntry(char *File_Name)
+TFileListEntry *FileSystemReadFLEntry(char *String_File_Name)
 {
 	unsigned int i;
 	
 	// Search for matching file name in FL
 	for (i = 0; i < File_System_Informations.Total_Files_Count; i++)
 	{
-		if (strncmp(File_Name, Files_List[i].Name, CONFIGURATION_FILE_NAME_LENGTH) == 0) return &Files_List[i];
+		if (strncmp(String_File_Name, Files_List[i].Name, CONFIGURATION_FILE_NAME_LENGTH) == 0) return &Files_List[i];
 	}
 	return NULL;
 }
 
-int FileSystemWriteFLEntry(char *File_Name, TFileListEntry **New_Entry)
+int FileSystemWriteFLEntry(char *String_File_Name, TFileListEntry **Pointer_Pointer_New_Entry)
 {
 	unsigned int i;
 	
@@ -236,8 +236,8 @@ int FileSystemWriteFLEntry(char *File_Name, TFileListEntry **New_Entry)
 	{
 		if (Files_List[i].Name[0] == 0)
 		{
-			strncpy(Files_List[i].Name, File_Name, CONFIGURATION_FILE_NAME_LENGTH);
-			*New_Entry = &Files_List[i];
+			strncpy(Files_List[i].Name, String_File_Name, CONFIGURATION_FILE_NAME_LENGTH);
+			*Pointer_Pointer_New_Entry = &Files_List[i];
 			return ERROR_CODE_NO_ERROR;
 		}
 	}
