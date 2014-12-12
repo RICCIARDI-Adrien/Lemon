@@ -35,6 +35,7 @@ int main(void)
 	ScreenWriteString("    3. Test stack overflow\n");
 	ScreenWriteString("    4. Test out of bounds memory access\n");
 	ScreenWriteString("    5. Test division by zero\n");
+	ScreenWriteString("    6. Test malicious user space pointer\n");
 	ScreenWriteString("    Other. Quit\n\n");
 
 	switch (KeyboardReadCharacter())
@@ -72,6 +73,16 @@ int main(void)
 			ScreenWriteString("-> Division per zero test.\n");
 			Divided = Divided / Divisor;
 			ScreenWriteString("-> Test failed !\n");
+			break;
+			
+		case '6':
+			ScreenWriteString("-> Doing a system call with a malicious pointer as parameter.\n");
+			Pointer = (unsigned int *) (0xFFFFFFFF - 0x000F0000); // The kernel will add 0x00100000 to this value, resulting in a pointer in the kernel space
+			ScreenWriteString((char *) Pointer);
+			ScreenWriteString("-> Test failed !\n");
+			break;
+			
+		default:
 			break;
 	}
 	

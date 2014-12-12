@@ -124,7 +124,7 @@ void KernelGeneralProtectionFaultExceptionInterruptHandler(void) // Can't be sta
 	KernelStartShell();
 }
 
-/** A kernel stack exception occured, this should never happen. */
+/** A kernel stack exception occurred, this should never happen. */
 void KernelStackExceptionInterruptHandler(void) // Can't be static as it must be linked with assembly frame
 {
 	ScreenSetColor(SCREEN_COLOR_RED);
