@@ -38,28 +38,28 @@ static int TestsFileFunctionsInputParameters(void)
 	Return_Value = FileOpen("\0", 'r', &File_ID);
 	if (Return_Value != ERROR_CODE_BAD_FILE_NAME)
 	{
-		DisplayMessageError("when given a bad file name", Return_Value);
+		DisplayMessageErrorAndCode("when given a bad file name", Return_Value);
 		return 1;
 	}
 	// Bad filename (NULL string, checked by Libraries)
 	Return_Value = FileOpen(NULL, 'r', &File_ID);
 	if (Return_Value != ERROR_CODE_BAD_FILE_NAME)
 	{
-		DisplayMessageError("when given a NULL file name", Return_Value);
+		DisplayMessageErrorAndCode("when given a NULL file name", Return_Value);
 		return 1;
 	}
 	// File not found
 	Return_Value = FileOpen("_!azerty", 'r', &File_ID);
 	if (Return_Value != ERROR_CODE_FILE_NOT_FOUND)
 	{
-		DisplayMessageError("when given an unexisting file", Return_Value);
+		DisplayMessageErrorAndCode("when given an unexisting file", Return_Value);
 		return 1;
 	}
 	// Unknown opening mode
 	Return_Value = FileOpen("Ignored", 't', &File_ID);
 	if (Return_Value != ERROR_CODE_UNKNOWN_OPENING_MODE)
 	{
-		DisplayMessageError("when given a bad opening mode", Return_Value);
+		DisplayMessageErrorAndCode("when given a bad opening mode", Return_Value);
 		return 1;
 	}
 
@@ -71,7 +71,7 @@ static int TestsFileFunctionsInputParameters(void)
 	Return_Value = FileRead(123456, );
 	if (Return_Value != ERROR_CODE_FILE_NOT_FOUND)
 	{
-		DisplayMessageError("when given an unexisting file", Return_Value);
+		DisplayMessageErrorAndCode("when given an unexisting file", Return_Value);
 		return 1;
 	}*/
 	// Bad opening mode
@@ -110,14 +110,14 @@ static int TestsFileSystemCalls(void)
 	Return_Value = SystemCall(SYSTEM_CALL_FILE_OPEN, 'w', 0, "_test_", &File_ID);
 	if (Return_Value != ERROR_CODE_NO_ERROR)
 	{
-		DisplayMessageError("when opening the file in write mode", Return_Value);
+		DisplayMessageErrorAndCode("when opening the file in write mode", Return_Value);
 		return 1;
 	}
 	// Write data
 	Return_Value = SystemCall(SYSTEM_CALL_FILE_WRITE, File_ID, File_Size_Bytes, Buffer, NULL);
 	if (Return_Value != ERROR_CODE_NO_ERROR)
 	{
-		DisplayMessageError("when writing to the file", Return_Value);
+		DisplayMessageErrorAndCode("when writing to the file", Return_Value);
 		return 1;
 	}
 	// Close the file
@@ -132,14 +132,14 @@ static int TestsFileSystemCalls(void)
 	Return_Value = SystemCall(SYSTEM_CALL_FILE_OPEN, 'r', 0, "_test_", &File_ID);
 	if (Return_Value != ERROR_CODE_NO_ERROR)
 	{
-		DisplayMessageError("when opening the file in read mode", Return_Value);
+		DisplayMessageErrorAndCode("when opening the file in read mode", Return_Value);
 		return 1;
 	}
 	// Read data
 	Return_Value = SystemCall(SYSTEM_CALL_FILE_READ, File_ID, File_Size_Bytes, Buffer, &Read_Bytes_Count);
 	if (Return_Value != ERROR_CODE_NO_ERROR)
 	{
-		DisplayMessageError("when reading from the file", Return_Value);
+		DisplayMessageErrorAndCode("when reading from the file", Return_Value);
 		return 1;
 	}
 	// Close the file
@@ -158,7 +158,7 @@ static int TestsFileSystemCalls(void)
 	Return_Value = FileDelete("_test_");
 	if (Return_Value != ERROR_CODE_NO_ERROR)
 	{
-		DisplayMessageError("when deleting the file", Return_Value);
+		DisplayMessageErrorAndCode("when deleting the file", Return_Value);
 		return 1;
 	}
 
@@ -189,7 +189,7 @@ static int TestsFileMaximumOpenedFiles(void)
 		Return_Value = FileOpen(String_File_Name, 'w', &File_IDs[i]);
 		if (Return_Value != ERROR_CODE_NO_ERROR)
 		{
-			DisplayMessageError("while opening the files allowed count", Return_Value);
+			DisplayMessageErrorAndCode("while opening the files allowed count", Return_Value);
 			return 1;
 		}
 	}
@@ -199,7 +199,7 @@ static int TestsFileMaximumOpenedFiles(void)
 	Return_Value = FileOpen("_test_!!!", 'w', &File_IDs[FILE_MAXIMUM_OPENED_COUNT]);
 	if (Return_Value != ERROR_CODE_CANT_OPEN_MORE_FILES)
 	{
-		DisplayMessageError("while opening too much files in the same time", Return_Value);
+		DisplayMessageErrorAndCode("while opening too much files in the same time", Return_Value);
 		return 1;
 	}
 	
@@ -224,7 +224,7 @@ static int TestsFileSameFileMultipleSimultaneousOpening(void)
 	Return_Value = FileOpen("_test_", 'w', &File_ID);
 	if (Return_Value != ERROR_CODE_NO_ERROR)
 	{
-		DisplayMessageError("while opening the file in write mode", Return_Value);
+		DisplayMessageErrorAndCode("while opening the file in write mode", Return_Value);
 		Function_Result = 1;
 		goto Exit;
 	}
@@ -232,7 +232,7 @@ static int TestsFileSameFileMultipleSimultaneousOpening(void)
 	Return_Value = FileWrite(File_ID, String_File_Content, sizeof(String_File_Content) - 1);
 	if (Return_Value != ERROR_CODE_NO_ERROR)
 	{
-		DisplayMessageError("while writing data to the file", Return_Value);
+		DisplayMessageErrorAndCode("while writing data to the file", Return_Value);
 		Function_Result = 1;
 		goto Exit;
 	}
@@ -245,7 +245,7 @@ static int TestsFileSameFileMultipleSimultaneousOpening(void)
 	Return_Value = FileOpen("_test_", 'r', &File_ID);
 	if (Return_Value != ERROR_CODE_NO_ERROR)
 	{
-		DisplayMessageError("while opening the file in read mode", Return_Value);
+		DisplayMessageErrorAndCode("while opening the file in read mode", Return_Value);
 		Function_Result = 1;
 		goto Exit;
 	}
@@ -254,7 +254,7 @@ static int TestsFileSameFileMultipleSimultaneousOpening(void)
 	Return_Value = FileOpen("_test_", 'r', &File_ID_2);
 	if (Return_Value != ERROR_CODE_FILE_OPENED_YET)
 	{
-		DisplayMessageError("while reopening a previously opened file", Return_Value);
+		DisplayMessageErrorAndCode("while reopening a previously opened file", Return_Value);
 		Function_Result = 1;
 	}
 	

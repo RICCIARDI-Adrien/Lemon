@@ -53,7 +53,7 @@ void DisplayMessageTestFailed(void)
 	SystemExitProgram();
 }
 
-void DisplayMessageError(char *String_Message, int Error_Code)
+void DisplayMessageErrorAndCode(char *String_Message, int Error_Code)
 {
 	char *String_Unknown_Error_Code = "Unknown error code", *String_Error_Code;
 	
@@ -69,6 +69,15 @@ void DisplayMessageError(char *String_Message, int Error_Code)
 	
 	// Display the error code signification
 	ScreenWriteString(String_Error_Code);
+	ScreenWriteCharacter('\n');
+	ScreenSetFontColor(SCREEN_COLOR_BLUE);
+}
+
+void DisplayMessageError(char *String_Message)
+{
+	ScreenSetFontColor(SCREEN_COLOR_RED);
+	ScreenWriteString("Error : ");
+	ScreenWriteString(String_Message);
 	ScreenWriteCharacter('\n');
 	ScreenSetFontColor(SCREEN_COLOR_BLUE);
 }

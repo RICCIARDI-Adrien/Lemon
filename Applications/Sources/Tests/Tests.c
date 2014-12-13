@@ -26,6 +26,7 @@ static TTestFunction Test_Functions[] =
 {
 	TestsFile,
 	TestsMemory,
+	TestsString,
 	NULL
 };
 

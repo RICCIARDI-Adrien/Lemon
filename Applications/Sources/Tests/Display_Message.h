@@ -24,6 +24,11 @@ void DisplayMessageTestFailed(void);
  * @param String_Message The message to display (it is automatically prefixed by "Error " and suffixed by " : \<error code signification\>\n").
  * @param Error_Code The error code.
  */
-void DisplayMessageError(char *String_Message, int Error_Code);
+void DisplayMessageErrorAndCode(char *String_Message, int Error_Code);
+
+/** Display a red message prefixed by "Error : ".
+ * @param String_Message The message to display.
+ */
+void DisplayMessageError(char *String_Message);
 
 #endif
