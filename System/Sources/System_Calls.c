@@ -274,7 +274,7 @@ int SystemCalls(void)
 	);
 	
 	// Is the system call implemented ?
-	if (Call_Code >= SYSTEM_CALLS_COUNT) return -1; // Arbitrary value
+	if (Call_Code >= SYSTEM_CALLS_COUNT) KernelUnknownSystemCallErrorHandler(); // This function never returns
 	
 	// Adjust string pointers according to user segment base into GDT
 	Pointer_1 += KERNEL_USER_SPACE_ADDRESS;

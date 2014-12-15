@@ -36,6 +36,7 @@ int main(void)
 	ScreenWriteString("    4. Test out of bounds memory access\n");
 	ScreenWriteString("    5. Test division by zero\n");
 	ScreenWriteString("    6. Test malicious user space pointer\n");
+	ScreenWriteString("    7. Test invalid system call\n");
 	ScreenWriteString("    Other. Quit\n\n");
 
 	switch (KeyboardReadCharacter())
@@ -48,8 +49,14 @@ int main(void)
 			
 		case '2':
 			ScreenWriteString("-> I/O instructions test.\n");
-			asm("mov dx, 0x3F2");
-			asm("in ax, dx");
+			asm
+			(
+				"mov dx, 0x3F2\n"
+				"in ax, dx"
+				: // No output parameter
+				: // No input parameter
+				: "eax", "edx"
+			);
 			ScreenWriteString("-> Test failed !\n");
 			break;
 			
@@ -80,6 +87,18 @@ int main(void)
 			Pointer = (unsigned int *) (0xFFFFFFFF - 0x000F0000); // The kernel will add 0x00100000 to this value, resulting in a pointer in the kernel space
 			ScreenWriteString((char *) Pointer);
 			ScreenWriteString("-> Test failed !\n");
+			break;
+			
+		case '7':
+			ScreenWriteString("-> Requesting an invalid system call.\n");
+			asm
+			(
+				"mov eax, 0xFFFFFFFF\n"
+				"int 0x60"
+				: // No output parameter
+				: // No input parameter
+				: "eax"
+			);
 			break;
 			
 		default:

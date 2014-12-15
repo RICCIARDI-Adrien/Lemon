@@ -89,6 +89,22 @@ void KernelStartProgram(void)
 	ArchitectureSwitchToUserSpace();
 }
 
+// This error is not triggered by the MMU, so it is not an interrupt handler
+void KernelUnknownSystemCallErrorHandler(void)
+{
+	// Show error message
+	ScreenSetColor(SCREEN_COLOR_RED);
+	ScreenClear();
+	ScreenWriteString(STRING_KERNEL_CONSOLE_UNKNWOWN_SYSTEM_CALL_ERROR);
+	
+	// Wait for the user to hit the Enter key
+	KERNEL_ENABLE_INTERRUPTS();
+	while (KeyboardReadChar() != '\n');
+	
+	// Restart the shell
+	KernelStartShell();
+}
+
 //-------------------------------------------------------------------------------------------------
 // Interrupt handlers
 //-------------------------------------------------------------------------------------------------
@@ -127,6 +143,7 @@ void KernelGeneralProtectionFaultExceptionInterruptHandler(void) // Can't be sta
 /** A kernel stack exception occurred, this should never happen. */
 void KernelStackExceptionInterruptHandler(void) // Can't be static as it must be linked with assembly frame
 {
+	// Show error message
 	ScreenSetColor(SCREEN_COLOR_RED);
 	ScreenClear();
 	ScreenWriteString(STRING_KERNEL_CONSOLE_STACK_EXCEPTION);

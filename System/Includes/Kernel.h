@@ -89,4 +89,7 @@ void KernelStartShell(void);
 /** Switch to protection ring 3 and execute user program's entry point. */
 void KernelStartProgram(void);
 
+/** Called when an invalid system call is requested by the user. This function does not return. */
+void KernelUnknownSystemCallErrorHandler(void);
+
 #endif
