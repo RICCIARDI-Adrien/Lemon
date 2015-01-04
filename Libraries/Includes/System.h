@@ -9,6 +9,7 @@
 // Gather all the includes the system provides, so there is no need to include them in a program
 #include <File.h>
 #include <Keyboard.h>
+#include <Math.h>
 #include <Memory.h>
 #include <Random.h>
 #include <Screen.h>
