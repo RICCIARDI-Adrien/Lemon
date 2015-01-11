@@ -31,15 +31,28 @@ export LDFLAGS
 #------------------------------------------------------------------------------------------------------------------------------
 # Global rules
 #------------------------------------------------------------------------------------------------------------------------------
-all: brain_calculation fibonacci game_of_life help no_match_dealer numbers rain tests text_viewer
+all: benchmark brain_calculation game_of_life help no_match_dealer numbers rain tests text_viewer
 
-clean: brain_calculation_clean fibonacci_clean game_of_life_clean help_clean no_match_dealer_clean numbers_clean rain_clean tests_clean text_viewer_clean
+clean: benchmark_clean brain_calculation_clean game_of_life_clean help_clean no_match_dealer_clean numbers_clean rain_clean tests_clean text_viewer_clean
 	# Delete also the tools
 	rm -rf $(SERIAL_PORT_SERVER)
 
 # Compile the server program if it is not done yet
 $(SERIAL_PORT_SERVER): $(TOOLS_PATH)/Serial_Port_Server.c
 	gcc -W -Wall $(TOOLS_PATH)/Serial_Port_Server.c -o $(SERIAL_PORT_SERVER)
+
+#------------------------------------------------------------------------------------------------------------------------------
+# Benchmark
+#------------------------------------------------------------------------------------------------------------------------------
+benchmark:
+	@$(ECHO) "\033[33mCompiling Benchmark...\033[0m"
+	@cd $(SOURCES_PATH)/Benchmark && $(MAKE)
+
+benchmark_clean:
+	@cd $(SOURCES_PATH)/Benchmark && $(MAKE) clean
+
+benchmark_download: $(SERIAL_PORT_SERVER)
+	@$(SERIAL_PORT_SERVER) $(SERIAL_PORT_SERVER_FLAGS) $(BINARIES_PATH)/Benchmark.32b
 
 #------------------------------------------------------------------------------------------------------------------------------
 # Brain calculation
@@ -53,19 +66,6 @@ brain_calculation_clean:
 
 brain_calculation_download: $(SERIAL_PORT_SERVER)
 	@$(SERIAL_PORT_SERVER) $(SERIAL_PORT_SERVER_FLAGS) $(BINARIES_PATH)/Brain_Calculation.32b
-
-#------------------------------------------------------------------------------------------------------------------------------
-# Fibonacci
-#------------------------------------------------------------------------------------------------------------------------------
-fibonacci:
-	@$(ECHO) "\033[33mCompiling Fibonacci...\033[0m"
-	@cd $(SOURCES_PATH)/Fibonacci && $(MAKE)
-
-fibonacci_clean:
-	@cd $(SOURCES_PATH)/Fibonacci && $(MAKE) clean
-
-fibonacci_download: $(SERIAL_PORT_SERVER)
-	@$(SERIAL_PORT_SERVER) $(SERIAL_PORT_SERVER_FLAGS) $(BINARIES_PATH)/Fibonacci.32b
 
 #------------------------------------------------------------------------------------------------------------------------------
 # Game of Life

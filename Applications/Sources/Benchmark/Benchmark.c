@@ -1,5 +1,5 @@
-/** @file Fibonacci.c
- * Compute the Fibonacci suite up to the requested numbers of iterations.
+/** @file Benchmark.c
+ * Compute the Fibonacci suite up to the requested numbers of iterations in order to stress the processor.
  * @author Adrien RICCIARDI
  * @version 1.0 : 03/01/2015
  */
