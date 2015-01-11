@@ -10,7 +10,7 @@
 // Constants
 //-------------------------------------------------------------------------------------------------
 /** The number of "parts" in an integer number. A part is 32-bit long, so to have a 128-bit integer set the value 4 to this constant. */
-#define MATH_INTEGER_SIZE_PARTS 64
+#define MATH_INTEGER_SIZE_PARTS 1024
 
 //-------------------------------------------------------------------------------------------------
 // Types

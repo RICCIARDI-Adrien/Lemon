@@ -91,4 +91,9 @@ void SystemExitProgram(void);
  */
 void SystemGetFileSystemTotalSize(unsigned int *Pointer_Block_Size, unsigned int *Pointer_Blocks_Count, unsigned int *Pointer_Files_Count);
 
+/** Get the timer current value. This timer is incremented by one every 50 ms and starts from zero on system boot.
+ * @return The timer value (the unit is 50 ms).
+ */
+unsigned int SystemGetTimerValue(void);
+
 #endif

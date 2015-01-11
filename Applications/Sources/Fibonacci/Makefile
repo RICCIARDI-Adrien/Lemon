@@ -1,3 +1,4 @@
+CCFLAGS += -O2
 OBJECTS = $(OBJECTS_PATH)/Fibonacci/Fibonacci.o
 BINARY_NAME = Fibonacci.32b
 

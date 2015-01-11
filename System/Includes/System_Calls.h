@@ -59,7 +59,7 @@ typedef enum
 	 * @param ecx = don't care
 	 * @param edx = don't care
 	 * @param esi = don't care
-	 * @return The counter value (incremented by one every 50 ms since the start of the system).
+	 * @return The counter value (incremented by one every 50 ms since the start of the system). This value must be casted to unsigned int.
 	 */
 	SYSTEM_CALL_TIMER_READ_VALUE,
 
