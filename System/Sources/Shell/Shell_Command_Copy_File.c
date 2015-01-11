@@ -4,9 +4,10 @@
  * @version 1.0 : 16/04/2013.
  */
 #include <Drivers/Driver_Screen.h>
+#include <Error_Codes.h>
 #include <File_System/File.h>
 #include <File_System/File_System.h>
-#include <Kernel.h>
+#include <Kernel.h> // To have the NULL definition
 #include <Shell/Shell_Commands.h>
 #include <Strings.h>
 

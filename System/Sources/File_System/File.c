@@ -3,9 +3,10 @@
  * @author Adrien RICCIARDI
  */
 #include <Configuration.h>
+#include <Error_Codes.h>
 #include <File_System/File.h>
 #include <File_System/File_System.h>
-#include <Kernel.h>
+#include <Kernel.h> // Needed to know program entry point, ...
 #include <Standard_Functions.h> // Needed by strncpy(), ...
 
 //-------------------------------------------------------------------------------------------------

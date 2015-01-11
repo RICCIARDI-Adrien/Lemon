@@ -4,6 +4,7 @@
  */
 #include <Drivers/Driver_Keyboard.h>
 #include <Drivers/Driver_Screen.h>
+#include <Error_Codes.h>
 #include <File_System/File.h>
 #include <File_System/File_System.h>
 #include <Kernel.h>

@@ -4,8 +4,9 @@
  */
 #include <Configuration.h>
 #include <Drivers/Driver_Hard_Disk.h>
+#include <Error_Codes.h>
 #include <File_System/File_System.h>
-#include <Kernel.h> // For error codes
+#include <Kernel.h> // Needed for the NULL definition
 #include <Standard_Functions.h>
 
 //-------------------------------------------------------------------------------------------------

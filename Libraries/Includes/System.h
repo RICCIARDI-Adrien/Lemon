@@ -7,6 +7,7 @@
 #define H_SYSTEM_H
 
 // Gather all the includes the system provides, so there is no need to include them in a program
+#include <Error_Codes.h> // Error codes imported directly from the system
 #include <File.h>
 #include <Keyboard.h>
 #include <Math.h>
@@ -14,47 +15,11 @@
 #include <Random.h>
 #include <Screen.h>
 #include <String.h>
-#include <System_Calls.h> // System calls codes imported directly from kernel
+#include <System_Calls.h> // System calls codes imported directly from the system
 #include <UART.h>
 
 //-------------------------------------------------------------------------------------------------
 // Constants
-//-------------------------------------------------------------------------------------------------
-/** No error happened. */
-#define ERROR_CODE_NO_ERROR 0
-/** The File List is full. */
-#define ERROR_CODE_FL_FULL 1
-/** There are no more free block in the Blocks Allocation Table. */
-#define ERROR_CODE_BAT_FULL 2
-/** The provided file name is not valid. */
-#define ERROR_CODE_BAD_FILE_NAME 3
-/** The requested file doesn't exist in the file system. */
-#define ERROR_CODE_FILE_NOT_FOUND 4
-/** The file is already existing. */
-#define ERROR_CODE_FILE_ALREADY_EXISTS 5
-/** The maximum opened files count is reached. */
-#define ERROR_CODE_CANT_OPEN_MORE_FILES 6
-/** The file is opened yet. */
-#define ERROR_CODE_FILE_OPENED_YET 7
-/** A file was opened with an invalid mode. */
-#define ERROR_CODE_UNKNOWN_OPENING_MODE 8
-/** An attempt to read or write a file which was not previously opened was done. */
-#define ERROR_CODE_FILE_NOT_OPENED 9
-/** A file opened in read mode is accessed in write mode or a file opened in write mode is accessed in read mode. */
-#define ERROR_CODE_BAD_OPENING_MODE 10
-/** A bad file descriptor (value >= CONFIGURATION_FILE_SYSTEM_MAXIMUM_OPENED_FILES_COUNT) was provided to a file function. */
-#define ERROR_CODE_BAD_FILE_DESCRIPTOR 11
-/** Bad parameters were provided to UART during initialization. */
-#define ERROR_CODE_BAD_UART_PARAMETERS 12
-/** There is not enough room in RAM to load the file. */
-#define ERROR_CODE_FILE_LARGER_THAN_RAM 13
-/** The file is not an executable program. */
-#define ERROR_CODE_FILE_NOT_EXECUTABLE 14
-
-// TODO : enum avec les erreurs (ou pas, à déterminer)
-
-//-------------------------------------------------------------------------------------------------
-// Types
 //-------------------------------------------------------------------------------------------------
 /** The NULL pointer. */
 #ifndef NULL

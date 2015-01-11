@@ -9,7 +9,7 @@
 // Private constants
 //-------------------------------------------------------------------------------------------------
 /** How many iterations to compute. */
-#define ITERATIONS_COUNT 1000000000
+#define ITERATIONS_COUNT 10000000
 
 /** Convert the macro identifier to a C string. */
 #define CONVERT_MACRO_NAME_TO_STRING(X) #X

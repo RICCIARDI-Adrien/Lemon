@@ -40,7 +40,7 @@ sdk:
 	@$(ECHO) "-> Copy the whole Applications directory..."
 	@cp -r Applications $(SDK_PATH)
 	@# Delete serial server binary to force the target computer to recompile it (and thus to avoid some incompatibilities)
-	@rm $(SDK_PATH)/Applications/Tools/Serial_Port_Server
+	@rm $(SDK_PATH)/Applications/Tools/Serial_Port_Server.out
 	@# Clean the Applications .32b and .o files
 	@make -C $(SDK_PATH)/Applications clean > /dev/null
 	@$(ECHO) "-> Copy user relevant documentation..."
@@ -52,7 +52,8 @@ sdk:
 	@mkdir $(SDK_PATH)/Libraries
 	@cp -r Libraries/Binaries $(SDK_PATH)/Libraries
 	@cp -r Libraries/Includes $(SDK_PATH)/Libraries
-	@# Copy System_Calls.h to Librairies includes directory
+	@# Copy Error_Codes.h and System_Calls.h to Librairies includes directory
+	@cp System/Includes/Error_Codes.h $(SDK_PATH)/Libraries/Includes
 	@cp System/Includes/System_Calls.h $(SDK_PATH)/Libraries/Includes
 	@$(ECHO) "-> Copy installer CD image..."
 	@cp Installer/Binaries/Lemon_Installer_CD_Image.iso $(SDK_PATH)

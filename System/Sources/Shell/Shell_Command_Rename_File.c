@@ -6,8 +6,8 @@
  * @version 1.2 : 22/08/2013, added more detailed error messages.
  */
 #include <Drivers/Driver_Screen.h>
+#include <Error_Codes.h>
 #include <File_System/File.h>
-#include <Kernel.h> // To have error codes
 #include <Shell/Shell_Commands.h>
 #include <Strings.h>
 

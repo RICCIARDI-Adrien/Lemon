@@ -8,8 +8,9 @@
 #include <Drivers/Driver_Keyboard.h>
 #include <Drivers/Driver_Screen.h>
 #include <Drivers/Driver_UART.h>
+#include <Error_Codes.h>
 #include <File_System/File.h>
-#include <Kernel.h> // Needed for error codes and kernel constants
+#include <Kernel.h> // Needed for kernel constants
 #include <Shell/Shell_Commands.h>
 #include <Standard_Functions.h> // Needed by itoa()
 #include <Strings.h>

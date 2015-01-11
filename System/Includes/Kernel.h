@@ -16,6 +16,7 @@
  * @version 2.1.4 : 07/06/2014, the system is now able to compile on 64-bit development system, file system is terminated.
  * @version 2.1.5 : 26/10/2014, removed 'help' command and added 'version' command.
  * @version 2.1.6 : 07/12/2014, fixed the memory protection limit bug.
+ * @version 2.1.7 : 11/01/2015, moved the system error codes in a dedicated header file that can be shared with the libraries.
  */
 #ifndef H_KERNEL_H
 #define H_KERNEL_H
@@ -23,13 +24,11 @@
 #include <Configuration.h>
 
 //-------------------------------------------------------------------------------------------------
-// Types
-//-------------------------------------------------------------------------------------------------
-#define NULL ((void *) 0)
-
-//-------------------------------------------------------------------------------------------------
 // Constants
 //-------------------------------------------------------------------------------------------------
+/** The indispensable NULL value. */
+#define NULL ((void *) 0)
+
 // Kernel memory areas
 /** The MBR stores file system informations. */
 #define KERNEL_MBR_ADDRESS 0x7C00
@@ -47,38 +46,6 @@
 #define KERNEL_PROGRAM_LOAD_ADDRESS (KERNEL_USER_SPACE_ADDRESS + KERNEL_PROGRAM_ENTRY_POINT)
 /** Executable program magic number. */
 #define KERNEL_PROGRAM_MAGIC_NUMBER 0x83E58955 // This is the hexadecimal representation of the main() stack frame (push ebp...)
-
-// Functions return codes
-/** No error happened. */
-#define ERROR_CODE_NO_ERROR 0
-/** The File List is full. */
-#define ERROR_CODE_FL_FULL 1
-/** There are no more free block in the Blocks Allocation Table. */
-#define ERROR_CODE_BAT_FULL 2
-/** The provided file name is not valid. */
-#define ERROR_CODE_BAD_FILE_NAME 3
-/** The requested file doesn't exist in the file system. */
-#define ERROR_CODE_FILE_NOT_FOUND 4
-/** The file is already existing. */
-#define ERROR_CODE_FILE_ALREADY_EXISTS 5
-/** The maximum opened files count is reached. */
-#define ERROR_CODE_CANT_OPEN_MORE_FILES 6
-/** The file is opened yet. */
-#define ERROR_CODE_FILE_OPENED_YET 7
-/** A file was opened with an invalid mode. */
-#define ERROR_CODE_UNKNOWN_OPENING_MODE 8
-/** An attempt to read or write a file which was not previously opened was done. */
-#define ERROR_CODE_FILE_NOT_OPENED 9
-/** A file opened in read mode is accessed in write mode or a file opened in write mode is accessed in read mode. */
-#define ERROR_CODE_BAD_OPENING_MODE 10
-/** A bad file descriptor (value >= CONFIGURATION_FILE_SYSTEM_MAXIMUM_OPENED_FILES_COUNT) was provided to a file function. */
-#define ERROR_CODE_BAD_FILE_DESCRIPTOR 11
-/** Bad parameters were provided to UART during initialization. */
-#define ERROR_CODE_BAD_UART_PARAMETERS 12
-/** There is not enough room in RAM to load the file. */
-#define ERROR_CODE_FILE_LARGER_THAN_RAM 13
-/** The file is not an executable program. */
-#define ERROR_CODE_FILE_NOT_EXECUTABLE 14
 
 //-------------------------------------------------------------------------------------------------
 // Functions

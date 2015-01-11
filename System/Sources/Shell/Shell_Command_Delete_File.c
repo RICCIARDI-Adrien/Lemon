@@ -5,8 +5,8 @@
  * @version 1.1 : 29/12/2012, added to kernel code.
  */
 #include <Drivers/Driver_Screen.h>
+#include <Error_Codes.h>
 #include <File_System/File.h>
-#include <Kernel.h> // To have error codes
 #include <Shell/Shell_Commands.h>
 #include <Strings.h>
 

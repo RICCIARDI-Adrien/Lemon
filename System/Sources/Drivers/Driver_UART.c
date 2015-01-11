@@ -3,8 +3,8 @@
  * @author Adrien RICCIARDI
  */
 #include <Drivers/Driver_UART.h>
+#include <Error_Codes.h>
 #include <Hardware_Functions.h> // Needed for inb() and outb() functions
-#include <Kernel.h> // Needed for error codes
 
 //-------------------------------------------------------------------------------------------------
 // Private constant
