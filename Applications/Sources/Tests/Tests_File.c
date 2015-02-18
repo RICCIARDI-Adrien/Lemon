@@ -203,8 +203,18 @@ static int TestsFileMaximumOpenedFiles(void)
 		return 1;
 	}
 	
-	// Close all files
-	for (i = 0; i < FILE_MAXIMUM_OPENED_COUNT; i++) FileClose(File_IDs[i]);
+	// Close and delete all files
+	for (i = 0; i < FILE_MAXIMUM_OPENED_COUNT; i++)
+	{
+		FileClose(File_IDs[i]);
+		
+		// Create the file name
+		StringConvertUnsignedIntegerToString(i, String_Number);
+		StringCopy("_test_", String_File_Name);
+		StringConcatenate(String_File_Name, String_Number);
+		
+		FileDelete(String_File_Name);
+	}
 	
 	return 0;
 }
