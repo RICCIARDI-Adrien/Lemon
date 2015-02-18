@@ -2,12 +2,6 @@
 | URGENT |
 +--------+
 
-Système
--------
-
-support sysenter ?
-envoyer automatiquement le nom du fichier avec la commande download
-
 Doc
 ---
 Rajouter dans doc la liste des programmes nécessaires pour compiler l'OS
@@ -33,4 +27,3 @@ Commandes
 ---------
 
 - faire en sorte que Text Viewer n'ouvre pas les fichiers binaires (utile ?)
-- faire commande "upload" pour envoyer depuis le port série

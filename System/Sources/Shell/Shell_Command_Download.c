@@ -32,14 +32,14 @@
 //-------------------------------------------------------------------------------------------------
 void ShellCommandDownload(void)
 {
-	char Buffer[CONFIGURATION_FILE_NAME_LENGTH + 1];
+	char String_File_Name[CONFIGURATION_FILE_NAME_LENGTH + 1], String_User_Answer[2];
 	unsigned int Download_Bytes_Count = 0, i;
 	unsigned char *Pointer_Downloaded_Data;
 	
 	// Configure the UART every time (to avoid problem if an other application modifies UART settings)
 	UARTInitialize(UART_DISABLE_PARITY, UART_BAUD_RATE_115200);
 	ScreenWriteString(STRING_SHELL_DOWNLOAD_WAITING_FOR_SERVER);
-			
+	
 	// Send special code to tell server that we are ready for download
 	while (1)
 	{
@@ -58,18 +58,23 @@ void ShellCommandDownload(void)
 		}
 	}
 	
-	ScreenWriteString(STRING_SHELL_DOWNLOAD_DOWNLOADING_FILE);
-			
 	// Get the size of the file to download (in bytes)
-	Pointer_Downloaded_Data = (unsigned char *) &Download_Bytes_Count;
-	for (i = 0; i < 4; i++) // Here with gcc 4.4.5-8 (debian 6.0.6) Pointer_Downloaded_Data[i] doesn't point on the good address, why ? Bad kernel segment start address ?
+	for (i = 0; i < 4; i++)
 	{
-		*Pointer_Downloaded_Data = UARTReadByte();
-		Pointer_Downloaded_Data++;
+		Download_Bytes_Count <<= 8;
+		Download_Bytes_Count |= UARTReadByte();
 	}
-	ScreenWriteString(STRING_SHELL_DOWNLOAD_SHOW_FILE_SIZE_1);
+	
+	// Get the file name (the number of sent characters is fixed)
+	for (i = 0; i < CONFIGURATION_FILE_NAME_LENGTH; i++) String_File_Name[i] = UARTReadByte();
+	String_File_Name[CONFIGURATION_FILE_NAME_LENGTH] = 0;
+	
+	// Display file informations
+	ScreenWriteString(STRING_SHELL_DOWNLOAD_SHOW_FILE_INFORMATIONS_1);
+	ScreenWriteString(String_File_Name);
+	ScreenWriteString(STRING_SHELL_DOWNLOAD_SHOW_FILE_INFORMATIONS_2);
 	ScreenWriteString(itoa(Download_Bytes_Count));
-	ScreenWriteString(STRING_SHELL_DOWNLOAD_SHOW_FILE_SIZE_2);
+	ScreenWriteString(STRING_SHELL_DOWNLOAD_SHOW_FILE_INFORMATIONS_3);
 	
 	// Abort the download according to file size
 	ScreenSetColor(SCREEN_COLOR_RED);
@@ -104,20 +109,17 @@ void ShellCommandDownload(void)
 	ScreenWriteString(STRING_SHELL_DOWNLOAD_DOWNLOADING_COMPLETED);
 	ScreenSetColor(SCREEN_COLOR_BLUE);
 	
-	// Ask user on what he wants to do with the file
+	// Ask the user on what he wants to do with the file
 	do
 	{
 		ScreenWriteString(STRING_SHELL_DOWNLOAD_FINAL_QUESTION);
-		KeyboardReadString(Buffer, 1);
-	} while ((Buffer[0] != 's') && (Buffer[0] != 'a'));
+		KeyboardReadString(String_User_Answer, 1);
+	} while ((String_User_Answer[0] != 's') && (String_User_Answer[0] != 'a'));
 			
 	// Save the file on the hard disk
-	if (Buffer[0] == 's')
+	if (String_User_Answer[0] == 's')
 	{
-		ScreenWriteString(STRING_SHELL_DOWNLOAD_ASK_FILE_NAME);
-		KeyboardReadString(Buffer, CONFIGURATION_FILE_NAME_LENGTH + 1);
-		
-		switch (FileCreate(Buffer, (unsigned char *) KERNEL_USER_SPACE_ADDRESS, Download_Bytes_Count))
+		switch (FileCreate(String_File_Name, (unsigned char *) KERNEL_USER_SPACE_ADDRESS, Download_Bytes_Count))
 		{
 			case  ERROR_CODE_NO_ERROR:
 				ScreenSetColor(SCREEN_COLOR_GREEN);

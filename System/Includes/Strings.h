@@ -31,9 +31,9 @@
 
 	// Shell download command
 	#define STRING_SHELL_DOWNLOAD_WAITING_FOR_SERVER "Attente de la connexion au serveur...\nAppuyez sur Echap pour annuler.\n"
-	#define STRING_SHELL_DOWNLOAD_DOWNLOADING_FILE "\nT\202l\202chargement en cours...\n"
-	#define STRING_SHELL_DOWNLOAD_SHOW_FILE_SIZE_1 "Taille du fichier : "
-	#define STRING_SHELL_DOWNLOAD_SHOW_FILE_SIZE_2 " octets.\n"
+	#define STRING_SHELL_DOWNLOAD_SHOW_FILE_INFORMATIONS_1 "\nT\202l\202chargement du fichier '"
+	#define STRING_SHELL_DOWNLOAD_SHOW_FILE_INFORMATIONS_2 "' ("
+	#define STRING_SHELL_DOWNLOAD_SHOW_FILE_INFORMATIONS_3 " octets)...\n"
 	#define STRING_SHELL_DOWNLOAD_FILE_SIZE_NULL "Abandon du t\202l\202chargement : il n'y a rien \205 t\202l\202charger.\n"
 	#define STRING_SHELL_DOWNLOAD_FILE_SIZE_TOO_BIG "Abandon du t\202l\202chargement : la taille du fichier est trop importante pour le\nstocker en m\202moire.\n"
 	#define STRING_SHELL_DOWNLOAD_DOWNLOADING_COMPLETED "\nT\202l\202chargement termin\202.\n"
