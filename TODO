@@ -5,7 +5,8 @@
 Système
 -------
 
-optimiser cadre d'appel du point d'entrée des interruptions système (peut-être n'utiliser que eax et pusher edi une seule fois)
+support sysenter ?
+envoyer automatiquement le nom du fichier avec la commande download
 
 Doc
 ---
@@ -32,3 +33,4 @@ Commandes
 ---------
 
 - faire en sorte que Text Viewer n'ouvre pas les fichiers binaires (utile ?)
+- faire commande "upload" pour envoyer depuis le port série

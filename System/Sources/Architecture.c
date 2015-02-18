@@ -43,11 +43,9 @@
 		"push es\n" \
 		"push fs\n" \
 		"push gs\n" \
-		"push eax\n" \
 		"mov ax, %0\n" /* Point to kernel data segment descriptor */ \
 		"mov ds, ax\n" \
 		"mov es, ax\n" \
-		"pop eax" \
 		: /* No output parameter */ \
 		: "i" (ARCHITECTURE_MEMORY_PROTECTION_SEGMENT_INDEX_KERNEL_DATA << 3) \
 		: "eax" \
@@ -304,11 +302,11 @@ static void __attribute__((used)) ArchitectureInterruptLaunchers(void)
 		"push edi\n" // This is not a system call parameter, so it must be preserved
 		
 		// Switch to kernel data segment
-		"push eax\n"
+		"mov edi, eax\n" // Keep eax content faster than pushing it on the stack
 		"mov ax, %0\n"
 		"mov ds, ax\n"
 		"mov es, ax\n" // Needed by Intel string instructions or a GPF exception will be generated when returning from user mode
-		"pop eax\n"
+		"mov eax, edi\n"
 		"call SystemCalls\n" // The handler is contained in the System_Calls.c file
 
 		// Restore descriptor segments
