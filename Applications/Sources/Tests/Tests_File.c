@@ -185,7 +185,7 @@ static int TestsFileMaximumOpenedFiles(void)
 		StringCopy("_test_", String_File_Name);
 		StringConcatenate(String_File_Name, String_Number);
 		
-		// Open the file in write mode so the file has not exist yet
+		// Open the file in write mode so the file should not exist yet
 		Return_Value = FileOpen(String_File_Name, 'w', &File_IDs[i]);
 		if (Return_Value != ERROR_CODE_NO_ERROR)
 		{
@@ -223,7 +223,7 @@ static int TestsFileMaximumOpenedFiles(void)
  * @return 0 if test was successful,
  * @return 1 if the test failed.
  */
-static int TestsFileSameFileMultipleSimultaneousOpening(void)
+static int TestsFileReopenSameFile(void)
 {
 	unsigned int File_ID, File_ID_2;
 	int Return_Value, Function_Result = 0;
@@ -274,6 +274,58 @@ Exit:
 	return Function_Result;
 }
 
+/** Fill all available Files List entries.
+ * @return 0 if test was successful,
+ * @return 1 if the test failed.
+ */
+static int TestsFileFillFilesList(void)
+{
+	unsigned int i, Free_Files_Count, File_ID;
+	int Result, Return_Value = 1;
+	char String_File_Name[FILE_NAME_LENGTH + 1], String_Number[11];
+	
+	// Retrieve the amount of free Files List entries
+	SystemGetFileSystemFreeSize(&i, &Free_Files_Count); // The first parameter is not relevant here
+	
+	// Create one more files than the free Files List entries amount
+	for (i = 0; i <= Free_Files_Count; i++)
+	{
+		// Create the file name
+		StringConvertUnsignedIntegerToString(i, String_Number);
+		StringCopy("_test_", String_File_Name);
+		StringConcatenate(String_File_Name, String_Number);
+		
+		// Create the file
+		Result = FileOpen(String_File_Name, 'w', &File_ID);
+		if (i == Free_Files_Count) // The one more file
+		{
+			if (Result == ERROR_CODE_FILES_LIST_FULL) Return_Value = 0;
+			else DisplayMessageErrorAndCode("while opening the offending file", Result);
+			break;
+		}
+		else if (Result != ERROR_CODE_NO_ERROR) // Regular files
+		{
+			DisplayMessageErrorAndCode("while opening a file that could be opened", Result);
+			break;
+		}
+		
+		FileClose(File_ID);
+	}
+	
+	// Delete all files
+	for (i = 0; i < Free_Files_Count; i++)
+	{
+		// Create the file name
+		StringConvertUnsignedIntegerToString(i, String_Number);
+		StringCopy("_test_", String_File_Name);
+		StringConcatenate(String_File_Name, String_Number);
+		
+		FileDelete(String_File_Name);
+	}
+	
+	return Return_Value;
+}
+
 //-------------------------------------------------------------------------------------------------
 // Public functions
 //-------------------------------------------------------------------------------------------------
@@ -293,9 +345,18 @@ int TestsFile(void)
 	if (TestsFileMaximumOpenedFiles()) return 1;
 	DisplayMessageTestSuccessful();
 	
-	DisplayMessageTestStarting("multiple simultaneous opening of the same file");
-	if (TestsFileSameFileMultipleSimultaneousOpening()) return 1;
+	DisplayMessageTestStarting("same file reopening");
+	if (TestsFileReopenSameFile()) return 1;
 	DisplayMessageTestSuccessful();
+	
+	DisplayMessageTestStarting("Files List complete fill");
+	if (TestsFileFillFilesList()) return 1;
+	DisplayMessageTestSuccessful();
+	
+	// TODO
+	/*DisplayMessageTestStarting("filling the Blocks List");
+	if (TestsFileFillBlocksList()) return 1;
+	DisplayMessageTestSuccessful();*/
 	
 	return 0;
 }
