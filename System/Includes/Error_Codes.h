@@ -13,8 +13,8 @@
 typedef enum
 {
 	ERROR_CODE_NO_ERROR, //! No error happened.
-	ERROR_CODE_FL_FULL, //! The File List is full.
-	ERROR_CODE_BAT_FULL, //! There are no more free block in the Blocks Allocation Table.
+	ERROR_CODE_FILES_LIST_FULL, //! The Files List is full.
+	ERROR_CODE_BLOCKS_LIST_FULL, //! There is no more free block in the Blocks List.
 	ERROR_CODE_BAD_FILE_NAME, //! The provided file name is not valid.
 	ERROR_CODE_FILE_NOT_FOUND, //! The requested file doesn't exist in the file system.
 	ERROR_CODE_FILE_ALREADY_EXISTS, //! The file is already existing.

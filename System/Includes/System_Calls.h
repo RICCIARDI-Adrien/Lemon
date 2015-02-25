@@ -20,10 +20,10 @@ typedef enum
 	SYSTEM_CALL_SYSTEM_PARAMETER_ID_MEMORY_USER_SIZE, //! How many RAM a user program can access (in mega bytes).
 	SYSTEM_CALL_SYSTEM_PARAMETER_ID_FILE_MAXIMUM_OPENED_FILES_COUNT, //! How many files can be opened in the same time.
 	SYSTEM_CALL_SYSTEM_PARAMETER_ID_FILE_SYSTEM_BLOCK_SIZE, //! A block size in bytes.
-	SYSTEM_CALL_SYSTEM_PARAMETER_ID_FILE_SYSTEM_MAXIMUM_FILE_LIST_ENTRIES_COUNT, //! Maximum number of entries in the file system File List (i.e. the maximum number of files that can be stored in the file system).
-	SYSTEM_CALL_SYSTEM_PARAMETER_ID_FILE_SYSTEM_MAXIMUM_BLOCK_ALLOCATION_TABLE_ENTRIES_COUNT, //! Maximum number of file system blocks.
-	SYSTEM_CALL_SYSTEM_PARAMETER_ID_FILE_SYSTEM_FREE_FILE_LIST_ENTRIES_COUNT, //! How many FL entries are available.
-	SYSTEM_CALL_SYSTEM_PARAMETER_ID_FILE_SYSTEM_FREE_BLOCK_ALLOCATION_TABLE_ENTRIES_COUNT, //! How many BAT entries are available.
+	SYSTEM_CALL_SYSTEM_PARAMETER_ID_FILE_SYSTEM_MAXIMUM_FILES_LIST_ENTRIES_COUNT, //! Maximum number of entries in the file system Files List (i.e. the maximum number of files that can be stored in the file system).
+	SYSTEM_CALL_SYSTEM_PARAMETER_ID_FILE_SYSTEM_MAXIMUM_BLOCKS_LIST_ENTRIES_COUNT, //! Maximum number of file system blocks.
+	SYSTEM_CALL_SYSTEM_PARAMETER_ID_FILE_SYSTEM_FREE_FILES_LIST_ENTRIES_COUNT, //! How many Files List entries are available.
+	SYSTEM_CALL_SYSTEM_PARAMETER_ID_FILE_SYSTEM_FREE_BLOCKS_LIST_ENTRIES_COUNT, //! How many Blocks List entries are available.
 	SYSTEM_CALL_SYSTEM_PARAMETER_IDS_COUNT //! The total number of parameters.
 } TSystemCallSystemParameterID;
 
@@ -298,8 +298,8 @@ typedef enum
 	 * @return ERROR_CODE_BAD_FILENAME if File_Name is an empty string,
 	 * @return ERROR_CODE_FILE_NOT_FOUND if the file was not found,
 	 * @return ERROR_CODE_FILE_OPENED_YET if the file was previously opened by not closed,
-	 * @return ERROR_CODE_FL_FULL if the file was opened in write mode and there was no more room in FL,
-	 * @return ERROR_CODE_BAT_FULL if the file was opened in write mode and there was no more room in BAT,
+	 * @return ERROR_CODE_FILES_LIST_FULL if the file was opened in write mode and there was no more room in Files List,
+	 * @return ERROR_CODE_BLOCKS_LIST_FULL if the file was opened in write mode and there was no more room in Blocks List,
 	 * @return ERROR_CODE_UNKNOWN_OPENING_MODE if the opening mode byte is not 'r' or 'w',
 	 * @return ERROR_CODE_CANT_OPEN_MORE_FILES if there is no more free file descriptor.
 	 */
@@ -318,7 +318,7 @@ typedef enum
 	 */
 	SYSTEM_CALL_FILE_READ,
 
-	/** Write a whole to an opened file.
+	/** Write data to an opened file.
 	 * @param eax = 0x38
 	 * @param ebx = File descriptor index.
 	 * @param ecx = How many bytes to write.
@@ -328,7 +328,7 @@ typedef enum
 	 * @return ERROR_CODE_BAD_FILE_DESCRIPTOR if the supplied file descriptor exceeds the maximum number of files that the kernel can open at the same time,
 	 * @return ERROR_CODE_FILE_NOT_OPENED if the file is not opened,
 	 * @return ERROR_CODE_BAD_OPENING_MODE if the file is not opened in write mode,
-	 * @return ERROR_CODE_BAT_FULL if there no more free blocks in BAT and the data could not be written.
+	 * @return ERROR_CODE_BLOCKS_LIST_FULL if there is no more free blocks in the Blocks List and the data could not be written.
 	 */
 	SYSTEM_CALL_FILE_WRITE,
 

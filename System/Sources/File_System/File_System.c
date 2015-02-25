@@ -20,10 +20,10 @@
 //-------------------------------------------------------------------------------------------------
 // Private variables
 //-------------------------------------------------------------------------------------------------
-/** The Block Allocation Table size in hard disk sectors. */
-static unsigned int Block_Allocation_Table_Size_Sectors;
-/** The ID of the first hard disk sector containing the Files List. */
-static unsigned int Block_Allocation_Table_First_Sector_Number;
+/** The Blocks List size in hard disk sectors. */
+static unsigned int Blocks_List_Size_Sectors;
+/** The ID of the first hard disk sector containing the Blocks List. */
+static unsigned int Blocks_List_First_Sector_Number;
 
 /** The Files List size in hard disk sectors. */
 static unsigned int Files_List_Size_Sectors;
@@ -31,14 +31,14 @@ static unsigned int Files_List_Size_Sectors;
 static unsigned int Files_List_First_Sector_Number;
 
 /** First sector dedicated to data, located right after the file system. */
-static unsigned int File_System_First_Data_Sector;
+static unsigned int Data_First_Sector_Number;
 
 //-------------------------------------------------------------------------------------------------
 // Public variables
 //-------------------------------------------------------------------------------------------------
 TFileSystemInformations File_System_Informations;
-unsigned int Block_Allocation_Table[CONFIGURATION_FILE_SYSTEM_MAXIMUM_BLOCK_ALLOCATION_TABLE_ENTRIES];
-TFileListEntry Files_List[CONFIGURATION_FILE_SYSTEM_MAXIMUM_FILES_LIST_ENTRIES];
+unsigned int Blocks_List[CONFIGURATION_FILE_SYSTEM_MAXIMUM_BLOCKS_LIST_ENTRIES];
+TFilesListEntry Files_List[CONFIGURATION_FILE_SYSTEM_MAXIMUM_FILES_LIST_ENTRIES];
 
 //-------------------------------------------------------------------------------------------------
 // Private functions
@@ -91,25 +91,25 @@ int FileSystemInit(void)
 	// Check if there is a valid file system on the device
 	if (File_System_Informations.Magic_Number != FILE_SYSTEM_MAGIC_NUMBER) return 0;
 	// Check if the file system is small enough to fit into the kernel reserved memory space
-	if ((File_System_Informations.Total_Blocks_Count > CONFIGURATION_FILE_SYSTEM_MAXIMUM_BLOCK_ALLOCATION_TABLE_ENTRIES) || (File_System_Informations.Total_Files_Count > CONFIGURATION_FILE_SYSTEM_MAXIMUM_FILES_LIST_ENTRIES)) return 0;
+	if ((File_System_Informations.Total_Blocks_Count > CONFIGURATION_FILE_SYSTEM_MAXIMUM_BLOCKS_LIST_ENTRIES) || (File_System_Informations.Total_Files_Count > CONFIGURATION_FILE_SYSTEM_MAXIMUM_FILES_LIST_ENTRIES)) return 0;
 	
-	// Compute Block Allocation Table size in sectors
+	// Compute Blocks List size in sectors
 	Temp = File_System_Informations.Total_Blocks_Count * sizeof(unsigned int);
-	Block_Allocation_Table_Size_Sectors = Temp / FILE_SYSTEM_SECTOR_SIZE_BYTES;
-	if (Temp % FILE_SYSTEM_SECTOR_SIZE_BYTES) Block_Allocation_Table_Size_Sectors++;
+	Blocks_List_Size_Sectors = Temp / FILE_SYSTEM_SECTOR_SIZE_BYTES;
+	if (Temp % FILE_SYSTEM_SECTOR_SIZE_BYTES) Blocks_List_Size_Sectors++;
 	
 	// Compute Files List size in sectors
-	Temp = File_System_Informations.Total_Files_Count * sizeof(TFileListEntry);
+	Temp = File_System_Informations.Total_Files_Count * sizeof(TFilesListEntry);
 	Files_List_Size_Sectors = Temp / FILE_SYSTEM_SECTOR_SIZE_BYTES;
 	if (Temp % FILE_SYSTEM_SECTOR_SIZE_BYTES != 0) Files_List_Size_Sectors++;
 	
-	// Determine starting sectors for each file system structures
-	Block_Allocation_Table_First_Sector_Number = CONFIGURATION_FILE_SYSTEM_STARTING_SECTOR;
-	Files_List_First_Sector_Number = Block_Allocation_Table_First_Sector_Number + Block_Allocation_Table_Size_Sectors;
-	File_System_First_Data_Sector = Files_List_First_Sector_Number + Files_List_Size_Sectors;
+	// Determine starting sectors for each file system structure
+	Blocks_List_First_Sector_Number = CONFIGURATION_FILE_SYSTEM_STARTING_SECTOR;
+	Files_List_First_Sector_Number = Blocks_List_First_Sector_Number + Blocks_List_Size_Sectors;
+	Data_First_Sector_Number = Files_List_First_Sector_Number + Files_List_Size_Sectors;
 	
-	// Load Block Allocation Table and Files List
-	FileSystemReadSectors(Block_Allocation_Table_First_Sector_Number, Block_Allocation_Table_Size_Sectors, Block_Allocation_Table);
+	// Load Blocks List and Files List
+	FileSystemReadSectors(Blocks_List_First_Sector_Number, Blocks_List_Size_Sectors, Blocks_List);
 	FileSystemReadSectors(Files_List_First_Sector_Number, Files_List_Size_Sectors, Files_List);
 
 	// No error
@@ -118,7 +118,7 @@ int FileSystemInit(void)
 
 void FileSystemSave(void)
 {
-	FileSystemWriteSectors(Block_Allocation_Table_First_Sector_Number, Block_Allocation_Table_Size_Sectors, Block_Allocation_Table);
+	FileSystemWriteSectors(Blocks_List_First_Sector_Number, Blocks_List_Size_Sectors, Blocks_List);
 	FileSystemWriteSectors(Files_List_First_Sector_Number, Files_List_Size_Sectors, Files_List);
 }
 
@@ -128,12 +128,12 @@ unsigned int FileSystemGetFreeBlocksCount(void)
 	
 	for (i = 0; i < File_System_Informations.Total_Blocks_Count; i++)
 	{
-		if (Block_Allocation_Table[i] == FILE_SYSTEM_BAT_BLOCK_FREE) Free_Blocks_Count++;
+		if (Blocks_List[i] == FILE_SYSTEM_BLOCKS_LIST_BLOCK_FREE) Free_Blocks_Count++;
 	}
 	return Free_Blocks_Count;
 }
 
-unsigned int FileSystemGetFreeFileListEntriesCount(void)
+unsigned int FileSystemGetFreeFilesListEntriesCount(void)
 {
 	unsigned int i, File_List_Entries_Count = 0;
 	
@@ -150,10 +150,10 @@ unsigned int FileSystemGetFirstFreeBlock(void)
 	
 	for (i = 0; i < File_System_Informations.Total_Blocks_Count; i++)
 	{
-		if (Block_Allocation_Table[i] == FILE_SYSTEM_BAT_BLOCK_FREE) return i;
+		if (Blocks_List[i] == FILE_SYSTEM_BLOCKS_LIST_BLOCK_FREE) return i;
 	}
-	// No more room in BAT
-	return FILE_SYSTEM_BAT_FULL_CODE;
+	// No more room in the Blocks List
+	return FILE_SYSTEM_BLOCKS_LIST_FULL_CODE;
 }
 
 unsigned int FileSystemReadBlocks(unsigned int Start_Block, unsigned int Blocks_Count, unsigned char *Pointer_Buffer)
@@ -161,14 +161,14 @@ unsigned int FileSystemReadBlocks(unsigned int Start_Block, unsigned int Blocks_
 	unsigned int i, j, Block, Sector;
 	
 	// Is end of file reached ?
-	if (Start_Block == FILE_SYSTEM_BAT_BLOCK_EOF) return FILE_SYSTEM_BAT_BLOCK_EOF;
+	if (Start_Block == FILE_SYSTEM_BLOCKS_LIST_BLOCK_EOF) return FILE_SYSTEM_BLOCKS_LIST_BLOCK_EOF;
 		
 	Block = Start_Block;
 	for (i = 0; i < Blocks_Count; i++)
 	{
 		// Read block
-		Sector = (Block * (FILE_SYSTEM_BLOCK_SIZE_BYTES / FILE_SYSTEM_SECTOR_SIZE_BYTES)) + File_System_First_Data_Sector;
-		for (j = 0; j < FILE_SYSTEM_BLOCK_SIZE_BYTES / FILE_SYSTEM_SECTOR_SIZE_BYTES; j++)
+		Sector = (Block * (CONFIGURATION_FILE_SYSTEM_BLOCK_SIZE_BYTES / FILE_SYSTEM_SECTOR_SIZE_BYTES)) + Data_First_Sector_Number;
+		for (j = 0; j < CONFIGURATION_FILE_SYSTEM_BLOCK_SIZE_BYTES / FILE_SYSTEM_SECTOR_SIZE_BYTES; j++)
 		{
 			HardDiskReadSector(Sector, Pointer_Buffer);
 			Sector++;
@@ -176,9 +176,9 @@ unsigned int FileSystemReadBlocks(unsigned int Start_Block, unsigned int Blocks_
 		}
 
 		// Next block
-		Block = Block_Allocation_Table[Block];
-		// Return FILE_SYSTEM_BAT_BLOCK_EOF if end of file is reached
-		if (Block == FILE_SYSTEM_BAT_BLOCK_EOF) break;
+		Block = Blocks_List[Block];
+		// Tell that the end of file is reached
+		if (Block == FILE_SYSTEM_BLOCKS_LIST_BLOCK_EOF) break;
 	}
 	return Block;
 }
@@ -192,8 +192,8 @@ unsigned int FileSystemWriteBlocks(unsigned int Start_Block, unsigned int Blocks
 	for (i = 0; i < Blocks_Count; i++)
 	{
 		// Write block
-		Sector = (Block * (FILE_SYSTEM_BLOCK_SIZE_BYTES / FILE_SYSTEM_SECTOR_SIZE_BYTES)) + File_System_First_Data_Sector;
-		for (j = 0; j < FILE_SYSTEM_BLOCK_SIZE_BYTES / FILE_SYSTEM_SECTOR_SIZE_BYTES; j++)
+		Sector = (Block * (CONFIGURATION_FILE_SYSTEM_BLOCK_SIZE_BYTES / FILE_SYSTEM_SECTOR_SIZE_BYTES)) + Data_First_Sector_Number;
+		for (j = 0; j < CONFIGURATION_FILE_SYSTEM_BLOCK_SIZE_BYTES / FILE_SYSTEM_SECTOR_SIZE_BYTES; j++)
 		{
 			HardDiskWriteSector(Sector, Pointer_Buffer);
 			Sector++;
@@ -201,14 +201,14 @@ unsigned int FileSystemWriteBlocks(unsigned int Start_Block, unsigned int Blocks
 		}
 		
 		// Write end-of-file in the last block
-		if (i == Blocks_Count - 1) Block_Allocation_Table[Block] = FILE_SYSTEM_BAT_BLOCK_EOF;
+		if (i == Blocks_Count - 1) Blocks_List[Block] = FILE_SYSTEM_BLOCKS_LIST_BLOCK_EOF;
 		else
 		{
 			// Find next block
-			Block_Allocation_Table[Block] = 12; // Set a value to the previously written block in order to avoid getting this block when calling FileSystemGetFirstFreeBlock()
+			Blocks_List[Block] = 12; // Set a value to the previously written block in order to avoid getting this block when calling FileSystemGetFirstFreeBlock()
 			Next_Block = FileSystemGetFirstFreeBlock();
-			// Update BAT with next block
-			Block_Allocation_Table[Block] = Next_Block;
+			// Update Blocks List with next block
+			Blocks_List[Block] = Next_Block;
 			Block = Next_Block;
 		}
 	}
@@ -217,11 +217,11 @@ unsigned int FileSystemWriteBlocks(unsigned int Start_Block, unsigned int Blocks
 	return Block;
 }
 
-TFileListEntry *FileSystemReadFLEntry(char *String_File_Name)
+TFilesListEntry *FileSystemReadFilesListEntry(char *String_File_Name)
 {
 	unsigned int i;
 	
-	// Search for matching file name in FL
+	// Search for the first matching file name in the Files List
 	for (i = 0; i < File_System_Informations.Total_Files_Count; i++)
 	{
 		if (strncmp(String_File_Name, Files_List[i].Name, CONFIGURATION_FILE_NAME_LENGTH) == 0) return &Files_List[i];
@@ -229,7 +229,7 @@ TFileListEntry *FileSystemReadFLEntry(char *String_File_Name)
 	return NULL;
 }
 
-int FileSystemWriteFLEntry(char *String_File_Name, TFileListEntry **Pointer_Pointer_New_Entry)
+int FileSystemWriteFilesListEntry(char *String_File_Name, TFilesListEntry **Pointer_Pointer_New_Entry)
 {
 	unsigned int i;
 	
@@ -242,8 +242,8 @@ int FileSystemWriteFLEntry(char *String_File_Name, TFileListEntry **Pointer_Poin
 			return ERROR_CODE_NO_ERROR;
 		}
 	}
-	// No room left in FL
-	return ERROR_CODE_FL_FULL;
+	// No room left in Files List
+	return ERROR_CODE_FILES_LIST_FULL;
 }
 
 unsigned int FileSystemAllocateBlock(void)
@@ -252,10 +252,10 @@ unsigned int FileSystemAllocateBlock(void)
 	
 	// Try to get a free block
 	New_Block = FileSystemGetFirstFreeBlock();
-	if (New_Block == FILE_SYSTEM_BAT_FULL_CODE) return ERROR_CODE_BAT_FULL;
+	if (New_Block == FILE_SYSTEM_BLOCKS_LIST_FULL_CODE) return ERROR_CODE_BLOCKS_LIST_FULL;
 	
 	// "Reserve" the block
-	Block_Allocation_Table[New_Block] = FILE_SYSTEM_BAT_BLOCK_EOF;
+	Blocks_List[New_Block] = FILE_SYSTEM_BLOCKS_LIST_BLOCK_EOF;
 	return New_Block;
 }
 
@@ -269,11 +269,11 @@ unsigned int FileSystemAllocateBlock(void)
 		// The number of blocks must be greater or equal to the number of files or all files can't be stored on disk
 		if (Blocks_Count < Files_Count) return 1;
 		
-		// Check is the file system is not too big to be mounted by the kernel
-		if ((Blocks_Count > CONFIGURATION_FILE_SYSTEM_MAXIMUM_BLOCK_ALLOCATION_TABLE_ENTRIES) || (Files_Count > CONFIGURATION_FILE_SYSTEM_MAXIMUM_FILES_LIST_ENTRIES)) return 1;
+		// Check if the file system is not too big to be mounted by the kernel
+		if ((Blocks_Count > CONFIGURATION_FILE_SYSTEM_MAXIMUM_BLOCKS_LIST_ENTRIES) || (Files_Count > CONFIGURATION_FILE_SYSTEM_MAXIMUM_FILES_LIST_ENTRIES)) return 1;
 		
 		// Check if the file system can fit on the hard disk
-		Required_Size = (Blocks_Count * sizeof(unsigned int)) + (Files_Count * sizeof(TFileListEntry)) + (Blocks_Count * FILE_SYSTEM_BLOCK_SIZE_BYTES) + (CONFIGURATION_FILE_SYSTEM_STARTING_SECTOR * FILE_SYSTEM_SECTOR_SIZE_BYTES); // Size of the file system + size of data area + (size of MBR + size of kernel)
+		Required_Size = (Blocks_Count * sizeof(unsigned int)) + (Files_Count * sizeof(TFilesListEntry)) + (Blocks_Count * CONFIGURATION_FILE_SYSTEM_BLOCK_SIZE_BYTES) + (CONFIGURATION_FILE_SYSTEM_STARTING_SECTOR * FILE_SYSTEM_SECTOR_SIZE_BYTES); // Size of the file system + size of data area + (size of MBR + size of kernel)
 		if (Required_Size > HardDiskGetDriveSizeBytes()) return 2;
 		
 		// Create empty file system
@@ -287,25 +287,25 @@ unsigned int FileSystemAllocateBlock(void)
 		// Copy MBR to disk
 		HardDiskWriteSector(0, Pointer_MBR_Code);
 		
-		// Set BAT area to free block value
-		for (i = 0; i < Blocks_Count; i++) Block_Allocation_Table[i] = FILE_SYSTEM_BAT_BLOCK_FREE;
-		// Set FL area to 0 to indicate it's free
-		memset(Files_List, 0, Files_Count * sizeof(TFileListEntry));
+		// Fill the Blocks List area with free block value
+		for (i = 0; i < Blocks_Count; i++) Blocks_List[i] = FILE_SYSTEM_BLOCKS_LIST_BLOCK_FREE;
+		// Set Files List area to 0 to indicate it's free
+		memset(Files_List, 0, Files_Count * sizeof(TFilesListEntry));
 		
 		// Compute the variables needed to safely call FileSystemSave()
-		// Compute Block Allocation Table size in sectors
+		// Compute Blocks List size in sectors
 		i = Blocks_Count * sizeof(unsigned int);
-		Block_Allocation_Table_Size_Sectors = i / FILE_SYSTEM_SECTOR_SIZE_BYTES;
-		if (i % FILE_SYSTEM_SECTOR_SIZE_BYTES) Block_Allocation_Table_Size_Sectors++;
+		Blocks_List_Size_Sectors = i / FILE_SYSTEM_SECTOR_SIZE_BYTES;
+		if (i % FILE_SYSTEM_SECTOR_SIZE_BYTES) Blocks_List_Size_Sectors++;
 		
 		// Compute Files List size in sectors
-		i = Files_Count * sizeof(TFileListEntry);
+		i = Files_Count * sizeof(TFilesListEntry);
 		Files_List_Size_Sectors = i / FILE_SYSTEM_SECTOR_SIZE_BYTES;
 		if (i % FILE_SYSTEM_SECTOR_SIZE_BYTES != 0) Files_List_Size_Sectors++;
 	
 		// Determine starting sectors for each file system structures
-		Block_Allocation_Table_First_Sector_Number = CONFIGURATION_FILE_SYSTEM_STARTING_SECTOR;
-		Files_List_First_Sector_Number = Block_Allocation_Table_First_Sector_Number + Block_Allocation_Table_Size_Sectors;
+		Blocks_List_First_Sector_Number = CONFIGURATION_FILE_SYSTEM_STARTING_SECTOR;
+		Files_List_First_Sector_Number = Blocks_List_First_Sector_Number + Blocks_List_Size_Sectors;
 		
 		// Save new generated file system
 		FileSystemSave();
