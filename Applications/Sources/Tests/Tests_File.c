@@ -326,13 +326,64 @@ static int TestsFileFillFilesList(void)
 	return Return_Value;
 }
 
+/** Fill all available Blocks List entries.
+ * @return 0 if test was successful,
+ * @return 1 if the test failed.
+ */
+static int TestsFileFillBlocksList(void)
+{
+	unsigned int Free_Blocks_Count, i, File_ID, Block_Size_Bytes;
+	int Result, Return_Value = 1;
+	
+	// Retrieve the amount of free Blocks List entries
+	SystemGetFileSystemFreeSize(&Free_Blocks_Count, &i);
+	// Retrieve a block size in bytes
+	SystemGetFileSystemTotalSize(&Block_Size_Bytes, &i, &i);
+	
+	// Create a file
+	Result = FileOpen("_test_", 'w', &File_ID);
+	if (Result != ERROR_CODE_NO_ERROR)
+	{
+		DisplayMessageErrorAndCode("while creating the file", Result);
+		return 1;
+	}
+	
+	// Fill the buffer with crap data
+	for (i = 0; i < Block_Size_Bytes; i++) Buffer[i] = (unsigned char) RandomGenerateNumber();
+	
+	// Fill the Blocks List with one block more than the available space
+	for (i = 0; i <= Free_Blocks_Count; i++)
+	{
+		Result = FileWrite(File_ID, Buffer, Block_Size_Bytes);
+		
+		if (i == Free_Blocks_Count) // The offending block is reached
+		{
+			if (Result != ERROR_CODE_BLOCKS_LIST_FULL)
+			{
+				DisplayMessageErrorAndCode(": the 'Blocks List full' error did not triggered successfully", Result);
+				goto Exit;
+			}
+			Return_Value = 0;
+			break;
+		}
+		else if (Result != ERROR_CODE_NO_ERROR) // Regular blocks
+		{
+			DisplayMessageErrorAndCode(": could not write a block whereas there is available space", Result);
+			goto Exit;
+		}
+	}
+	
+Exit:
+	FileClose(File_ID);
+	FileDelete("_test_");
+	return Return_Value;	
+}
+
 //-------------------------------------------------------------------------------------------------
 // Public functions
 //-------------------------------------------------------------------------------------------------
 int TestsFile(void)
 {
-	DisplayMessageTestStarting("functions input parameters");
-	
 	DisplayMessageTestStarting("Libraries File functions input parameters");
 	if (TestsFileFunctionsInputParameters()) return 1;
 	DisplayMessageTestSuccessful();
@@ -353,10 +404,9 @@ int TestsFile(void)
 	if (TestsFileFillFilesList()) return 1;
 	DisplayMessageTestSuccessful();
 	
-	// TODO
-	/*DisplayMessageTestStarting("filling the Blocks List");
+	DisplayMessageTestStarting("Blocks List complete fill");
 	if (TestsFileFillBlocksList()) return 1;
-	DisplayMessageTestSuccessful();*/
+	DisplayMessageTestSuccessful();
 	
 	return 0;
 }

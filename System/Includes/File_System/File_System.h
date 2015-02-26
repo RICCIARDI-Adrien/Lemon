@@ -114,7 +114,7 @@ int FileSystemWriteFilesListEntry(char *String_File_Name, TFilesListEntry **Poin
 TFilesListEntry *FileSystemReadFilesListEntry(char *String_File_Name);
 
 /** "Reserve" a free block by writing a false value into it.
- * @return The allocated block index or ERROR_CODE_BLOCKS_LIST_FULL if there is no more free block.
+ * @return The allocated block index or FILE_SYSTEM_BLOCKS_LIST_FULL_CODE if there is no more free block.
  */
 unsigned int FileSystemAllocateBlock(void);
 

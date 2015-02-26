@@ -426,7 +426,7 @@ void FileClose(unsigned int File_Descriptor_Index)
 	// Save file system if the file was opened in write mode to backup newly allocated Blocks List blocks
 	if (Pointer_File_Descriptor->Opening_Mode == 'w')
 	{
-		// Flush last block if it exists (even if is has been flushed yet as this case rarely happens)
+		// Flush the last block if the file is not empty (the last block is never flushed by FileWrite() as it would need one more call, but FileClose() is called instead)
 		if (Pointer_File_Descriptor->Pointer_Files_List_Entry->Size_Bytes > 0) FileSystemWriteBlocks(Pointer_File_Descriptor->Current_Block_Index, 1, Pointer_File_Descriptor->Buffer);
 		FileSystemSave();
 	}

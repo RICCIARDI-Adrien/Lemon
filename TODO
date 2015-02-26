@@ -2,6 +2,11 @@
 | URGENT |
 +--------+
 
+Système
+-------
+
+pas de protection sur le chargement d'un système de fichiers trop grand
+
 Doc
 ---
 Rajouter dans doc la liste des programmes nécessaires pour compiler l'OS

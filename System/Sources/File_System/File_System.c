@@ -252,10 +252,7 @@ unsigned int FileSystemAllocateBlock(void)
 	
 	// Try to get a free block
 	New_Block = FileSystemGetFirstFreeBlock();
-	if (New_Block == FILE_SYSTEM_BLOCKS_LIST_FULL_CODE) return ERROR_CODE_BLOCKS_LIST_FULL;
-	
-	// "Reserve" the block
-	Blocks_List[New_Block] = FILE_SYSTEM_BLOCKS_LIST_BLOCK_EOF;
+	if (New_Block != FILE_SYSTEM_BLOCKS_LIST_FULL_CODE) Blocks_List[New_Block] = FILE_SYSTEM_BLOCKS_LIST_BLOCK_EOF; // "Reserve" the block on success
 	return New_Block;
 }
 

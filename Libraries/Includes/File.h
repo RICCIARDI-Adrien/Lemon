@@ -59,8 +59,8 @@ void FileListNext(char *String_File_Name);
  * @return ERROR_CODE_FILE_NOT_FOUND if the file was opened in read only mode and it was not found,
  * @return ERROR_CODE_UNKNOWN_OPENING_MODE if the opening mode is not "read" or "write",
  * @return ERROR_CODE_CANT_OPEN_MORE_FILES if the kernel files quota was exceeded,
- * @return ERROR_CODE_FL_FULL if the file was opened in write mode an there is no more room in FL,
- * @return ERROR_CODE_BAT_FULL if the file was opened in write mode an there is no more room in BAT,
+ * @return ERROR_CODE_FILES_LIST_FULL if the file was opened in write mode an there is no more room in the Files List,
+ * @return ERROR_CODE_BLOCKS_LIST_FULL if the file was opened in write mode an there is no more room in the Blocks List,
  * @return ERROR_CODE_NO_ERROR if the file was correctly opened.
  */
 int FileOpen(char *String_File_Name, TFileOpeningMode Opening_Mode, unsigned int *Pointer_File_ID);
@@ -85,7 +85,7 @@ int FileRead(unsigned int File_ID, void *Pointer_Buffer, unsigned int Bytes_Coun
  * @return ERROR_CODE_BAD_FILE_DESCRIPTOR if the supplied file descriptor exceeds the maximum number of files that the kernel can open at the same time,
  * @return ERROR_CODE_FILE_NOT_OPENED if the file is not opened,
  * @return ERROR_CODE_BAD_OPENING_MODE if the file is not opened in write mode,
- * @return ERROR_CODE_BAT_FULL if there no more free blocks in BAT and the data could not be written.
+ * @return ERROR_CODE_BLOCKS_LIST_FULL if there no more free blocks in the Blocks List and the data could not be written.
  */
 int FileWrite(unsigned int File_ID, void *Pointer_Buffer, unsigned int Bytes_Count);
 

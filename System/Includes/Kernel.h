@@ -17,6 +17,7 @@
  * @version 2.1.5 : 26/10/2014, removed 'help' command and added 'version' command.
  * @version 2.1.6 : 07/12/2014, fixed the memory protection limit bug.
  * @version 2.1.7 : 11/01/2015, moved the system error codes in a dedicated header file that can be shared with the libraries.
+ * @version 2.1.8 : 26/02/2015, improved and fixed a bug in the file system code.
  */
 #ifndef H_KERNEL_H
 #define H_KERNEL_H
