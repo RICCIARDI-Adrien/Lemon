@@ -287,6 +287,12 @@ static int TestsFileFillFilesList(void)
 	// Retrieve the amount of free Files List entries
 	SystemGetFileSystemFreeSize(&i, &Free_Files_Count); // The first parameter is not relevant here
 	
+	ScreenWriteString("There are ");
+	ScreenWriteUnsignedInteger(Free_Files_Count);
+	ScreenWriteString(" free Files List entries.\n");
+	
+	ScreenWriteString("Filling all entries...\n");
+	
 	// Create one more files than the free Files List entries amount
 	for (i = 0; i <= Free_Files_Count; i++)
 	{
@@ -311,6 +317,8 @@ static int TestsFileFillFilesList(void)
 		
 		FileClose(File_ID);
 	}
+	
+	ScreenWriteString("Deleting all test generated files...\n");
 	
 	// Delete all files
 	for (i = 0; i < Free_Files_Count; i++)
@@ -340,6 +348,12 @@ static int TestsFileFillBlocksList(void)
 	// Retrieve a block size in bytes
 	SystemGetFileSystemTotalSize(&Block_Size_Bytes, &i, &i);
 	
+	ScreenWriteString("There are ");
+	ScreenWriteUnsignedInteger(Free_Blocks_Count);
+	ScreenWriteString(" free Blocks List entries.\n");
+	
+	ScreenWriteString("Creating the test file...\n");
+	
 	// Create a file
 	Result = FileOpen("_test_", 'w', &File_ID);
 	if (Result != ERROR_CODE_NO_ERROR)
@@ -350,6 +364,8 @@ static int TestsFileFillBlocksList(void)
 	
 	// Fill the buffer with crap data
 	for (i = 0; i < Block_Size_Bytes; i++) Buffer[i] = (unsigned char) RandomGenerateNumber();
+	
+	ScreenWriteString("Filling the file...\n");
 	
 	// Fill the Blocks List with one block more than the available space
 	for (i = 0; i <= Free_Blocks_Count; i++)
@@ -374,6 +390,7 @@ static int TestsFileFillBlocksList(void)
 	}
 	
 Exit:
+	ScreenWriteString("Deleting the test file...\n");
 	FileClose(File_ID);
 	FileDelete("_test_");
 	return Return_Value;	
