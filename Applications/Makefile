@@ -31,9 +31,9 @@ export LDFLAGS
 #------------------------------------------------------------------------------------------------------------------------------
 # Global rules
 #------------------------------------------------------------------------------------------------------------------------------
-all: benchmark brain_calculation game_of_life help no_match_dealer numbers rain tests text_viewer
+all: benchmark brain_calculation game_of_life help no_match_dealer numbers rain tests text_viewer unix_commands
 
-clean: benchmark_clean brain_calculation_clean game_of_life_clean help_clean no_match_dealer_clean numbers_clean rain_clean tests_clean text_viewer_clean
+clean: benchmark_clean brain_calculation_clean game_of_life_clean help_clean no_match_dealer_clean numbers_clean rain_clean tests_clean text_viewer_clean unix_commands_clean
 	# Delete also the tools
 	rm -rf $(SERIAL_PORT_SERVER)
 

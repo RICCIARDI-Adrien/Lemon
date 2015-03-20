@@ -20,3 +20,5 @@ rain
 Readme.txt
 ../Applications/Binaries/Text_Viewer.32b
 text
+../Applications/Binaries/UNIX_Commands.32b
+u
