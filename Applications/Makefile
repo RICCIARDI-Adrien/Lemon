@@ -14,7 +14,7 @@ SERIAL_PORT_SERVER = $(TOOLS_PATH)/Serial_Port_Server.out
 # Some systems want "echo -e" to display colors, some do not want
 ECHO = echo -e
 
-CCFLAGS += -nostdlib -fno-builtin -masm=intel -m32 -W -Wall -I$(LIBRARIES_PATH)/Includes -I$(SYSTEM_PATH)/Includes
+CCFLAGS += -nostdlib -fno-builtin -masm=intel -m32 -W -Wall -Os -I$(LIBRARIES_PATH)/Includes -I$(SYSTEM_PATH)/Includes
 LDFLAGS = -T $(TOOLS_PATH)/Linker_Script.ld --strip-all -s -L$(LIBRARIES_PATH)/Binaries -l:Libraries.a
 SERIAL_PORT_SERVER_FLAGS = /tmp/Lemon_Serial_Port_Pipe
 
@@ -163,3 +163,16 @@ text_viewer_clean:
 
 text_viewer_download: $(SERIAL_PORT_SERVER)
 	@$(SERIAL_PORT_SERVER) $(SERIAL_PORT_SERVER_FLAGS) $(BINARIES_PATH)/Text_Viewer.32b text
+
+#------------------------------------------------------------------------------------------------------------------------------
+# UNIX commands
+#------------------------------------------------------------------------------------------------------------------------------
+unix_commands:
+	@$(ECHO) "\033[33mCompiling UNIX commands...\033[0m"
+	@cd $(SOURCES_PATH)/UNIX_Commands && $(MAKE)
+
+unix_commands_clean:
+	@cd $(SOURCES_PATH)/UNIX_Commands && $(MAKE) clean
+
+unix_commands_download: $(SERIAL_PORT_SERVER)
+	@$(SERIAL_PORT_SERVER) $(SERIAL_PORT_SERVER_FLAGS) $(BINARIES_PATH)/UNIX_Commands.32b u
