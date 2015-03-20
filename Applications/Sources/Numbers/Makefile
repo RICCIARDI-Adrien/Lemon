@@ -1,11 +1,11 @@
-OBJECTS = $(OBJECTS_PATH)/Numbers/Numbers.o
-BINARY_NAME = Numbers.32b
+PROGRAM_NAME = Numbers
+OBJECTS = $(OBJECTS_PATH)/$(PROGRAM_NAME)/Numbers.o
 
 all: $(OBJECTS)
-	$(LD) $(OBJECTS) $(LDFLAGS) -o $(BINARIES_PATH)/$(BINARY_NAME)
+	$(LD) $(OBJECTS) $(LDFLAGS) -o $(BINARIES_PATH)/$(PROGRAM_NAME).32b
 
-$(OBJECTS_PATH)/Numbers/Numbers.o: Numbers.c Numbers.h
-	$(CC) $(CCFLAGS) -c Numbers.c -o $(OBJECTS_PATH)/Numbers/Numbers.o
+$(OBJECTS_PATH)/$(PROGRAM_NAME)/Numbers.o: Numbers.c Numbers.h
+	$(CC) $(CCFLAGS) -c Numbers.c -o $(OBJECTS_PATH)/$(PROGRAM_NAME)/Numbers.o
 
 clean:
-	rm -f $(OBJECTS_PATH)/Numbers/*.o $(BINARIES_PATH)/$(BINARY_NAME)
+	rm -f $(OBJECTS_PATH)/$(PROGRAM_NAME)/*.o $(BINARIES_PATH)/$(PROGRAM_NAME).32b

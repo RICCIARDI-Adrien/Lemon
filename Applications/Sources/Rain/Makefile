@@ -1,11 +1,11 @@
-OBJECTS = $(OBJECTS_PATH)/Rain/Rain.o
-BINARY_NAME = Rain.32b
+PROGRAM_NAME = Rain
+OBJECTS = $(OBJECTS_PATH)/$(PROGRAM_NAME)/Rain.o
 
 all: $(OBJECTS)
-	$(LD) $(OBJECTS) $(LDFLAGS) -o $(BINARIES_PATH)/$(BINARY_NAME)
+	$(LD) $(OBJECTS) $(LDFLAGS) -o $(BINARIES_PATH)/$(PROGRAM_NAME).32b
 
-$(OBJECTS_PATH)/Rain/Rain.o: Rain.c Rain.h
-	$(CC) $(CCFLAGS) -c Rain.c -o $(OBJECTS_PATH)/Rain/Rain.o
+$(OBJECTS_PATH)/$(PROGRAM_NAME)/Rain.o: Rain.c Rain.h
+	$(CC) $(CCFLAGS) -c Rain.c -o $(OBJECTS_PATH)/$(PROGRAM_NAME)/Rain.o
 
 clean:
-	rm -f $(OBJECTS_PATH)/Rain/*.o $(BINARIES_PATH)/$(BINARY_NAME)
+	rm -f $(OBJECTS_PATH)/$(PROGRAM_NAME)/*.o $(BINARIES_PATH)/$(PROGRAM_NAME).32b

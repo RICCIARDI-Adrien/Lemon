@@ -1,12 +1,12 @@
+PROGRAM_NAME = Benchmark
+OBJECTS = $(OBJECTS_PATH)/$(PROGRAM_NAME)/Benchmark.o
 CCFLAGS += -O2
-OBJECTS = $(OBJECTS_PATH)/Benchmark/Benchmark.o
-BINARY_NAME = Benchmark.32b
 
 all: $(OBJECTS)
-	$(LD) $(OBJECTS) $(LDFLAGS) -o $(BINARIES_PATH)/$(BINARY_NAME)
+	$(LD) $(OBJECTS) $(LDFLAGS) -o $(BINARIES_PATH)/$(PROGRAM_NAME).32b
 
-$(OBJECTS_PATH)/Benchmark/Benchmark.o: Benchmark.c
-	$(CC) $(CCFLAGS) -c Benchmark.c -o $(OBJECTS_PATH)/Benchmark/Benchmark.o
+$(OBJECTS_PATH)/$(PROGRAM_NAME)/Benchmark.o: Benchmark.c
+	$(CC) $(CCFLAGS) -c Benchmark.c -o $(OBJECTS_PATH)/$(PROGRAM_NAME)/Benchmark.o
 
 clean:
-	rm -f $(OBJECTS_PATH)/Benchmark/*.o $(BINARIES_PATH)/$(BINARY_NAME)
+	rm -f $(OBJECTS_PATH)/$(PROGRAM_NAME)/*.o $(BINARIES_PATH)/$(PROGRAM_NAME).32b

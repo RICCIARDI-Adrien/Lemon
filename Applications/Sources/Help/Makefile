@@ -1,11 +1,11 @@
-OBJECTS = $(OBJECTS_PATH)/Help/Help.o
-BINARY_NAME = Help.32b
+PROGRAM_NAME = Help
+OBJECTS = $(OBJECTS_PATH)/$(PROGRAM_NAME)/Help.o
 
 all: $(OBJECTS)
-	$(LD) $(OBJECTS) $(LDFLAGS) -o $(BINARIES_PATH)/$(BINARY_NAME)
+	$(LD) $(OBJECTS) $(LDFLAGS) -o $(BINARIES_PATH)/$(PROGRAM_NAME).32b
 
-$(OBJECTS_PATH)/Help/Help.o: Help.c Help.h
-	$(CC) $(CCFLAGS) -c Help.c -o $(OBJECTS_PATH)/Help/Help.o
+$(OBJECTS_PATH)/$(PROGRAM_NAME)/Help.o: Help.c Help.h
+	$(CC) $(CCFLAGS) -c Help.c -o $(OBJECTS_PATH)/$(PROGRAM_NAME)/Help.o
 
 clean:
-	rm -f $(OBJECTS_PATH)/Help/*.o $(BINARIES_PATH)/$(BINARY_NAME)
+	rm -f $(OBJECTS_PATH)/$(PROGRAM_NAME)/*.o $(BINARIES_PATH)/$(PROGRAM_NAME).32b
