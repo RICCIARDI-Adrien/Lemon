@@ -4,7 +4,7 @@ OBJECTS = $(OBJECTS_PATH)/$(PROGRAM_NAME)/Help.o
 all: $(OBJECTS)
 	$(LD) $(OBJECTS) $(LDFLAGS) -o $(BINARIES_PATH)/$(PROGRAM_NAME).32b
 
-$(OBJECTS_PATH)/$(PROGRAM_NAME)/Help.o: Help.c Help.h
+$(OBJECTS_PATH)/$(PROGRAM_NAME)/Help.o: Help.c Strings.h
 	$(CC) $(CCFLAGS) -c Help.c -o $(OBJECTS_PATH)/$(PROGRAM_NAME)/Help.o
 
 clean:

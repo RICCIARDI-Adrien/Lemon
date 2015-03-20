@@ -1,9 +1,9 @@
 /** @file Help.c
- * @see Help.h for description.
+ * System commands help.
  * @author Adrien RICCIARDI
  */
 #include <System.h>
-#include "Help.h"
+#include "Strings.h"
 
 //-------------------------------------------------------------------------------------------------
 // Private constants
@@ -26,6 +26,7 @@ static char *String_Commands[] =
 	"rename",
 	"size",
 	"text",
+	"u",
 	"version",
 	NULL
 };
@@ -42,6 +43,7 @@ static char *String_Command_Short_Descriptions[] =
 	STRING_COMMAND_SHORT_DESCRIPTION_RENAME,
 	STRING_COMMAND_SHORT_DESCRIPTION_SIZE,
 	STRING_COMMAND_SHORT_DESCRIPTION_TEXT,
+	STRING_COMMAND_SHORT_DESCRIPTION_U,
 	STRING_COMMAND_SHORT_DESCRIPTION_VERSION
 };
 
@@ -57,6 +59,7 @@ static char *String_Command_Full_Descriptions[] =
 	STRING_COMMAND_SHORT_DESCRIPTION_RENAME,
 	STRING_COMMAND_SHORT_DESCRIPTION_SIZE,
 	STRING_COMMAND_FULL_DESCRIPTION_TEXT,
+	STRING_COMMAND_FULL_DESCRIPTION_U,
 	STRING_COMMAND_SHORT_DESCRIPTION_VERSION
 };
 	

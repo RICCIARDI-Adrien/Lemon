@@ -1,10 +1,10 @@
-/** @file Help.h
- * System commands help.
+/** @file Strings.h
+ * Gather all strings to ease translation.
  * @author Adrien RICCIARDI
  * @version 1.0 : 26/10/2014
  */
-#ifndef H_HELP_H
-#define H_HELP_H
+#ifndef H_STRINGS_H
+#define H_STRINGS_H
 
 //-------------------------------------------------------------------------------------------------
 // Constants
@@ -32,14 +32,19 @@
 	#define STRING_COMMAND_SHORT_DESCRIPTION_RENAME "Renomme un fichier existant."
 	#define STRING_COMMAND_SHORT_DESCRIPTION_SIZE "Affiche la taille d'un fichier en octets."
 	#define STRING_COMMAND_SHORT_DESCRIPTION_TEXT "Affiche le contenu d'un fichier texte."
+	#define STRING_COMMAND_SHORT_DESCRIPTION_U "Rassemble des commandes du monde UNIX."
 	#define STRING_COMMAND_SHORT_DESCRIPTION_VERSION "Affiche la version et la date de compilation du syst\212me."
 	
 	// Commands full description
 	#define STRING_COMMAND_FULL_DESCRIPTION_HELP "Appel\202e sans argument, la commande 'help' affiche une liste et une br\212ve\ndescription de toutes les commandes disponibles.\n" \
-												 "Lorsque le nom d'une commande est sp\202cifi\202 comme argument, 'help' affiche une\ndescription d\202taill\202e des possibilit\202s de la commande."
+		"Lorsque le nom d'une commande est sp\202cifi\202 comme argument, 'help' affiche une\ndescription d\202taill\202e des possibilit\202s de la commande."
 	#define STRING_COMMAND_FULL_DESCRIPTION_TEXT "Affiche le contenu d'un fichier texte.\n" \
-												 "La touche 'Echap' permet de quitter le programme.\n" \
-												 "Il est possible de faire d\202filer le texte \205 l'aide des touches 'Fl\212che haut' et 'Fl\212che bas'."
+		"La touche 'Echap' permet de quitter le programme.\n" \
+		"Il est possible de faire d\202filer le texte \205 l'aide des touches 'Fl\212che haut' et 'Fl\212che bas'."
+	#define STRING_COMMAND_FULL_DESCRIPTION_U "Rassemble des versions simplifi\202es de plusieurs commandes UNIX.\n" \
+		"Taper 'u' affiche la liste de toutes les commandes disponibles.\n" \
+		"Il suffit de taper 'u <Commande>' pour lancer la commande souhait\202e.\n"
+	
 #endif
 
 #endif
