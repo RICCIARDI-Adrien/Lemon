@@ -17,7 +17,7 @@ OBJECTS_KEYBOARD = $(PATH_OBJECTS)/Keyboard_Is_Key_Available.o $(PATH_OBJECTS)/K
 OBJECTS_MATH = $(PATH_OBJECTS)/Math_Integer_Add.o $(PATH_OBJECTS)/Math_Integer_Copy.o $(PATH_OBJECTS)/Math_Integer_Display_Hexadecimal.o $(PATH_OBJECTS)/Math_Integer_Initialize_From_Int.o
 OBJECTS_MEMORY = $(PATH_OBJECTS)/Memory_Copy_Area.o $(PATH_OBJECTS)/Memory_Set_Area_Value.o
 OBJECTS_RANDOM = $(PATH_OBJECTS)/Random_Generate_Number.o $(PATH_OBJECTS)/Random_Initialize.o
-OBJECTS_SCREEN = $(PATH_OBJECTS)/Screen_Clear.o $(PATH_OBJECTS)/Screen_Display_Buffer.o $(PATH_OBJECTS)/Screen_Get_Cursor_Position.o $(PATH_OBJECTS)/Screen_Set_Background_Color.o $(PATH_OBJECTS)/Screen_Set_Cursor_Position.o $(PATH_OBJECTS)/Screen_Set_Font_Color.o $(PATH_OBJECTS)/Screen_Write_Character.o $(PATH_OBJECTS)/Screen_Write_Integer.o $(PATH_OBJECTS)/Screen_Write_String.o $(PATH_OBJECTS)/Screen_Write_Unsigned_Integer.o
+OBJECTS_SCREEN = $(PATH_OBJECTS)/Screen_Clear.o $(PATH_OBJECTS)/Screen_Display_Buffer.o $(PATH_OBJECTS)/Screen_Get_Cursor_Position.o $(PATH_OBJECTS)/Screen_Set_Background_Color.o $(PATH_OBJECTS)/Screen_Set_Cursor_Position.o $(PATH_OBJECTS)/Screen_Set_Font_Color.o $(PATH_OBJECTS)/Screen_Write_Centered_String.o $(PATH_OBJECTS)/Screen_Write_Character.o $(PATH_OBJECTS)/Screen_Write_Integer.o $(PATH_OBJECTS)/Screen_Write_String.o $(PATH_OBJECTS)/Screen_Write_Unsigned_Integer.o
 OBJECTS_STRING = $(PATH_OBJECTS)/String_Compare.o $(PATH_OBJECTS)/String_Concatenate.o $(PATH_OBJECTS)/String_Convert_String_To_Unsigned_Integer.o $(PATH_OBJECTS)/String_Convert_Unsigned_Integer_To_String.o $(PATH_OBJECTS)/String_Copy.o $(PATH_OBJECTS)/String_Get_Size.o
 OBJECTS_SYSTEM = $(PATH_OBJECTS)/System_Exit_Program.o $(PATH_OBJECTS)/System_Get_File_System_Free_Size.o $(PATH_OBJECTS)/System_Get_File_System_Total_Size.o $(PATH_OBJECTS)/System_Get_Timer_Value.o $(PATH_OBJECTS)/System_Program_Entry_Point.o $(PATH_OBJECTS)/System_Wait.o
 OBJECTS_UART = $(PATH_OBJECTS)/UART_Initialize.o $(PATH_OBJECTS)/UART_Is_Data_Received.o $(PATH_OBJECTS)/UART_Read_Byte.o $(PATH_OBJECTS)/UART_Write_Byte.o
@@ -178,6 +178,11 @@ $(PATH_OBJECTS)/Screen_Set_Font_Color.d: $(PATH_SOURCES)/Screen/Screen_Set_Font_
 	$(CC) $(CCFLAGS) -MM $(PATH_SOURCES)/Screen/Screen_Set_Font_Color.c -MF $(PATH_OBJECTS)/Screen_Set_Font_Color.d
 $(PATH_OBJECTS)/Screen_Set_Font_Color.o: $(PATH_OBJECTS)/Screen_Set_Font_Color.d
 	$(CC) $(CCFLAGS) $(PATH_SOURCES)/Screen/Screen_Set_Font_Color.c -o $(PATH_OBJECTS)/Screen_Set_Font_Color.o
+
+$(PATH_OBJECTS)/Screen_Write_Centered_String.d: $(PATH_SOURCES)/Screen/Screen_Write_Centered_String.c
+	$(CC) $(CCFLAGS) -MM $(PATH_SOURCES)/Screen/Screen_Write_Centered_String.c -MF $(PATH_OBJECTS)/Screen_Write_Centered_String.d
+$(PATH_OBJECTS)/Screen_Write_Centered_String.o: $(PATH_OBJECTS)/Screen_Write_Centered_String.d
+	$(CC) $(CCFLAGS) $(PATH_SOURCES)/Screen/Screen_Write_Centered_String.c -o $(PATH_OBJECTS)/Screen_Write_Centered_String.o
 
 $(PATH_OBJECTS)/Screen_Write_Character.d: $(PATH_SOURCES)/Screen/Screen_Write_Character.c
 	$(CC) $(CCFLAGS) -MM $(PATH_SOURCES)/Screen/Screen_Write_Character.c -MF $(PATH_OBJECTS)/Screen_Write_Character.d

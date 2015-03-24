@@ -104,6 +104,11 @@ void ScreenWriteCharacter(char Character);
  */
 void ScreenWriteString(char *String);
 
+/** Display a centered ASCIIZ string.
+ * @param String The string to display.
+ */
+void ScreenWriteCenteredString(char *String);
+
 /** Display the string representation of a signed integer.
  * @param Integer The integer number to display.
  */
