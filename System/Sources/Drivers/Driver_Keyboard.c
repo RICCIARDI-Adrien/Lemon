@@ -193,13 +193,13 @@ void KeyboardReadString(char *String, unsigned int Maximum_Characters_Number)
 				i--;
 				String[i] = 0;
 				// Clean the deleted character from the screen
-				ScreenWriteChar(8);
+				ScreenWriteCharacter('\b');
 				break;
 			
 			// Enter
 			case '\n':
 				String[i] = 0;
-				ScreenWriteChar('\n'); // Go to a new line
+				ScreenWriteCharacter('\n'); // Go to a new line
 				return;
 				
 			default:
@@ -211,7 +211,7 @@ void KeyboardReadString(char *String, unsigned int Maximum_Characters_Number)
 				String[i] = Key;
 				i++;
 				// Print to screen
-				ScreenWriteChar(Key);
+				ScreenWriteCharacter(Key);
 		}
 	}
 }

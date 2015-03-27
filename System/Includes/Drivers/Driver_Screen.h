@@ -63,13 +63,13 @@ void ScreenClear(void);
 
 /** Write a character to the screen.
  * @param Character ASCII value of the character to print.
- * @note This function handles the new line '\\n' and backspace (\\b) characters.
+ * @note This function handles special characters '\\n', '\\r' and '\\b'.
  */
-void ScreenWriteChar(char Character);
+void ScreenWriteCharacter(char Character);
 
 /** Print an ASCIIZ string to the screen.
  * @param String Pointer on the string to print.
- * @note This function handles the new line '\\n' and backspace (\\b) characters.
+ * @note This function handles special characters '\\n', '\\r' and '\\b'.
  */
 void ScreenWriteString(char *String);
 

@@ -72,7 +72,7 @@ void ScreenClear(void)
 	}
 }
 
-void ScreenWriteChar(char Character)
+void ScreenWriteCharacter(char Character)
 {
 	unsigned char *Pointer_Video_Memory;
 	
@@ -137,6 +137,7 @@ void ScreenWriteChar(char Character)
 					Screen_Cursor_Row = SCREEN_ROWS_COUNT - 1;
 				}
 			}
+			break;
 	}
 }
 
@@ -144,7 +145,7 @@ void ScreenWriteString(char *String)
 {
 	while (*String != 0)
 	{
-		ScreenWriteChar(*String);
+		ScreenWriteCharacter(*String);
 		String++;
 	}
 }
@@ -169,7 +170,7 @@ void ScreenDisplayBuffer(unsigned char *Pointer_Buffer)
 {
 	unsigned int *Pointer_Source, *Pointer_Destination, i;
 	
-	// Access to source buffer 4-byte by time
+	// Access to source buffer 4-byte at a time
 	Pointer_Source = (unsigned int *) Pointer_Buffer;
 	// Copy to video memory
 	Pointer_Destination = (unsigned int *) SCREEN_MEMORY_ADDRESS;
@@ -177,10 +178,10 @@ void ScreenDisplayBuffer(unsigned char *Pointer_Buffer)
 	// Wait for the current frame to be entirely displayed
 	while(inb(SCREEN_VGA_REGISTER_INPUT_STATUS_1 & SCREEN_VGA_REGISTER_INPUT_STATUS_1_BIT_VRETRACE));
 	
-	// Wait for the VSync signal to trigger
+	// Wait for the VSync signal to be triggered
 	while(!(inb(SCREEN_VGA_REGISTER_INPUT_STATUS_1) & SCREEN_VGA_REGISTER_INPUT_STATUS_1_BIT_VRETRACE));
 	
-	// Copy buffer into video memory 4 bytes by time
+	// Copy buffer into video memory 4 bytes at a time
 	for (i = 0; i < SCREEN_ROWS_COUNT * SCREEN_COLUMNS_COUNT * 2 / sizeof(unsigned int); i++)
 	{
 		*Pointer_Destination = *Pointer_Source;

@@ -68,7 +68,7 @@ static inline void ShellReadCommandLine(char *Pointer_Buffer)
 			// Delete previous characters if some were inserted yet
 			while (Characters_Count > 0)
 			{
-				ScreenWriteChar('\b');
+				ScreenWriteCharacter('\b');
 				Characters_Count--;
 			}
 
@@ -90,7 +90,7 @@ static inline void ShellReadCommandLine(char *Pointer_Buffer)
 				{
 					Characters_Count--;
 					Pointer_Buffer[Characters_Count] = 0;
-					ScreenWriteChar('\b');
+					ScreenWriteCharacter('\b');
 				}
 				break;
 				
@@ -99,7 +99,7 @@ static inline void ShellReadCommandLine(char *Pointer_Buffer)
 				// Terminate string
 				Pointer_Buffer[Characters_Count] = 0;
 				// Go to next line
-				ScreenWriteChar('\n');
+				ScreenWriteCharacter('\n');
 				// Copy this line into the last command buffer
 				strcpy(String_Last_Command_Buffer, Pointer_Buffer);
 				return;
@@ -113,7 +113,7 @@ static inline void ShellReadCommandLine(char *Pointer_Buffer)
 				// Add character to  the string
 				Pointer_Buffer[Characters_Count] = Key_Code;
 				Characters_Count++;
-				ScreenWriteChar(Key_Code);
+				ScreenWriteCharacter(Key_Code);
 				break;
 		}
 	}

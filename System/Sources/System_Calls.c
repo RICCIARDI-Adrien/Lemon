@@ -125,7 +125,7 @@ static void SystemCallUARTIsDataReceived(void)
 //====================================================================================================================
 static void SystemCallScreenWriteCharacter(void)
 {
-	ScreenWriteChar((char) Integer_1);
+	ScreenWriteCharacter((char) Integer_1);
 }
 
 static void SystemCallScreenWriteString(void)

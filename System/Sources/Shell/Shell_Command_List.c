@@ -24,6 +24,6 @@ void ShellCommandList(void)
 		if (Buffer[0] == 0) break;
 		
 		ScreenWriteString(Buffer);
-		ScreenWriteChar('\n');
+		ScreenWriteCharacter('\n');
 	}
 }
