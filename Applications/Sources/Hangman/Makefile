@@ -1,0 +1,11 @@
+PROGRAM_NAME = Hangman
+OBJECTS = $(OBJECTS_PATH)/$(PROGRAM_NAME)/Hangman.o
+
+all: $(OBJECTS)
+	$(LD) $(OBJECTS) $(LDFLAGS) -o $(BINARIES_PATH)/$(PROGRAM_NAME).32b
+
+$(OBJECTS_PATH)/$(PROGRAM_NAME)/Hangman.o: Hangman.c Strings.h
+	$(CC) $(CCFLAGS) -c Hangman.c -o $(OBJECTS_PATH)/$(PROGRAM_NAME)/Hangman.o
+
+clean:
+	rm -f $(OBJECTS_PATH)/$(PROGRAM_NAME)/*.o $(BINARIES_PATH)/$(PROGRAM_NAME).32b

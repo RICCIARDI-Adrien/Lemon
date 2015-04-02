@@ -10,6 +10,8 @@ brain
 deal
 ../Applications/Binaries/Game_Of_Life.32b
 life
+../Applications/Binaries/Hangman.32b
+hangman
 ../Applications/Binaries/Help.32b
 help
 ../Applications/Binaries/Numbers.32b

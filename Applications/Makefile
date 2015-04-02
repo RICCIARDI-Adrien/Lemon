@@ -31,9 +31,9 @@ export LDFLAGS
 #------------------------------------------------------------------------------------------------------------------------------
 # Global rules
 #------------------------------------------------------------------------------------------------------------------------------
-all: benchmark brain_calculation game_of_life help no_match_dealer numbers rain tests text_viewer unix_commands
+all: benchmark brain_calculation game_of_life hangman help no_match_dealer numbers rain tests text_viewer unix_commands
 
-clean: benchmark_clean brain_calculation_clean game_of_life_clean help_clean no_match_dealer_clean numbers_clean rain_clean tests_clean text_viewer_clean unix_commands_clean
+clean: benchmark_clean brain_calculation_clean game_of_life_clean hangman_clean help_clean no_match_dealer_clean numbers_clean rain_clean tests_clean text_viewer_clean unix_commands_clean
 	# Delete also the tools
 	rm -rf $(SERIAL_PORT_SERVER)
 
@@ -79,6 +79,19 @@ game_of_life_clean:
 
 game_of_life_download: $(SERIAL_PORT_SERVER)
 	@$(SERIAL_PORT_SERVER) $(SERIAL_PORT_SERVER_FLAGS) $(BINARIES_PATH)/Game_Of_Life.32b life
+
+#------------------------------------------------------------------------------------------------------------------------------
+# Hangman
+#------------------------------------------------------------------------------------------------------------------------------
+hangman:
+	@$(ECHO) "\033[33mCompiling Hangman...\033[0m"
+	@cd $(SOURCES_PATH)/Hangman && $(MAKE)
+
+hangman_clean:
+	@cd $(SOURCES_PATH)/Hangman && $(MAKE) clean
+
+hangman_download: $(SERIAL_PORT_SERVER)
+	@$(SERIAL_PORT_SERVER) $(SERIAL_PORT_SERVER_FLAGS) $(BINARIES_PATH)/Hangman.32b hangman
 
 #------------------------------------------------------------------------------------------------------------------------------
 # Help
