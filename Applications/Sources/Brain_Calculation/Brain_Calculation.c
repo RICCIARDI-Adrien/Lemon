@@ -69,7 +69,7 @@ static void ChooseCalculus(int *Pointer_First_Number, char *Pointer_Operator, in
 				Minimum_Value = 10;
 				Maximum_Value = 100;
 				break;
-			case Hard:
+			default:
 				Minimum_Value = 100;
 				Maximum_Value = 1000;
 				break;
@@ -88,7 +88,7 @@ static void ChooseCalculus(int *Pointer_First_Number, char *Pointer_Operator, in
 				*Pointer_Operator = '-';
 				*Pointer_Result = *Pointer_First_Number - *Pointer_Second_Number;
 				break;
-			case 2:
+			default:
 				*Pointer_Operator = '*';
 				*Pointer_Result = *Pointer_First_Number * *Pointer_Second_Number;
 				break;
