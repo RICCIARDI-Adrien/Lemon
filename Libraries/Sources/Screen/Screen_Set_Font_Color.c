@@ -7,7 +7,7 @@
 //-------------------------------------------------------------------------------------------------
 // Public functions
 //-------------------------------------------------------------------------------------------------
-void ScreenSetFontColor(unsigned char Color_Code)
+void ScreenSetFontColor(TScreenColor Color_Code)
 {
 	unsigned char Color;
 	

@@ -14,40 +14,7 @@
 /** Screen columns number. */
 #define SCREEN_COLUMNS_COUNT 80
 
-/** Black color. */
-#define SCREEN_COLOR_BLACK 0x00
-/** Blue color. */
-#define SCREEN_COLOR_BLUE 0x01
-/** Green color. */
-#define SCREEN_COLOR_GREEN 0x02
-/** Cyan color. */
-#define SCREEN_COLOR_CYAN 0x03
-/** Red color. */
-#define SCREEN_COLOR_RED 0x04
-/** Magenta color. */
-#define SCREEN_COLOR_MAGENTA 0x05
-/** Brown color. */
-#define SCREEN_COLOR_BROWN 0x06
-/** Light gray color. */
-#define SCREEN_COLOR_LIGHT_GRAY 0x07
-/** Gray color. */
-#define SCREEN_COLOR_GRAY 0x08
-/** Light blue color. */
-#define SCREEN_COLOR_LIGHT_BLUE 0x09
-/** Light green color. */
-#define SCREEN_COLOR_LIGHT_GREEN 0x0A
-/** Light cyan color. */
-#define SCREEN_COLOR_LIGHT_CYAN 0x0B
-/** Light red color. */
-#define SCREEN_COLOR_LIGHT_RED 0x0C
-/** Light magenta color. */
-#define SCREEN_COLOR_LIGHT_MAGENTA 0x0D
-/** Yellow color. */
-#define SCREEN_COLOR_YELLOW 0x0E
-/** White color. */
-#define SCREEN_COLOR_WHITE 0x0F
-
-/** Create a complete color using a foreground and background colors.
+/** Create a complete color using a foreground and a background colors.
  * @param Foreground_Color The text color.
  * @param Background_Color The background color.
  */
@@ -56,7 +23,26 @@
 //-------------------------------------------------------------------------------------------------
 // Types
 //-------------------------------------------------------------------------------------------------
-// TODO enum avec les couleurs, changer paramètre couleur dans fonctions screen
+/** All available colors. */
+typedef enum
+{
+	SCREEN_COLOR_BLACK,
+	SCREEN_COLOR_BLUE,
+	SCREEN_COLOR_GREEN,
+	SCREEN_COLOR_CYAN,
+	SCREEN_COLOR_RED,
+	SCREEN_COLOR_MAGENTA,
+	SCREEN_COLOR_BROWN,
+	SCREEN_COLOR_LIGHT_GRAY,
+	SCREEN_COLOR_GRAY,
+	SCREEN_COLOR_LIGHT_BLUE,
+	SCREEN_COLOR_LIGHT_GREEN,
+	SCREEN_COLOR_LIGHT_CYAN,
+	SCREEN_COLOR_LIGHT_RED,
+	SCREEN_COLOR_LIGHT_MAGENTA,
+	SCREEN_COLOR_YELLOW,
+	SCREEN_COLOR_WHITE
+} TScreenColor;
 
 //-------------------------------------------------------------------------------------------------
 // Functions
@@ -67,12 +53,12 @@ void ScreenClear(void);
 /** Set the screen font color.
  * @param Color_Code Must be a constant from the SCREEN_COLOR_X set.
  */
-void ScreenSetFontColor(unsigned char Color_Code);
+void ScreenSetFontColor(TScreenColor Color_Code);
 
 /** Set the screen background color.
  * @param Color_Code Must be a constant from the SCREEN_COLOR_X set.
  */
-void ScreenSetBackgroundColor(unsigned char Color_Code);
+void ScreenSetBackgroundColor(TScreenColor Color_Code);
 
 /** Get the screen cursor position.
  * @param Pointer_Row On output will contain the row coordinate.
