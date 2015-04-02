@@ -20,7 +20,7 @@ OBJECTS = $(OBJECTS_CORE) $(OBJECTS_DRIVERS) $(OBJECTS_FILE_SYSTEM) $(OBJECTS_SH
 
 INCLUDES = $(SYSTEM_INCLUDES_PATH)
 
-CCFLAGS += -masm=intel -m32 -fno-builtin -finline-functions-called-once -nostdlib -nostartfiles -Wunused -Wall -I$(INCLUDES) -DINSTALLER
+CCFLAGS += -masm=intel -m32 -fno-builtin -finline-functions-called-once -nostdlib -nostartfiles -W -Wall -Wunused -fno-asynchronous-unwind-tables -I$(INCLUDES) -DINSTALLER
 LDFLAGS = -T ../System/Linker_Script.ld --strip-all -nostdlib -nostartfile
 MBR_FLAGS = -DSECTORS_TO_LOAD_COUNT=512
 

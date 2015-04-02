@@ -13,7 +13,8 @@ PATH_INCLUDES = Includes
 
 INCLUDES = -I$(PATH_INCLUDES)
 
-CCFLAGS += -masm=intel -m32 -fno-builtin -finline-functions-called-once -nostdlib -nostartfiles -Wunused -Wall -W $(INCLUDES)
+# Option -fno-asynchronous-unwind-tables avoid generating the .eh_frame section, which is heavy and useless here
+CCFLAGS += -masm=intel -m32 -fno-builtin -finline-functions-called-once -nostdlib -nostartfiles -fno-asynchronous-unwind-tables -W -Wall -Wunused $(INCLUDES)
 LDFLAGS = -T Linker_Script.ld --strip-all -nostdlib -nostartfile
 MBR_FLAGS = -DSECTORS_TO_LOAD_COUNT=64
 

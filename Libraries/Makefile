@@ -27,7 +27,7 @@ ARCHIVE_NAME = Libraries.a
 INCLUDES = -IIncludes -I../System/Includes
 
 CC = gcc
-CCFLAGS += -c -nostdlib -fno-builtin -masm=intel -m32 -W -Wall -O2 $(INCLUDES)
+CCFLAGS += -c -nostdlib -fno-builtin -masm=intel -m32 -W -Wall -fno-asynchronous-unwind-tables -O2 $(INCLUDES)
 
 all: $(OBJECTS)
 	ar -rvsc $(PATH_BINARIES)/$(ARCHIVE_NAME) $(OBJECTS)
