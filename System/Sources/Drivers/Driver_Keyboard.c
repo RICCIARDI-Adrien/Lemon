@@ -24,7 +24,8 @@
 //-------------------------------------------------------------------------------------------------
 // Private variables
 //-------------------------------------------------------------------------------------------------
-static unsigned char Keyboard_Led_State = KEYBOARD_LED_NUM_LOCK, Keyboard_ASCII_Code, Keyboard_Is_Key_Available = 0;
+static unsigned char Keyboard_Led_State = KEYBOARD_LED_NUM_LOCK, Keyboard_ASCII_Code;
+static volatile int Keyboard_Is_Key_Available = 0;
 
 /** Uppercase keyboard layout, used when Shift or Caps. Lock. key is active. */
 static unsigned char Keyboard_Uppercase_ASCII_Table[] =
@@ -238,7 +239,7 @@ void KeyboardEnableA20Gate(void)
 //-------------------------------------------------------------------------------------------------
 void KeyboardInterruptHandler(void)
 {
-	static char Is_Uppercase_Mode = 0, Is_Alternate_Mode = 0, Is_Extended_Mode = 0, Is_Stress_Mode = 0;
+	static int Is_Uppercase_Mode = 0, Is_Alternate_Mode = 0, Is_Extended_Mode = 0, Is_Stress_Mode = 0;
 	unsigned char Scan_Code;
 	
 	// Wait for the complete key transfer from the motherboard controller
@@ -247,9 +248,9 @@ void KeyboardInterruptHandler(void)
 	Scan_Code = inb(KEYBOARD_PORT_DATA);
 	
 	// Enable the following lines to see raw data from keyboard (debugging purpose only)
-	/*ConsoleWriteString(itoa(Scan_Code));
-	ConsoleWriteChar('\n');
-	outb(0x20, 32);
+	/*ScreenWriteString(itoa(Scan_Code));
+	ScreenWriteChar('\n');
+	KEYBOARD_ACKNOWLEDGE();
 	return;*/
 	
 	// F12 : go back instantly to the kernel console
