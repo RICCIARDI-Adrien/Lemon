@@ -27,21 +27,20 @@ MBR_FLAGS = -DSECTORS_TO_LOAD_COUNT=512
 BINARIES_TO_HEADER_CONVERTER = Tools/Binaries_To_Header_Converter.out
 
 all: clean Tools/Binaries_To_Header_Converter.out Convert_Files $(OBJECTS_PATH)/MBR.32b $(OBJECTS)
-	######## Link installer ########
+	######## Linking installer ########
 	$(LD) $(LDFLAGS) $(OBJECTS) -o $(OBJECTS_PATH)/Kernel.32b
-	######## Create floppy image ########
+	######## Creating floppy image ########
 	@cat $(OBJECTS_PATH)/MBR.32b $(OBJECTS_PATH)/Kernel.32b > $(BINARIES_PATH)/Raw_Image.bin
 	@dd if=/dev/zero of=$(BINARIES_PATH)/Lemon_Installer_Floppy_Image.img bs=512 count=2880 status=noxfer
 	@dd if=$(BINARIES_PATH)/Raw_Image.bin of=$(BINARIES_PATH)/Lemon_Installer_Floppy_Image.img conv=notrunc status=noxfer
 	@# Clean binaries folder of useless files
 	@rm $(BINARIES_PATH)/*.bin
-	######## Create CDROM image ########
+	######## Creating CDROM image ########
 	@if (test -e $(BINARIES_PATH)/Lemon_Installer_CD_Image.iso); then rm $(BINARIES_PATH)/Lemon_Installer_CD_Image.iso; fi
 	$(ISO_GENERATOR) -r -b Lemon_Installer_Floppy_Image.img -c boot.catalog -o Lemon_Installer_CD_Image.iso $(BINARIES_PATH)
 	@mv Lemon_Installer_CD_Image.iso $(BINARIES_PATH)
-	#============ Build successful ============#
-	@echo -n "Installer size (bytes) : "
-	@ls -l $(OBJECTS_PATH)/Kernel.32b | awk '{print $$5 + 512}'
+	######## Build successful ########
+	@ls -l $(OBJECTS_PATH)/Kernel.32b | awk '{print "Installer size : " $$5 + 512 " bytes"}'
 
 clean:
 	rm -f $(BINARIES_PATH)/* $(OBJECTS_PATH)/* $(SOURCES_PATH)/Shell/Embedded_Files_Data.h $(BINARIES_TO_HEADER_CONVERTER)
