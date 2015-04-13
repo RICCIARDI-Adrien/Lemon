@@ -11,8 +11,6 @@ TOOLS_PATH = $(realpath Tools)
 CC = gcc
 LD = ld
 SERIAL_PORT_SERVER = $(TOOLS_PATH)/Serial_Port_Server.out
-# Some systems want "echo -e" to display colors, some do not want
-ECHO = echo -e
 
 CCFLAGS += -nostdlib -fno-builtin -masm=intel -m32 -W -Wall -Wunused -Os -fno-asynchronous-unwind-tables -I$(LIBRARIES_PATH)/Includes -I$(SYSTEM_PATH)/Includes
 LDFLAGS = -T $(TOOLS_PATH)/Linker_Script.ld --strip-all -s -L$(LIBRARIES_PATH)/Binaries -l:Libraries.a
@@ -27,6 +25,13 @@ export OBJECTS_PATH
 export TOOLS_PATH
 export CCFLAGS
 export LDFLAGS
+
+#------------------------------------------------------------------------------------------------------------------------------
+# Private functions
+#------------------------------------------------------------------------------------------------------------------------------
+define DisplayProgramToCompile
+	@printf "\033[33mCompiling $1...\033[0m\n"
+endef
 
 #------------------------------------------------------------------------------------------------------------------------------
 # Global rules
@@ -45,7 +50,7 @@ $(SERIAL_PORT_SERVER): $(TOOLS_PATH)/Serial_Port_Server.c
 # Benchmark
 #------------------------------------------------------------------------------------------------------------------------------
 benchmark:
-	@$(ECHO) "\033[33mCompiling Benchmark...\033[0m"
+	@$(call DisplayProgramToCompile,Benchmark)
 	@cd $(SOURCES_PATH)/Benchmark && $(MAKE)
 
 benchmark_clean:
@@ -58,7 +63,7 @@ benchmark_download: $(SERIAL_PORT_SERVER)
 # Brain calculation
 #------------------------------------------------------------------------------------------------------------------------------
 brain_calculation:
-	@$(ECHO) "\033[33mCompiling Brain Calculation...\033[0m"
+	@$(call DisplayProgramToCompile,Brain Calculation)
 	@cd $(SOURCES_PATH)/Brain_Calculation && $(MAKE)
 
 brain_calculation_clean:
@@ -71,7 +76,7 @@ brain_calculation_download: $(SERIAL_PORT_SERVER)
 # Game of Life
 #------------------------------------------------------------------------------------------------------------------------------
 game_of_life:
-	@$(ECHO) "\033[33mCompiling Game of Life...\033[0m"
+	@$(call DisplayProgramToCompile,Game of Life)
 	@cd $(SOURCES_PATH)/Game_Of_Life && $(MAKE)
 
 game_of_life_clean:
@@ -84,7 +89,7 @@ game_of_life_download: $(SERIAL_PORT_SERVER)
 # Hangman
 #------------------------------------------------------------------------------------------------------------------------------
 hangman:
-	@$(ECHO) "\033[33mCompiling Hangman...\033[0m"
+	@$(call DisplayProgramToCompile,Hangman)
 	@cd $(SOURCES_PATH)/Hangman && $(MAKE)
 
 hangman_clean:
@@ -97,7 +102,7 @@ hangman_download: $(SERIAL_PORT_SERVER)
 # Help
 #------------------------------------------------------------------------------------------------------------------------------
 help:
-	@$(ECHO) "\033[33mCompiling Help...\033[0m"
+	@$(call DisplayProgramToCompile,Help)
 	@cd $(SOURCES_PATH)/Help && $(MAKE)
 
 help_clean:
@@ -110,7 +115,7 @@ help_download: $(SERIAL_PORT_SERVER)
 # No match dealer
 #------------------------------------------------------------------------------------------------------------------------------
 no_match_dealer:
-	@$(ECHO) "\033[33mCompiling No match dealer...\033[0m"
+	@$(call DisplayProgramToCompile,No match dealer)
 	@cd $(SOURCES_PATH)/No_Match_Dealer && $(MAKE)
 
 no_match_dealer_clean:
@@ -123,7 +128,7 @@ no_match_dealer_download: $(SERIAL_PORT_SERVER)
 # Numbers
 #------------------------------------------------------------------------------------------------------------------------------
 numbers:
-	@$(ECHO) "\033[33mCompiling Numbers...\033[0m"
+	@$(call DisplayProgramToCompile,Numbers)
 	@cd $(SOURCES_PATH)/Numbers && $(MAKE)
 
 numbers_clean:
@@ -136,7 +141,7 @@ numbers_download: $(SERIAL_PORT_SERVER)
 # Rain
 #------------------------------------------------------------------------------------------------------------------------------
 rain:
-	@$(ECHO) "\033[33mCompiling Rain...\033[0m"
+	@$(call DisplayProgramToCompile,Rain)
 	@cd $(SOURCES_PATH)/Rain && $(MAKE)
 
 rain_clean:
@@ -149,7 +154,7 @@ rain_download: $(SERIAL_PORT_SERVER)
 # Tests
 #------------------------------------------------------------------------------------------------------------------------------
 tests:
-	@$(ECHO) "\033[33mCompiling Tests...\033[0m"
+	@$(call DisplayProgramToCompile,Tests)
 	@cd $(SOURCES_PATH)/Tests && $(MAKE)
 
 tests_clean:
@@ -168,7 +173,7 @@ tests_download: $(SERIAL_PORT_SERVER)
 # Text viewer
 #------------------------------------------------------------------------------------------------------------------------------
 text_viewer:
-	@$(ECHO) "\033[33mCompiling Text viewer...\033[0m"
+	@$(call DisplayProgramToCompile,Text viewer)
 	@cd $(SOURCES_PATH)/Text_Viewer && $(MAKE)
 
 text_viewer_clean:
@@ -181,7 +186,7 @@ text_viewer_download: $(SERIAL_PORT_SERVER)
 # UNIX commands
 #------------------------------------------------------------------------------------------------------------------------------
 unix_commands:
-	@$(ECHO) "\033[33mCompiling UNIX commands...\033[0m"
+	@$(call DisplayProgramToCompile,UNIX commands)
 	@cd $(SOURCES_PATH)/UNIX_Commands && $(MAKE)
 
 unix_commands_clean:

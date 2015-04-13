@@ -2,25 +2,20 @@
 # Author : Adrien RICCIARDI
 SDK_PATH = ../Lemon_SDK
 
-# Some systems want "echo -e" to display colors, some do not want
-ECHO = echo -e
+define DisplayTitle
+	@printf "\033[32m###################################################################################################\n"
+	@printf "## $1\n"
+	@printf "###################################################################################################\033[0m\n"
+endef
 
 all: clean
-	@$(ECHO) "\033[32m--------------------------------------------------------------------------------"
-	@$(ECHO) "-- Compile system"
-	@$(ECHO) "--------------------------------------------------------------------------------\033[0m"
+	@$(call DisplayTitle,Compiling system)
 	@cd System && $(MAKE)
-	@$(ECHO) "\033[32m--------------------------------------------------------------------------------"
-	@$(ECHO) "-- Compile libraries"
-	@$(ECHO) "--------------------------------------------------------------------------------\033[0m"
+	@$(call DisplayTitle,Compiling libraries)
 	@cd Libraries && $(MAKE)
-	@$(ECHO) "\033[32m--------------------------------------------------------------------------------"
-	@$(ECHO) "-- Compile applications"
-	@$(ECHO) "--------------------------------------------------------------------------------\033[0m"
+	@$(call DisplayTitle,Compiling applications)
 	@cd Applications && $(MAKE)
-	@$(ECHO) "\033[32m--------------------------------------------------------------------------------"
-	@$(ECHO) "-- Create installation image"
-	@$(ECHO) "--------------------------------------------------------------------------------\033[0m"
+	@$(call DisplayTitle,Creating installation image)
 	@cd Installer && $(MAKE)
 
 
@@ -34,30 +29,30 @@ italian: all
 export CCFLAGS
 
 sdk:
-	@$(ECHO) "-> Prepare SDK directory..."
+	@printf "-> Prepare SDK directory..."
 	@rm -rf $(SDK_PATH)
 	@mkdir $(SDK_PATH)
-	@$(ECHO) "-> Copy the whole Applications directory..."
+	@printf "-> Copy the whole Applications directory..."
 	@cp -r Applications $(SDK_PATH)
 	@# Delete serial server binary to force the target computer to recompile it (and thus to avoid some incompatibilities)
 	@rm $(SDK_PATH)/Applications/Tools/Serial_Port_Server.out
 	@# Clean the Applications .32b and .o files
 	@make -C $(SDK_PATH)/Applications clean > /dev/null
-	@$(ECHO) "-> Copy user relevant documentation..."
+	@printf "-> Copy user relevant documentation..."
 	@mkdir $(SDK_PATH)/Documentation
 	@cp -r Documentation/Documentation_Libraries $(SDK_PATH)/Documentation
 	@cp -r Documentation/User_Manual $(SDK_PATH)/Documentation
 	@cp Documentation/Manual.html $(SDK_PATH)/Documentation
-	@$(ECHO) "-> Copy Libraries binaries and includes directories..."
+	@printf "-> Copy Libraries binaries and includes directories..."
 	@mkdir $(SDK_PATH)/Libraries
 	@cp -r Libraries/Binaries $(SDK_PATH)/Libraries
 	@cp -r Libraries/Includes $(SDK_PATH)/Libraries
 	@# Copy Error_Codes.h and System_Calls.h to Librairies includes directory
 	@cp System/Includes/Error_Codes.h $(SDK_PATH)/Libraries/Includes
 	@cp System/Includes/System_Calls.h $(SDK_PATH)/Libraries/Includes
-	@$(ECHO) "-> Copy installer CD image..."
+	@printf "-> Copy installer CD image..."
 	@cp Installer/Binaries/Lemon_Installer_CD_Image.iso $(SDK_PATH)
-	@$(ECHO) "### SDK successfully built ###"
+	@printf "### SDK successfully built ###"
 
 clean:
 	@cd Installer && $(MAKE) clean
