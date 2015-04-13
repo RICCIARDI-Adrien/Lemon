@@ -10,7 +10,7 @@
 // Private constants and macros
 //-------------------------------------------------------------------------------------------------
 /** Compute automatically the total number of words. */
-#define WORDS_TOTAL_COUNT (sizeof(String_Words) / sizeof(char *))
+#define WORDS_TOTAL_COUNT SYSTEM_GET_ARRAY_ELEMENTS_COUNT(String_Words)
 
 /** The word to find row position. */
 #define ROW_FOUND_LETTERS 2
@@ -220,7 +220,7 @@ int main(void)
 	RandomInitialize();
 	
 	// Initialize the following array here to avoid problems (!?)
-	for (i = 0; i < sizeof(Is_Word_Solved); i++) Is_Word_Solved[i] = 0;
+	for (i = 0; i < WORDS_TOTAL_COUNT; i++) Is_Word_Solved[i] = 0;
 	
 	while (1)
 	{

@@ -19,12 +19,15 @@
 #include <UART.h>
 
 //-------------------------------------------------------------------------------------------------
-// Constants
+// Constants and macros
 //-------------------------------------------------------------------------------------------------
 /** The NULL pointer. */
 #ifndef NULL
 	#define NULL ((void *) 0)
 #endif
+
+/** Give the number of elements in an array. */
+#define SYSTEM_GET_ARRAY_ELEMENTS_COUNT(Array) (sizeof(Array) / sizeof(Array[0]))
 
 //-------------------------------------------------------------------------------------------------
 // Functions
