@@ -67,7 +67,7 @@ static int TestsStringConvertStringToUnsignedInteger(void)
 	char *String_Numbers[] = {"12345", "0", "16", "4294967295", "1000000"};
 	unsigned int i, Results[] = {12345, 0, 16, 4294967295UL, 1000000};
 	
-	for (i = 0; i < sizeof(Results) / sizeof(unsigned int); i++)
+	for (i = 0; i < SYSTEM_GET_ARRAY_ELEMENTS_COUNT(Results); i++)
 	{
 		ScreenWriteString("Testing string \"");
 		ScreenWriteString(String_Numbers[i]);
@@ -92,7 +92,7 @@ static int TestsStringConvertUnsignedIntegerToString(void)
 	char *String_Results[] = {"12345", "0", "16", "4294967295", "1000000"}, String_Result[20];
 	unsigned int i, Numbers[] = {12345, 0, 16, 4294967295UL, 1000000};
 	
-	for (i = 0; i < sizeof(Numbers) / sizeof(unsigned int); i++)
+	for (i = 0; i < SYSTEM_GET_ARRAY_ELEMENTS_COUNT(Numbers); i++)
 	{
 		ScreenWriteString("Testing number ");
 		ScreenWriteString(String_Results[i]);

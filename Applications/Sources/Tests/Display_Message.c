@@ -64,7 +64,7 @@ void DisplayMessageErrorAndCode(char *String_Message, int Error_Code)
 	ScreenWriteString(" : ");
 	
 	// Select the corresponding error string (if the error code is known)
-	if ((unsigned int) Error_Code >= sizeof(String_Error_Codes) / sizeof(char *)) String_Error_Code = String_Unknown_Error_Code; // The sizeof() computation works as it is done on an array of pointers, no need to test if Error_Code < 0 because it is an unsigned comparison
+	if ((unsigned int) Error_Code >= SYSTEM_GET_ARRAY_ELEMENTS_COUNT(String_Error_Codes)) String_Error_Code = String_Unknown_Error_Code; // SYSTEM_GET_ARRAY_ELEMENTS_COUNT() returns an unsigned value
 	else String_Error_Code = String_Error_Codes[Error_Code];
 	
 	// Display the error code signification
