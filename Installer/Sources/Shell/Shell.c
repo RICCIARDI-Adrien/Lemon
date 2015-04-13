@@ -114,7 +114,21 @@ void Shell(void)
 	// Create file system
 	ScreenSetColor(SCREEN_COLOR_BLUE);
 	ScreenWriteString(STRING_CREATING_FILE_SYSTEM);
-	FileSystemCreate(2048, 128, Embedded_Files[0].Pointer_Data);
+	switch (FileSystemCreate(2048, 128, Embedded_Files[0].Pointer_Data))
+	{
+		case 1:
+			ScreenSetColor(SCREEN_COLOR_RED);
+			ScreenWriteString(STRING_ERROR_BAD_FILE_SYSTEM_PARAMETERS);
+			ShellReboot();
+		case 2:
+			ScreenSetColor(SCREEN_COLOR_RED);
+			ScreenWriteString(STRING_ERROR_FILE_SYSTEM_TOO_BIG_FOR_HARD_DISK_1);
+			ScreenWriteString(itoa(HardDiskGetDriveSizeBytes()));
+			ScreenWriteString(STRING_ERROR_FILE_SYSTEM_TOO_BIG_FOR_HARD_DISK_2);
+			ShellReboot();
+		default:
+			break;
+	}
 	FileSystemInit();
 	
 	// Install kernel

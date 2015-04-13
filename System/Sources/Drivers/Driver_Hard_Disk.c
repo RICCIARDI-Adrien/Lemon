@@ -8,6 +8,9 @@
 //-------------------------------------------------------------------------------------------------
 // Private constants and macros
 //-------------------------------------------------------------------------------------------------
+/** A standard hard disk sector size in bytes. */
+#define HARD_DISK_SECTOR_SIZE 512
+
 /** The port used to read or to write data to the hard disk controller. */
 #define HARD_DISK_PORT_DATA 0x01F0
 /** Hold the number of sectors to read or to write. */
@@ -29,6 +32,8 @@
 #define HARD_DISK_COMMAND_READ_WITH_RETRIES 0x20
 /** Command to start writing with automatic retries in case of failure. */
 #define HARD_DISK_COMMAND_WRITE_WITH_RETRIES 0x30
+/** Command to identify the device. */
+#define HARD_DISK_COMMAND_IDENTIFY_DEVICE 0xEC
 
 /** Wait until the controller signals it is ready. */
 #define WAIT_BUSY_CONTROLLER() while (inb(HARD_DISK_PORT_STATUS) & 0x80)
@@ -64,16 +69,16 @@ void HardDiskReadSector(unsigned int Logical_Sector_Number, unsigned char *Point
 		"push edi\n"
 		"push ecx\n"
 		"push edx\n"
-		"mov ecx, 256\n" // Sector size is divided by two because we read words from the bus
-		"mov edi, %0\n"
-		"mov edx, %1\n"
+		"mov ecx, %0\n" // Sector size is divided by two because we read words from the bus
+		"mov edi, %1\n"
+		"mov edx, %2\n"
 		"rep insw\n"
 		"pop edx\n"
 		"pop ecx\n"
 		"pop edi\n"
 		"sti"
 		: // No output
-		: "m" (Pointer_Buffer), "i" (HARD_DISK_PORT_DATA)
+		: "g" (HARD_DISK_SECTOR_SIZE / 2), "g" (Pointer_Buffer), "g" (HARD_DISK_PORT_DATA)
 		: "edi", "ecx", "edx"
 	);
 }
@@ -106,22 +111,55 @@ void HardDiskWriteSector(unsigned int Logical_Sector_Number, unsigned char *Poin
 		"push esi\n"
 		"push ecx\n"
 		"push edx\n"
-		"mov ecx, 256\n" // Sector size is divided by two because we write words to the bus
-		"mov esi, %0\n"
-		"mov edx, %1\n"
+		"mov ecx, %0\n" // Sector size is divided by two because we write words to the bus
+		"mov esi, %1\n"
+		"mov edx, %2\n"
 		"rep outsw\n"
 		"pop edx\n"
 		"pop ecx\n"
 		"pop esi\n"
 		"sti"
 		: // No output
-		: "m" (Pointer_Buffer), "i" (HARD_DISK_PORT_DATA)
+		: "g" (HARD_DISK_SECTOR_SIZE / 2), "g" (Pointer_Buffer), "g" (HARD_DISK_PORT_DATA)
 		: "esi", "ecx", "edx"
 	);
 }
 
 unsigned long long HardDiskGetDriveSizeBytes(void)
 {
-	// TODO
-	return 64 * 1024 * 1024;
+	unsigned int Buffer[HARD_DISK_SECTOR_SIZE / sizeof(unsigned int)]; // Store a whole sector
+	
+	// Wait for the controller to be ready
+	asm("cli");
+	WAIT_BUSY_CONTROLLER();
+	
+	// Select the master device
+	outb(HARD_DISK_PORT_DEVICE_HEAD, 0);
+	
+	// Send the Identify command
+	outb(HARD_DISK_PORT_COMMAND, HARD_DISK_COMMAND_IDENTIFY_DEVICE);
+	
+	// Wait for read clearance
+	WAIT_BUSY_CONTROLLER();
+	// Read data
+	asm
+	(
+		"push edi\n"
+		"push ecx\n"
+		"push edx\n"
+		"mov ecx, %0\n" // Sector size is divided by two because we read words from the bus
+		"mov edi, %1\n"
+		"mov edx, %2\n"
+		"rep insw\n"
+		"pop edx\n"
+		"pop ecx\n"
+		"pop edi\n"
+		"sti"
+		: // No output
+		: "g" (HARD_DISK_SECTOR_SIZE / 2), "g" (Buffer), "g" (HARD_DISK_PORT_DATA)
+		: "edi", "ecx", "edx"
+	);
+	
+	// The total number of sectors is located in the words 60 and 61
+	return Buffer[30] * HARD_DISK_SECTOR_SIZE;
 }
