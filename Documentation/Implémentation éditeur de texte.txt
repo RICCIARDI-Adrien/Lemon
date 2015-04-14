@@ -1,7 +1,0 @@
-Affichage de la ligne suivante
-------------------------------
-
-L'affichage des caractères correspondants à la ligne suivante s'interrompt lorsque l'une des conditions énoncées ci-dessous est remplie :
-- un caractère de saut de ligne (\n) est détecté (ce qui correspond à la fin de la ligne) 
-- les 80 colonnes de l'écran sont remplies
-- la fin du fichier est atteinte
