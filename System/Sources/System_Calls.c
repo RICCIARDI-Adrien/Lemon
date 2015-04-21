@@ -164,7 +164,7 @@ static void SystemCallScreenDisplayBuffer(void)
 static void SystemCallKeyboardReadCharacter(void)
 {
 	asm("sti");
-	Return_Value = KeyboardReadChar();
+	Return_Value = KeyboardReadCharacter();
 }
 
 static void SystemCallKeyboardIsKeyAvailable(void)

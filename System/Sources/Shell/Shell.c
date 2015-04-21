@@ -57,7 +57,7 @@ static inline void ShellReadCommandLine(char *Pointer_Buffer)
 	while (1)
 	{
 		// Read key
-		Key_Code = KeyboardReadChar();
+		Key_Code = KeyboardReadCharacter();
 		
 		// Handle special key Up arrow (use last command)
 		if (Key_Code == KEYBOARD_KEY_CODE_ARROW_UP)

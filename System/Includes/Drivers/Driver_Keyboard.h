@@ -82,7 +82,7 @@ void KeyboardInitialize(void);
  * @return ASCII or virtual code of the last key hit by the user.
  * @note This is a blocking function.
  */
-unsigned char KeyboardReadChar(void);
+unsigned char KeyboardReadCharacter(void);
 
 /** Read a string from the keyboard.
  * @param String Pointer on the destination string.

@@ -48,7 +48,7 @@ void ShellCommandDownload(void)
 		// Did the user pressed escape key ?
 		if (KeyboardIsKeyAvailable())
 		{
-			if (KeyboardReadChar() == KEYBOARD_KEY_CODE_ESCAPE) return;
+			if (KeyboardReadCharacter() == KEYBOARD_KEY_CODE_ESCAPE) return;
 		}
 		
 		// Did the server started the transmission ?

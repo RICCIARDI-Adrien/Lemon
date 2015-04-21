@@ -62,7 +62,7 @@ void __attribute__((section(".init"))) KernelEntryPoint(void)
 			
 			// Wait for Enter key to reboot
 			KERNEL_ENABLE_INTERRUPTS();
-			while (KeyboardReadChar() != '\n');
+			while (KeyboardReadCharacter() != '\n');
 			KeyboardRebootSystem();
 		}
 	#endif
@@ -99,7 +99,7 @@ void KernelUnknownSystemCallErrorHandler(void)
 	
 	// Wait for the user to hit the Enter key
 	KERNEL_ENABLE_INTERRUPTS();
-	while (KeyboardReadChar() != '\n');
+	while (KeyboardReadCharacter() != '\n');
 	
 	// Restart the shell
 	KernelStartShell();
@@ -118,7 +118,7 @@ void KernelDivisionErrorExceptionInterruptHandler(void) // Can't be static as it
 	
 	// Wait for the user to hit the Enter key
 	KERNEL_ENABLE_INTERRUPTS();
-	while (KeyboardReadChar() != '\n');
+	while (KeyboardReadCharacter() != '\n');
 	
 	// Restart the shell
 	KernelStartShell();
@@ -134,7 +134,7 @@ void KernelGeneralProtectionFaultExceptionInterruptHandler(void) // Can't be sta
 	
 	// Wait for the user to hit the Enter key
 	KERNEL_ENABLE_INTERRUPTS();
-	while (KeyboardReadChar() != '\n');
+	while (KeyboardReadCharacter() != '\n');
 	
 	// Restart the shell
 	KernelStartShell();
@@ -150,7 +150,7 @@ void KernelStackExceptionInterruptHandler(void) // Can't be static as it must be
 	
 	// Wait for the user to hit the Enter key
 	KERNEL_ENABLE_INTERRUPTS();
-	while (KeyboardReadChar() != '\n');
+	while (KeyboardReadCharacter() != '\n');
 	
 	// This is the safest way
 	KeyboardRebootSystem();

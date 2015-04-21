@@ -168,7 +168,7 @@ void KeyboardInitialize(void)
 	KeyboardActivateLeds();
 }
 
-unsigned char KeyboardReadChar(void)
+unsigned char KeyboardReadCharacter(void)
 {
 	// Wait for a key to be hit
 	while (!Keyboard_Is_Key_Available);
@@ -183,7 +183,7 @@ void KeyboardReadString(char *String, unsigned int Maximum_Characters_Number)
 	
 	while (1)
 	{
-		Key = KeyboardReadChar();
+		Key = KeyboardReadCharacter();
 		switch (Key)
 		{
 			// Backspace
