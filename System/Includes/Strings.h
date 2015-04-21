@@ -28,6 +28,20 @@
 
 	// Shell welcoming message shown only at system startup
 	#define STRING_SHELL_WELCOME "Bienvenue sur Lemon !\n"
+	
+	// Shell copy command
+	#define STRING_SHELL_COPY_FILE_BAD_PARAMETERS_COUNT "Erreur : mauvais nombre de param\212tres.\nUtilisation : copy Nom_Fichier_Source Nom_Fichier_Destination\n"
+	#define STRING_SHELL_COPY_FILE_SOURCE_FILE_NOT_FOUND "Erreur : le fichier source est introuvable.\n"
+	#define STRING_SHELL_COPY_FILE_DESTINATION_FILE_EXISTING_YET "Erreur : le fichier de destination existe d\202j\205.\n"
+	#define STRING_SHELL_COPY_FILE_NOT_ENOUGH_ROOM "Erreur : il n'y a pas assez de place sur le syst\212me de fichiers.\n"
+	#define STRING_SHELL_COPY_FILE_STARTING_COPY "Copie en cours...\n"
+	#define STRING_SHELL_COPY_FILE_SUCCESS "Copie r\202ussie.\n"
+	
+	// Shell delete command
+	#define STRING_SHELL_DELETE_FILE_BAD_PARAMETERS_COUNT "Erreur : mauvais nombre de param\212tres.\nUtilisation : delete Nom_Fichier\n"
+	#define STRING_SHELL_DELETE_FILE_SUCCESS "Suppression r\202ussie.\n"
+	#define STRING_SHELL_DELETE_FILE_FAILURE_1 "Erreur : le fichier '"
+	#define STRING_SHELL_DELETE_FILE_FAILURE_2 "' n'existe pas !\n"
 
 	// Shell download command
 	#define STRING_SHELL_DOWNLOAD_WAITING_FOR_SERVER "Attente de la connexion au serveur...\nAppuyez sur Echap pour annuler.\n"
@@ -42,12 +56,9 @@
 	#define STRING_SHELL_DOWNLOAD_FILE_SAVE_COMPLETED "Sauvegarde r\202ussie.\n"
 	#define STRING_SHELL_DOWNLOAD_BAD_FILE_NAME "Erreur : nom de fichier incorrect.\n"
 	#define STRING_SHELL_DOWNLOAD_FILE_SAVE_FAILED "Echec de la sauvegarde ! Le syst\212me de fichiers est plein !\n"
-
-	// Shell delete command
-	#define STRING_SHELL_DELETE_FILE_BAD_PARAMETERS_COUNT "Erreur : mauvais nombre de param\212tres.\nUtilisation : delete Nom_Fichier\n"
-	#define STRING_SHELL_DELETE_FILE_SUCCESS "Suppression r\202ussie.\n"
-	#define STRING_SHELL_DELETE_FILE_FAILURE_1 "Erreur : le fichier '"
-	#define STRING_SHELL_DELETE_FILE_FAILURE_2 "' n'existe pas !\n"
+	
+	// Shell list command
+	#define STRING_SHELL_LIST_WAIT_FOR_USER_INPUT "Appuyez sur une touche pour continuer."
 
 	// Shell rename command
 	#define STRING_SHELL_RENAME_FILE_BAD_PARAMETERS_COUNT "Erreur : mauvais nombre de param\212tres.\nUtilisation : rename Ancien_Nom_Fichier Nouveau_Nom_Fichier\n"
@@ -65,14 +76,6 @@
 	#define STRING_SHELL_FILE_SIZE_SHOW_SIZE_1 "Taille : "
 	#define STRING_SHELL_FILE_SIZE_SHOW_SIZE_2 " octets.\n"
 
-	// Shell copy command
-	#define STRING_SHELL_COPY_FILE_BAD_PARAMETERS_COUNT "Erreur : mauvais nombre de param\212tres.\nUtilisation : copy Nom_Fichier_Source Nom_Fichier_Destination\n"
-	#define STRING_SHELL_COPY_FILE_SOURCE_FILE_NOT_FOUND "Erreur : le fichier source est introuvable.\n"
-	#define STRING_SHELL_COPY_FILE_DESTINATION_FILE_EXISTING_YET "Erreur : le fichier de destination existe d\202j\205.\n"
-	#define STRING_SHELL_COPY_FILE_NOT_ENOUGH_ROOM "Erreur : il n'y a pas assez de place sur le syst\212me de fichiers.\n"
-	#define STRING_SHELL_COPY_FILE_STARTING_COPY "Copie en cours...\n"
-	#define STRING_SHELL_COPY_FILE_SUCCESS "Copie r\202ussie.\n"
-	
 	// Shell version command
 	#define STRING_SHELL_VERSION "Version du syst\212me : 2.1.8 (" __DATE__ ", " __TIME__ ")\n"
 
