@@ -56,33 +56,39 @@ static inline void ShellReadCommandLine(char *Pointer_Buffer)
 	
 	while (1)
 	{
-		// Read key
 		Key_Code = KeyboardReadCharacter();
 		
-		// Handle special key Up arrow (use last command)
-		if (Key_Code == KEYBOARD_KEY_CODE_ARROW_UP)
-		{
-			// Do nothing if the last command is empty
-			if (String_Last_Command_Buffer[0] == 0) continue;
-			
-			// Delete previous characters if some were inserted yet
-			while (Characters_Count > 0)
-			{
-				ScreenWriteCharacter('\b');
-				Characters_Count--;
-			}
-
-			// Show last command
-			ScreenWriteString(String_Last_Command_Buffer);
-			// Copy to buffer
-			strcpy(Pointer_Buffer, String_Last_Command_Buffer);
-			Characters_Count = strlen(String_Last_Command_Buffer);
-			continue;
-		}
-		
-		// Handle control keys
 		switch (Key_Code)
 		{
+			// Show the last typed command
+			case KEYBOARD_KEY_CODE_ARROW_UP:
+				// Do nothing if the last command is empty
+				if (String_Last_Command_Buffer[0] == 0) continue;
+				
+				// Delete previous characters if some were inserted yet
+				while (Characters_Count > 0)
+				{
+					ScreenWriteCharacter('\b');
+					Characters_Count--;
+				}
+				
+				// Show last command
+				ScreenWriteString(String_Last_Command_Buffer);
+				// Copy to buffer
+				strcpy(Pointer_Buffer, String_Last_Command_Buffer);
+				Characters_Count = strlen(String_Last_Command_Buffer);
+				continue;
+				
+			// Clear the typed text
+			case KEYBOARD_KEY_CODE_ARROW_DOWN:
+				// Delete previous characters if some were inserted yet
+				while (Characters_Count > 0)
+				{
+					ScreenWriteCharacter('\b');
+					Characters_Count--;
+				}
+				continue;
+			
 			// Backspace
 			case '\b':
 				// Delete last character if it exists
