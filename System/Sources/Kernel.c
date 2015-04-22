@@ -67,6 +67,11 @@ void __attribute__((section(".init"))) KernelEntryPoint(void)
 		}
 	#endif
 	
+	// Show the welcoming message once at the system boot
+	ScreenSetColor(SCREEN_COLOR_LIGHT_BLUE);
+	ScreenClear();
+	ScreenWriteString(STRING_SHELL_WELCOME);
+	
 	// Jump to shell
 	KernelStartShell();
 }

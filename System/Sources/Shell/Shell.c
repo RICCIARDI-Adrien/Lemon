@@ -33,9 +33,6 @@ typedef struct __attribute__((packed))
 //-------------------------------------------------------------------------------------------------
 // Private variables
 //-------------------------------------------------------------------------------------------------
-/** This boolean tells if the shell was previously launched or not. */
-static char Is_First_Launch = 1;
-
 /** The command line arguments in kernel memory. */
 static TCommandLineArguments Command_Line_Arguments;
 
@@ -50,7 +47,7 @@ static TCommandLineArguments Command_Line_Arguments;
  */
 static inline void ShellReadCommandLine(char *Pointer_Buffer)
 {
-	static char String_Last_Command_Buffer[SHELL_MAXIMUM_LINE_LENGTH + 1] = {0}; // +1 for terminating zero
+	static char String_Last_Command[SHELL_MAXIMUM_LINE_LENGTH + 1] = {0}; // +1 for terminating zero
 	unsigned char Key_Code;
 	int Characters_Count = 0;
 	
@@ -63,7 +60,7 @@ static inline void ShellReadCommandLine(char *Pointer_Buffer)
 			// Show the last typed command
 			case KEYBOARD_KEY_CODE_ARROW_UP:
 				// Do nothing if the last command is empty
-				if (String_Last_Command_Buffer[0] == 0) continue;
+				if (String_Last_Command[0] == 0) break;
 				
 				// Delete previous characters if some were inserted yet
 				while (Characters_Count > 0)
@@ -73,11 +70,11 @@ static inline void ShellReadCommandLine(char *Pointer_Buffer)
 				}
 				
 				// Show last command
-				ScreenWriteString(String_Last_Command_Buffer);
+				ScreenWriteString(String_Last_Command);
 				// Copy to buffer
-				strcpy(Pointer_Buffer, String_Last_Command_Buffer);
-				Characters_Count = strlen(String_Last_Command_Buffer);
-				continue;
+				strcpy(Pointer_Buffer, String_Last_Command);
+				Characters_Count = strlen(String_Last_Command);
+				break;
 				
 			// Clear the typed text
 			case KEYBOARD_KEY_CODE_ARROW_DOWN:
@@ -87,7 +84,7 @@ static inline void ShellReadCommandLine(char *Pointer_Buffer)
 					ScreenWriteCharacter('\b');
 					Characters_Count--;
 				}
-				continue;
+				break;
 			
 			// Backspace
 			case '\b':
@@ -107,7 +104,7 @@ static inline void ShellReadCommandLine(char *Pointer_Buffer)
 				// Go to next line
 				ScreenWriteCharacter('\n');
 				// Copy this line into the last command buffer
-				strcpy(String_Last_Command_Buffer, Pointer_Buffer);
+				strcpy(String_Last_Command, Pointer_Buffer);
 				return;
 			
 			// Normal keys
@@ -166,15 +163,6 @@ void Shell(void)
 	char String_Buffer[SHELL_MAXIMUM_LINE_LENGTH + 1]; // Length of a console line + 1
 	int i, Offset;
 	TCommandLineArguments *Pointer_Command_Line_Arguments = (TCommandLineArguments *) KERNEL_USER_SPACE_ADDRESS;
-	
-	// Show welcoming message
-	if (Is_First_Launch)
-	{
-		ScreenSetColor(SCREEN_COLOR_LIGHT_BLUE);
-		ScreenClear();
-		ScreenWriteString(STRING_SHELL_WELCOME);
-		Is_First_Launch = 0;
-	}
 	
 	// Main loop
 	while (1)
