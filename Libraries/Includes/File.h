@@ -43,7 +43,7 @@ int FileExists(char *String_File_Name);
 unsigned int FileGetSize(char *String_File_Name);
 
 /** Start a file listing. */
-void FileListBegin(void);
+void FileListInitialize(void);
 
 /** Get the next file name for file listing.
  * @param String_File_Name Pointer on a FILE_NAME_LENGTH + 1 wide string which will receive the file name.

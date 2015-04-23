@@ -28,6 +28,11 @@ static TCommand Commands[] =
 		CommandMainDf
 	},
 	
+	{
+		"ls",
+		CommandMainLs
+	},
+	
 	// The NULL command tells that the list is terminated
 	{
 		NULL,
@@ -48,14 +53,18 @@ static void DisplayUsage(char *String_Program_Name)
 	ScreenWriteString(STRING_USAGE_1);
 	ScreenWriteString(String_Program_Name);
 	ScreenWriteString(STRING_USAGE_2);
+	ScreenWriteString(String_Program_Name);
+	ScreenWriteString(STRING_USAGE_3);
 	
 	ScreenWriteString(STRING_AVAILABLE_COMMANDS);
 	
+	ScreenSetFontColor(SCREEN_COLOR_LIGHT_BLUE);
 	for (i = 0; Commands[i].String_Command_Name != NULL; i++)
 	{
 		ScreenWriteString(Commands[i].String_Command_Name);
 		ScreenWriteCharacter(' ');
 	}
+	ScreenSetFontColor(SCREEN_COLOR_BLUE);
 	ScreenWriteCharacter('\n');
 }
 

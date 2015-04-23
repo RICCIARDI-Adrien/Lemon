@@ -7,7 +7,7 @@
 //-------------------------------------------------------------------------------------------------
 // Public functions
 //-------------------------------------------------------------------------------------------------
-void File_List_Initialize(void)
+void FileListInitialize(void)
 {
 	SystemCall(SYSTEM_CALL_FILE_LIST_INITIALIZE, 0, 0, NULL, NULL);
 }

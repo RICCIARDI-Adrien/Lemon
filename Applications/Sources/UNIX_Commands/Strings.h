@@ -15,7 +15,8 @@
 // French strings
 #else
 	#define STRING_USAGE_1 "Utilisation : "
-	#define STRING_USAGE_2 " Commande [Param\212tres]\n"
+	#define STRING_USAGE_2 " Commande [Param\212tres]\nTaper '"
+	#define STRING_USAGE_3 " <Commande> -h' pour obtenir plus de d\202tails sur l'utilisation d'une\ncommande.\n"
 	
 	#define STRING_AVAILABLE_COMMANDS "Commandes disponibles : "
 	
@@ -26,6 +27,12 @@
 	#define STRING_COMMAND_DF_FILES_COUNT "Nombre de fichiers : "
 	#define STRING_COMMAND_DF_REMAINING_STORAGE_1 "Espace de stockage utilis\202 : "
 	#define STRING_COMMAND_DF_REMAINING_STORAGE_2 " octets"
+	
+	// "ls" command
+	#define STRING_COMMAND_LS_USAGE "Liste dans l'ordre alphab\202tique tous les fichiers pr\202sents sur le disque dur.\nCette commande n'a pas de param\212tre.\n"
+	#define STRING_COMMAND_LS_NOT_ENOUGH_SPACE_TO_STORE_FILES "Erreur : le programme n'a pas assez de m\202moire pour afficher tous les fichiers.\n"
+	#define STRING_COMMAND_LS_DISPLAYED_UNIT " octets\n"
+	#define STRING_COMMAND_LS_WAIT_FOR_USER_INPUT "Appuyez sur une touche pour continuer."
 #endif
 
 #endif

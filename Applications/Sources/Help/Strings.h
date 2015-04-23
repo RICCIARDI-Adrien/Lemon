@@ -43,7 +43,8 @@
 		"Il est possible de faire d\202filer le texte \205 l'aide des touches 'Fl\212che haut' et 'Fl\212che bas'."
 	#define STRING_COMMAND_FULL_DESCRIPTION_U "Rassemble des versions simplifi\202es de plusieurs commandes UNIX.\n" \
 		"Taper 'u' affiche la liste de toutes les commandes disponibles.\n" \
-		"Il suffit de taper 'u <Commande>' pour lancer la commande souhait\202e.\n"
+		"Il suffit de taper 'u <Commande>' pour lancer la commande souhait\202e.\n" \
+		"Taper 'u <Commande> -h' pour afficher plus de d\202tails sur la commande."
 	
 #endif
 
