@@ -27,6 +27,12 @@ typedef struct __attribute__((packed))
 } TCommandLineArguments;
 
 //-------------------------------------------------------------------------------------------------
+// Public variables
+//-------------------------------------------------------------------------------------------------
+/** The following symbols are given by the application linker script. */
+extern unsigned int *_bss_start, *_bss_end;
+
+//-------------------------------------------------------------------------------------------------
 // Prototypes
 //-------------------------------------------------------------------------------------------------
 /** Standard main function.
@@ -43,7 +49,11 @@ int main(int argc, char *argv[]);
 void  __attribute__((section(".init"))) _start(void)
 {
 	int Return_Value;
+	unsigned int *Pointer_Dword;
 	TCommandLineArguments *Pointer_Command_Line_Arguments = (TCommandLineArguments *) 0; // Located at the beginning of the user space
+	
+	// Clear the BSS section as gcc expects
+	for (Pointer_Dword = (unsigned int *) &_bss_start; Pointer_Dword <= (unsigned int *) &_bss_end; Pointer_Dword++) *Pointer_Dword = 0; // It is possible to clear 4 bytes at a time as the _bss_* addresses are 4-byte aligned. Symbol addresses must be used or gcc will try to dereference the symbol, resulting in a wrong value
 	
 	Return_Value = main(Pointer_Command_Line_Arguments->Arguments_Count, Pointer_Command_Line_Arguments->Pointer_Arguments); 
 	
