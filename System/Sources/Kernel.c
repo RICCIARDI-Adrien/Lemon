@@ -33,10 +33,21 @@
 #define KERNEL_ENABLE_INTERRUPTS() asm("sti")
 
 //-------------------------------------------------------------------------------------------------
+// Public variables
+//-------------------------------------------------------------------------------------------------
+/** These symbols come from the linker script. Their address must be used, not their value. */
+extern unsigned int *_bss_start, *_bss_end;
+
+//-------------------------------------------------------------------------------------------------
 // Kernel entry point
 //-------------------------------------------------------------------------------------------------
 void __attribute__((section(".init"))) KernelEntryPoint(void)
 {
+	unsigned int *Pointer_Dword;
+	
+	// Clear the BSS section as the compiler expects
+	for (Pointer_Dword = (unsigned int *) &_bss_start; Pointer_Dword <= (unsigned int *) &_bss_end; Pointer_Dword++) *Pointer_Dword = 0;
+	
 	// Initialize Intel memory protection mechanisms
 	ArchitectureInitializeMemoryProtection();
 	
