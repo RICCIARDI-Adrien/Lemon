@@ -20,7 +20,7 @@ static void ShellReboot(void)
 {
 	ScreenSetColor(SCREEN_COLOR_BLUE);
 	ScreenWriteString(STRING_REBOOT);
-	KeyboardReadChar();
+	KeyboardReadCharacter();
 	KeyboardRebootSystem();
 	while (1);
 }
