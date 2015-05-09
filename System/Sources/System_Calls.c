@@ -268,8 +268,8 @@ int SystemCalls(void)
 		"mov [%2], ecx\n"
 		"mov [%3], edx\n"
 		"mov [%4], esi"
-		: // No output parameters
-		: "m" (Call_Code), "m" (Integer_1), "m" (Integer_2), "m" (Pointer_1), "m" (Pointer_2)
+		: "=m" (Call_Code), "=m" (Integer_1), "=m" (Integer_2), "=m" (Pointer_1), "=m" (Pointer_2)
+		: // No input parameters
 		: "eax", "ebx", "ecx", "edx", "esi"
 	);
 	
