@@ -224,7 +224,7 @@ int KeyboardIsKeyAvailable(void)
 
 void KeyboardRebootSystem(void)
 {
-	unsigned short *Pointer_Word = 0x472; // The BIOS Warm Boot Flag address
+	unsigned short *Pointer_Word = (unsigned short *) 0x472; // The BIOS Warm Boot Flag address
 	
 	// Tell the POST that this is a warn reboot
 	*Pointer_Word = 0x1234;
