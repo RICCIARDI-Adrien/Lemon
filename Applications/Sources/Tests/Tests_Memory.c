@@ -64,11 +64,11 @@ static int TestsMemoryCheckAreaValue(unsigned char *Pointer_Memory_Area, unsigne
 			ScreenWriteUnsignedInteger(Offset);
 			ScreenWriteString(" has a bad value.\n");
 			
-			ScreenWriteString("ar : ");
+			ScreenWriteString("Read value : ");
 			ScreenWriteUnsignedInteger(Pointer_Memory_Area[Offset]);
-			ScreenWriteString("\nval : ");
+			ScreenWriteString("\nExpected value : ");
 			ScreenWriteUnsignedInteger(Value);
-			ScreenWriteString("\n");
+			ScreenWriteCharacter('\n');
 			return 0;
 		}
 	}
