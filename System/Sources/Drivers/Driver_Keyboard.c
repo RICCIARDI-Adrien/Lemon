@@ -236,8 +236,27 @@ void KeyboardRebootSystem(void)
 
 void KeyboardEnableA20Gate(void)
 {
+	unsigned char State;
+	
+	// Disable the keyboard
 	WAIT_KEYBOARD_READY();
-	outb(KEYBOARD_PORT_COMMANDS, 0xDF);
+	outb(KEYBOARD_PORT_COMMANDS, 0xAD);
+
+	// Read the current keyboard state
+	WAIT_KEYBOARD_READY();
+	outb(KEYBOARD_PORT_COMMANDS, 0xD0); // Send the "read output port" command
+	WAIT_KEYBOARD_READY();
+	State = inb(KEYBOARD_PORT_DATA); // Read the state
+	
+	// Send back the keyboard state with the A20 line enabled
+	WAIT_KEYBOARD_READY();
+	outb(KEYBOARD_PORT_COMMANDS, 0xD1); // Send the "write output port" command
+	WAIT_KEYBOARD_READY();
+	outb(KEYBOARD_PORT_DATA, State |  0x02); // Enable the A20 line
+	
+	// Re-enable the keyboard
+	WAIT_KEYBOARD_READY();
+	outb(KEYBOARD_PORT_COMMANDS, 0xAE);
 }
 
 //-------------------------------------------------------------------------------------------------
