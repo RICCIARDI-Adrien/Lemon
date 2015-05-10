@@ -18,6 +18,7 @@
  * @version 2.1.6 : 07/12/2014, fixed the memory protection limit bug.
  * @version 2.1.7 : 11/01/2015, moved the system error codes in a dedicated header file that can be shared with the libraries.
  * @version 2.1.8 : 26/02/2015, improved and fixed a bug in the file system code.
+ * @version 2.1.9 : 10/05/2015, fixed a bug preventing the extended memory (above 1MB+64KB) to be enabled on old CPUs.
  */
 #ifndef H_KERNEL_H
 #define H_KERNEL_H
@@ -46,7 +47,7 @@
 /** User program will be loaded at this address. 256 bytes are reserved to store command line arguments. */
 #define KERNEL_PROGRAM_LOAD_ADDRESS (KERNEL_USER_SPACE_ADDRESS + KERNEL_PROGRAM_ENTRY_POINT)
 /** Executable program magic number. */
-#define KERNEL_PROGRAM_MAGIC_NUMBER 0x83E58955 // This is the hexadecimal representation of the main() stack frame (push ebp...)
+#define KERNEL_PROGRAM_MAGIC_NUMBER 0x57E58955 // This is the hexadecimal representation of the main() stack frame (push ebp...)
 
 //-------------------------------------------------------------------------------------------------
 // Functions

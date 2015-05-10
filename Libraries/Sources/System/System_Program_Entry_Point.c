@@ -52,8 +52,25 @@ void  __attribute__((section(".init"))) _start(void)
 	unsigned int *Pointer_Dword;
 	TCommandLineArguments *Pointer_Command_Line_Arguments = (TCommandLineArguments *) 0; // Located at the beginning of the user space
 	
-	// Clear the BSS section as gcc expects
-	for (Pointer_Dword = (unsigned int *) &_bss_start; Pointer_Dword < (unsigned int *) &_bss_end; Pointer_Dword++) *Pointer_Dword = 0; // It is possible to clear 4 bytes at a time as the _bss_* addresses are 4-byte aligned. Symbol addresses must be used or gcc will try to dereference the symbol, resulting in a wrong value
+	// Clear the BSS section as gcc expects (use assembly to do that quickly)
+	asm
+	(
+		"push eax\n"
+		"push ecx\n"
+		"push edi\n"
+		
+		"xor eax, eax\n"
+		"mov edi, %0\n"
+		"mov ecx, %1\n"
+		"repnz stosd\n" // It is possible to clear 4 bytes at a time as the _bss_* addresses are 4-byte aligned
+		
+		"pop edi\n"
+		"pop ecx\n"
+		"pop eax\n"
+		: // No output parameter
+		: "g" (&_bss_start), "g" (&_bss_end - &_bss_start) // Symbol addresses must be used or gcc will try to dereference the symbol, resulting in a wrong value
+		: "eax", "ecx", "edi"
+	);
 	
 	Return_Value = main(Pointer_Command_Line_Arguments->Arguments_Count, Pointer_Command_Line_Arguments->Pointer_Arguments); 
 	
