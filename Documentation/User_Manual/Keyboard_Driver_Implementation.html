@@ -1,0 +1,543 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+	   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+	<head>
+		<title>Keyboard driver implementation</title>
+		<meta http-equiv="content-type" content="text/html;charset=utf-8" />
+	</head>
+
+	<body>
+		<h1 align="center">Keyboard driver implementation</h1>
+		
+		<h2>1. IBM keyboard functionning</h2>
+		<p>
+			The keyboard behaviour is really simple, it tells if a key is pressed or released.<br />
+			Each keystroke owns an identifying 7-bit scan code. The state of the keystroke (pressed or released) is indicated by the value of the eighth bit of the byte sent by the keyboard.<br />
+			Some keys have been added after the first keyboard version, they are called "extended keys". To differenciate between normal scan codes and extended scan codes, the byte value <b>0xE0</b> is sent before an extended scan code.<br />
+			Using keyboards terminology, to press a key generates a "make code" and to release a key generates a "release code" or "break code".
+		</p>
+		
+		<h2>2. List of normal scan codes</h2>
+		<p>
+			The following codes are directly read from the keyboard controller (the key mapping stands for an AZERTY keyboard).<br />
+			The scan code is given in decimal representation, otherwise 0x is added when using hexadecimal representation.
+		</p>
+		<table border="1">
+			<!-- Table titles -->
+			<tr>
+				<td><b>Key</b></td>
+				<td><b>Corresponding scan code</b></td>
+			</tr>
+			<!-- Table data -->
+			<tr>
+				<td>Escape</td>
+				<td>1</td>
+			</tr>
+			<tr>
+				<td>1 &amp;</td>
+				<td>2</td>
+			</tr>
+			<tr>
+				<td>2 &eacute; ~</td>
+				<td>3</td>
+			</tr>
+			<tr>
+				<td>3 &quot; #</td>
+				<td>4</td>
+			</tr>
+			<tr>
+				<td>4 ' {</td>
+				<td>5</td>
+			</tr>
+			<tr>
+				<td>5 ( [</td>
+				<td>6</td>
+			</tr>
+			<tr>
+				<td>6 - |</td>
+				<td>7</td>
+			</tr>
+			<tr>
+				<td>7 &egrave; `</td>
+				<td>8</td>
+			</tr>
+			<tr>
+				<td>8 _ \</td>
+				<td>9</td>
+			</tr>
+			<tr>
+				<td>9 &ccedil; ^</td>
+				<td>10</td>
+			</tr>
+			<tr>
+				<td>0 &agrave; @</td>
+				<td>11</td>
+			</tr>
+			<tr>
+				<td>° ) ]</td>
+				<td>12</td>
+			</tr>
+			<tr>
+				<td>+ = }</td>
+				<td>13</td>
+			</tr>
+			<tr>
+				<td>Backspace</td>
+				<td>14</td>
+			</tr>
+			<tr>
+				<td>Tabulation</td>
+				<td>15</td>
+			</tr>
+			<tr>
+				<td>A</td>
+				<td>16</td>
+			</tr>
+			<tr>
+				<td>Z</td>
+				<td>17</td>
+			</tr>
+			<tr>
+				<td>E &euro;</td>
+				<td>18</td>
+			</tr>
+			<tr>
+				<td>R</td>
+				<td>19</td>
+			</tr>
+			<tr>
+				<td>T</td>
+				<td>20</td>
+			</tr>
+			<tr>
+				<td>Y</td>
+				<td>21</td>
+			</tr>
+			<tr>
+				<td>U</td>
+				<td>22</td>
+			</tr>
+			<tr>
+				<td>I</td>
+				<td>23</td>
+			</tr>
+			<tr>
+				<td>O</td>
+				<td>24</td>
+			</tr>
+			<tr>
+				<td>P</td>
+				<td>25</td>
+			</tr>
+			<tr>
+				<td>&uml; ^</td>
+				<td>26</td>
+			</tr>
+			<tr>
+				<td>£ $</td>
+				<td>27</td>
+			</tr>
+			<tr>
+				<td>Enter</td>
+				<td>28</td>
+			</tr>
+			<tr>
+				<td>Left ctrl</td>
+				<td>29</td>
+			</tr>
+			<tr>
+				<td>Q</td>
+				<td>30</td>
+			</tr>
+			<tr>
+				<td>S</td>
+				<td>31</td>
+			</tr>
+			<tr>
+				<td>D</td>
+				<td>32</td>
+			</tr>
+			<tr>
+				<td>F</td>
+				<td>33</td>
+			</tr>
+			<tr>
+				<td>G</td>
+				<td>34</td>
+			</tr>
+			<tr>
+				<td>H</td>
+				<td>35</td>
+			</tr>
+			<tr>
+				<td>J</td>
+				<td>36</td>
+			</tr>
+			<tr>
+				<td>K</td>
+				<td>37</td>
+			</tr>
+			<tr>
+				<td>L</td>
+				<td>38</td>
+			</tr>
+			<tr>
+				<td>M</td>
+				<td>39</td>
+			</tr>
+			<tr>
+				<td>% &ugrave;</td>
+				<td>40</td>
+			</tr>
+			<tr>
+				<td>&sup2;</td>
+				<td>41</td>
+			</tr>
+			<tr>
+				<td>Left shift</td>
+				<td>42</td>
+			</tr>
+			<tr>
+				<td>&micro; *</td>
+				<td>43</td>
+			</tr>
+			<tr>
+				<td>W</td>
+				<td>44</td>
+			</tr>
+			<tr>
+				<td>X</td>
+				<td>45</td>
+			</tr>
+			<tr>
+				<td>C</td>
+				<td>46</td>
+			</tr>
+			<tr>
+				<td>V</td>
+				<td>47</td>
+			</tr>
+			<tr>
+				<td>B</td>
+				<td>48</td>
+			</tr>
+			<tr>
+				<td>N</td>
+				<td>49</td>
+			</tr>
+			<tr>
+				<td>? ,</td>
+				<td>50</td>
+			</tr>
+			<tr>
+				<td>; .</td>
+				<td>51</td>
+			</tr>
+			<tr>
+				<td>/ :</td>
+				<td>52</td>
+			</tr>
+			<tr>
+				<td>&sect; !</td>
+				<td>53</td>
+			</tr>
+			<tr>
+				<td>Right shift</td>
+				<td>54</td>
+			</tr>
+			<tr>
+				<td>Numpad *</td>
+				<td>55</td>
+			</tr>
+			<tr>
+				<td>Alt</td>
+				<td>56</td>
+			</tr>
+			<tr>
+				<td>Space</td>
+				<td>57</td>
+			</tr>
+			<tr>
+				<td>-</td>
+				<td>-</td>
+			</tr>
+			<tr>
+				<td>F1</td>
+				<td>59</td>
+			</tr>
+			<tr>
+				<td>F2</td>
+				<td>60</td>
+			</tr>
+			<tr>
+				<td>F3</td>
+				<td>61</td>
+			</tr>
+			<tr>
+				<td>F4</td>
+				<td>62</td>
+			</tr>
+			<tr>
+				<td>F5</td>
+				<td>63</td>
+			</tr>
+			<tr>
+				<td>F6</td>
+				<td>64</td>
+			</tr>
+			<tr>
+				<td>F7</td>
+				<td>65</td>
+			</tr>
+			<tr>
+				<td>F8</td>
+				<td>66</td>
+			</tr>
+			<tr>
+				<td>F9</td>
+				<td>67</td>
+			</tr>
+			<tr>
+				<td>F10</td>
+				<td>68</td>
+			</tr>
+			<tr>
+				<td>Num lock</td>
+				<td>69</td>
+			</tr>
+			<tr>
+				<td>Scroll lock</td>
+				<td>70</td>
+			</tr>
+			<tr>
+				<td>Numpad 7</td>
+				<td>71</td>
+			</tr>
+			<tr>
+				<td>Numpad 8</td>
+				<td>72</td>
+			</tr>
+			<tr>
+				<td>Numpad 9</td>
+				<td>73</td>
+			</tr>
+			<tr>
+				<td>Numpad -</td>
+				<td>74</td>
+			</tr>
+			<tr>
+				<td>Numpad 4</td>
+				<td>75</td>
+			</tr>
+			<tr>
+				<td>Numpad 5</td>
+				<td>76</td>
+			</tr>
+			<tr>
+				<td>Numpad 6</td>
+				<td>77</td>
+			</tr>
+			<tr>
+				<td>Numpad +</td>
+				<td>78</td>
+			</tr>
+			<tr>
+				<td>Numpad 1</td>
+				<td>79</td>
+			</tr>
+			<tr>
+				<td>Numpad 2</td>
+				<td>80</td>
+			</tr>
+			<tr>
+				<td>Numpad 3</td>
+				<td>81</td>
+			</tr>
+			<tr>
+				<td>Numpad 0</td>
+				<td>82</td>
+			</tr>
+			<tr>
+				<td>Numpad .</td>
+				<td>83</td>
+			</tr>
+			<tr>
+				<td>-</td>
+				<td>-</td>
+			</tr>
+			<tr>
+				<td>&gt; &lt;</td>
+				<td>86</td>
+			</tr>
+			<tr>
+				<td>F11</td>
+				<td>87</td>
+			</tr>
+			<tr>
+				<td>F12</td>
+				<td>88</td>
+			</tr>
+		</table>
+		
+		<h2>2. List of extended scan codes</h2>
+		<p>
+			These scan codes are preceded by 0xE0.<br />
+			The scan code is given in decimal representation, otherwise 0x is added when using hexadecimal representation.
+		</p>
+		<table border="1">
+			<!-- Table titles -->
+			<tr>
+				<td><b>Key</b></td>
+				<td><b>Corresponding scan code</b></td>
+			</tr>
+			<!-- Table data -->
+			<tr>
+				<td>Numpad enter</td>
+				<td>0xE0 28</td>
+			</tr>
+			<tr>
+				<td>Right ctrl</td>
+				<td>0xE0 29</td>
+			</tr>
+			<tr>
+				<td>-</td>
+				<td>-</td>
+			</tr>
+			<tr>
+				<td>Numpad /</td>
+				<td>0xE0 53</td>
+			</tr>
+			<tr>
+				<td>-</td>
+				<td>-</td>
+			</tr>
+			<tr>
+				<td>Altgr</td>
+				<td>0xE0 56</td>
+			</tr>
+			<tr>
+				<td>-</td>
+				<td>-</td>
+			</tr>
+			<tr>
+				<td>Origin</td>
+				<td>0xE0 71</td>
+			</tr>
+			<tr>
+				<td>Arrow up</td>
+				<td>0xE0 72</td>
+			</tr>
+			<tr>
+				<td>Page up</td>
+				<td>0xE0 73</td>
+			</tr>
+			<tr>
+				<td>-</td>
+				<td>-</td>
+			</tr>
+			<tr>
+				<td>Arrow left</td>
+				<td>0xE0 75</td>
+			</tr>
+			<tr>
+				<td>-</td>
+				<td>-</td>
+			</tr>
+			<tr>
+				<td>Arrow right</td>
+				<td>0xE0 77</td>
+			</tr>
+			<tr>
+				<td>-</td>
+				<td>-</td>
+			</tr>
+			<tr>
+				<td>End</td>
+				<td>0xE0 79</td>
+			</tr>
+			<tr>
+				<td>Arrow down</td>
+				<td>0xE0 80</td>
+			</tr>
+			<tr>
+				<td>Page down</td>
+				<td>0xE0 81</td>
+			</tr>
+			<tr>
+				<td>Insert</td>
+				<td>0xE0 82</td>
+			</tr>
+			<tr>
+				<td>Del</td>
+				<td>0xE0 83</td>
+			</tr>
+			<tr>
+				<td>-</td>
+				<td>-</td>
+			</tr>
+			<tr>
+				<td>Left Windows</td>
+				<td>0xE0 91</td>
+			</tr>
+			<tr>
+				<td>Right Windows</td>
+				<td>0xE0 92</td>
+			</tr>
+			<tr>
+				<td>Mouse right menu</td>
+				<td>0xE0 93</td>
+			</tr>
+		</table>
+		
+		<h2>3. Specifications</h2>
+		<ul>
+			<li>Despite keyboard drivers from other systems, this one provides only one byte identifying the pressed key. Non-ASCII keys have a virtual code out of the printable character codes range, but still stored on one byte.</li>
+			<li>When multiple "ASCII" keys are pressed, only the last pressed one is recorded (there is no pressed keys buffer).</li>
+			<li>Stress mode generates only lowercase stressed letters, even if uppercase mode is set (use normal uppercase letters instead of stressed ones) because there is not the ASCII code corresponding to uppercase stressed letters.</li>
+			<li>ASCII codes from 224 to 250 are reserved for virtual codes as their ASCII representations are not really useful.</li>
+			<li>When pressing a shift key and caps lock is active, caps lock mode is not disabled, and the letter is not written in lowercase.</li>
+			<li>Stress key (¨ ^) can be used only to create stressed vowels, because the ^ symbol can be done with Alt Gr + 9 and the ¨ symbol does not exist into the ASCII code.</li>
+			<li>Alt Gr + c = &Ccedil;</li>
+			<li>Only 3 keys are not supported for now due to their special 4-byte scan code sequences (pressing them can lead to an undetermined behaviour) :
+				<ul>
+					<li>Print screen</li>
+					<li>Scroll lock</li>
+					<li>Pause</li>
+				</ul>
+			</li>
+			<li>The following "special" keys are considered normal keys and return a virtual code when they are pressed :
+				<ul>
+					<li>Left ctrl</li>
+					<li>Right ctrl</li>
+					<li>Num lock (it it always enabled and can't be disabled, so the numpad always returns numbers)</li>
+					<li>Alt</li>
+					<li>Left Windows</li>
+					<li>Right Windows</li>
+					<li>Mouse right click menu</li>
+					<li>Up arrow</li>
+					<li>Down arrow</li>
+					<li>Left arrow</li>
+					<li>Right arrow</li>
+					<li>Insert</li>
+					<li>Origin</li>
+					<li>Del</li>
+					<li>End</li>
+					<li>Page up</li>
+					<li>Page down</li>
+				</ul>
+			</li>
+			<li>The following keys do not return a code when they are pressed, but modify the following pressed key values :
+				<ul>
+					<li>Left shift and Right shift enable uppercase mode when held.</li>
+					<li>Caps lock enables uppercase mode when it is pressed and released. The second press / release sequence disables uppercase mode.</li>
+					<li>Alt Gr enables third key symbol mode when held.</li>
+					<li>¨ ^ key prints nothing alone but must be used with vowels. First, the ¨ ^ key is pressed and released. Second, a vowel key is pressed and released. It does nothing with wrong keys.</li>
+				</ul>
+			</li>
+		</ul>
+		
+		<p>
+			<a href="../Manual.html">Return to main page</a>
+		</p>
+	</body>
+</html>
