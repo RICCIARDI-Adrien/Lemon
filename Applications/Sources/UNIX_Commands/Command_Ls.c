@@ -37,6 +37,16 @@ static unsigned int Files_Count = 0;
 //-------------------------------------------------------------------------------------------------
 // Private functions
 //-------------------------------------------------------------------------------------------------
+/** Convert a lowercase character to uppercase.
+ * @param Character The character to convert.
+ * @return The converted character.
+ */
+static inline char ConvertCharacterToUppercase(char Character)
+{
+	if ((Character >= 'a') && (Character <= 'z')) Character -= 32;
+	return Character;
+}
+
 /** Compare two strings according to the alphabetical order.
  * @param String_1 The first string to compare.
  * @param String_2 The second string to compare.
@@ -46,10 +56,16 @@ static unsigned int Files_Count = 0;
  */
 static int StringAlphabeticalCompare(char *String_1, char *String_2)
 {
+	char Character_1, Character_2;
+	
 	while ((*String_1 != 0) && (*String_2 != 0))
 	{
-		if (*String_1 < *String_2) return -1;
-		if (*String_1 > *String_2) return 1;
+		// Convert the characters to uppercase
+		Character_1 = ConvertCharacterToUppercase(*String_1);
+		Character_2 = ConvertCharacterToUppercase(*String_2);
+		
+		if (Character_1 < Character_2) return -1;
+		if (Character_1 > Character_2) return 1;
 		String_1++;
 		String_2++;
 	}
@@ -90,7 +106,6 @@ static void SortFileNames(void)
 				Is_Modification_Done = 1;
 			}
 		}
-		
 	} while (Is_Modification_Done);
 }
 
