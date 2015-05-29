@@ -49,7 +49,6 @@ int main(int argc, char *argv[]);
 void  __attribute__((section(".init"))) _start(void)
 {
 	int Return_Value;
-	unsigned int *Pointer_Dword;
 	TCommandLineArguments *Pointer_Command_Line_Arguments = (TCommandLineArguments *) 0; // Located at the beginning of the user space
 	
 	// Clear the BSS section as gcc expects (use assembly to do that quickly)
