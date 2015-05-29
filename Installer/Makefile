@@ -22,7 +22,7 @@ INCLUDES = $(SYSTEM_INCLUDES_PATH)
 
 CCFLAGS += -masm=intel -m32 -fno-builtin -finline-functions-called-once -nostdlib -nostartfiles -W -Wall -Wunused -fno-asynchronous-unwind-tables -I$(INCLUDES) -DINSTALLER
 LDFLAGS = -T ../System/Linker_Script.ld --strip-all -nostdlib -nostartfile
-MBR_FLAGS = -DSECTORS_TO_LOAD_COUNT=512
+MBR_FLAGS = -DSECTORS_TO_LOAD_COUNT=512 -DINSTALLER
 
 BINARIES_TO_HEADER_CONVERTER = Tools/Binaries_To_Header_Converter.out
 
@@ -37,7 +37,7 @@ all: clean Tools/Binaries_To_Header_Converter.out Convert_Files $(OBJECTS_PATH)/
 	@rm $(BINARIES_PATH)/*.bin
 	######## Creating CDROM image ########
 	@if (test -e $(BINARIES_PATH)/Lemon_Installer_CD_Image.iso); then rm $(BINARIES_PATH)/Lemon_Installer_CD_Image.iso; fi
-	$(ISO_GENERATOR) -r -b Lemon_Installer_Floppy_Image.img -c boot.catalog -o Lemon_Installer_CD_Image.iso $(BINARIES_PATH)
+	$(ISO_GENERATOR) -G $(BINARIES_PATH)/Lemon_Installer_Floppy_Image.img -hard-disk-boot -r -b Lemon_Installer_Floppy_Image.img -c boot.catalog -o Lemon_Installer_CD_Image.iso $(BINARIES_PATH)
 	@mv Lemon_Installer_CD_Image.iso $(BINARIES_PATH)
 	######## Build successful ########
 	@ls -l $(OBJECTS_PATH)/Kernel.32b | awk '{print "Installer size : " $$5 + 512 " bytes"}'

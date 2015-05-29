@@ -77,7 +77,7 @@
 	#define STRING_SHELL_FILE_SIZE_SHOW_SIZE_2 " octets.\n"
 
 	// Shell version command
-	#define STRING_SHELL_VERSION "Version du syst\212me : 2.1.9 (" __DATE__ ", " __TIME__ ")\nCopyright (C) Adrien Ricciardi\n"
+	#define STRING_SHELL_VERSION "Version du syst\212me : 2.1.10 (" __DATE__ ", " __TIME__ ")\nCopyright (C) Adrien Ricciardi\n"
 
 	// Shell error strings
 	#define STRING_SHELL_ERROR_FILE_NOT_EXECUTABLE "Ce fichier n'est pas un programme !\n"

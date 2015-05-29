@@ -19,6 +19,7 @@
  * @version 2.1.7 : 11/01/2015, moved the system error codes in a dedicated header file that can be shared with the libraries.
  * @version 2.1.8 : 26/02/2015, improved and fixed a bug in the file system code.
  * @version 2.1.9 : 10/05/2015, fixed a bug preventing the extended memory (above 1MB+64KB) to be enabled on old CPUs.
+ * @version 2.1.10 : 29/05/2015, made the Installer boot from USB stick.
  */
 #ifndef H_KERNEL_H
 #define H_KERNEL_H

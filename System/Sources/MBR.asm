@@ -7,6 +7,7 @@
 ; V 1.4 : 27/12/2012, moved kernel in memory at address 0x10000 (linear) to avoid crossing 64K limit boundary when loading sectors.
 ; V 1.5 : 27/04/2014, SECTORS_TO_LOAD_COUNT is now defined on the assembler command line.
 ; V 1.6 : 22/06/2014, directly program the IDE controller when loading from hard disk to make the system load on a lot of buggy BIOSes.
+; V 1.7 : 29/05/2015, added a valid partition table to be able to boot from USB stick, System now loads only from hard disk with custom LBA support whereas Installer loads only with BIOS support.
 [BITS 16]
 [ORG 0]
 
@@ -58,16 +59,13 @@ Entry_Point:
 	xor bl, bl
 	int 10h
 
-	; Load the kernel from the boot device
-	test BYTE [Boot_Device], 80h ; The boot device is a hard disk of the 7th bit is set
-	jnz .Load_From_Hard_Disk
-
-.Load_From_Floppy:
-	call LoadFromFloppy
-	jmp .Enter_Protected_Mode
-
-.Load_From_Hard_Disk:
-	call LoadFromHardDisk
+	; Load the Installer kernel from the boot device
+	%ifdef INSTALLER
+		call LoadKernelWithBIOS
+	; Load the System kernel from the hard disk
+	%else
+		call LoadKernelWithLBA
+	%endif
 	
 .Enter_Protected_Mode:
 	; Load GDT
@@ -90,15 +88,15 @@ Entry_Point:
 	;mov fs, ax CRASH
 	;mov gs, ax CRASH
 	mov ss, ax
-
+	
 	; Far jump to kernel (8 is to bypass initial stack frame)
 	jmp DWORD 8:KERNEL_PROTECTED_MODE_ADDRESS
 
 ;--------------------------------------------------------------------------------------------------
 ; Functions
 ;--------------------------------------------------------------------------------------------------
-; Use the BIOS to access to the floppy disk
-LoadFromFloppy:
+; Use the BIOS to access to the storage disk
+LoadKernelWithBIOS:
 	; Get boot drive parameters
 	mov ah, 8
 	mov dl, [Boot_Device]
@@ -135,7 +133,7 @@ LoadFromFloppy:
 	mov cx, SECTORS_TO_LOAD_COUNT
 
 	; Loop for loading kernel sectors
-.Loop_Load_Kernel_From_Floppy:
+.Loop_Load_Kernel_With_BIOS:
 	push cx
 
 	; Convert LBA to CHS
@@ -160,26 +158,26 @@ LoadFromFloppy:
 
 	; Go to next memory segment if this one is full
 	or bx, bx
-	jnz .Loop_Load_Kerne_From_Floppy_Continue_Loading
+	jnz .Loop_Load_Kernel_With_BIOS_Continue_Loading
 	mov ax, es
 	add ax, 1000h ; 64KB / 16
 	mov es, ax
 
-.Loop_Load_Kerne_From_Floppy_Continue_Loading:
+.Loop_Load_Kernel_With_BIOS_Continue_Loading:
 	pop cx
-	loop .Loop_Load_Kernel_From_Floppy
+	loop .Loop_Load_Kernel_With_BIOS
 
 	ret
 
 ; Program the IDE controller to load from the hard disk
-LoadFromHardDisk:
+LoadKernelWithLBA:
 	cli
 	mov ax, KERNEL_LOAD_SEGMENT
 	mov es, ax
 	xor di, di
 	mov cx, SECTORS_TO_LOAD_COUNT
 
-.Loop_Load_Kernel_From_Hard_Disk:
+.Loop_Load_Kernel_With_LBA:
 	; Wait for the controller to be ready
 	mov dx, HARD_DISK_PORT_STATUS
 .Wait_Controller_Ready_1:
@@ -232,7 +230,7 @@ LoadFromHardDisk:
 	mov cx, ax ; Pop cx
 
 	inc WORD [Logical_Sector_Number]
-	loop .Loop_Load_Kernel_From_Hard_Disk
+	loop .Loop_Load_Kernel_With_LBA
 
 	sti
 	ret
@@ -299,10 +297,25 @@ GDT_Pointer DW 8 * 3
 
 Boot_Device DB 0
 Logical_Sector_Number DW 1
-Sectors_Per_Track_Count DW 18 ; Like a 1.44 MB floppy disk
-Heads_Count DW 2 ; Like a 1.44 MB floppy disk
+Sectors_Per_Track_Count DW 18 ; Like a 1.44MB floppy disk
+Heads_Count DW 2 ; Like a 1.44MB floppy disk
 
-times 510 - ($ - $$) nop
+; The partition table starts at offset 446
+times 446 - ($ - $$) nop
+; First partition entry
+DB 80h, ; Mark the partition as active
+DB 01h, 01h, 00h ; CHS address of first absolute sector in partition (genisoimage wants it to be 0/1/1)
+DB 0EFh ; Partition type (allow FAT12, FAT16, FAT32 or other file system)
+DB 01h, 12h, 4Fh ; CHS address of last absolute sector in partition (set the last one of a 1.44MB floppy disk)
+DB 00h, 00h, 00h, 00h ; LBA of first absolute sector in partition (make it start from 0)
+DB 40h, 0Bh, 00h, 00h ; Number of sectors in partition (2880 as in a 1.44MB floppy disk; the number is in little endian)
+; Second partition entry (empty)
+DB 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
+; Third partition entry (empty)
+DB 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
+; Fourth partition entry (empty)
+DB 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
+
 ; BIOS magical number
 DB 55h
 DB 0AAh
