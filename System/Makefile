@@ -4,10 +4,8 @@
 CC = gcc
 LD = ld
 AS = nasm
-ISO_GENERATOR = genisoimage
 
 PATH_SOURCES = Sources
-PATH_BINARIES = Binaries
 PATH_OBJECTS = Objects
 PATH_INCLUDES = Includes
 
@@ -26,21 +24,11 @@ OBJECTS = $(OBJECTS_CORE) $(OBJECTS_DRIVERS) $(OBJECTS_FILE_SYSTEM) $(OBJECTS_SH
 
 all: clean $(PATH_OBJECTS)/MBR.32b $(OBJECTS)
 	$(LD) $(LDFLAGS) $(OBJECTS) -o $(PATH_OBJECTS)/Kernel.32b
-	######## Creating floppy image ########
-	@cat $(PATH_OBJECTS)/MBR.32b $(PATH_OBJECTS)/Kernel.32b > $(PATH_BINARIES)/Raw_Image.bin
-	@dd if=/dev/zero of=$(PATH_BINARIES)/Lemon_System_Floppy_Image.img bs=512 count=2880 status=noxfer
-	@dd if=$(PATH_BINARIES)/Raw_Image.bin of=$(PATH_BINARIES)/Lemon_System_Floppy_Image.img conv=notrunc status=noxfer
-	@# Clean binaries folder of useless files
-	@rm $(PATH_BINARIES)/*.bin
-	######## Creating CDROM image ########
-	@if (test -e $(PATH_BINARIES)/Lemon_System_CD_Image.iso); then rm $(PATH_BINARIES)/Lemon_System_CD_Image.iso; fi
-	$(ISO_GENERATOR) -r -b Lemon_System_Floppy_Image.img -c boot.catalog -o Lemon_System_CD_Image.iso $(PATH_BINARIES)
-	@mv Lemon_System_CD_Image.iso $(PATH_BINARIES)
 	######## Build successful ########
-	@ls -l $(PATH_OBJECTS)/Kernel.32b | awk '{print "Kernel size : " $$5 " bytes"}'
+	@ls -l $(PATH_OBJECTS)/Kernel.32b | awk '{print "Kernel size : " $$5 + 512 " bytes"}'
 	
 clean:
-	rm -f $(PATH_BINARIES)/* $(PATH_OBJECTS)/*
+	rm -f $(PATH_OBJECTS)/*
 
 #------------------------------------------------------------------------------------------------------------------------------
 # System core
