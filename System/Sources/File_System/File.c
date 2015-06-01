@@ -105,14 +105,14 @@ void FileListInitialize(void)
 void FileListNext(char *String_File_Name)
 {
 	// Avoid blank entries
-	while ((File_System_Last_Listed_File < File_System_Informations.Total_Files_Count) && (Files_List[File_System_Last_Listed_File].Name[0] == 0)) File_System_Last_Listed_File++;
+	while ((File_System_Last_Listed_File < File_System.File_System_Informations.Total_Files_Count) && (File_System.Files_List[File_System_Last_Listed_File].String_Name[0] == 0)) File_System_Last_Listed_File++;
 
 	// Check if all files were listed
-	if (File_System_Last_Listed_File >= File_System_Informations.Total_Files_Count) *String_File_Name = 0; // Signal end of listing
+	if (File_System_Last_Listed_File >= File_System.File_System_Informations.Total_Files_Count) *String_File_Name = 0; // Signal end of listing
 	else
 	{
 		// Copy name
-		strncpy(String_File_Name, Files_List[File_System_Last_Listed_File].Name, CONFIGURATION_FILE_NAME_LENGTH);
+		strncpy(String_File_Name, File_System.Files_List[File_System_Last_Listed_File].String_Name, CONFIGURATION_FILE_NAME_LENGTH);
 		File_System_Last_Listed_File++;
 	}
 }
@@ -133,7 +133,7 @@ int FileRename(char *String_Current_File_Name, char *String_New_File_Name)
 	if (Pointer_Files_List_Entry == NULL) return ERROR_CODE_FILE_NOT_FOUND;
 	
 	// Write new file name
-	strncpy(Pointer_Files_List_Entry->Name, String_New_File_Name, CONFIGURATION_FILE_NAME_LENGTH);
+	strncpy(Pointer_Files_List_Entry->String_Name, String_New_File_Name, CONFIGURATION_FILE_NAME_LENGTH);
 	FileSystemSave();
 	
 	return ERROR_CODE_NO_ERROR;
@@ -156,15 +156,15 @@ int FileDelete(char *String_File_Name)
 	while (Block != FILE_SYSTEM_BLOCKS_LIST_BLOCK_EOF)
 	{
 		// Get next block
-		Next_Block = Blocks_List[Block];
+		Next_Block = File_System.Blocks_List[Block];
 		// Erase current block
-		Blocks_List[Block] = FILE_SYSTEM_BLOCKS_LIST_BLOCK_FREE;
+		File_System.Blocks_List[Block] = FILE_SYSTEM_BLOCKS_LIST_BLOCK_FREE;
 		// Go to next block
 		Block = Next_Block;
 	}
 	
 	// Free the file entry after having freed the allocated blocks, so if the system is powered off during the blocks freeing step the file system won't be corrupted : the Files List entry is still existing
-	Pointer_Files_List_Entry->Name[0] = 0;
+	Pointer_Files_List_Entry->String_Name[0] = 0;
 	
 	FileSystemSave();
 	
@@ -248,7 +248,7 @@ int FileOpen(char *String_File_Name, char Opening_Mode, unsigned int *Pointer_Fi
 	{
 		if (!File_Descriptors[i].Is_Entry_Free)
 		{
-			if (strcmp(File_Descriptors[i].Pointer_Files_List_Entry->Name, String_File_Name) == 0) return ERROR_CODE_FILE_OPENED_YET;
+			if (strcmp(File_Descriptors[i].Pointer_Files_List_Entry->String_Name, String_File_Name) == 0) return ERROR_CODE_FILE_OPENED_YET;
 		}
 	}
 	
@@ -398,7 +398,7 @@ int FileWrite(unsigned int File_Descriptor_Index, unsigned char *Pointer_Buffer,
 			}
 			
 			// Link the new block index to the flushed block Blocks List entry
-			Blocks_List[Pointer_File_Descriptor->Current_Block_Index] = New_Block;
+			File_System.Blocks_List[Pointer_File_Descriptor->Current_Block_Index] = New_Block;
 			Pointer_File_Descriptor->Current_Block_Index = New_Block;
 		}
 		

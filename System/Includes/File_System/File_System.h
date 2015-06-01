@@ -39,20 +39,24 @@ typedef struct __attribute__((packed))
 /** The Files List is an array of this structure. */
 typedef struct __attribute__((packed))
 {
-	char Name[CONFIGURATION_FILE_NAME_LENGTH]; //! The ASCIIZ string storing the file name.
+	char String_Name[CONFIGURATION_FILE_NAME_LENGTH]; //! The ASCIIZ string storing the file name.
 	unsigned int Start_Block; //! ID of the first block of the file. This is the beginning of the chained list into the Blocks List.
 	unsigned int Size_Bytes; //! Size of the file in bytes. Yes, maximum file size is limited to 4 GB...
 } TFilesListEntry;
 
+/** Represent a whole file system. */
+typedef struct __attribute__((packed))
+{
+	TFileSystemInformations File_System_Informations; //! Contain the file system parameters.
+	unsigned int Blocks_List[CONFIGURATION_FILE_SYSTEM_MAXIMUM_BLOCKS_LIST_ENTRIES]; //! All the possible blocks.
+	TFilesListEntry Files_List[CONFIGURATION_FILE_SYSTEM_MAXIMUM_FILES_LIST_ENTRIES]; //! All the possible files.
+} TFileSystem;
+
 //-------------------------------------------------------------------------------------------------
 // Public variables
 //-------------------------------------------------------------------------------------------------
-/** Informations about the currently mounted file system. */
-extern TFileSystemInformations File_System_Informations;
-/** Linked-list of all the blocks holding the files data. */
-extern unsigned int Blocks_List[];
-/** Contain each existing file name and properties. */
-extern TFilesListEntry Files_List[];
+/** The currently mounted file system. */
+extern TFileSystem File_System;
 
 //-------------------------------------------------------------------------------------------------
 // Functions
@@ -121,12 +125,11 @@ unsigned int FileSystemAllocateBlock(void);
 /** Create a new file system on the hard disk.
  * @param Blocks_Count Number of blocks on the new file system.
  * @param Files_Count Number of files on the new file system.
- * @param Pointer_MBR_Code The 512-byte MBR code to copy into the first hard disk sector
  * @return 0 if the new file system was successfully created,
  * @return 1 if Blocks_Count and/or Files_Count variables are incoherent values,
  * @return 2 if hard disk size is less than requested file system size.
  * @warning This function overwrites any previously created file system. When this function terminates, the new file system is in use.
  */
-int FileSystemCreate(unsigned int Blocks_Count, unsigned int Files_Count, unsigned char *Pointer_MBR_Code);
+int FileSystemCreate(unsigned int Blocks_Count, unsigned int Files_Count);
 
 #endif

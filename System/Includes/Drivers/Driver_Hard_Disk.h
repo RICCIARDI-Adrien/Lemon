@@ -18,13 +18,13 @@
  * @param Logical_Sector_Number The LBA sector to read.
  * @param Pointer_Buffer A pointer on a 512 bytes buffer where the data will be stored.
  */
-void HardDiskReadSector(unsigned int Logical_Sector_Number, unsigned char *Pointer_Buffer);
+void HardDiskReadSector(unsigned int Logical_Sector_Number, void *Pointer_Buffer);
 
 /** Write the data contained in Buffer to a hard disk logical sector.
  * @param Logical_Sector_Number The LBA sector to write.
  * @param Pointer_Buffer A pointer on a 512 bytes buffer containing data to write.
  */
-void HardDiskWriteSector(unsigned int Logical_Sector_Number, unsigned char *Pointer_Buffer);
+void HardDiskWriteSector(unsigned int Logical_Sector_Number, void *Pointer_Buffer);
 
 /** Get the total size of the hard disk 0 in bytes.
  * @return The hard disk size in bytes.

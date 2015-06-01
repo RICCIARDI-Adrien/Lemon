@@ -14,8 +14,6 @@
 //-------------------------------------------------------------------------------------------------
 /** Tell if a correct file system is stored on the disk or not. */
 #define FILE_SYSTEM_MAGIC_NUMBER 0x12345678
-/** Offset into the MBR sector where file system informations are stored. */
-#define FILE_SYSTEM_INFORMATIONS_OFFSET (510 - sizeof(TFileSystemInformations)) // The "-2" is to bypass MBR magic number
 
 //-------------------------------------------------------------------------------------------------
 // Private variables
@@ -36,9 +34,7 @@ static unsigned int Data_First_Sector_Number;
 //-------------------------------------------------------------------------------------------------
 // Public variables
 //-------------------------------------------------------------------------------------------------
-TFileSystemInformations File_System_Informations;
-unsigned int Blocks_List[CONFIGURATION_FILE_SYSTEM_MAXIMUM_BLOCKS_LIST_ENTRIES];
-TFilesListEntry Files_List[CONFIGURATION_FILE_SYSTEM_MAXIMUM_FILES_LIST_ENTRIES];
+TFileSystem File_System;
 
 //-------------------------------------------------------------------------------------------------
 // Private functions
@@ -80,26 +76,23 @@ static void FileSystemWriteSectors(unsigned int First_Sector_Number, unsigned in
 //-------------------------------------------------------------------------------------------------
 int FileSystemInit(void)
 {
-	unsigned char Sector_Temp[FILE_SYSTEM_SECTOR_SIZE_BYTES];
 	unsigned int Temp;
 	
-	// Retrieve file system informations
-	// Load the hard disk MBR to prevent errors if we are booting from another drive
-	HardDiskReadSector(0, Sector_Temp);
-	memcpy((unsigned char *) &File_System_Informations, Sector_Temp + FILE_SYSTEM_INFORMATIONS_OFFSET, sizeof(TFileSystemInformations)); 
+	// Retrieve file system informations, they are stored at the beginning of the file system
+	HardDiskReadSector(CONFIGURATION_FILE_SYSTEM_STARTING_SECTOR, &File_System);
 	
 	// Check if there is a valid file system on the device
-	if (File_System_Informations.Magic_Number != FILE_SYSTEM_MAGIC_NUMBER) return 0;
+	if (File_System.File_System_Informations.Magic_Number != FILE_SYSTEM_MAGIC_NUMBER) return 0;
 	// Check if the file system is small enough to fit into the kernel reserved memory space
-	if ((File_System_Informations.Total_Blocks_Count > CONFIGURATION_FILE_SYSTEM_MAXIMUM_BLOCKS_LIST_ENTRIES) || (File_System_Informations.Total_Files_Count > CONFIGURATION_FILE_SYSTEM_MAXIMUM_FILES_LIST_ENTRIES)) return 0;
+	if ((File_System.File_System_Informations.Total_Blocks_Count > CONFIGURATION_FILE_SYSTEM_MAXIMUM_BLOCKS_LIST_ENTRIES) || (File_System.File_System_Informations.Total_Files_Count > CONFIGURATION_FILE_SYSTEM_MAXIMUM_FILES_LIST_ENTRIES)) return 0;
 	
 	// Compute Blocks List size in sectors
-	Temp = File_System_Informations.Total_Blocks_Count * sizeof(unsigned int);
+	Temp = File_System.File_System_Informations.Total_Blocks_Count * sizeof(unsigned int) + sizeof(TFileSystemInformations); // Take into account the file system informations to ease their handling
 	Blocks_List_Size_Sectors = Temp / FILE_SYSTEM_SECTOR_SIZE_BYTES;
 	if (Temp % FILE_SYSTEM_SECTOR_SIZE_BYTES) Blocks_List_Size_Sectors++;
 	
 	// Compute Files List size in sectors
-	Temp = File_System_Informations.Total_Files_Count * sizeof(TFilesListEntry);
+	Temp = File_System.File_System_Informations.Total_Files_Count * sizeof(TFilesListEntry);
 	Files_List_Size_Sectors = Temp / FILE_SYSTEM_SECTOR_SIZE_BYTES;
 	if (Temp % FILE_SYSTEM_SECTOR_SIZE_BYTES != 0) Files_List_Size_Sectors++;
 	
@@ -109,8 +102,8 @@ int FileSystemInit(void)
 	Data_First_Sector_Number = Files_List_First_Sector_Number + Files_List_Size_Sectors;
 	
 	// Load Blocks List and Files List
-	FileSystemReadSectors(Blocks_List_First_Sector_Number, Blocks_List_Size_Sectors, Blocks_List);
-	FileSystemReadSectors(Files_List_First_Sector_Number, Files_List_Size_Sectors, Files_List);
+	FileSystemReadSectors(Blocks_List_First_Sector_Number, Blocks_List_Size_Sectors, &File_System); // The file system informations are reloaded, but this is the easiest way
+	FileSystemReadSectors(Files_List_First_Sector_Number, Files_List_Size_Sectors, &File_System.Files_List);
 
 	// No error
 	return 1;
@@ -118,17 +111,17 @@ int FileSystemInit(void)
 
 void FileSystemSave(void)
 {
-	FileSystemWriteSectors(Blocks_List_First_Sector_Number, Blocks_List_Size_Sectors, Blocks_List);
-	FileSystemWriteSectors(Files_List_First_Sector_Number, Files_List_Size_Sectors, Files_List);
+	FileSystemWriteSectors(Blocks_List_First_Sector_Number, Blocks_List_Size_Sectors, &File_System);
+	FileSystemWriteSectors(Files_List_First_Sector_Number, Files_List_Size_Sectors, &File_System.Files_List);
 }
 
 unsigned int FileSystemGetFreeBlocksCount(void)
 {
 	unsigned int i, Free_Blocks_Count = 0;
 	
-	for (i = 0; i < File_System_Informations.Total_Blocks_Count; i++)
+	for (i = 0; i < File_System.File_System_Informations.Total_Blocks_Count; i++)
 	{
-		if (Blocks_List[i] == FILE_SYSTEM_BLOCKS_LIST_BLOCK_FREE) Free_Blocks_Count++;
+		if (File_System.Blocks_List[i] == FILE_SYSTEM_BLOCKS_LIST_BLOCK_FREE) Free_Blocks_Count++;
 	}
 	return Free_Blocks_Count;
 }
@@ -137,9 +130,9 @@ unsigned int FileSystemGetFreeFilesListEntriesCount(void)
 {
 	unsigned int i, File_List_Entries_Count = 0;
 	
-	for (i = 0; i < File_System_Informations.Total_Files_Count; i++)
+	for (i = 0; i < File_System.File_System_Informations.Total_Files_Count; i++)
 	{
-		if (Files_List[i].Name[0] == 0) File_List_Entries_Count++;
+		if (File_System.Files_List[i].String_Name[0] == 0) File_List_Entries_Count++;
 	}
 	return File_List_Entries_Count;
 }
@@ -148,9 +141,9 @@ unsigned int FileSystemGetFirstFreeBlock(void)
 {
 	unsigned int i;
 	
-	for (i = 0; i < File_System_Informations.Total_Blocks_Count; i++)
+	for (i = 0; i < File_System.File_System_Informations.Total_Blocks_Count; i++)
 	{
-		if (Blocks_List[i] == FILE_SYSTEM_BLOCKS_LIST_BLOCK_FREE) return i;
+		if (File_System.Blocks_List[i] == FILE_SYSTEM_BLOCKS_LIST_BLOCK_FREE) return i;
 	}
 	// No more room in the Blocks List
 	return FILE_SYSTEM_BLOCKS_LIST_FULL_CODE;
@@ -176,7 +169,7 @@ unsigned int FileSystemReadBlocks(unsigned int Start_Block, unsigned int Blocks_
 		}
 
 		// Next block
-		Block = Blocks_List[Block];
+		Block = File_System.Blocks_List[Block];
 		// Tell that the end of file is reached
 		if (Block == FILE_SYSTEM_BLOCKS_LIST_BLOCK_EOF) break;
 	}
@@ -201,14 +194,14 @@ unsigned int FileSystemWriteBlocks(unsigned int Start_Block, unsigned int Blocks
 		}
 		
 		// Write end-of-file in the last block
-		if (i == Blocks_Count - 1) Blocks_List[Block] = FILE_SYSTEM_BLOCKS_LIST_BLOCK_EOF;
+		if (i == Blocks_Count - 1) File_System.Blocks_List[Block] = FILE_SYSTEM_BLOCKS_LIST_BLOCK_EOF;
 		else
 		{
 			// Find next block
-			Blocks_List[Block] = 12; // Set a value to the previously written block in order to avoid getting this block when calling FileSystemGetFirstFreeBlock()
+			File_System.Blocks_List[Block] = 12; // Set a value to the previously written block in order to avoid getting this block when calling FileSystemGetFirstFreeBlock()
 			Next_Block = FileSystemGetFirstFreeBlock();
 			// Update Blocks List with next block
-			Blocks_List[Block] = Next_Block;
+			File_System.Blocks_List[Block] = Next_Block;
 			Block = Next_Block;
 		}
 	}
@@ -222,9 +215,9 @@ TFilesListEntry *FileSystemReadFilesListEntry(char *String_File_Name)
 	unsigned int i;
 	
 	// Search for the first matching file name in the Files List
-	for (i = 0; i < File_System_Informations.Total_Files_Count; i++)
+	for (i = 0; i < File_System.File_System_Informations.Total_Files_Count; i++)
 	{
-		if (strncmp(String_File_Name, Files_List[i].Name, CONFIGURATION_FILE_NAME_LENGTH) == 0) return &Files_List[i];
+		if (strncmp(String_File_Name, File_System.Files_List[i].String_Name, CONFIGURATION_FILE_NAME_LENGTH) == 0) return &File_System.Files_List[i];
 	}
 	return NULL;
 }
@@ -233,12 +226,12 @@ int FileSystemWriteFilesListEntry(char *String_File_Name, TFilesListEntry **Poin
 {
 	unsigned int i;
 	
-	for (i = 0; i < File_System_Informations.Total_Files_Count; i++)
+	for (i = 0; i < File_System.File_System_Informations.Total_Files_Count; i++)
 	{
-		if (Files_List[i].Name[0] == 0)
+		if (File_System.Files_List[i].String_Name[0] == 0)
 		{
-			strncpy(Files_List[i].Name, String_File_Name, CONFIGURATION_FILE_NAME_LENGTH);
-			*Pointer_Pointer_New_Entry = &Files_List[i];
+			strncpy(File_System.Files_List[i].String_Name, String_File_Name, CONFIGURATION_FILE_NAME_LENGTH);
+			*Pointer_Pointer_New_Entry = &File_System.Files_List[i];
 			return ERROR_CODE_NO_ERROR;
 		}
 	}
@@ -252,17 +245,17 @@ unsigned int FileSystemAllocateBlock(void)
 	
 	// Try to get a free block
 	New_Block = FileSystemGetFirstFreeBlock();
-	if (New_Block != FILE_SYSTEM_BLOCKS_LIST_FULL_CODE) Blocks_List[New_Block] = FILE_SYSTEM_BLOCKS_LIST_BLOCK_EOF; // "Reserve" the block on success
+	if (New_Block != FILE_SYSTEM_BLOCKS_LIST_FULL_CODE) File_System.Blocks_List[New_Block] = FILE_SYSTEM_BLOCKS_LIST_BLOCK_EOF; // "Reserve" the block on success
 	return New_Block;
 }
 
 // Only the Installer program needs to create a new file system
 #ifdef INSTALLER
-	int FileSystemCreate(unsigned int Blocks_Count, unsigned int Files_Count, unsigned char *Pointer_MBR_Code)
+	int FileSystemCreate(unsigned int Blocks_Count, unsigned int Files_Count)
 	{
 		unsigned long long Required_Size;
 		unsigned int i;
-				
+		
 		// The number of blocks must be greater or equal to the number of files or all files can't be stored on disk
 		if (Blocks_Count < Files_Count) return 1;
 		
@@ -275,23 +268,18 @@ unsigned int FileSystemAllocateBlock(void)
 		
 		// Create empty file system
 		// Create information record
-		File_System_Informations.Magic_Number = FILE_SYSTEM_MAGIC_NUMBER;
-		File_System_Informations.Total_Blocks_Count = Blocks_Count;
-		File_System_Informations.Total_Files_Count = Files_Count;
-		
-		// Copy to MBR
-		memcpy(Pointer_MBR_Code + FILE_SYSTEM_INFORMATIONS_OFFSET, &File_System_Informations, sizeof(TFileSystemInformations));
-		// Copy MBR to disk
-		HardDiskWriteSector(0, Pointer_MBR_Code);
+		File_System.File_System_Informations.Magic_Number = FILE_SYSTEM_MAGIC_NUMBER;
+		File_System.File_System_Informations.Total_Blocks_Count = Blocks_Count;
+		File_System.File_System_Informations.Total_Files_Count = Files_Count;
 		
 		// Fill the Blocks List area with free block value
-		for (i = 0; i < Blocks_Count; i++) Blocks_List[i] = FILE_SYSTEM_BLOCKS_LIST_BLOCK_FREE;
+		for (i = 0; i < Blocks_Count; i++) File_System.Blocks_List[i] = FILE_SYSTEM_BLOCKS_LIST_BLOCK_FREE;
 		// Set Files List area to 0 to indicate it's free
-		memset(Files_List, 0, Files_Count * sizeof(TFilesListEntry));
+		memset(File_System.Files_List, 0, Files_Count * sizeof(TFilesListEntry));
 		
 		// Compute the variables needed to safely call FileSystemSave()
 		// Compute Blocks List size in sectors
-		i = Blocks_Count * sizeof(unsigned int);
+		i = Blocks_Count * sizeof(unsigned int) + sizeof(TFileSystemInformations); // Take the file system informations into account to ease their handling
 		Blocks_List_Size_Sectors = i / FILE_SYSTEM_SECTOR_SIZE_BYTES;
 		if (i % FILE_SYSTEM_SECTOR_SIZE_BYTES) Blocks_List_Size_Sectors++;
 		

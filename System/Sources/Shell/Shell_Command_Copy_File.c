@@ -84,13 +84,13 @@ void ShellCommandCopyFile(char *String_File_Name_Source, char *String_File_Name_
 			// Reserve the next destination block and update the Blocks List
 			Current_Block_To_Write = Next_Block_To_Write;
 			Next_Block_To_Write = FileSystemGetFirstFreeBlock();
-			Blocks_List[Current_Block_To_Write] = Next_Block_To_Write;
+			File_System.Blocks_List[Current_Block_To_Write] = Next_Block_To_Write;
 
 			Blocks_Count--;
 		}
 
 		// Terminate the list
-		Blocks_List[Current_Block_To_Write] = FILE_SYSTEM_BLOCKS_LIST_BLOCK_EOF;
+		File_System.Blocks_List[Current_Block_To_Write] = FILE_SYSTEM_BLOCKS_LIST_BLOCK_EOF;
 	}
 
 	// Backup changes in Files List and Blocks List

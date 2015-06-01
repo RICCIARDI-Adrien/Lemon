@@ -114,7 +114,7 @@ void Shell(void)
 	// Create file system
 	ScreenSetColor(SCREEN_COLOR_BLUE);
 	ScreenWriteString(STRING_CREATING_FILE_SYSTEM);
-	switch (FileSystemCreate(2048, 128, Embedded_Files[0].Pointer_Data))
+	switch (FileSystemCreate(2048, 128))
 	{
 		case 1:
 			ScreenSetColor(SCREEN_COLOR_RED);
@@ -130,6 +130,9 @@ void Shell(void)
 			break;
 	}
 	FileSystemInit();
+	
+	// Install MBR
+	HardDiskWriteSector(0, Embedded_Files[0].Pointer_Data);
 	
 	// Install kernel
 	ShellInstallKernel(&Embedded_Files[1]);

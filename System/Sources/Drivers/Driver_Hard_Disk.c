@@ -41,8 +41,10 @@
 //-------------------------------------------------------------------------------------------------
 // Public functions
 //-------------------------------------------------------------------------------------------------
-void HardDiskReadSector(unsigned int Logical_Sector_Number, unsigned char *Pointer_Buffer)
+void HardDiskReadSector(unsigned int Logical_Sector_Number, void *Pointer_Buffer)
 {
+	unsigned char *Pointer_Buffer_Bytes = Pointer_Buffer;
+	
 	// Wait for the controller to be ready
 	asm("cli");
 	WAIT_BUSY_CONTROLLER();
@@ -78,13 +80,15 @@ void HardDiskReadSector(unsigned int Logical_Sector_Number, unsigned char *Point
 		"pop edi\n"
 		"sti"
 		: // No output
-		: "g" (HARD_DISK_SECTOR_SIZE / 2), "g" (Pointer_Buffer), "g" (HARD_DISK_PORT_DATA)
+		: "g" (HARD_DISK_SECTOR_SIZE / 2), "g" (Pointer_Buffer_Bytes), "g" (HARD_DISK_PORT_DATA)
 		: "edi", "ecx", "edx"
 	);
 }
 
-void HardDiskWriteSector(unsigned int Logical_Sector_Number, unsigned char *Pointer_Buffer)
+void HardDiskWriteSector(unsigned int Logical_Sector_Number, void *Pointer_Buffer)
 {
+	unsigned char *Pointer_Buffer_Bytes = Pointer_Buffer;
+	
 	// Wait for the controller to be ready
 	asm("cli");
 	WAIT_BUSY_CONTROLLER();
@@ -120,7 +124,7 @@ void HardDiskWriteSector(unsigned int Logical_Sector_Number, unsigned char *Poin
 		"pop esi\n"
 		"sti"
 		: // No output
-		: "g" (HARD_DISK_SECTOR_SIZE / 2), "g" (Pointer_Buffer), "g" (HARD_DISK_PORT_DATA)
+		: "g" (HARD_DISK_SECTOR_SIZE / 2), "g" (Pointer_Buffer_Bytes), "g" (HARD_DISK_PORT_DATA)
 		: "esi", "ecx", "edx"
 	);
 }
