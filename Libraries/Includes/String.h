@@ -46,4 +46,18 @@ unsigned int StringGetSize(char *String);
  */
 void StringConcatenate(char *String_Destination, char *String_To_Append);
 
+/** Tell if the character is a lowercase or an uppercase letter.
+ * @param Character The character to test.
+ * @return 0 if the character is not a letter,
+ * @return 1 if the character is a letter.
+ */
+int StringIsCharacterALetter(char Character);
+
+/** Tell if the character is a digit or not.
+ * @param Character The character to test.
+ * @return 0 if the character is not a digit,
+ * @return 1 if the character is a digit.
+ */
+int StringIsCharacterADigit(char Character);
+
 #endif
