@@ -1,5 +1,5 @@
 /** @file File_System.h
- * File system low level routines.
+ * File system low level routines. All the blocks handling is done with virtual block numbers, only FileSystemReadBlocks() and FileSystemWriteBlocks() really access to the physical blocks.
  * @author Adrien RICCIARDI
  * @version 1.0 : 01/08/2012
  * @version 1.1 : 12/09/2012
@@ -62,10 +62,11 @@ extern TFileSystem File_System;
 // Functions
 //-------------------------------------------------------------------------------------------------
 /** Load file system from the hard disk and initialize it.
+ * @param Starting_Sector The first LBA sector of the file system.
  * @return 1 if all operations were done successfully,
  * @return 0 if there were a problem.
  */
-int FileSystemInit(void);
+int FileSystemInitialize(unsigned int Starting_Sector);
 
 /** Copy the Blocks List and the Files List to the disk. */
 void FileSystemSave(void);
@@ -125,11 +126,12 @@ unsigned int FileSystemAllocateBlock(void);
 /** Create a new file system on the hard disk.
  * @param Blocks_Count Number of blocks on the new file system.
  * @param Files_Count Number of files on the new file system.
+ * @param Starting_Sector The file system starting sector.
  * @return 0 if the new file system was successfully created,
  * @return 1 if Blocks_Count and/or Files_Count variables are incoherent values,
  * @return 2 if hard disk size is less than requested file system size.
  * @warning This function overwrites any previously created file system. When this function terminates, the new file system is in use.
  */
-int FileSystemCreate(unsigned int Blocks_Count, unsigned int Files_Count);
+int FileSystemCreate(unsigned int Blocks_Count, unsigned int Files_Count, unsigned int Starting_Sector);
 
 #endif

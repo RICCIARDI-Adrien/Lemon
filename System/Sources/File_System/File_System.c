@@ -74,12 +74,12 @@ static void FileSystemWriteSectors(unsigned int First_Sector_Number, unsigned in
 //-------------------------------------------------------------------------------------------------
 // Public functions
 //-------------------------------------------------------------------------------------------------
-int FileSystemInit(void)
+int FileSystemInitialize(unsigned int Starting_Sector)
 {
 	unsigned int Temp;
 	
 	// Retrieve file system informations, they are stored at the beginning of the file system
-	HardDiskReadSector(CONFIGURATION_FILE_SYSTEM_STARTING_SECTOR, &File_System);
+	HardDiskReadSector(Starting_Sector, &File_System);
 	
 	// Check if there is a valid file system on the device
 	if (File_System.File_System_Informations.Magic_Number != FILE_SYSTEM_MAGIC_NUMBER) return 0;
@@ -97,7 +97,7 @@ int FileSystemInit(void)
 	if (Temp % FILE_SYSTEM_SECTOR_SIZE_BYTES != 0) Files_List_Size_Sectors++;
 	
 	// Determine starting sectors for each file system structure
-	Blocks_List_First_Sector_Number = CONFIGURATION_FILE_SYSTEM_STARTING_SECTOR;
+	Blocks_List_First_Sector_Number = Starting_Sector;
 	Files_List_First_Sector_Number = Blocks_List_First_Sector_Number + Blocks_List_Size_Sectors;
 	Data_First_Sector_Number = Files_List_First_Sector_Number + Files_List_Size_Sectors;
 	
@@ -251,7 +251,7 @@ unsigned int FileSystemAllocateBlock(void)
 
 // Only the Installer program needs to create a new file system
 #ifdef INSTALLER
-	int FileSystemCreate(unsigned int Blocks_Count, unsigned int Files_Count)
+	int FileSystemCreate(unsigned int Blocks_Count, unsigned int Files_Count, unsigned int Starting_Sector)
 	{
 		unsigned long long Required_Size;
 		unsigned int i;
@@ -263,7 +263,7 @@ unsigned int FileSystemAllocateBlock(void)
 		if ((Blocks_Count > CONFIGURATION_FILE_SYSTEM_MAXIMUM_BLOCKS_LIST_ENTRIES) || (Files_Count > CONFIGURATION_FILE_SYSTEM_MAXIMUM_FILES_LIST_ENTRIES)) return 1;
 		
 		// Check if the file system can fit on the hard disk
-		Required_Size = (Blocks_Count * sizeof(unsigned int)) + (Files_Count * sizeof(TFilesListEntry)) + (Blocks_Count * CONFIGURATION_FILE_SYSTEM_BLOCK_SIZE_BYTES) + (CONFIGURATION_FILE_SYSTEM_STARTING_SECTOR * FILE_SYSTEM_SECTOR_SIZE_BYTES); // Size of the file system + size of data area + (size of MBR + size of kernel)
+		Required_Size = (Blocks_Count * sizeof(unsigned int)) + (Files_Count * sizeof(TFilesListEntry)) + (Blocks_Count * CONFIGURATION_FILE_SYSTEM_BLOCK_SIZE_BYTES) + (CONFIGURATION_FILE_SYSTEM_STARTING_SECTOR_OFFSET * FILE_SYSTEM_SECTOR_SIZE_BYTES); // Size of the file system + size of data area + (size of MBR + size of kernel)
 		if (Required_Size > HardDiskGetDriveSizeBytes()) return 2;
 		
 		// Create empty file system
@@ -289,7 +289,7 @@ unsigned int FileSystemAllocateBlock(void)
 		if (i % FILE_SYSTEM_SECTOR_SIZE_BYTES != 0) Files_List_Size_Sectors++;
 	
 		// Determine starting sectors for each file system structures
-		Blocks_List_First_Sector_Number = CONFIGURATION_FILE_SYSTEM_STARTING_SECTOR;
+		Blocks_List_First_Sector_Number = Starting_Sector;
 		Files_List_First_Sector_Number = Blocks_List_First_Sector_Number + Blocks_List_Size_Sectors;
 		
 		// Save new generated file system

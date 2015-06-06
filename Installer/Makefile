@@ -15,7 +15,7 @@ BINARIES_PATH = Binaries
 OBJECTS_CORE = $(OBJECTS_PATH)/Architecture.o $(OBJECTS_PATH)/Hardware_Functions.o $(OBJECTS_PATH)/Kernel.o $(OBJECTS_PATH)/Standard_Functions.o $(OBJECTS_PATH)/System_Calls.o
 OBJECTS_DRIVERS = $(OBJECTS_PATH)/Driver_Keyboard.o $(OBJECTS_PATH)/Driver_Hard_Disk.o $(OBJECTS_PATH)/Driver_UART.o $(OBJECTS_PATH)/Driver_Timer.o $(OBJECTS_PATH)/Driver_Screen.o $(OBJECTS_PATH)/Driver_PIC.o
 OBJECTS_FILE_SYSTEM = $(OBJECTS_PATH)/File_System.o $(OBJECTS_PATH)/File.o
-OBJECTS_SHELL = $(OBJECTS_PATH)/Shell.o
+OBJECTS_SHELL = $(OBJECTS_PATH)/Shell.o $(OBJECTS_PATH)/Shell_Partition_Menu.o
 OBJECTS = $(OBJECTS_CORE) $(OBJECTS_DRIVERS) $(OBJECTS_FILE_SYSTEM) $(OBJECTS_SHELL)
 
 INCLUDES = $(SYSTEM_INCLUDES_PATH)
@@ -111,3 +111,6 @@ $(OBJECTS_PATH)/File.o: $(SYSTEM_SOURCES_PATH)/File_System/File.c
 #------------------------------------------------------------------------------------------------------------------------------
 $(OBJECTS_PATH)/Shell.o: $(SOURCES_PATH)/Shell/Shell.c
 	$(CC) $(CCFLAGS) -c $(SOURCES_PATH)/Shell/Shell.c -o $(OBJECTS_PATH)/Shell.o
+	
+$(OBJECTS_PATH)/Shell_Partition_Menu.o: $(SOURCES_PATH)/Shell/Shell_Partition_Menu.c
+	$(CC) $(CCFLAGS) -c $(SOURCES_PATH)/Shell/Shell_Partition_Menu.c -o $(OBJECTS_PATH)/Shell_Partition_Menu.o

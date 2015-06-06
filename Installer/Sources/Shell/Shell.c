@@ -10,6 +10,7 @@
 #include <File_System/File_System.h>
 #include <Standard_Functions.h> // To have atoi()
 #include "Embedded_Files_Data.h"
+#include "Shell_Partition_Menu.h"
 #include "Strings.h"
 
 //-------------------------------------------------------------------------------------------------------------------------------
@@ -25,10 +26,28 @@ static void ShellReboot(void)
 	while (1);
 }
 
-/** Copy the kernel code at the LBA sector 1 and following.
- * @param Pointer_Kernel_File The file entry containing the kernel.
+/** Copy the MBR code and the partition table at the partition starting sector.
+ * @param Pointer_Lemon_Partition_Table The partition table to put on the Lemon MBR.
  */
-static void ShellInstallKernel(TEmbeddedFile *Pointer_Kernel_File)
+static void ShellInstallMBR(TShellPartitionMenuPartitionTableEntry *Pointer_Lemon_Partition_Table)
+{
+	unsigned char Sector_Temp[FILE_SYSTEM_SECTOR_SIZE_BYTES];
+	
+	// Extract the MBR code
+	memcpy(Sector_Temp, Embedded_Files[0].Pointer_Data, FILE_SYSTEM_SECTOR_SIZE_BYTES);
+	
+	// Merge the partition table
+	memcpy(&Sector_Temp[SHELL_PARTITION_MENU_PARTITION_TABLE_OFFSET], Pointer_Lemon_Partition_Table, SHELL_PARTITION_MENU_PARTITION_TABLE_SIZE);
+	
+	// Write on disk
+	HardDiskWriteSector(Pointer_Lemon_Partition_Table[0].First_Sector_LBA, Sector_Temp);
+}
+
+/** Copy the kernel code just after the MBR.
+ * @param Pointer_Kernel_File The file entry containing the kernel.
+ * @param Starting_Sector Where to start installing the kernel (LBA addressing).
+ */
+static void ShellInstallKernel(TEmbeddedFile *Pointer_Kernel_File, unsigned int Starting_Sector)
 {
 	unsigned char *Pointer_Data;
 	int i, Sectors_Count;
@@ -38,9 +57,9 @@ static void ShellInstallKernel(TEmbeddedFile *Pointer_Kernel_File)
 	if (Pointer_Kernel_File->Size_Bytes % FILE_SYSTEM_SECTOR_SIZE_BYTES != 0) Sectors_Count++;
 	
 	Pointer_Data = Pointer_Kernel_File->Pointer_Data;
-	for (i = 1; i <= Sectors_Count; i++)
+	for (i = 0; i < Sectors_Count; i++)
 	{
-		HardDiskWriteSector(i, Pointer_Data);
+		HardDiskWriteSector(Starting_Sector + i, Pointer_Data);
 		Pointer_Data += FILE_SYSTEM_SECTOR_SIZE_BYTES;
 	}
 }
@@ -79,6 +98,8 @@ static void ShellInstallFiles(void)
 void Shell(void)
 {
 	char String_User_Answer[2];
+	TShellPartitionMenuPartitionTableEntry *Pointer_Lemon_Partition_Table;
+	unsigned int Partition_Starting_Sector, File_System_Starting_Sector;
 	
 	// Show title
 	ScreenSetColor(SCREEN_COLOR_LIGHT_BLUE);
@@ -107,14 +128,19 @@ void Shell(void)
 		}
 	}
 	
+	// Select the installation partition
+	Pointer_Lemon_Partition_Table = ShellPartitionMenu();
+	Partition_Starting_Sector = Pointer_Lemon_Partition_Table[0].First_Sector_LBA;
+	File_System_Starting_Sector = Partition_Starting_Sector + CONFIGURATION_FILE_SYSTEM_STARTING_SECTOR_OFFSET;
+	
 	// Start the installation
-	ScreenSetColor(SCREEN_COLOR_GREEN);
+	ScreenSetColor(SCREEN_COLOR_LIGHT_BLUE);
 	ScreenWriteString(STRING_INSTALLATION_BEGINNING);
+	ScreenSetColor(SCREEN_COLOR_BLUE);
 	
 	// Create file system
-	ScreenSetColor(SCREEN_COLOR_BLUE);
 	ScreenWriteString(STRING_CREATING_FILE_SYSTEM);
-	switch (FileSystemCreate(2048, 128))
+	switch (FileSystemCreate(2048, 128, File_System_Starting_Sector))
 	{
 		case 1:
 			ScreenSetColor(SCREEN_COLOR_RED);
@@ -129,13 +155,13 @@ void Shell(void)
 		default:
 			break;
 	}
-	FileSystemInit();
+	FileSystemInitialize(File_System_Starting_Sector);
 	
 	// Install MBR
-	HardDiskWriteSector(0, Embedded_Files[0].Pointer_Data);
+	ShellInstallMBR(Pointer_Lemon_Partition_Table);
 	
 	// Install kernel
-	ShellInstallKernel(&Embedded_Files[1]);
+	ShellInstallKernel(&Embedded_Files[1], Partition_Starting_Sector + 1);
 	
 	// Install remaining files
 	ScreenWriteString(STRING_INSTALLING_FILES);

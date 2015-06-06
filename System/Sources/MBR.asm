@@ -59,11 +59,15 @@ Entry_Point:
 	xor bl, bl
 	int 10h
 
-	; Load the Installer kernel from the boot device
+	; Load the Installer kernel from the boot device (there only one partition starting from zero, there is no need to read the partitions table)
 	%ifdef INSTALLER
 		call LoadKernelWithBIOS
 	; Load the System kernel from the hard disk
 	%else
+		; Get the starting LBA sector of the first partition
+		mov eax, DWORD [First_Partition_Starting_Sector_LBA]
+		inc eax ; Bypass the first sector which is the MBR
+		mov DWORD [Logical_Sector_Number], eax
 		call LoadKernelWithLBA
 	%endif
 	
@@ -89,8 +93,8 @@ Entry_Point:
 	;mov gs, ax CRASH
 	mov ss, ax
 	
-	; Far jump to kernel (8 is to bypass initial stack frame)
-	jmp DWORD 8:KERNEL_PROTECTED_MODE_ADDRESS
+	; Far jump to the kernel entry point.
+	jmp DWORD 8:KERNEL_PROTECTED_MODE_ADDRESS ; '8' is to select the kernel code segment
 
 ;--------------------------------------------------------------------------------------------------
 ; Functions
@@ -169,7 +173,7 @@ LoadKernelWithBIOS:
 
 	ret
 
-; Program the IDE controller to load from the hard disk
+; Program the IDE controller to load the kernel from the hard disk
 LoadKernelWithLBA:
 	cli
 	mov ax, KERNEL_LOAD_SEGMENT
@@ -185,28 +189,43 @@ LoadKernelWithLBA:
 	test al, 80h
 	jnz .Wait_Controller_Ready_1
 
-	; Select master device and send high LBA address nibble (assume here that it is always 0)
-	mov al, 0E0h
+	; Select master device
+	mov al, 40h
 	mov dx, HARD_DISK_PORT_DEVICE_HEAD
 	out dx, al
-
-	; Send LBA address remaining bytes
+	
+	; Send sectors count high byte (the sector count is always 1 to avoid issues with the 400ns delay between sectors)
 	xor al, al
-	mov dx, HARD_DISK_PORT_LBA_ADDRESS_HIGH
-	out dx, al ; Assume that it is always 0 too, as the kernel is located at the beginning of the drive
-
-	mov bx, [Logical_Sector_Number]
-	mov al, bh
-	mov dx, HARD_DISK_PORT_LBA_ADDRESS_MIDDLE
+	mov dx, HARD_DISK_PORT_SECTOR_COUNT
 	out dx, al
-
-	mov al, bl
-	mov dx, HARD_DISK_PORT_LBA_ADDRESS_LOW
-	out dx, al
-
-	; Send the sectors count to read (always 1 to avoid issues with the 400ns delay between sectors)
+	; Send sectors count low byte
 	mov al, 1
 	mov dx, HARD_DISK_PORT_SECTOR_COUNT
+	out dx, al
+	
+	; Send 48-bit LBA byte 3
+	mov al, BYTE [Logical_Sector_Number + 3]
+	mov dx, HARD_DISK_PORT_LBA_ADDRESS_LOW
+	out dx, al
+	; Send 48-bit LBA byte 4 (always zero as the LBA value is 4-bytes long)
+	xor al, al
+	mov dx, HARD_DISK_PORT_LBA_ADDRESS_MIDDLE
+	out dx, al
+	; Send 48-bit LBA byte 5 (always zero as the LBA value is 4-bytes long)
+	xor al, al
+	mov dx, HARD_DISK_PORT_LBA_ADDRESS_HIGH
+	out dx, al
+	; Send 48-bit LBA byte 0
+	mov al, BYTE [Logical_Sector_Number]
+	mov dx, HARD_DISK_PORT_LBA_ADDRESS_LOW
+	out dx, al
+	; Send 48-bit LBA byte 1
+	mov al, BYTE [Logical_Sector_Number + 1]
+	mov dx, HARD_DISK_PORT_LBA_ADDRESS_MIDDLE
+	out dx, al
+	; Send 48-bit LBA byte 2
+	mov al, BYTE [Logical_Sector_Number + 2]
+	mov dx, HARD_DISK_PORT_LBA_ADDRESS_HIGH
 	out dx, al
 
 	; Send read command with automatic retries
@@ -229,7 +248,7 @@ LoadKernelWithLBA:
 	rep insw
 	mov cx, ax ; Pop cx
 
-	inc WORD [Logical_Sector_Number]
+	inc DWORD [Logical_Sector_Number]
 	loop .Loop_Load_Kernel_With_LBA
 
 	sti
@@ -296,7 +315,7 @@ GDT_Pointer DW 8 * 3
              DD Global_Descriptor_Table + 7C00h
 
 Boot_Device DB 0
-Logical_Sector_Number DW 1
+Logical_Sector_Number DD 1
 Sectors_Per_Track_Count DW 18 ; Like a 1.44MB floppy disk
 Heads_Count DW 2 ; Like a 1.44MB floppy disk
 
@@ -307,7 +326,7 @@ DB 80h, ; Mark the partition as active
 DB 01h, 01h, 00h ; CHS address of first absolute sector in partition (genisoimage wants it to be 0/1/1)
 DB 0EFh ; Partition type (allow FAT12, FAT16, FAT32 or other file system)
 DB 01h, 12h, 4Fh ; CHS address of last absolute sector in partition (set the last one of a 1.44MB floppy disk)
-DB 00h, 00h, 00h, 00h ; LBA of first absolute sector in partition (make it start from 0)
+First_Partition_Starting_Sector_LBA DB 00h, 00h, 00h, 00h ; LBA of first absolute sector in partition (make it start from 0)
 DB 40h, 0Bh, 00h, 00h ; Number of sectors in partition (2880 as in a 1.44MB floppy disk; the number is in little endian)
 ; Second partition entry (empty)
 DB 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0

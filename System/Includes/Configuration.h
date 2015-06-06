@@ -16,7 +16,7 @@
 /** The size of a file system block in bytes (must be a multiple of 512). */
 #define CONFIGURATION_FILE_SYSTEM_BLOCK_SIZE_BYTES 4096
 /** The file system is stored just behind the kernel on the hard disk. This value is in LBA addressing mode. */
-#define CONFIGURATION_FILE_SYSTEM_STARTING_SECTOR 130 // 1 sector for the MBR + 128 sectors (= 64 KB) for the kernel
+#define CONFIGURATION_FILE_SYSTEM_STARTING_SECTOR_OFFSET 129 // 1 sector for the MBR + 128 sectors (= 64 KB) for the kernel
 /** The system can't open more files than specified here simultaneously. */
 #define CONFIGURATION_FILE_SYSTEM_MAXIMUM_OPENED_FILES_COUNT 8
 

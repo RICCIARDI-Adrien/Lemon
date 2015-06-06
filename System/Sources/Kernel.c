@@ -41,9 +41,15 @@ extern unsigned int *_bss_start, *_bss_end;
 //-------------------------------------------------------------------------------------------------
 // Kernel entry point
 //-------------------------------------------------------------------------------------------------
+/** The MBR directly calls this function.
+ * @param Partition_Starting_Sector The partition first LBA sector.
+ */
 void __attribute__((section(".init"))) KernelEntryPoint(void)
 {
 	unsigned int *Pointer_Dword;
+	#ifndef INSTALLER
+		unsigned int Partition_Starting_Sector;
+	#endif
 	
 	// Clear the BSS section as the compiler expects
 	for (Pointer_Dword = (unsigned int *) &_bss_start; Pointer_Dword < (unsigned int *) &_bss_end; Pointer_Dword++) *Pointer_Dword = 0;
@@ -64,7 +70,10 @@ void __attribute__((section(".init"))) KernelEntryPoint(void)
 	
 	// Load file system (can't do that in the Installer program)
 	#ifndef INSTALLER
-		if (!FileSystemInit())
+		// Retrieve the partition starting sector from the partition table located in the MBR
+		Partition_Starting_Sector = *((unsigned int *) (KERNEL_MBR_ADDRESS + 446 + 8)); // The partition table is located at offset 446, and the first partition starting LBA sector is located at offset 8 of the beginning of the partition table
+		
+		if (!FileSystemInitialize(Partition_Starting_Sector + CONFIGURATION_FILE_SYSTEM_STARTING_SECTOR_OFFSET))
 		{
 			// Show error message
 			ScreenSetColor(SCREEN_COLOR_RED); // Color must be set before in order to clear screen with this value
