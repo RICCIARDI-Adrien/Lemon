@@ -7,6 +7,7 @@
  * @version 1.3 : 18/11/2012, heads count and sector / track count are now stored into the file system descriptor.
  * @version 1.4 : 24/11/2012, use of the 28-LBA addressing mode.
  * @version 1.5 : 10/08/2013, code cleanup and optimization.
+ * @version 1.6 : 06/06/2015, use of the 48-LBA addressing mode.
  */
 #ifndef H_DRIVER_HARD_DISK_H
 #define H_DRIVER_HARD_DISK_H
