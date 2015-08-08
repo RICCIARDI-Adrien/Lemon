@@ -284,6 +284,7 @@ void KeyboardInterruptHandler(void)
 		{
 			// Send the End of Interrupt code to the PIC
 			KEYBOARD_ACKNOWLEDGE(); // It is not sent automatically when the interrupt returns because it never returns...
+			ScreenSetColor(SCREEN_COLOR_LIGHT_BLUE); // Force the screen color in case it was altered by the program
 			ScreenClear();
 			KernelStartShell();
 		}
