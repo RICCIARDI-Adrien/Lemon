@@ -18,6 +18,7 @@ static TMenu Menu_Main =
 		STRING_MAIN_MENU_GAME_NUMBERS,
 		STRING_MAIN_MENU_GAME_BRAIN_CALCULATION,
 		STRING_MAIN_MENU_GAME_NO_MATCH_DEALER,
+		STRING_MAIN_MENU_GAME_RAIN,
 		STRING_MAIN_MENU_EXIT,
 		NULL
 	}
@@ -41,6 +42,10 @@ int main(void)
 				
 			case 3:
 				NoMatchDealer();
+				break;
+				
+			case 4:
+				Rain();
 				break;
 				
 			default:

@@ -35,9 +35,9 @@ endef
 #------------------------------------------------------------------------------------------------------------------------------
 # Global rules
 #------------------------------------------------------------------------------------------------------------------------------
-all: benchmark game_of_life games hangman help numbers rain tests text_viewer unix_commands
+all: benchmark game_of_life games hangman help numbers tests text_viewer unix_commands
 
-clean: benchmark_clean game_of_life_clean games_clean hangman_clean help_clean numbers_clean rain_clean tests_clean text_viewer_clean unix_commands_clean
+clean: benchmark_clean game_of_life_clean games_clean hangman_clean help_clean numbers_clean tests_clean text_viewer_clean unix_commands_clean
 	# Delete also the tools
 	rm -rf $(SERIAL_PORT_SERVER)
 
@@ -123,19 +123,6 @@ numbers_clean:
 numbers_download: $(SERIAL_PORT_SERVER)
 	@$(SERIAL_PORT_SERVER) $(SERIAL_PORT_SERVER_FLAGS) $(BINARIES_PATH)/Numbers.32b numbers
 
-#------------------------------------------------------------------------------------------------------------------------------
-# Rain
-#------------------------------------------------------------------------------------------------------------------------------
-rain:
-	@$(call DisplayProgramToCompile,Rain)
-	@cd $(SOURCES_PATH)/Rain && $(MAKE)
-
-rain_clean:
-	@cd $(SOURCES_PATH)/Rain && $(MAKE) clean
-
-rain_download: $(SERIAL_PORT_SERVER)
-	@$(SERIAL_PORT_SERVER) $(SERIAL_PORT_SERVER_FLAGS) $(BINARIES_PATH)/Rain.32b rain
-	
 #------------------------------------------------------------------------------------------------------------------------------
 # Tests
 #------------------------------------------------------------------------------------------------------------------------------

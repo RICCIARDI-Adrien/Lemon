@@ -19,6 +19,7 @@
 	#define STRING_MAIN_MENU_GAME_NUMBERS "Trouver un nombre"
 	#define STRING_MAIN_MENU_GAME_BRAIN_CALCULATION "Calcul mental"
 	#define STRING_MAIN_MENU_GAME_NO_MATCH_DEALER "No Match Dealer"
+	#define STRING_MAIN_MENU_GAME_RAIN "Gouttes de pluie"
 	#define STRING_MAIN_MENU_EXIT "Quitter"
 
 	// Brain calculation
@@ -40,6 +41,17 @@
 	#define STRING_NO_MATCH_DEALER_GAME_LOST "Vous avez perdu, plusieurs nombres sont identiques !\n"
 	#define STRING_NO_MATCH_DEALER_GAME_WON "Vous avez gagn\202, tous les nombres sont diff\202rents !\n"
 	#define STRING_NO_MATCH_DEALER_ASK_FOR_RETRY "Appuyez sur Entr\202e pour relancer ou sur Echap pour quitter.\n\n"
+	
+	// Rain
+	#define STRING_RAIN_MENU_TITLE "Gouttes de pluie"
+	#define STRING_RAIN_MENU_PROMPT "Choisissez le type de pluie : "
+	#define STRING_RAIN_MENU_SLOW "Clairsem\202e"
+	#define STRING_RAIN_MENU_NORMAL "Soutenue"
+	#define STRING_RAIN_MENU_FAST "Diluvienne"
+	#define STRING_RAIN_MENU_ULTRAFAST "Torrentielle"
+	#define STRING_RAIN_MENU_EXIT "Retour"
+	#define STRING_RAIN_STATISTICS_1 "Gouttes de pluie "
+	#define STRING_RAIN_STATISTICS_2 " ; Boucles "
 #endif
 
 #endif
