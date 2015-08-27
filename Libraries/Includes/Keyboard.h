@@ -83,6 +83,13 @@ int KeyboardIsKeyAvailable(void);
  */
 int KeyboardReadCharacter(void);
 
+/** Read an unsigned 32-bit number from the keyboard.
+ * @return The read number converted to binary.
+ * @note Only digits are allowed, other characters are discarded.
+ * @note The result will be unpredictable if the entered number is greater than 4294967295.
+ */
+unsigned int KeyboardReadUnsignedInteger(void);
+
 // TODO
 // KeyboardReadString
 // KeyboardReadInteger

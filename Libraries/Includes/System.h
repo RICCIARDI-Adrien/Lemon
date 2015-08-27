@@ -12,6 +12,7 @@
 #include <Keyboard.h>
 #include <Math.h>
 #include <Memory.h>
+#include <Menu.h>
 #include <Random.h>
 #include <Screen.h>
 #include <String.h>

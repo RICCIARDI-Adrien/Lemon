@@ -13,15 +13,16 @@ PATH_OBJECTS = Objects
 PATH_SOURCES = Sources
 
 OBJECTS_FILE = $(PATH_OBJECTS)/File_Close.o $(PATH_OBJECTS)/File_Delete.o $(PATH_OBJECTS)/File_Exists.o $(PATH_OBJECTS)/File_Get_Size.o $(PATH_OBJECTS)/File_List_Initialize.o $(PATH_OBJECTS)/File_List_Next.o $(PATH_OBJECTS)/File_Open.o $(PATH_OBJECTS)/File_Read.o $(PATH_OBJECTS)/File_Write.o
-OBJECTS_KEYBOARD = $(PATH_OBJECTS)/Keyboard_Is_Key_Available.o $(PATH_OBJECTS)/Keyboard_Read_Character.o
+OBJECTS_KEYBOARD = $(PATH_OBJECTS)/Keyboard_Is_Key_Available.o $(PATH_OBJECTS)/Keyboard_Read_Character.o $(PATH_OBJECTS)/Keyboard_Read_Unsigned_Integer.o
 OBJECTS_MATH = $(PATH_OBJECTS)/Math_Integer_Add.o $(PATH_OBJECTS)/Math_Integer_Copy.o $(PATH_OBJECTS)/Math_Integer_Display_Hexadecimal.o $(PATH_OBJECTS)/Math_Integer_Initialize_From_Int.o
 OBJECTS_MEMORY = $(PATH_OBJECTS)/Memory_Copy_Area.o $(PATH_OBJECTS)/Memory_Set_Area_Value.o
+OBJECTS_MENU = $(PATH_OBJECTS)/Menu_Display.o
 OBJECTS_RANDOM = $(PATH_OBJECTS)/Random_Generate_Number.o $(PATH_OBJECTS)/Random_Initialize.o
 OBJECTS_SCREEN = $(PATH_OBJECTS)/Screen_Clear.o $(PATH_OBJECTS)/Screen_Display_Buffer.o $(PATH_OBJECTS)/Screen_Get_Cursor_Position.o $(PATH_OBJECTS)/Screen_Set_Background_Color.o $(PATH_OBJECTS)/Screen_Set_Cursor_Position.o $(PATH_OBJECTS)/Screen_Set_Font_Color.o $(PATH_OBJECTS)/Screen_Write_Centered_String.o $(PATH_OBJECTS)/Screen_Write_Character.o $(PATH_OBJECTS)/Screen_Write_Integer.o $(PATH_OBJECTS)/Screen_Write_String.o $(PATH_OBJECTS)/Screen_Write_Unsigned_Integer.o
 OBJECTS_STRING = $(PATH_OBJECTS)/String_Compare.o $(PATH_OBJECTS)/String_Concatenate.o $(PATH_OBJECTS)/String_Convert_String_To_Unsigned_Integer.o $(PATH_OBJECTS)/String_Convert_Unsigned_Integer_To_String.o $(PATH_OBJECTS)/String_Copy.o $(PATH_OBJECTS)/String_Get_Size.o $(PATH_OBJECTS)/String_Is_Character_A_Digit.o $(PATH_OBJECTS)/String_Is_Character_A_Letter.o
 OBJECTS_SYSTEM = $(PATH_OBJECTS)/System_Exit_Program.o $(PATH_OBJECTS)/System_Get_File_System_Free_Size.o $(PATH_OBJECTS)/System_Get_File_System_Total_Size.o $(PATH_OBJECTS)/System_Get_Timer_Value.o $(PATH_OBJECTS)/System_Program_Entry_Point.o $(PATH_OBJECTS)/System_Wait.o
 OBJECTS_UART = $(PATH_OBJECTS)/UART_Initialize.o $(PATH_OBJECTS)/UART_Is_Data_Received.o $(PATH_OBJECTS)/UART_Read_Byte.o $(PATH_OBJECTS)/UART_Write_Byte.o
-OBJECTS = $(OBJECTS_FILE) $(OBJECTS_KEYBOARD) $(OBJECTS_MATH) $(OBJECTS_MEMORY) $(OBJECTS_RANDOM) $(OBJECTS_SCREEN) $(OBJECTS_STRING) $(OBJECTS_SYSTEM) $(OBJECTS_UART)
+OBJECTS = $(OBJECTS_FILE) $(OBJECTS_KEYBOARD) $(OBJECTS_MATH) $(OBJECTS_MEMORY) $(OBJECTS_MENU) $(OBJECTS_RANDOM) $(OBJECTS_SCREEN) $(OBJECTS_STRING) $(OBJECTS_SYSTEM) $(OBJECTS_UART)
 
 ARCHIVE_NAME = Libraries.a
 INCLUDES = -IIncludes -I../System/Includes
@@ -97,6 +98,11 @@ $(PATH_OBJECTS)/Keyboard_Read_Character.d: $(PATH_SOURCES)/Keyboard/Keyboard_Rea
 $(PATH_OBJECTS)/Keyboard_Read_Character.o: $(PATH_OBJECTS)/Keyboard_Read_Character.d
 	$(CC) $(CCFLAGS) $(PATH_SOURCES)/Keyboard/Keyboard_Read_Character.c -o $(PATH_OBJECTS)/Keyboard_Read_Character.o
 
+$(PATH_OBJECTS)/Keyboard_Read_Unsigned_Integer.d: $(PATH_SOURCES)/Keyboard/Keyboard_Read_Unsigned_Integer.c
+	$(CC) $(CCFLAGS) -MM $(PATH_SOURCES)/Keyboard/Keyboard_Read_Unsigned_Integer.c -MF $(PATH_OBJECTS)/Keyboard_Read_Unsigned_Integer.d
+$(PATH_OBJECTS)/Keyboard_Read_Unsigned_Integer.o: $(PATH_OBJECTS)/Keyboard_Read_Unsigned_Integer.d
+	$(CC) $(CCFLAGS) $(PATH_SOURCES)/Keyboard/Keyboard_Read_Unsigned_Integer.c -o $(PATH_OBJECTS)/Keyboard_Read_Unsigned_Integer.o
+
 #--------------------------------------------------------------------------------------------------
 # Math
 #--------------------------------------------------------------------------------------------------
@@ -132,6 +138,14 @@ $(PATH_OBJECTS)/Memory_Set_Area_Value.d: $(PATH_SOURCES)/Memory/Memory_Set_Area_
 	$(CC) $(CCFLAGS) -MM $(PATH_SOURCES)/Memory/Memory_Set_Area_Value.c -MF $(PATH_OBJECTS)/Memory_Set_Area_Value.d
 $(PATH_OBJECTS)/Memory_Set_Area_Value.o: $(PATH_OBJECTS)/Memory_Set_Area_Value.d
 	$(CC) $(CCFLAGS) $(PATH_SOURCES)/Memory/Memory_Set_Area_Value.c -o $(PATH_OBJECTS)/Memory_Set_Area_Value.o
+
+#--------------------------------------------------------------------------------------------------
+# Menu
+#--------------------------------------------------------------------------------------------------
+$(PATH_OBJECTS)/Menu_Display.d: $(PATH_SOURCES)/Menu/Menu_Display.c
+	$(CC) $(CCFLAGS) -MM $(PATH_SOURCES)/Menu/Menu_Display.c -MF $(PATH_OBJECTS)/Menu_Display.d
+$(PATH_OBJECTS)/Menu_Display.o: $(PATH_OBJECTS)/Menu_Display.d
+	$(CC) $(CCFLAGS) $(PATH_SOURCES)/Menu/Menu_Display.c -o $(PATH_OBJECTS)/Menu_Display.o
 
 #--------------------------------------------------------------------------------------------------
 # Random
