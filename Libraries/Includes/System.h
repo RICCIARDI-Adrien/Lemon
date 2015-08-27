@@ -1,7 +1,6 @@
 /** @file System.h
+ * Gather all header files. Only this header should be included in an application.
  * @author Adrien RICCIARDI
- * @version 1.0 : 27/04/2012
- * @version 1.1 : 13/12/2013, use kernel system calls definition to ease maintenance.
  */
 #ifndef H_SYSTEM_H
 #define H_SYSTEM_H

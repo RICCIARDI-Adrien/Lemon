@@ -1,7 +1,6 @@
 /** @file Memory.h
  * Various memory manipulation functions.
  * @author Adrien RICCIARDI
- * @version 25/10/2014
  */
 #ifndef H_MEMORY_H
 #define H_MEMORY_H

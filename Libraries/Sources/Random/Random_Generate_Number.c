@@ -1,6 +1,5 @@
 /** @file Random_Generate_Number.c
  * @author Adrien RICCIARDI
- * @version 1.0 : 25/10/2014
  */
 #include <System.h>
 

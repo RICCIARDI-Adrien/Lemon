@@ -1,11 +1,6 @@
 /** @file System_Program_Entry_Point.c
  * This code is executed before the program main() function.
  * @author Adrien RICCIARDI
- * @version 1.0 : 11/12/2011
- * @version 1.1 : 27/04/2012
- * @version 1.2 : 25/12/2012, added argc and argv[] support.
- * @version 1.3 : 22/08/2013, optimized SystemCall() code.
- * @version 1.4 : 13/06/2014, added errno initialization.
  */
 #include <System.h>
 

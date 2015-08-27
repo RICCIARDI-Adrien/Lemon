@@ -1,7 +1,6 @@
 /** @file String.h
  * Contain string manipulation functions.
  * @author Adrien RICCIARDI
- * @version 1.0 : 25/10/2014
  */
 #ifndef H_STRING_H
 #define H_STRING_H

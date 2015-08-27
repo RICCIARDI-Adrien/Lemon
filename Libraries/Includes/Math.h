@@ -1,7 +1,6 @@
 /** @file Math.h
  * Allow calculations on a configurable number of bits.
  * @author Adrien RICCIARDI
- * @version 1.0 : 03/01/2015
  */
 #ifndef H_MATH_H
 #define H_MATH_H

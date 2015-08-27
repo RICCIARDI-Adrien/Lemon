@@ -1,6 +1,5 @@
 /** @file String_Get_Size.c
  * @author Adrien RICCIARDI
- * @version 1.0 : 26/10/2014
  */
 #include <System.h>
 

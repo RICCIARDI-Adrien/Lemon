@@ -1,6 +1,6 @@
 /** @file UART.h
+ * Read from and write to the PC serial port.
  * @author Adrien RICCIARDI
- * @version 1.0 : 24/12/2012
  */
 #ifndef H_UART_H
 #define H_UART_H

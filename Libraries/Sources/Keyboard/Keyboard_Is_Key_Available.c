@@ -1,6 +1,5 @@
 /** @file Keyboard_Is_Key_Available.c
  * @author Adrien RICCIARDI
- * @version 1.0 : 21/10/2012
  */
 #include <System.h>
 

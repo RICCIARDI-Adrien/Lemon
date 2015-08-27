@@ -1,6 +1,5 @@
 /** @file System_Get_File_System_Free_Size.c
  * @author Adrien RICCIARDI
- * @version 1.0 : 25/02/2015
  */
 #include <System.h>
 

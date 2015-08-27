@@ -1,6 +1,5 @@
 /** @file Memory_Set_Area_Value.c
  * @author Adrien RICCIARDI
- * @version 1.0 : 25/10/2014
  */
 #include <System.h>
 

@@ -1,7 +1,5 @@
 /** @file Memory_Copy_Area.c
  * @author Adrien RICCIARDI
- * @version 1.0 : 25/10/2014
- * @version 1.1 : 06/12/2014, improved function speed by copying 4 bytes at a time.
  */
 #include <System.h>
 

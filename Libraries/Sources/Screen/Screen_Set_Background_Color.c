@@ -1,6 +1,5 @@
 /** @file Screen_Set_Background_Color.c
  * @author Adrien RICCIARDI
- * @version 1.0 : 13/12/2013
  */
 #include <System.h>
 

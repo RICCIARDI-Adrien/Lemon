@@ -1,6 +1,5 @@
 /** @file Screen_Write_Centered_String.c
  * @author Adrien RICCIARDI
- * @version 1.0 : 24/03/2015
  */
 #include <System.h>
 

@@ -1,7 +1,5 @@
 /** @file UART_Initialize.c
- * Initialize the RS-232 serial port.
  * @author Adrien RICCIARDI
- * @version 1.0 : 24/12/2012
  */
 #include <System.h>
 

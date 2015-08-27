@@ -1,6 +1,5 @@
 /** @file String_Is_Character_A_Digit.c
  * @author Adrien RICCIARDI
- * @version 1.0 : 28/05/2015
  */
 #include <System.h>
 

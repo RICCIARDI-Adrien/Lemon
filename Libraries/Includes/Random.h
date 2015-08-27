@@ -1,7 +1,6 @@
 /** @file Random.h
  * Generate pseudo-random numbers.
  * @author Adrien RICCIARDI
- * @version 1.0 : 25/10/2014
  */
 #ifndef H_RANDOM_H
 #define H_RANDOM_H

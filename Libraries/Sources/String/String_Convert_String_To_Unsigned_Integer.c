@@ -1,6 +1,5 @@
 /** @file String_Convert_String_To_Unsigned_Integer.c
  * @author Adrien RICCIARDI
- * @version 1.0 : 25/10/2014
  */
 #include <System.h>
 

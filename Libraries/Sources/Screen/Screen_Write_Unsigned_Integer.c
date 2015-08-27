@@ -1,6 +1,5 @@
 /** @file Screen_Write_Unsigned_Integer.c
  * @author Adrien RICCIARDI
- * @version 1.0 : 26/10/2014
  */
 #include <System.h>
 

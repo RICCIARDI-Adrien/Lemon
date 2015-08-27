@@ -1,5 +1,6 @@
 /** @file Menu.h
  * Display text-based menus.
+ * @author Adrien RICCIARDI
  */
 #ifndef H_MENU_H
 #define H_MENU_H

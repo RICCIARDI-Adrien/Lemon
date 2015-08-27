@@ -1,7 +1,6 @@
 /** @file File.h
+ * Simple file manipulation functions.
  * @author Adrien RICCIARDI
- * @version 1.0 : 27/04/2012
- * @version 1.1 : 14/09/2012
  */
 #ifndef H_FILE_H
 #define H_FILE_H

@@ -1,6 +1,6 @@
 /** @file Keyboard.h
+ * Get and format data from the keyboard.
  * @author Adrien RICCIARDI
- * @version 1.0 : 18/12/2013
  */
 #ifndef H_KEYBOARD_H
 #define H_KEYBOARD_H

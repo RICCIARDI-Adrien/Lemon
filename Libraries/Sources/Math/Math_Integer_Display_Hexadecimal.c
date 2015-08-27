@@ -1,6 +1,5 @@
 /** @file Math_Integer_Display_Hexadecimal.c
  * @author Adrien RICCIARDI
- * @version 1.0 : 04/01/2015
  */
 #include <System.h>
 

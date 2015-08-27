@@ -1,6 +1,5 @@
 /** @file Math_Integer_Initialize_From_Int.c
  * @author Adrien RICCIARDI
- * @version 1.0 : 03/01/2015
  */
 #include <System.h>
 

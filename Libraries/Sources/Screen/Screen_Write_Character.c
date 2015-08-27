@@ -1,6 +1,5 @@
 /** @file Screen_Write_Character.c
  * @author Adrien RICCIARDI
- * @version 1.0 : 25/10/2014
  */
 #include <System.h>
 

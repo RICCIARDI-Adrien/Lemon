@@ -1,7 +1,6 @@
 /** @file Screen.h
+ * Display data on the screen, modify cursor location and provide a direct access to the video memory for games.
  * @author Adrien RICCIARDI
- * @version 1.0 : 13/12/2013
- * @version 1.1 : 15/05/2014, added SCREEN_MAKE_COLOR().
  */
 #ifndef H_SCREEN_H
 #define H_SCREEN_H

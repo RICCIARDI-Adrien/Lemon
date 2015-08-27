@@ -1,6 +1,5 @@
 /** @file File_List_Initialize.c
  * @author Adrien RICCIARDI
- * @version 1.0 : 14/09/2012
  */
 #include <System.h>
 
