@@ -20,6 +20,7 @@
 	#define STRING_MAIN_MENU_GAME_BRAIN_CALCULATION "Calcul mental"
 	#define STRING_MAIN_MENU_GAME_NO_MATCH_DEALER "No Match Dealer"
 	#define STRING_MAIN_MENU_GAME_RAIN "Gouttes de pluie"
+	#define STRING_MAIN_MENU_GAME_GAME_OF_LIFE "Jeu de la Vie"
 	#define STRING_MAIN_MENU_EXIT "Quitter"
 
 	// Brain calculation

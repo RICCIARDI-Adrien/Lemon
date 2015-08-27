@@ -35,9 +35,9 @@ endef
 #------------------------------------------------------------------------------------------------------------------------------
 # Global rules
 #------------------------------------------------------------------------------------------------------------------------------
-all: benchmark game_of_life games hangman help numbers tests text_viewer unix_commands
+all: benchmark games hangman help numbers tests text_viewer unix_commands
 
-clean: benchmark_clean game_of_life_clean games_clean hangman_clean help_clean numbers_clean tests_clean text_viewer_clean unix_commands_clean
+clean: benchmark_clean games_clean hangman_clean help_clean numbers_clean tests_clean text_viewer_clean unix_commands_clean
 	# Delete also the tools
 	rm -rf $(SERIAL_PORT_SERVER)
 
@@ -57,19 +57,6 @@ benchmark_clean:
 
 benchmark_download: $(SERIAL_PORT_SERVER)
 	@$(SERIAL_PORT_SERVER) $(SERIAL_PORT_SERVER_FLAGS) $(BINARIES_PATH)/Benchmark.32b benchmark
-
-#------------------------------------------------------------------------------------------------------------------------------
-# Game of Life
-#------------------------------------------------------------------------------------------------------------------------------
-game_of_life:
-	@$(call DisplayProgramToCompile,Game of Life)
-	@cd $(SOURCES_PATH)/Game_Of_Life && $(MAKE)
-
-game_of_life_clean:
-	@cd $(SOURCES_PATH)/Game_Of_Life && $(MAKE) clean
-
-game_of_life_download: $(SERIAL_PORT_SERVER)
-	@$(SERIAL_PORT_SERVER) $(SERIAL_PORT_SERVER_FLAGS) $(BINARIES_PATH)/Game_Of_Life.32b life
 
 #------------------------------------------------------------------------------------------------------------------------------
 # Games

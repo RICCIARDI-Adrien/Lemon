@@ -1,11 +1,10 @@
 /** @file Game_Of_Life.c
- * The famous Conway's Game of Life cellular automaton.
+ * @see Games.h for description.
  * @author Adrien RICCIARDI
- * @version 1.0 : 10/05/2014
- * @version 1.1 : 16/06/2014, added oscillators and stable world detections.
- * @version 1.2 : 17/06/2014, optimized oscillators detection (can detect all two-state oscillators) and added faster and slower keys.
  */
 #include <System.h>
+#include "Games.h"
+#include "Strings.h"
 
 //-------------------------------------------------------------------------------------------------
 // Private constants
@@ -156,7 +155,7 @@ static void ComputeNextWorldGeneration(void)
 //-------------------------------------------------------------------------------------------------
 // Public functions
 //-------------------------------------------------------------------------------------------------
-int main(void)
+void GameOfLife(void)
 {
 	int Wait_Time = 2; // 100 ms
 
@@ -176,8 +175,7 @@ int main(void)
 			{
 				// Exit program
 				case KEYBOARD_KEY_CODE_ESCAPE:
-					ScreenClear();
-					return 0;
+					return;
 					
 				// Display the world faster
 				case 'f':

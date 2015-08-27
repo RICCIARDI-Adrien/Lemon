@@ -17,4 +17,7 @@ void NoMatchDealer(void);
 /** Some ASCII characters are randomly raining on the screen, as in the classic BSD game (yes, it is completely useless). */
 void Rain(void);
 
+/** The famous Conway's Game of Life cellular automaton. */
+void GameOfLife(void);
+
 #endif
