@@ -17,15 +17,11 @@ static TMenu Menu_Main =
 	{
 		STRING_MAIN_MENU_GAME_NUMBERS,
 		STRING_MAIN_MENU_GAME_BRAIN_CALCULATION,
+		STRING_MAIN_MENU_GAME_NO_MATCH_DEALER,
 		STRING_MAIN_MENU_EXIT,
 		NULL
 	}
 };
-
-//-------------------------------------------------------------------------------------------------
-// Private functions
-//-------------------------------------------------------------------------------------------------
-
 
 //-------------------------------------------------------------------------------------------------
 // Entry point
@@ -36,13 +32,15 @@ int main(void)
 	{
 		switch (MenuDisplay(&Menu_Main))
 		{
-			// Numbers
 			case 1:
 				break;
 				
-			// Brain calculation
 			case 2:
 				BrainCalculation();
+				break;
+				
+			case 3:
+				NoMatchDealer();
 				break;
 				
 			default:

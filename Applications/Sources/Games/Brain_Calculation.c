@@ -3,6 +3,7 @@
  * @author Adrien RICCIARDI
  */
 #include <System.h>
+#include "Games.h"
 #include "Strings.h"
 
 //-------------------------------------------------------------------------------------------------

@@ -11,4 +11,7 @@
 /** A game in which the player should compute a maximum amount of small calculus without mistake. */
 void BrainCalculation(void);
 
+/** If the dealer gets 16 numbers (from range 0 to 99) with no match between them, the player wins. */
+void NoMatchDealer(void);
+
 #endif

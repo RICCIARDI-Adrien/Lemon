@@ -35,9 +35,9 @@ endef
 #------------------------------------------------------------------------------------------------------------------------------
 # Global rules
 #------------------------------------------------------------------------------------------------------------------------------
-all: benchmark game_of_life games hangman help no_match_dealer numbers rain tests text_viewer unix_commands
+all: benchmark game_of_life games hangman help numbers rain tests text_viewer unix_commands
 
-clean: benchmark_clean game_of_life_clean games_clean hangman_clean help_clean no_match_dealer_clean numbers_clean rain_clean tests_clean text_viewer_clean unix_commands_clean
+clean: benchmark_clean game_of_life_clean games_clean hangman_clean help_clean numbers_clean rain_clean tests_clean text_viewer_clean unix_commands_clean
 	# Delete also the tools
 	rm -rf $(SERIAL_PORT_SERVER)
 
@@ -109,19 +109,6 @@ help_clean:
 
 help_download: $(SERIAL_PORT_SERVER)
 	@$(SERIAL_PORT_SERVER) $(SERIAL_PORT_SERVER_FLAGS) $(BINARIES_PATH)/Help.32b help
-
-#------------------------------------------------------------------------------------------------------------------------------
-# No match dealer
-#------------------------------------------------------------------------------------------------------------------------------
-no_match_dealer:
-	@$(call DisplayProgramToCompile,No match dealer)
-	@cd $(SOURCES_PATH)/No_Match_Dealer && $(MAKE)
-
-no_match_dealer_clean:
-	@cd $(SOURCES_PATH)/No_Match_Dealer && $(MAKE) clean
-
-no_match_dealer_download: $(SERIAL_PORT_SERVER)
-	@$(SERIAL_PORT_SERVER) $(SERIAL_PORT_SERVER_FLAGS) $(BINARIES_PATH)/No_Match_Dealer.32b dealer
 
 #------------------------------------------------------------------------------------------------------------------------------
 # Numbers

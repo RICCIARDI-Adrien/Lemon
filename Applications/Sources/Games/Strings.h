@@ -18,6 +18,7 @@
 	#define STRING_MAIN_MENU_PROMPT "Choisissez un jeu : "
 	#define STRING_MAIN_MENU_GAME_NUMBERS "Trouver un nombre"
 	#define STRING_MAIN_MENU_GAME_BRAIN_CALCULATION "Calcul mental"
+	#define STRING_MAIN_MENU_GAME_NO_MATCH_DEALER "No Match Dealer"
 	#define STRING_MAIN_MENU_EXIT "Quitter"
 
 	// Brain calculation
@@ -33,7 +34,12 @@
 	#define STRING_BRAIN_CALCULATION_BAD_RESULT_2 ".\n"
 	#define STRING_BRAIN_CALCULATION_CORRECT_ANSWERS_COUNT_1 "Vous avez r\202solu "
 	#define STRING_BRAIN_CALCULATION_CORRECT_ANSWERS_COUNT_2 " calcul(s).\nAppuyez sur une touche pour continuer."
-	//#define STRING_BRAIN_CALCULATION_ASK_TO_CONTINUE "\nVoulez-vous (Q)uitter ou (R)\202essayer ? "
+	
+	// No match dealer
+	#define STRING_NO_MATCH_DEALER_INSTRUCTIONS "Instructions : le dealer tire 16 nombres au hasard compris entre 0 et 99.\nSi tous les nombres sont uniques, le joueur gagne.\nSi au moins deux nombres sont identiques, le joueur perd.\n\n"
+	#define STRING_NO_MATCH_DEALER_GAME_LOST "Vous avez perdu, plusieurs nombres sont identiques !\n"
+	#define STRING_NO_MATCH_DEALER_GAME_WON "Vous avez gagn\202, tous les nombres sont diff\202rents !\n"
+	#define STRING_NO_MATCH_DEALER_ASK_FOR_RETRY "Appuyez sur Entr\202e pour relancer ou sur Echap pour quitter.\n\n"
 #endif
 
 #endif
