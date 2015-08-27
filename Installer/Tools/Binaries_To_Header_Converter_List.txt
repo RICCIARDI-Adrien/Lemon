@@ -4,10 +4,10 @@ MBR
 Kernel
 ../Applications/Binaries/Benchmark.32b
 benchmark
-../Applications/Binaries/Brain_Calculation.32b
-brain
 ../Applications/Binaries/No_Match_Dealer.32b
 deal
+../Applications/Binaries/Games.32b
+games
 ../Applications/Binaries/Game_Of_Life.32b
 life
 ../Applications/Binaries/Hangman.32b

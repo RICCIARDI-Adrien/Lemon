@@ -1,9 +1,9 @@
 /** @file Brain_Calculation.c
- * @see Brain_Calculation.h for description.
+ * @see Games.h for description.
  * @author Adrien RICCIARDI
  */
 #include <System.h>
-#include "Brain_Calculation.h"
+#include "Strings.h"
 
 //-------------------------------------------------------------------------------------------------
 // Private constants
@@ -17,14 +17,30 @@
 /** All the available game difficulties. */
 typedef enum
 {
-	Easy, Medium, Hard
-} TDifficultyLevel;
+	BRAIN_CALCULATION_DIFFICULTY_LEVEL_EASY, //! Calculations are made with only one digit.
+	BRAIN_CALCULATION_DIFFICULTY_LEVEL_MEDIUM, //! Calculations are made with 2 digits.
+	BRAIN_CALCULATION_DIFFICULTY_LEVEL_HARD //! Calculations are made with 3 digits.
+} TBrainCalculationDifficultyLevel;
 
 //-------------------------------------------------------------------------------------------------
 // Private variables
 //-------------------------------------------------------------------------------------------------
+/** Difficulty-level selection menu. */
+static TMenu Menu_Difficulty_Level =
+{
+	STRING_BRAIN_CALCULATION_MENU_TITLE,
+	STRING_BRAIN_CALCULATION_MENU_PROMPT,
+	{
+		STRING_BRAIN_CALCULATION_MENU_EASY_DIFFICULTY,
+		STRING_BRAIN_CALCULATION_MENU_MEDIUM_DIFFICULTY,
+		STRING_BRAIN_CALCULATION_MENU_HARD_DIFFICULTY,
+		STRING_BRAIN_CALCULATION_MENU_EXIT,
+		NULL
+	}
+};
+
 /** The chosen difficulty level. */
-static TDifficultyLevel Difficulty_Level;
+static TBrainCalculationDifficultyLevel Difficulty_Level;
 
 //-------------------------------------------------------------------------------------------------
 // Private functions
@@ -38,10 +54,8 @@ static int RandomNumberRange(int Minimum, int Maximum)
 {
 	int Number;
 	
-	do
-	{
-		Number = RandomGenerateNumber() % Maximum;
-	} while (Number < Minimum);
+	Number = RandomGenerateNumber() % (Maximum - Minimum);
+	Number += Minimum;
 	
 	return Number;
 }
@@ -61,11 +75,11 @@ static void ChooseCalculus(int *Pointer_First_Number, char *Pointer_Operator, in
 		// Choose numbers according to difficulty level
 		switch (Difficulty_Level)
 		{
-			case Easy:
+			case BRAIN_CALCULATION_DIFFICULTY_LEVEL_EASY:
 				Minimum_Value = 0;
 				Maximum_Value = 10;
 				break;
-			case Medium:
+			case BRAIN_CALCULATION_DIFFICULTY_LEVEL_MEDIUM:
 				Minimum_Value = 10;
 				Maximum_Value = 100;
 				break;
@@ -144,75 +158,85 @@ static int ReadUserNumber(void)
 //-------------------------------------------------------------------------------------------------
 // Public functions
 //-------------------------------------------------------------------------------------------------
-int main(int argc, char *argv[])
+void BrainCalculation(void)
 {
 	int First_Number, Second_Number, Result, Correct_Results_Count = 0, Number;
 	char Operator;
 	
-	// Use selected difficulty level or select medium difficulty if user did not specify a difficulty
-	if (argc == 2)
-	{
-		if (StringCompare(argv[1], "-e")) Difficulty_Level = Easy;
-		else if (StringCompare(argv[1], "-h")) Difficulty_Level = Hard;
-		else Difficulty_Level = Medium;
-	}
-	else Difficulty_Level = Medium;
-	
-	RandomInitialize();
-	
-	// Show instructions
-	ScreenWriteString(STRING_INSTRUCTIONS);
-	
 	while (1)
 	{
-		// Show calculus
-		ChooseCalculus(&First_Number, &Operator, &Second_Number, &Result);
-		ScreenSetFontColor(SCREEN_COLOR_LIGHT_BLUE);
-		ScreenWriteString("   ");
-		ScreenWriteInteger(First_Number);
-		ScreenWriteCharacter(' ');
-		ScreenWriteCharacter(Operator);
-		ScreenWriteCharacter(' ');
-		ScreenWriteInteger(Second_Number);
-		ScreenWriteString("  =  ");
-		ScreenSetFontColor(SCREEN_COLOR_BLUE);
-		
-		// Get user's number
-		Number = ReadUserNumber();
-		
-		// Does the user want to exit program ?
-		if (Number == BRAIN_CALCULATION_EXIT_CODE)
+		// Let the player select the game difficulty
+		switch (MenuDisplay(&Menu_Difficulty_Level))
 		{
-			ScreenWriteCharacter('\n');
-			ScreenWriteString(STRING_CORRECT_ANSWERS_COUNT_1);
-			ScreenWriteInteger(Correct_Results_Count);
-			ScreenWriteString(STRING_CORRECT_ANSWERS_COUNT_2);
-			return 0;
+			case 1:
+				Difficulty_Level = BRAIN_CALCULATION_DIFFICULTY_LEVEL_EASY;
+				break;
+			case 2:
+				Difficulty_Level = BRAIN_CALCULATION_DIFFICULTY_LEVEL_MEDIUM;
+				break;
+			case 3:
+				Difficulty_Level = BRAIN_CALCULATION_DIFFICULTY_LEVEL_HARD;
+				break;
+			default:
+				return;
 		}
 		
-		// Check if user's result is correct
-		if (Number == Result)
+		RandomInitialize();
+		
+		// Show instructions
+		ScreenWriteString(STRING_BRAIN_CALCULATION_INSTRUCTIONS);
+		
+		while (1)
 		{
-			ScreenSetFontColor(SCREEN_COLOR_GREEN);
-			ScreenWriteString(STRING_GOOD_RESULT);
+			// Show calculus
+			ChooseCalculus(&First_Number, &Operator, &Second_Number, &Result);
+			ScreenSetFontColor(SCREEN_COLOR_LIGHT_BLUE);
+			ScreenWriteString("   ");
+			ScreenWriteInteger(First_Number);
+			ScreenWriteCharacter(' ');
+			ScreenWriteCharacter(Operator);
+			ScreenWriteCharacter(' ');
+			ScreenWriteInteger(Second_Number);
+			ScreenWriteString("  =  ");
 			ScreenSetFontColor(SCREEN_COLOR_BLUE);
 			
-			Correct_Results_Count++;
-		}
-		else
-		{
-			ScreenSetFontColor(SCREEN_COLOR_RED);
-			ScreenWriteString(STRING_BAD_RESULT_1);
-			ScreenWriteInteger(Result);
-			ScreenWriteString(STRING_BAD_RESULT_2);
+			// Get user's number
+			Number = ReadUserNumber();
 			
-			ScreenSetFontColor(SCREEN_COLOR_BLUE);
-			ScreenWriteString(STRING_CORRECT_ANSWERS_COUNT_1);
-			ScreenWriteInteger(Correct_Results_Count);
-			ScreenWriteString(STRING_CORRECT_ANSWERS_COUNT_2);
-			return 0;
+			// Does the user want to exit program ?
+			if (Number == BRAIN_CALCULATION_EXIT_CODE)
+			{
+				ScreenWriteCharacter('\n');
+				ScreenWriteString(STRING_BRAIN_CALCULATION_CORRECT_ANSWERS_COUNT_1);
+				ScreenWriteInteger(Correct_Results_Count);
+				ScreenWriteString(STRING_BRAIN_CALCULATION_CORRECT_ANSWERS_COUNT_2);
+				return;
+			}
+			
+			// Check if user's result is correct
+			if (Number == Result)
+			{
+				ScreenSetFontColor(SCREEN_COLOR_GREEN);
+				ScreenWriteString(STRING_BRAIN_CALCULATION_GOOD_RESULT);
+				ScreenSetFontColor(SCREEN_COLOR_BLUE);
+				
+				Correct_Results_Count++;
+			}
+			else
+			{
+				ScreenSetFontColor(SCREEN_COLOR_RED);
+				ScreenWriteString(STRING_BRAIN_CALCULATION_BAD_RESULT_1);
+				ScreenWriteInteger(Result);
+				ScreenWriteString(STRING_BRAIN_CALCULATION_BAD_RESULT_2);
+				
+				ScreenSetFontColor(SCREEN_COLOR_BLUE);
+				ScreenWriteString(STRING_BRAIN_CALCULATION_CORRECT_ANSWERS_COUNT_1);
+				ScreenWriteInteger(Correct_Results_Count);
+				ScreenWriteString(STRING_BRAIN_CALCULATION_CORRECT_ANSWERS_COUNT_2);
+				
+				KeyboardReadCharacter();
+				break;
+			}
 		}
 	}
-	
-	return 0;
 }
