@@ -2,10 +2,15 @@
 | URGENT |
 +--------+
 
+Générique
+---------
+
+- virer les dates et versions dans les fichiers sauf dans kernel.h
+
 Système
 -------
 
-pas de protection sur le chargement d'un système de fichiers trop grand
+- test : permettre de choisir dans Configuration.h le LBA28 ou LBA48 (test sur pentium 166 cave)
 
 Doc
 ---
@@ -28,7 +33,17 @@ modif bibliothèques pour gérer nouveaux codes touches
 
 - bibliothèque userspace qui gère les fenêtres en ASCII art en exploitant le syscall de copie de buffer vidéo
 
-Commandes
----------
+- mettre Lemon devant tous les noms de fonctions publics + constantes...
+
+- utiliser les fonctions de conversion de string pour les fonctions screenwriteint...
+
+Applications
+------------
 
 - faire en sorte que Text Viewer n'ouvre pas les fichiers binaires (utile ?)
+
+- rassembler tous les jeux dans "games"
+  faire un menu de sélection du jeu + menus in game pour chaque jeu
+  à la fin de chaque jeu proposer d'y rejouer
+  
+- hexdump ?

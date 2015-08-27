@@ -149,7 +149,7 @@ rain_clean:
 
 rain_download: $(SERIAL_PORT_SERVER)
 	@$(SERIAL_PORT_SERVER) $(SERIAL_PORT_SERVER_FLAGS) $(BINARIES_PATH)/Rain.32b rain
-
+	
 #------------------------------------------------------------------------------------------------------------------------------
 # Tests
 #------------------------------------------------------------------------------------------------------------------------------
@@ -168,6 +168,19 @@ tests_download_test_protection_check: $(SERIAL_PORT_SERVER)
 
 tests_download: $(SERIAL_PORT_SERVER)
 	@$(SERIAL_PORT_SERVER) $(SERIAL_PORT_SERVER_FLAGS) $(BINARIES_PATH)/Tests.32b tests
+	
+#------------------------------------------------------------------------------------------------------------------------------
+# Text editor
+#------------------------------------------------------------------------------------------------------------------------------
+text_editor:
+	@$(call DisplayProgramToCompile,Text editor)
+	@cd $(SOURCES_PATH)/Text_Editor && $(MAKE)
+
+text_editor_clean:
+	@cd $(SOURCES_PATH)/Text_Editor && $(MAKE) clean
+
+text_editor_download: $(SERIAL_PORT_SERVER)
+	@$(SERIAL_PORT_SERVER) $(SERIAL_PORT_SERVER_FLAGS) $(BINARIES_PATH)/Text_Editor.32b edit
 
 #------------------------------------------------------------------------------------------------------------------------------
 # Text viewer
