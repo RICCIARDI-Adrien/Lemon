@@ -20,6 +20,7 @@ static TMenu Menu_Main =
 		STRING_MAIN_MENU_GAME_NO_MATCH_DEALER,
 		STRING_MAIN_MENU_GAME_RAIN,
 		STRING_MAIN_MENU_GAME_GAME_OF_LIFE,
+		STRING_MAIN_MENU_GAME_HANGMAN,
 		STRING_MAIN_MENU_EXIT,
 		NULL
 	}
@@ -51,6 +52,10 @@ int main(void)
 				
 			case 5:
 				GameOfLife();
+				break;
+				
+			case 6:
+				Hangman();
 				break;
 				
 			default:

@@ -6,8 +6,6 @@ Kernel
 benchmark
 ../Applications/Binaries/Games.32b
 games
-../Applications/Binaries/Hangman.32b
-hangman
 ../Applications/Binaries/Help.32b
 help
 ../Applications/Binaries/Numbers.32b

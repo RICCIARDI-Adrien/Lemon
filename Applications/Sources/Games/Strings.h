@@ -21,6 +21,7 @@
 	#define STRING_MAIN_MENU_GAME_NO_MATCH_DEALER "No Match Dealer"
 	#define STRING_MAIN_MENU_GAME_RAIN "Gouttes de pluie"
 	#define STRING_MAIN_MENU_GAME_GAME_OF_LIFE "Jeu de la Vie"
+	#define STRING_MAIN_MENU_GAME_HANGMAN "Jeu du pendu"
 	#define STRING_MAIN_MENU_EXIT "Quitter"
 
 	// Brain calculation
@@ -36,6 +37,19 @@
 	#define STRING_BRAIN_CALCULATION_BAD_RESULT_2 ".\n"
 	#define STRING_BRAIN_CALCULATION_CORRECT_ANSWERS_COUNT_1 "Vous avez r\202solu "
 	#define STRING_BRAIN_CALCULATION_CORRECT_ANSWERS_COUNT_2 " calcul(s).\nAppuyez sur une touche pour continuer."
+	
+	// Hangman
+	#define STRING_HANGMAN_TITLE "Jeu du Pendu"
+	#define STRING_HANGMAN_BAD_LETTERS_LIST "Lettres absentes du mot :"
+	#define STRING_HANGMAN_REMAINING_ATTEMPTS "Tentatives restantes :"
+	#define STRING_HANGMAN_WORD_FOUND_1 "Bravo, vous avez trouv\202 le mot !\n"
+	#define STRING_HANGMAN_WORD_FOUND_2 "Appuyez sur Entr\202e pour continuer."
+	#define STRING_HANGMAN_WORD_NOT_FOUND_1 "Perdu !\n"
+	#define STRING_HANGMAN_WORD_NOT_FOUND_2 "Le mot \202tait \""
+	#define STRING_HANGMAN_WORD_NOT_FOUND_3 "\".\nAppuyez sur Entr\202e pour quitter."
+	#define STRING_HANGMAN_GAME_WON_1 "F\202licitations, vous avez trouv\202 tous les mots !\n"
+	#define STRING_HANGMAN_GAME_WON_2 "Appuyez sur Entr\202e pour quitter."
+	#define STRING_HANGMAN_WORDS_LIST "INSPIRATION", "CORNICHE", "TENTATIVE"
 	
 	// No match dealer
 	#define STRING_NO_MATCH_DEALER_INSTRUCTIONS "Instructions : le dealer tire 16 nombres au hasard compris entre 0 et 99.\nSi tous les nombres sont uniques, le joueur gagne.\nSi au moins deux nombres sont identiques, le joueur perd.\n\n"

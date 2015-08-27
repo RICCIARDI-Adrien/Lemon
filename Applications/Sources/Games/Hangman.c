@@ -1,9 +1,9 @@
 /** @file Hangman.c
- * The classic Hangman game.
+ * @see Games.h for description.
  * @author Adrien RICCIARDI
- * @version 1.0 : 18/03/2015
  */
 #include <System.h>
+#include "Games.h"
 #include "Strings.h"
 
 //-------------------------------------------------------------------------------------------------
@@ -26,7 +26,7 @@
 // Private variables
 //-------------------------------------------------------------------------------------------------
 /** Hold all available words. */
-static char *String_Words[] = { STRINGS_WORDS };
+static char *String_Words[] = { STRING_HANGMAN_WORDS_LIST };
 
 /** Tell if a word has solved yet. */
 static int Is_Word_Solved[WORDS_TOTAL_COUNT]; // Do not initialize the array here as it seems to generate problems
@@ -138,7 +138,8 @@ static void DisplayInvalidLetter(char Letter)
  * @param String_Word_To_Find The word to find.
  * @param Attempts_Count How many attempts the player has to find the word.
  * @return 0 if the player found the word,
- * @return 1 if the player lost.
+ * @return 1 if the player lost,
+ * @return 2 if the player hit the Escape key.
  */
 static int Play(char *String_Word_To_Find, int Attempts_Count)
 {
@@ -158,11 +159,7 @@ static int Play(char *String_Word_To_Find, int Attempts_Count)
 	{
 		// Get the next letter
 		Letter = ReadLetter();
-		if (Letter == KEYBOARD_KEY_CODE_ESCAPE)
-		{
-			ScreenClear();
-			SystemExitProgram();
-		}
+		if (Letter == KEYBOARD_KEY_CODE_ESCAPE) return 2;
 		
 		// Is this letter present in the word ?
 		if (IsLetterPresentInWord(Letter, String_Word_To_Find))
@@ -212,7 +209,7 @@ static int Play(char *String_Word_To_Find, int Attempts_Count)
 //-------------------------------------------------------------------------------------------------
 // Entry point
 //-------------------------------------------------------------------------------------------------
-int main(void)
+void Hangman(void)
 {	
 	char *String_Current_Word;
 	unsigned int i;
@@ -227,15 +224,15 @@ int main(void)
 		// Display the title
 		ScreenClear();
 		ScreenSetFontColor(SCREEN_COLOR_GREEN);
-		ScreenWriteCenteredString(STRING_TITLE);
+		ScreenWriteCenteredString(STRING_HANGMAN_TITLE);
 		ScreenSetFontColor(SCREEN_COLOR_BLUE);
 		ScreenWriteCharacter('\n');
 			
 		// Display the interface parts that will never change
 		ScreenSetCursorPosition(ROW_INVALID_LETTERS - 1, 0);
-		ScreenWriteString(STRING_BAD_LETTERS_LIST);
+		ScreenWriteString(STRING_HANGMAN_BAD_LETTERS_LIST);
 		ScreenSetCursorPosition(ROW_REMAINING_ATTEMPTS - 1, 0);
-		ScreenWriteString(STRING_REMAINING_ATTEMPTS);
+		ScreenWriteString(STRING_HANGMAN_REMAINING_ATTEMPTS);
 		
 		String_Current_Word = ChooseNextWord();
 		if (String_Current_Word == NULL)
@@ -243,41 +240,42 @@ int main(void)
 			// The player found all words
 			ScreenClear();
 			ScreenSetFontColor(SCREEN_COLOR_GREEN);
-			ScreenWriteString(STRING_GAME_WON_1);
+			ScreenWriteString(STRING_HANGMAN_GAME_WON_1);
 			ScreenSetFontColor(SCREEN_COLOR_BLUE);
-			ScreenWriteString(STRING_GAME_WON_2);
+			ScreenWriteString(STRING_HANGMAN_GAME_WON_2);
 			
 			while (KeyboardReadCharacter() != KEYBOARD_KEY_CODE_ENTER);
 			ScreenClear();
-			return 0;
+			return;
 		}
 		
 		// Let the player find the word
-		if (Play(String_Current_Word, 16) == 1)
+		switch (Play(String_Current_Word, 16))
 		{
-			// The player did not find the word
-			ScreenClear();
-			ScreenSetFontColor(SCREEN_COLOR_RED);
-			ScreenWriteString(STRING_WORD_NOT_FOUND_1);
-			ScreenSetFontColor(SCREEN_COLOR_BLUE);
-			ScreenWriteString(STRING_WORD_NOT_FOUND_2);
-			ScreenWriteString(String_Current_Word);
-			ScreenWriteString(STRING_WORD_NOT_FOUND_3);
+			case 0:
+				// The player successfully found the word
+				ScreenClear();
+				ScreenSetFontColor(SCREEN_COLOR_GREEN);
+				ScreenWriteString(STRING_HANGMAN_WORD_FOUND_1);
+				ScreenSetFontColor(SCREEN_COLOR_BLUE);
+				ScreenWriteString(STRING_HANGMAN_WORD_FOUND_2);
+				while (KeyboardReadCharacter() != KEYBOARD_KEY_CODE_ENTER);
+				break;
 			
-			while (KeyboardReadCharacter() != KEYBOARD_KEY_CODE_ENTER);
-			ScreenClear();
-			return 0;
-		}
-		else
-		{
-			// The player successfully found the word
-			ScreenClear();
-			ScreenSetFontColor(SCREEN_COLOR_GREEN);
-			ScreenWriteString(STRING_WORD_FOUND_1);
-			ScreenSetFontColor(SCREEN_COLOR_BLUE);
-			ScreenWriteString(STRING_WORD_FOUND_2);
+			case 1:
+				// The player did not find the word
+				ScreenClear();
+				ScreenSetFontColor(SCREEN_COLOR_RED);
+				ScreenWriteString(STRING_HANGMAN_WORD_NOT_FOUND_1);
+				ScreenSetFontColor(SCREEN_COLOR_BLUE);
+				ScreenWriteString(STRING_HANGMAN_WORD_NOT_FOUND_2);
+				ScreenWriteString(String_Current_Word);
+				ScreenWriteString(STRING_HANGMAN_WORD_NOT_FOUND_3);
+				while (KeyboardReadCharacter() != KEYBOARD_KEY_CODE_ENTER);
+				return;
 			
-			while (KeyboardReadCharacter() != KEYBOARD_KEY_CODE_ENTER);
+			default:
+				return;
 		}
 	}
 }

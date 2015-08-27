@@ -35,9 +35,9 @@ endef
 #------------------------------------------------------------------------------------------------------------------------------
 # Global rules
 #------------------------------------------------------------------------------------------------------------------------------
-all: benchmark games hangman help numbers tests text_viewer unix_commands
+all: benchmark games help numbers tests text_viewer unix_commands
 
-clean: benchmark_clean games_clean hangman_clean help_clean numbers_clean tests_clean text_viewer_clean unix_commands_clean
+clean: benchmark_clean games_clean help_clean numbers_clean tests_clean text_viewer_clean unix_commands_clean
 	# Delete also the tools
 	rm -rf $(SERIAL_PORT_SERVER)
 
@@ -70,19 +70,6 @@ games_clean:
 
 games_download: $(SERIAL_PORT_SERVER)
 	@$(SERIAL_PORT_SERVER) $(SERIAL_PORT_SERVER_FLAGS) $(BINARIES_PATH)/Games.32b games
-
-#------------------------------------------------------------------------------------------------------------------------------
-# Hangman
-#------------------------------------------------------------------------------------------------------------------------------
-hangman:
-	@$(call DisplayProgramToCompile,Hangman)
-	@cd $(SOURCES_PATH)/Hangman && $(MAKE)
-
-hangman_clean:
-	@cd $(SOURCES_PATH)/Hangman && $(MAKE) clean
-
-hangman_download: $(SERIAL_PORT_SERVER)
-	@$(SERIAL_PORT_SERVER) $(SERIAL_PORT_SERVER_FLAGS) $(BINARIES_PATH)/Hangman.32b hangman
 
 #------------------------------------------------------------------------------------------------------------------------------
 # Help
