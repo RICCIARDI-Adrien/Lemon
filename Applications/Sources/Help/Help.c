@@ -12,57 +12,84 @@
 #define HELP_SHORT_DESCRIPTION_STARTING_COLUMN 11
 
 //-------------------------------------------------------------------------------------------------
+// Private types
+//-------------------------------------------------------------------------------------------------
+/** A command description. */
+typedef struct
+{
+	char *String_Name; //! The command name.
+	char *String_Short_Description; //! A short description that can fit on one line.
+	char *String_Full_Description; //! A more complete description.
+} THelpCommand;
+
+//-------------------------------------------------------------------------------------------------
 // Private variables
 //-------------------------------------------------------------------------------------------------
 /** All the available commands. */
-static char *String_Commands[] =
+static THelpCommand Commands[] =
 {
-	"clear",
-	"copy",
-	"delete",
-	"download",
-	"help",
-	"list",
-	"rename",
-	"size",
-	"text",
-	"u",
-	"version",
-	NULL
+	{
+		"clear",
+		STRING_COMMAND_SHORT_DESCRIPTION_CLEAR,
+		STRING_COMMAND_SHORT_DESCRIPTION_CLEAR
+	},
+	{
+		"copy",
+		STRING_COMMAND_SHORT_DESCRIPTION_COPY,
+		STRING_COMMAND_SHORT_DESCRIPTION_COPY
+	},
+	{
+		"delete",
+		STRING_COMMAND_SHORT_DESCRIPTION_DELETE,
+		STRING_COMMAND_SHORT_DESCRIPTION_DELETE
+	},
+	{
+		"download",
+		STRING_COMMAND_SHORT_DESCRIPTION_DOWNLOAD,
+		STRING_COMMAND_SHORT_DESCRIPTION_DOWNLOAD
+	},
+	{
+		"help",
+		STRING_COMMAND_SHORT_DESCRIPTION_HELP,
+		STRING_COMMAND_FULL_DESCRIPTION_HELP
+	},
+	{
+		"list",
+		STRING_COMMAND_SHORT_DESCRIPTION_LIST,
+		STRING_COMMAND_SHORT_DESCRIPTION_LIST
+	},
+	{
+		"rename",
+		STRING_COMMAND_SHORT_DESCRIPTION_RENAME,
+		STRING_COMMAND_SHORT_DESCRIPTION_RENAME
+	},
+	{
+		"size",
+		STRING_COMMAND_SHORT_DESCRIPTION_SIZE,
+		STRING_COMMAND_SHORT_DESCRIPTION_SIZE
+	},
+	{
+		"text",
+		STRING_COMMAND_SHORT_DESCRIPTION_TEXT,
+		STRING_COMMAND_FULL_DESCRIPTION_TEXT
+	},
+	{
+		"u",
+		STRING_COMMAND_SHORT_DESCRIPTION_U,
+		STRING_COMMAND_FULL_DESCRIPTION_U
+	},
+	{
+		"version",
+		STRING_COMMAND_SHORT_DESCRIPTION_VERSION,
+		STRING_COMMAND_SHORT_DESCRIPTION_VERSION
+	},
+	{
+		NULL,
+		NULL,
+		NULL
+	}
 };
 
-/** Commands short description. */
-static char *String_Command_Short_Descriptions[] =
-{
-	STRING_COMMAND_SHORT_DESCRIPTION_CLEAR,
-	STRING_COMMAND_SHORT_DESCRIPTION_COPY,
-	STRING_COMMAND_SHORT_DESCRIPTION_DELETE,
-	STRING_COMMAND_SHORT_DESCRIPTION_DOWNLOAD,
-	STRING_COMMAND_SHORT_DESCRIPTION_HELP,
-	STRING_COMMAND_SHORT_DESCRIPTION_LIST,
-	STRING_COMMAND_SHORT_DESCRIPTION_RENAME,
-	STRING_COMMAND_SHORT_DESCRIPTION_SIZE,
-	STRING_COMMAND_SHORT_DESCRIPTION_TEXT,
-	STRING_COMMAND_SHORT_DESCRIPTION_U,
-	STRING_COMMAND_SHORT_DESCRIPTION_VERSION
-};
-
-/** Commands full description. */
-static char *String_Command_Full_Descriptions[] =
-{
-	STRING_COMMAND_SHORT_DESCRIPTION_CLEAR,
-	STRING_COMMAND_SHORT_DESCRIPTION_COPY,
-	STRING_COMMAND_SHORT_DESCRIPTION_DELETE,
-	STRING_COMMAND_SHORT_DESCRIPTION_DOWNLOAD,
-	STRING_COMMAND_FULL_DESCRIPTION_HELP,
-	STRING_COMMAND_SHORT_DESCRIPTION_LIST,
-	STRING_COMMAND_SHORT_DESCRIPTION_RENAME,
-	STRING_COMMAND_SHORT_DESCRIPTION_SIZE,
-	STRING_COMMAND_FULL_DESCRIPTION_TEXT,
-	STRING_COMMAND_FULL_DESCRIPTION_U,
-	STRING_COMMAND_SHORT_DESCRIPTION_VERSION
-};
-	
 //-------------------------------------------------------------------------------------------------
 // Private functions
 //-------------------------------------------------------------------------------------------------
@@ -73,15 +100,15 @@ static void DisplayCommandsList(void)
 	
 	ScreenWriteString(STRING_AVAILABLE_COMMANDS);
 	
-	for (i = 0; String_Commands[i] != NULL; i++)
+	for (i = 0; Commands[i].String_Name != NULL; i++)
 	{
 		// Display the command
 		ScreenSetFontColor(SCREEN_COLOR_LIGHT_BLUE);
-		ScreenWriteString(String_Commands[i]);
+		ScreenWriteString(Commands[i].String_Name);
 		ScreenSetFontColor(SCREEN_COLOR_BLUE);
 		
 		// Display as many spaces as needed to align the command description on the requested column
-		Spaces_Count = HELP_SHORT_DESCRIPTION_STARTING_COLUMN - StringGetSize(String_Commands[i]);
+		Spaces_Count = HELP_SHORT_DESCRIPTION_STARTING_COLUMN - StringGetSize(Commands[i].String_Name);
 		while (Spaces_Count > 0)
 		{
 			ScreenWriteCharacter(' ');
@@ -89,20 +116,26 @@ static void DisplayCommandsList(void)
 		}
 		
 		// Display the command description
-		ScreenWriteString(String_Command_Short_Descriptions[i]);
+		ScreenWriteString(Commands[i].String_Short_Description);
 		ScreenWriteCharacter('\n');
 	}
 }
 
-/** Display a colored title.
- * @param Title The title to display.
+/** Display a colored and centered title.
+ * @param String_Title The title to display.
  */
 static void DisplayTitle(char *String_Title)
 {
-	ScreenSetFontColor(SCREEN_COLOR_LIGHT_BLUE);
-	ScreenWriteString("--- ");
-	ScreenWriteString(String_Title);
-	ScreenWriteString(" ---\n\n");
+	char String_Embellished_Title[128];
+	
+	// Embellish the title
+	StringCopy("--- ", String_Embellished_Title);
+	StringConcatenate(String_Embellished_Title, String_Title);
+	StringConcatenate(String_Embellished_Title, " ---\n\n");
+	
+	// Display it
+	ScreenSetFontColor(SCREEN_COLOR_BROWN);
+	ScreenWriteCenteredString(String_Embellished_Title);
 	ScreenSetFontColor(SCREEN_COLOR_BLUE);
 }
 
@@ -127,13 +160,13 @@ int main(int argc, char *argv[])
 	String_Requested_Command = argv[1];
 	
 	// Search for a complete command description
-	for (i = 0; String_Commands[i] != NULL; i++)
+	for (i = 0; Commands[i].String_Name != NULL; i++)
 	{
 		// Display the command help if the command exists
-		if (StringCompare(String_Requested_Command, String_Commands[i]))
+		if (StringCompare(String_Requested_Command, Commands[i].String_Name))
 		{
 			DisplayTitle(String_Requested_Command);
-			ScreenWriteString(String_Command_Full_Descriptions[i]);
+			ScreenWriteString(Commands[i].String_Full_Description);
 			ScreenWriteCharacter('\n');
 			return 0;
 		}

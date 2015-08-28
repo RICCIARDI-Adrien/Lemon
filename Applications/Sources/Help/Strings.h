@@ -1,7 +1,6 @@
 /** @file Strings.h
  * Gather all strings to ease translation.
  * @author Adrien RICCIARDI
- * @version 1.0 : 26/10/2014
  */
 #ifndef H_STRINGS_H
 #define H_STRINGS_H
