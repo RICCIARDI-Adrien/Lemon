@@ -1,15 +1,22 @@
 /** @file Numbers.c
- * @see Numbers.h for description.
+ * @see Games.h for description.
  * @author Adrien RICCIARDI
  */
 #include <System.h>
-#include "Numbers.h"
+#include "Games.h"
+#include "Strings.h"
 
 //-------------------------------------------------------------------------------------------------
 // Private constants
 //-------------------------------------------------------------------------------------------------
 /** This value can't be issued by the user input function. */
 #define NUMBERS_EXIT_CODE -1
+
+/** The number to find is in range [1 ; MAXIMUM_NUMBER_VALUE]. */ 
+#define MAXIMUM_NUMBER_VALUE 100000
+
+/** How many attempts are allowed. */
+#define ATTEMPTS_COUNT 20
 
 //-------------------------------------------------------------------------------------------------
 // Private functions
@@ -62,71 +69,71 @@ static int ReadUserNumber(void)
 //-------------------------------------------------------------------------------------------------
 // Public functions
 //-------------------------------------------------------------------------------------------------
-int main(void)
+void Numbers(void)
 {
 	int Computer_Number, Player_Number, Attempts = 0;
-		
+	
 	// Choose number
 	RandomInitialize();
 	Computer_Number = RandomGenerateNumber() % MAXIMUM_NUMBER_VALUE + 1;
 	
 	// Show instructions
-	ScreenWriteString(STRING_INSTRUCTIONS_1);
+	ScreenWriteString(STRING_NUMBERS_INSTRUCTIONS_1);
 	ScreenWriteInteger(MAXIMUM_NUMBER_VALUE);
-	ScreenWriteString(STRING_INSTRUCTIONS_2);
+	ScreenWriteString(STRING_NUMBERS_INSTRUCTIONS_2);
 	ScreenWriteInteger(ATTEMPTS_COUNT);
-	ScreenWriteString(STRING_INSTRUCTIONS_3);
+	ScreenWriteString(STRING_NUMBERS_INSTRUCTIONS_3);
 			
-	while (Attempts < ATTEMPTS_COUNT)
+	while (1)
 	{
 		// Get player's number
 		ScreenSetFontColor(SCREEN_COLOR_LIGHT_BLUE);
-		ScreenWriteString(STRING_INSERT_NUMBER);
+		ScreenWriteString(STRING_NUMBERS_INSERT_NUMBER);
 		ScreenSetFontColor(SCREEN_COLOR_BLUE);
 		Player_Number = ReadUserNumber();
 				
 		// Quit game ?
-		if (Player_Number == NUMBERS_EXIT_CODE)
-		{
-			ScreenWriteCharacter('\n');
-			return 0;
-		}
+		if (Player_Number == NUMBERS_EXIT_CODE) return;
 		
 		Attempts++;
 		if (Attempts >= ATTEMPTS_COUNT)
 		{
 			ScreenSetFontColor(SCREEN_COLOR_RED);
-			ScreenWriteString(STRING_PLAYER_LOST_1);
+			ScreenWriteString(STRING_NUMBERS_PLAYER_LOST_1);
 			ScreenWriteInteger(Computer_Number);
-			ScreenWriteString(STRING_PLAYER_LOST_2);
-			return 0;
+			ScreenWriteString(STRING_NUMBERS_PLAYER_LOST_2);
+			goto End;
 		}
 		
 		// Compare to computer number
 		if (Player_Number == Computer_Number) // Player won
 		{
 			ScreenSetFontColor(SCREEN_COLOR_GREEN);
-			ScreenWriteString(STRING_PLAYER_WON_1);
+			ScreenWriteString(STRING_NUMBERS_PLAYER_WON_1);
 			ScreenWriteInteger(Attempts);
-			ScreenWriteString(STRING_PLAYER_WON_2);
-			return 0;
+			ScreenWriteString(STRING_NUMBERS_PLAYER_WON_2);
+			goto End;
 		}
 		else if (Player_Number < Computer_Number) // Too small
 		{
 			ScreenSetFontColor(SCREEN_COLOR_RED);
-			ScreenWriteString(STRING_NUMBER_TOO_SMALL);
+			ScreenWriteString(STRING_NUMBERS_NUMBER_TOO_SMALL);
 		}
 		else // Too big
 		{
 			ScreenSetFontColor(SCREEN_COLOR_RED);
-			ScreenWriteString(STRING_NUMBER_TOO_BIG);
+			ScreenWriteString(STRING_NUMBERS_NUMBER_TOO_BIG);
 		}
 
 		// Show remaining attempts
 		ScreenSetFontColor(SCREEN_COLOR_BLUE);
-		ScreenWriteString(STRING_REMAINING_ATTEMPTS_1);
+		ScreenWriteString(STRING_NUMBERS_REMAINING_ATTEMPTS_1);
 		ScreenWriteInteger(ATTEMPTS_COUNT - Attempts);
-		ScreenWriteString(STRING_REMAINING_ATTEMPTS_2);
-	}		
-	return 0;
+		ScreenWriteString(STRING_NUMBERS_REMAINING_ATTEMPTS_2);
+	}
+	
+End:
+	ScreenSetFontColor(SCREEN_COLOR_BLUE);
+	ScreenWriteString(STRING_NUMBERS_END);
+	KeyboardReadCharacter();
 }

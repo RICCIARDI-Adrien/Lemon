@@ -36,6 +36,7 @@ int main(void)
 		switch (MenuDisplay(&Menu_Main))
 		{
 			case 1:
+				Numbers();
 				break;
 				
 			case 2:

@@ -8,8 +8,6 @@ benchmark
 games
 ../Applications/Binaries/Help.32b
 help
-../Applications/Binaries/Numbers.32b
-numbers
 ../Documentation/Readme.txt
 Readme.txt
 ../Applications/Binaries/Text_Viewer.32b

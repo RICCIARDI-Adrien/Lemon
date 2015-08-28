@@ -57,6 +57,25 @@
 	#define STRING_NO_MATCH_DEALER_GAME_WON "Vous avez gagn\202, tous les nombres sont diff\202rents !\n"
 	#define STRING_NO_MATCH_DEALER_ASK_FOR_RETRY "Appuyez sur Entr\202e pour relancer ou sur Echap pour quitter.\n\n"
 	
+	// Numbers
+	#define STRING_NUMBERS_INSTRUCTIONS_1 "Vous devez trouver un nombre compris entre 1 et "
+	#define STRING_NUMBERS_INSTRUCTIONS_2 ".\n" \
+		"Pour cela, vous ne disposerez que de "
+	#define STRING_NUMBERS_INSTRUCTIONS_3 " tentatives.\n" \
+		"Lorsque vous proposez un nombre, le jeu vous indique s'il est plus petit\n" \
+		"ou plus grand que celui recherch\202.\n" \
+		"Appuyez sur Echap pour quitter.\n\n"
+	#define STRING_NUMBERS_INSERT_NUMBER "Votre nombre : "
+	#define STRING_NUMBERS_PLAYER_LOST_1 "Vous avez perdu ! Le nombre \202tait "
+	#define STRING_NUMBERS_PLAYER_LOST_2 ".\n"
+	#define STRING_NUMBERS_PLAYER_WON_1 "F\202licitations, vous avez gagn\202 en "
+	#define STRING_NUMBERS_PLAYER_WON_2 " tentative(s) !\n"
+	#define STRING_NUMBERS_NUMBER_TOO_SMALL "Trop petit !\n"
+	#define STRING_NUMBERS_NUMBER_TOO_BIG "Trop grand !\n"
+	#define STRING_NUMBERS_REMAINING_ATTEMPTS_1 "Il vous reste "
+	#define STRING_NUMBERS_REMAINING_ATTEMPTS_2 " tentative(s).\n\n"
+	#define STRING_NUMBERS_END "Appuyez sur une touche pour continuer."
+	
 	// Rain
 	#define STRING_RAIN_MENU_TITLE "Gouttes de pluie"
 	#define STRING_RAIN_MENU_PROMPT "Choisissez le type de pluie : "
