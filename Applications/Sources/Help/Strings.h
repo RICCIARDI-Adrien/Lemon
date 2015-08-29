@@ -26,6 +26,7 @@
 	#define STRING_COMMAND_SHORT_DESCRIPTION_COPY "Copie un fichier."
 	#define STRING_COMMAND_SHORT_DESCRIPTION_DELETE "Supprime un fichier."
 	#define STRING_COMMAND_SHORT_DESCRIPTION_DOWNLOAD "T\202l\202charge un fichier depuis le port s\202rie."
+	#define STRING_COMMAND_SHORT_DESCRIPTION_GAMES "Comporte plusieurs jeux simples et divertissants."
 	#define STRING_COMMAND_SHORT_DESCRIPTION_HELP "Fournit de l'aide sur les commandes existantes."
 	#define STRING_COMMAND_SHORT_DESCRIPTION_LIST "Liste les fichiers pr\202sents sur le disque dur."
 	#define STRING_COMMAND_SHORT_DESCRIPTION_RENAME "Renomme un fichier existant."
@@ -35,6 +36,13 @@
 	#define STRING_COMMAND_SHORT_DESCRIPTION_VERSION "Affiche la version et la date de compilation du syst\212me."
 	
 	// Commands full description
+	#define STRING_COMMAND_FULL_DESCRIPTION_GAMES "Rassemble plusieurs jeux en mode texte.\n" \
+		"Les commandes de chaque jeu sont d\202taill\202es lors du lancement, sauf pour\n"\
+		"le Jeu de la Vie dont voici les commandes :\n" \
+		"    F : acc\202l\202rer la simulation\n" \
+		"    S : ralentir la simulation\n" \
+		"    N : g\202n\202rer un nouveau monde\n" \
+		"    Echap : quitter"
 	#define STRING_COMMAND_FULL_DESCRIPTION_HELP "Appel\202e sans argument, la commande 'help' affiche une liste et une br\212ve\ndescription de toutes les commandes disponibles.\n" \
 		"Lorsque le nom d'une commande est sp\202cifi\202 comme argument, 'help' affiche une\ndescription d\202taill\202e des possibilit\202s de la commande."
 	#define STRING_COMMAND_FULL_DESCRIPTION_TEXT "Affiche le contenu d'un fichier texte.\n" \

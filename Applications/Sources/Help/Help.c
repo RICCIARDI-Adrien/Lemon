@@ -49,6 +49,11 @@ static THelpCommand Commands[] =
 		STRING_COMMAND_SHORT_DESCRIPTION_DOWNLOAD
 	},
 	{
+		"games",
+		STRING_COMMAND_SHORT_DESCRIPTION_GAMES,
+		STRING_COMMAND_FULL_DESCRIPTION_GAMES
+	},
+	{
 		"help",
 		STRING_COMMAND_SHORT_DESCRIPTION_HELP,
 		STRING_COMMAND_FULL_DESCRIPTION_HELP
@@ -134,7 +139,7 @@ static void DisplayTitle(char *String_Title)
 	StringConcatenate(String_Embellished_Title, " ---\n\n");
 	
 	// Display it
-	ScreenSetFontColor(SCREEN_COLOR_BROWN);
+	ScreenSetFontColor(SCREEN_COLOR_GREEN);
 	ScreenWriteCenteredString(String_Embellished_Title);
 	ScreenSetFontColor(SCREEN_COLOR_BLUE);
 }
