@@ -18,7 +18,6 @@ all: clean
 	@$(call DisplayTitle,Creating installation image)
 	@cd Installer && $(MAKE)
 
-
 # Choose the whole system and applications language
 english: CCFLAGS += -DLEMON_LANGUAGE_ENGLISH
 english: all
@@ -53,6 +52,11 @@ sdk:
 	@printf "-> Copy installer CD image..."
 	@cp Installer/Binaries/Lemon_Installer_CD_Image.iso $(SDK_PATH)
 	@printf "### SDK successfully built ###"
+
+# Copy the installation image to the floppy disk
+floppy:
+	@if (test ! -e Installer/Binaries/Lemon_Installer_Floppy_Image.img) then printf "\033[31mThe installer floppy image has not been generated. Run \'make\' before calling \'make floppy\'.\033[0m\n"; false; fi
+	@sudo dd if=Installer/Binaries/Lemon_Installer_Floppy_Image.img of=/dev/fd0
 
 clean:
 	@cd Installer && $(MAKE) clean
