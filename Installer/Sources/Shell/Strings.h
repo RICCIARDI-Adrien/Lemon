@@ -47,7 +47,7 @@
 	// Errors
 	#define STRING_ERROR_BAD_FILE_SYSTEM_PARAMETERS "Erreur : les param\212tres du syst\212me de fichiers sont invalides.\n"
 	#define STRING_ERROR_FILE_SYSTEM_TOO_BIG_FOR_HARD_DISK_1 "Erreur : le disque dur est trop petit pour stocker le syst\212me de fichiers.\nTaille du disque : "
-	#define STRING_ERROR_FILE_SYSTEM_TOO_BIG_FOR_HARD_DISK_2 " octets\n"
+	#define STRING_ERROR_FILE_SYSTEM_TOO_BIG_FOR_HARD_DISK_2 " secteurs.\n"
 	#define STRING_ERROR_CANT_CREATE_FILE "Erreur : impossible de cr\202er le fichier.\n"
 #endif
 

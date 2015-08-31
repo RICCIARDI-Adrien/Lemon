@@ -253,8 +253,7 @@ unsigned int FileSystemAllocateBlock(void)
 #ifdef INSTALLER
 	int FileSystemCreate(unsigned int Blocks_Count, unsigned int Files_Count, unsigned int Starting_Sector)
 	{
-		unsigned long long Required_Size;
-		unsigned int i;
+		unsigned int i, Required_Disk_Size;
 		
 		// The number of blocks must be greater or equal to the number of files or all files can't be stored on disk
 		if (Blocks_Count < Files_Count) return 1;
@@ -263,8 +262,14 @@ unsigned int FileSystemAllocateBlock(void)
 		if ((Blocks_Count > CONFIGURATION_FILE_SYSTEM_MAXIMUM_BLOCKS_LIST_ENTRIES) || (Files_Count > CONFIGURATION_FILE_SYSTEM_MAXIMUM_FILES_LIST_ENTRIES)) return 1;
 		
 		// Check if the file system can fit on the hard disk
-		Required_Size = (Blocks_Count * sizeof(unsigned int)) + (Files_Count * sizeof(TFilesListEntry)) + (Blocks_Count * CONFIGURATION_FILE_SYSTEM_BLOCK_SIZE_BYTES) + (CONFIGURATION_FILE_SYSTEM_STARTING_SECTOR_OFFSET * FILE_SYSTEM_SECTOR_SIZE_BYTES); // Size of the file system + size of data area + (size of MBR + size of kernel)
-		if (Required_Size > HardDiskGetDriveSizeBytes()) return 2;
+		Required_Disk_Size = (Blocks_Count * sizeof(unsigned int)) + (Files_Count * sizeof(TFilesListEntry)) + (Blocks_Count * CONFIGURATION_FILE_SYSTEM_BLOCK_SIZE_BYTES) + (CONFIGURATION_FILE_SYSTEM_STARTING_SECTOR_OFFSET * FILE_SYSTEM_SECTOR_SIZE_BYTES); // Size of the file system + size of data area + (size of MBR + size of kernel)
+		// Convert the bytes value to sectors
+		i = Required_Disk_Size / FILE_SYSTEM_SECTOR_SIZE_BYTES; // Use 'i' as a temporary variable
+		if (Required_Disk_Size % FILE_SYSTEM_SECTOR_SIZE_BYTES != 0) i++;
+		Required_Disk_Size = i;
+		// Add the partition starting offset
+		Required_Disk_Size += Starting_Sector;
+		if (Required_Disk_Size > HardDiskGetDriveSizeSectors()) return 2;
 		
 		// Create empty file system
 		// Create information record

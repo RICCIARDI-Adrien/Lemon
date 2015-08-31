@@ -149,7 +149,7 @@ void Shell(void)
 		case 2:
 			ScreenSetColor(SCREEN_COLOR_RED);
 			ScreenWriteString(STRING_ERROR_FILE_SYSTEM_TOO_BIG_FOR_HARD_DISK_1);
-			ScreenWriteString(itoa(HardDiskGetDriveSizeBytes()));
+			ScreenWriteString(itoa(HardDiskGetDriveSizeSectors()));
 			ScreenWriteString(STRING_ERROR_FILE_SYSTEM_TOO_BIG_FOR_HARD_DISK_2);
 			ShellReboot();
 		default:

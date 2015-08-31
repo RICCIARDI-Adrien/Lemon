@@ -27,9 +27,9 @@ void HardDiskReadSector(unsigned int Logical_Sector_Number, void *Pointer_Buffer
  */
 void HardDiskWriteSector(unsigned int Logical_Sector_Number, void *Pointer_Buffer);
 
-/** Get the total size of the hard disk 0 in bytes.
- * @return The hard disk size in bytes.
+/** Get the total size of the hard disk 0 in sectors.
+ * @return The hard disk size in sectors.
  */
-unsigned long long HardDiskGetDriveSizeBytes(void);
+unsigned int HardDiskGetDriveSizeSectors(void);
 
 #endif

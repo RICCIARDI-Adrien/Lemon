@@ -49,20 +49,33 @@ void HardDiskReadSector(unsigned int Logical_Sector_Number, void *Pointer_Buffer
 	asm("cli");
 	WAIT_BUSY_CONTROLLER();
 	
-	// Select master device and configure for 48-LBA
-	outb(HARD_DISK_PORT_DEVICE_HEAD, 0x40);
-	
-	// Send the sectors to read count (always 1 to avoid issues with the 400 ns delay between sectors)
-	outb(HARD_DISK_PORT_SECTOR_COUNT, 0); // High byte
-	outb(HARD_DISK_PORT_SECTOR_COUNT, 1); // Low byte
-	
-	// Send the sector address
-	outb(HARD_DISK_PORT_LBA_ADDRESS_LOW, Logical_Sector_Number >> 24); // Byte 3
-	outb(HARD_DISK_PORT_LBA_ADDRESS_MIDDLE, 0); // Byte 4 (always 0 as the addresses are 32-bit long)
-	outb(HARD_DISK_PORT_LBA_ADDRESS_HIGH, 0); // Byte 5 (always 0 as the addresses are 32-bit long)
-	outb(HARD_DISK_PORT_LBA_ADDRESS_LOW, Logical_Sector_Number); // Byte 0
-	outb(HARD_DISK_PORT_LBA_ADDRESS_MIDDLE, Logical_Sector_Number >> 8); // Byte 1
-	outb(HARD_DISK_PORT_LBA_ADDRESS_HIGH, Logical_Sector_Number >> 16); // Byte 2
+	#if CONFIGURATION_HARD_DISK_ADDRESSING_LBA48 == 1
+		// Select master device and configure for 48-LBA
+		outb(HARD_DISK_PORT_DEVICE_HEAD, 0x40);
+		
+		// Send the sectors to read count (always 1 to avoid issues with the 400 ns delay between sectors)
+		outb(HARD_DISK_PORT_SECTOR_COUNT, 0); // High byte
+		outb(HARD_DISK_PORT_SECTOR_COUNT, 1); // Low byte
+		
+		// Send the sector address
+		outb(HARD_DISK_PORT_LBA_ADDRESS_LOW, Logical_Sector_Number >> 24); // Byte 3
+		outb(HARD_DISK_PORT_LBA_ADDRESS_MIDDLE, 0); // Byte 4 (always 0 as the addresses are 32-bit long)
+		outb(HARD_DISK_PORT_LBA_ADDRESS_HIGH, 0); // Byte 5 (always 0 as the addresses are 32-bit long)
+		outb(HARD_DISK_PORT_LBA_ADDRESS_LOW, Logical_Sector_Number); // Byte 0
+		outb(HARD_DISK_PORT_LBA_ADDRESS_MIDDLE, Logical_Sector_Number >> 8); // Byte 1
+		outb(HARD_DISK_PORT_LBA_ADDRESS_HIGH, Logical_Sector_Number >> 16); // Byte 2
+	#else
+		// Select master device and send high LBA address nibble
+		outb(HARD_DISK_PORT_DEVICE_HEAD, 0xE0 | ((Logical_Sector_Number >> 24) & 0x0F));
+		
+		// Send LBA address remaining bytes
+		outb(HARD_DISK_PORT_LBA_ADDRESS_HIGH, Logical_Sector_Number >> 16);
+		outb(HARD_DISK_PORT_LBA_ADDRESS_MIDDLE, Logical_Sector_Number >> 8);
+		outb(HARD_DISK_PORT_LBA_ADDRESS_LOW, Logical_Sector_Number);
+		
+		// Send the sectors count to read (always 1 to avoid issues with the 400 ns delay between sectors)
+		outb(HARD_DISK_PORT_SECTOR_COUNT, 1);
+	#endif
 	
 	// Send read command with automatic retries
 	outb(HARD_DISK_PORT_COMMAND, HARD_DISK_COMMAND_READ_WITH_RETRIES);
@@ -97,20 +110,33 @@ void HardDiskWriteSector(unsigned int Logical_Sector_Number, void *Pointer_Buffe
 	asm("cli");
 	WAIT_BUSY_CONTROLLER();
 	
-	// Select master device and configure for 48-LBA
-	outb(HARD_DISK_PORT_DEVICE_HEAD, 0x40);
-	
-	// Send the sectors to write count (always 1 to avoid issues with the 400 ns delay between sectors)
-	outb(HARD_DISK_PORT_SECTOR_COUNT, 0); // High byte
-	outb(HARD_DISK_PORT_SECTOR_COUNT, 1); // Low byte
-	
-	// Send the sector address
-	outb(HARD_DISK_PORT_LBA_ADDRESS_LOW, Logical_Sector_Number >> 24); // Byte 3
-	outb(HARD_DISK_PORT_LBA_ADDRESS_MIDDLE, 0); // Byte 4 (always 0 as the addresses are 32-bit long)
-	outb(HARD_DISK_PORT_LBA_ADDRESS_HIGH, 0); // Byte 5 (always 0 as the addresses are 32-bit long)
-	outb(HARD_DISK_PORT_LBA_ADDRESS_LOW, Logical_Sector_Number); // Byte 0
-	outb(HARD_DISK_PORT_LBA_ADDRESS_MIDDLE, Logical_Sector_Number >> 8); // Byte 1
-	outb(HARD_DISK_PORT_LBA_ADDRESS_HIGH, Logical_Sector_Number >> 16); // Byte 2
+	#if CONFIGURATION_HARD_DISK_ADDRESSING_LBA48 == 1
+		// Select master device and configure for 48-LBA
+		outb(HARD_DISK_PORT_DEVICE_HEAD, 0x40);
+		
+		// Send the sectors to write count (always 1 to avoid issues with the 400 ns delay between sectors)
+		outb(HARD_DISK_PORT_SECTOR_COUNT, 0); // High byte
+		outb(HARD_DISK_PORT_SECTOR_COUNT, 1); // Low byte
+		
+		// Send the sector address
+		outb(HARD_DISK_PORT_LBA_ADDRESS_LOW, Logical_Sector_Number >> 24); // Byte 3
+		outb(HARD_DISK_PORT_LBA_ADDRESS_MIDDLE, 0); // Byte 4 (always 0 as the addresses are 32-bit long)
+		outb(HARD_DISK_PORT_LBA_ADDRESS_HIGH, 0); // Byte 5 (always 0 as the addresses are 32-bit long)
+		outb(HARD_DISK_PORT_LBA_ADDRESS_LOW, Logical_Sector_Number); // Byte 0
+		outb(HARD_DISK_PORT_LBA_ADDRESS_MIDDLE, Logical_Sector_Number >> 8); // Byte 1
+		outb(HARD_DISK_PORT_LBA_ADDRESS_HIGH, Logical_Sector_Number >> 16); // Byte 2
+	#else
+		// Select master device and send high LBA address nibble
+		outb(HARD_DISK_PORT_DEVICE_HEAD, 0xE0 | ((Logical_Sector_Number >> 24) & 0x0F));
+		
+		// Send LBA address remaining bytes
+		outb(HARD_DISK_PORT_LBA_ADDRESS_HIGH, Logical_Sector_Number >> 16);
+		outb(HARD_DISK_PORT_LBA_ADDRESS_MIDDLE, Logical_Sector_Number >> 8);
+		outb(HARD_DISK_PORT_LBA_ADDRESS_LOW, Logical_Sector_Number);
+		
+		// Send the sectors count to write (always 1 to avoid issues with the 400 ns delay between sectors)
+		outb(HARD_DISK_PORT_SECTOR_COUNT, 1);
+	#endif
 	
 	// Send write command with automatic retries
 	outb(HARD_DISK_PORT_COMMAND, HARD_DISK_COMMAND_WRITE_WITH_RETRIES);
@@ -137,7 +163,7 @@ void HardDiskWriteSector(unsigned int Logical_Sector_Number, void *Pointer_Buffe
 	);
 }
 
-unsigned long long HardDiskGetDriveSizeBytes(void)
+unsigned int HardDiskGetDriveSizeSectors(void)
 {
 	unsigned int Buffer[HARD_DISK_SECTOR_SIZE / sizeof(unsigned int)]; // Store a whole sector
 	
@@ -173,5 +199,5 @@ unsigned long long HardDiskGetDriveSizeBytes(void)
 	);
 	
 	// The total number of sectors is located in the words 60 and 61
-	return Buffer[30] * HARD_DISK_SECTOR_SIZE;
+	return Buffer[30];
 }

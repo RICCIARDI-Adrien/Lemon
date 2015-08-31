@@ -8,6 +8,7 @@
 ; V 1.5 : 27/04/2014, SECTORS_TO_LOAD_COUNT is now defined on the assembler command line.
 ; V 1.6 : 22/06/2014, directly program the IDE controller when loading from hard disk to make the system load on a lot of buggy BIOSes.
 ; V 1.7 : 29/05/2015, added a valid partition table to be able to boot from USB stick, System now loads only from hard disk with custom LBA support whereas Installer loads only with BIOS support.
+; V 1.8 : 31/08/2015, added the ability to choose between LBA-28 and LBA-48.
 [BITS 16]
 [ORG 0]
 
@@ -17,6 +18,9 @@
 ;%define DEBUG ; Uncomment to enable debug output
 KERNEL_LOAD_SEGMENT EQU 1000h
 KERNEL_PROTECTED_MODE_ADDRESS EQU (KERNEL_LOAD_SEGMENT * 16)
+
+; IDE hard disk addressing mode (set to 1 to use LBA-48, set to 0 to use LBA-28)
+HARD_DISK_ADDRESSING_USE_LBA48 EQU 0
 
 ; IDE hard disk ports definition
 HARD_DISK_PORT_DATA EQU 01F0h
@@ -68,6 +72,18 @@ Entry_Point:
 		mov eax, DWORD [First_Partition_Starting_Sector_LBA]
 		inc eax ; Bypass the first sector which is the MBR
 		mov DWORD [Logical_Sector_Number], eax
+		
+		; Display the first sector to load
+		%ifdef DEBUG
+			xor di, di
+			mov ax, [Logical_Sector_Number + 2]
+			call WriteHex
+			mov ax, [Logical_Sector_Number]
+			call WriteHex
+			mov ax, 10h
+			int 16h
+		%endif
+		
 		call LoadKernelWithLBA
 	%endif
 	
@@ -180,7 +196,7 @@ LoadKernelWithLBA:
 	mov es, ax
 	xor di, di
 	mov cx, SECTORS_TO_LOAD_COUNT
-
+	
 .Loop_Load_Kernel_With_LBA:
 	; Wait for the controller to be ready
 	mov dx, HARD_DISK_PORT_STATUS
@@ -189,45 +205,73 @@ LoadKernelWithLBA:
 	test al, 80h
 	jnz .Wait_Controller_Ready_1
 
-	; Select master device
-	mov al, 40h
-	mov dx, HARD_DISK_PORT_DEVICE_HEAD
-	out dx, al
+	%if HARD_DISK_ADDRESSING_USE_LBA48 == 1
+		; Select master device
+		mov al, 40h
+		mov dx, HARD_DISK_PORT_DEVICE_HEAD
+		out dx, al
+		
+		; Send sectors count high byte (the sector count is always 1 to avoid issues with the 400ns delay between sectors)
+		xor al, al
+		mov dx, HARD_DISK_PORT_SECTOR_COUNT
+		out dx, al
+		; Send sectors count low byte
+		mov al, 1
+		mov dx, HARD_DISK_PORT_SECTOR_COUNT
+		out dx, al
+		
+		; Send 48-bit LBA byte 3
+		mov al, BYTE [Logical_Sector_Number + 3]
+		mov dx, HARD_DISK_PORT_LBA_ADDRESS_LOW
+		out dx, al
+		; Send 48-bit LBA byte 4 (always zero as the LBA value is 4-bytes long)
+		xor al, al
+		mov dx, HARD_DISK_PORT_LBA_ADDRESS_MIDDLE
+		out dx, al
+		; Send 48-bit LBA byte 5 (always zero as the LBA value is 4-bytes long)
+		xor al, al
+		mov dx, HARD_DISK_PORT_LBA_ADDRESS_HIGH
+		out dx, al
+		; Send 48-bit LBA byte 0
+		mov al, BYTE [Logical_Sector_Number]
+		mov dx, HARD_DISK_PORT_LBA_ADDRESS_LOW
+		out dx, al
+		; Send 48-bit LBA byte 1
+		mov al, BYTE [Logical_Sector_Number + 1]
+		mov dx, HARD_DISK_PORT_LBA_ADDRESS_MIDDLE
+		out dx, al
+		; Send 48-bit LBA byte 2
+		mov al, BYTE [Logical_Sector_Number + 2]
+		mov dx, HARD_DISK_PORT_LBA_ADDRESS_HIGH
+		out dx, al
+	%else
+		; Select master device and send high LBA address nibble
+		mov al, BYTE [Logical_Sector_Number + 3]
+		and al, 0Fh ; Keep only the most significant byte lower nibble
+		or al, 0E0h, ; Enable ECC, select 512-byte sectors and select the drive 0
+		mov dx, HARD_DISK_PORT_DEVICE_HEAD
+		out dx, al
+		
+		; Send LBA address remaining bytes
+		; High byte
+		mov al, BYTE [Logical_Sector_Number + 2]
+		mov dx, HARD_DISK_PORT_LBA_ADDRESS_HIGH
+		out dx, al
+		; Middle byte
+		mov al, BYTE [Logical_Sector_Number + 1]
+		mov dx, HARD_DISK_PORT_LBA_ADDRESS_MIDDLE
+		out dx, al
+		; Low byte
+		mov al, BYTE [Logical_Sector_Number]
+		mov dx, HARD_DISK_PORT_LBA_ADDRESS_LOW
+		out dx, al
+		
+		; Send the sectors count to read (always 1 to avoid issues with the 400 ns delay between sectors)
+		mov al, 1
+		mov dx, HARD_DISK_PORT_SECTOR_COUNT
+		out dx, al
+	%endif
 	
-	; Send sectors count high byte (the sector count is always 1 to avoid issues with the 400ns delay between sectors)
-	xor al, al
-	mov dx, HARD_DISK_PORT_SECTOR_COUNT
-	out dx, al
-	; Send sectors count low byte
-	mov al, 1
-	mov dx, HARD_DISK_PORT_SECTOR_COUNT
-	out dx, al
-	
-	; Send 48-bit LBA byte 3
-	mov al, BYTE [Logical_Sector_Number + 3]
-	mov dx, HARD_DISK_PORT_LBA_ADDRESS_LOW
-	out dx, al
-	; Send 48-bit LBA byte 4 (always zero as the LBA value is 4-bytes long)
-	xor al, al
-	mov dx, HARD_DISK_PORT_LBA_ADDRESS_MIDDLE
-	out dx, al
-	; Send 48-bit LBA byte 5 (always zero as the LBA value is 4-bytes long)
-	xor al, al
-	mov dx, HARD_DISK_PORT_LBA_ADDRESS_HIGH
-	out dx, al
-	; Send 48-bit LBA byte 0
-	mov al, BYTE [Logical_Sector_Number]
-	mov dx, HARD_DISK_PORT_LBA_ADDRESS_LOW
-	out dx, al
-	; Send 48-bit LBA byte 1
-	mov al, BYTE [Logical_Sector_Number + 1]
-	mov dx, HARD_DISK_PORT_LBA_ADDRESS_MIDDLE
-	out dx, al
-	; Send 48-bit LBA byte 2
-	mov al, BYTE [Logical_Sector_Number + 2]
-	mov dx, HARD_DISK_PORT_LBA_ADDRESS_HIGH
-	out dx, al
-
 	; Send read command with automatic retries
 	mov al, HARD_DISK_COMMAND_READ_WITH_RETRIES
 	mov dx, HARD_DISK_PORT_COMMAND
