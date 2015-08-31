@@ -19,9 +19,6 @@
 KERNEL_LOAD_SEGMENT EQU 1000h
 KERNEL_PROTECTED_MODE_ADDRESS EQU (KERNEL_LOAD_SEGMENT * 16)
 
-; IDE hard disk addressing mode (set to 1 to use LBA-48, set to 0 to use LBA-28)
-HARD_DISK_ADDRESSING_USE_LBA48 EQU 0
-
 ; IDE hard disk ports definition
 HARD_DISK_PORT_DATA EQU 01F0h
 HARD_DISK_PORT_SECTOR_COUNT EQU 01F2h
@@ -205,7 +202,7 @@ LoadKernelWithLBA:
 	test al, 80h
 	jnz .Wait_Controller_Ready_1
 
-	%if HARD_DISK_ADDRESSING_USE_LBA48 == 1
+	%if CONFIGURATION_HARD_DISK_ADDRESSING_IS_LBA48 == 1
 		; Select master device
 		mov al, 40h
 		mov dx, HARD_DISK_PORT_DEVICE_HEAD

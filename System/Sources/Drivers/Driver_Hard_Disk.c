@@ -49,7 +49,7 @@ void HardDiskReadSector(unsigned int Logical_Sector_Number, void *Pointer_Buffer
 	asm("cli");
 	WAIT_BUSY_CONTROLLER();
 	
-	#if CONFIGURATION_HARD_DISK_ADDRESSING_LBA48 == 1
+	#if CONFIGURATION_HARD_DISK_ADDRESSING_IS_LBA48 == 1
 		// Select master device and configure for 48-LBA
 		outb(HARD_DISK_PORT_DEVICE_HEAD, 0x40);
 		
@@ -110,7 +110,7 @@ void HardDiskWriteSector(unsigned int Logical_Sector_Number, void *Pointer_Buffe
 	asm("cli");
 	WAIT_BUSY_CONTROLLER();
 	
-	#if CONFIGURATION_HARD_DISK_ADDRESSING_LBA48 == 1
+	#if CONFIGURATION_HARD_DISK_ADDRESSING_IS_LBA48 == 1
 		// Select master device and configure for 48-LBA
 		outb(HARD_DISK_PORT_DEVICE_HEAD, 0x40);
 		

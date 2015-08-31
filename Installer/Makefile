@@ -59,6 +59,8 @@ Convert_Files:
 # System core
 #------------------------------------------------------------------------------------------------------------------------------
 $(OBJECTS_PATH)/MBR.32b: $(SYSTEM_SOURCES_PATH)/MBR.asm
+	@#Search for the configuration variables that impact the MBR too
+	@$(eval MBR_FLAGS += -DCONFIGURATION_HARD_DISK_ADDRESSING_IS_LBA48=$(shell grep "CONFIGURATION_HARD_DISK_ADDRESSING_IS_LBA48" $(SYSTEM_INCLUDES_PATH)/Configuration.h | awk '{print $$3}'))
 	$(AS) $(MBR_FLAGS) -f bin $(SYSTEM_SOURCES_PATH)/MBR.asm -o $(OBJECTS_PATH)/MBR.32b
 
 $(OBJECTS_PATH)/Architecture.o: $(SYSTEM_SOURCES_PATH)/Architecture.c
