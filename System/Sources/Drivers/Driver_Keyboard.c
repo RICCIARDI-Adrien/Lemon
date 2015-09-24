@@ -171,7 +171,7 @@ void KeyboardInitialize(void)
 unsigned char KeyboardReadCharacter(void)
 {
 	// Wait for a key to be hit
-	while (!Keyboard_Is_Key_Available);
+	while (!Keyboard_Is_Key_Available) asm("hlt"); // Make the processor sleep until an interrupt is triggered, so it is not 100% busy all the time
 	Keyboard_Is_Key_Available = 0;
 	return Keyboard_ASCII_Code;
 }
