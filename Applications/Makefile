@@ -35,9 +35,9 @@ endef
 #------------------------------------------------------------------------------------------------------------------------------
 # Global rules
 #------------------------------------------------------------------------------------------------------------------------------
-all: benchmark games help tests text_viewer unix_commands
+all: benchmark games help tests unix_commands
 
-clean: benchmark_clean games_clean help_clean tests_clean text_viewer_clean unix_commands_clean
+clean: benchmark_clean games_clean help_clean tests_clean unix_commands_clean
 	# Delete also the tools
 	rm -rf $(SERIAL_PORT_SERVER)
 
@@ -115,19 +115,6 @@ text_editor_clean:
 
 text_editor_download: $(SERIAL_PORT_SERVER)
 	@$(SERIAL_PORT_SERVER) $(SERIAL_PORT_SERVER_FLAGS) $(BINARIES_PATH)/Text_Editor.32b edit
-
-#------------------------------------------------------------------------------------------------------------------------------
-# Text viewer
-#------------------------------------------------------------------------------------------------------------------------------
-text_viewer:
-	@$(call DisplayProgramToCompile,Text viewer)
-	@cd $(SOURCES_PATH)/Text_Viewer && $(MAKE)
-
-text_viewer_clean:
-	@cd $(SOURCES_PATH)/Text_Viewer && $(MAKE) clean
-
-text_viewer_download: $(SERIAL_PORT_SERVER)
-	@$(SERIAL_PORT_SERVER) $(SERIAL_PORT_SERVER_FLAGS) $(BINARIES_PATH)/Text_Viewer.32b text
 
 #------------------------------------------------------------------------------------------------------------------------------
 # UNIX commands
