@@ -5,7 +5,7 @@
 Système
 -------
 
-- test : permettre de choisir dans Configuration.h le LBA28 ou LBA48 (test sur pentium 166 cave)
+- virer @version sauf dans kernel.h
 
 Doc
 ---
@@ -37,9 +37,9 @@ Applications
 
 - faire en sorte que Text Viewer n'ouvre pas les fichiers binaires (utile ?)
 
-- rassembler tous les jeux dans "games"
-  faire un menu de sélection du jeu + menus in game pour chaque jeu
-  à la fin de chaque jeu proposer d'y rejouer
-- mettre à jour help avec games
-  
 - hexdump ?
+
+Installer
+---------
+
+mettre .h dans Includes

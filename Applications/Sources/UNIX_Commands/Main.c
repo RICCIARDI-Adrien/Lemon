@@ -27,12 +27,14 @@ static TCommand Commands[] =
 		"df",
 		CommandMainDf
 	},
-	
 	{
 		"ls",
 		CommandMainLs
 	},
-	
+	{
+		"more",
+		CommandMainMore
+	},
 	// The NULL command tells that the list is terminated
 	{
 		NULL,

@@ -33,6 +33,17 @@
 	#define STRING_COMMAND_LS_NOT_ENOUGH_SPACE_TO_STORE_FILES "Erreur : le programme n'a pas assez de m\202moire pour afficher tous les fichiers.\n"
 	#define STRING_COMMAND_LS_DISPLAYED_UNIT " octets\n"
 	#define STRING_COMMAND_LS_WAIT_FOR_USER_INPUT "Appuyez sur une touche pour continuer."
+	
+	// "more" command
+	#define STRING_COMMAND_MORE_USAGE "Affiche le contenu d'un fichier texte ligne apr\212s ligne.\n" \
+		"L'unique param\212tre de cette fonction est le fichier \133 afficher.\n" \
+		"Utilisation des touches :\n" \
+		"  - Entr\202e : affiche la ligne suivante\n" \
+		"  - Espace : affiche la page suivante\n" \
+		"  - q      : quitte le programme\n"
+	#define STRING_COMMAND_MORE_FILE_NOT_FOUND_1 "Erreur : le fichier '"
+	#define STRING_COMMAND_MORE_FILE_NOT_FOUND_2 "' est introuvable.\n"
+	#define STRING_COMMAND_MORE_ERROR_READING_FROM_FILE "Erreur : impossible de lire le fichier.\n"
 #endif
 
 #endif
