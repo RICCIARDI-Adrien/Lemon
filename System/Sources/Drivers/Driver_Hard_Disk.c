@@ -2,6 +2,8 @@
  * @see Driver_Hard_Disk.h for description.
  * @author Adrien RICCIARDI
  */
+#include <Configuration.h>
+#include <Debug.h>
 #include <Drivers/Driver_Hard_Disk.h>
 #include <Hardware_Functions.h> // To have inb() and outb()
 
@@ -166,6 +168,11 @@ void HardDiskWriteSector(unsigned int Logical_Sector_Number, void *Pointer_Buffe
 unsigned int HardDiskGetDriveSizeSectors(void)
 {
 	unsigned int Buffer[HARD_DISK_SECTOR_SIZE / sizeof(unsigned int)]; // Store a whole sector
+	#if CONFIGURATION_HARD_DISK_ADDRESSING_IS_LBA48 == 1
+		const int LBA_Total_Sectors_Count_Index = 50; // The total number of sectors is located in the words 100 to 103 (TODO handle the 8-byte value)
+	#else
+		const int LBA_Total_Sectors_Count_Index = 30; // The total number of sectors is located in the words 60 and 61
+	#endif
 	
 	// Wait for the controller to be ready
 	asm("cli");
@@ -198,6 +205,13 @@ unsigned int HardDiskGetDriveSizeSectors(void)
 		: "ecx", "edx", "edi"
 	);
 	
-	// The total number of sectors is located in the words 60 and 61
-	return Buffer[30];
+	DEBUG_SECTION_START
+		DEBUG_DISPLAY_CURRENT_FUNCTION_NAME();
+		ScreenWriteString("Total sectors count : ");
+		ScreenWriteString(itoa(Buffer[LBA_Total_Sectors_Count_Index]));
+		ScreenWriteCharacter('\n');
+	DEBUG_SECTION_END
+
+	// TODO : handle the 48-bit return value of LBA48 (the return value is currently limited at hard disk of 2TB)
+	return Buffer[LBA_Total_Sectors_Count_Index];
 }
