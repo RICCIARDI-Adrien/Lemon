@@ -1,7 +1,6 @@
 /** @file Configuration.h
  * Gather all system configurable parameters.
  * @author Adrien RICCIARDI
- * @version 1.0 : 05/05/2014
  */
 #ifndef H_CONFIGURATION_H
 #define H_CONFIGURATION_H
@@ -28,5 +27,8 @@
 
 /** Size of the whole RAM that the system can use (in MB). */
 #define CONFIGURATION_SYSTEM_TOTAL_RAM_SIZE_MEGA_BYTES 16
+
+/** Enable or disable debug informations. */
+#define CONFIGURATION_IS_DEBUG_ENABLED 1
 
 #endif
