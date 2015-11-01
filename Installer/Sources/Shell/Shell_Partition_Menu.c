@@ -11,12 +11,6 @@
 #include "Strings.h"
 
 //-------------------------------------------------------------------------------------------------------------------------------
-// Private constants
-//-------------------------------------------------------------------------------------------------------------------------------
-/** The Lemon partition type. */
-#define LEMON_PARTITION_TYPE 0x60 // Same as system interrupt calls
-
-//-------------------------------------------------------------------------------------------------------------------------------
 // Public functions
 //-------------------------------------------------------------------------------------------------------------------------------
 TShellPartitionMenuPartitionTableEntry *ShellPartitionMenu(void)
@@ -66,7 +60,7 @@ TShellPartitionMenuPartitionTableEntry *ShellPartitionMenu(void)
 	// Fill the first Lemon MBR partition table with the selected entry
 	memcpy(&Lemon_Partition_Table[0], &Partition_Table[Partition_Number], sizeof(TShellPartitionMenuPartitionTableEntry));
 	// Set the Lemon partition type
-	Lemon_Partition_Table[0].Type = LEMON_PARTITION_TYPE;
+	Lemon_Partition_Table[0].Type = SHELL_PARTITION_MENU_LEMON_PARTITION_TYPE;
 	// Clear all other entries
 	memset(&Lemon_Partition_Table[1], 0, sizeof(TShellPartitionMenuPartitionTableEntry) * (SHELL_PARTITION_MENU_PARTITION_TABLE_ENTRIES_COUNT - 1));
 	

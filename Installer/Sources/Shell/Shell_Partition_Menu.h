@@ -16,6 +16,9 @@
 /** The partition table total size in bytes. */
 #define SHELL_PARTITION_MENU_PARTITION_TABLE_SIZE (SHELL_PARTITION_MENU_PARTITION_TABLE_ENTRIES_COUNT * sizeof(TShellPartitionMenuPartitionTableEntry))
 
+/** The Lemon partition type. */
+#define SHELL_PARTITION_MENU_LEMON_PARTITION_TYPE 0x60 // Same as system interrupt calls
+
 //-------------------------------------------------------------------------------------------------------------------------------
 // Types
 //-------------------------------------------------------------------------------------------------------------------------------

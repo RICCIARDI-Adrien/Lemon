@@ -14,6 +14,12 @@
 #include "Strings.h"
 
 //-------------------------------------------------------------------------------------------------------------------------------
+// Private constants
+//-------------------------------------------------------------------------------------------------------------------------------
+/** The sections title font color. */
+#define SHELL_SECTION_TITLE_COLOR SCREEN_COLOR_LIGHT_BLUE
+
+//-------------------------------------------------------------------------------------------------------------------------------
 // Private functions
 //-------------------------------------------------------------------------------------------------------------------------------
 /** Ask the user to remove installation media and reboot the computer. */
@@ -39,7 +45,7 @@ static void ShellInstallMBR(TShellPartitionMenuPartitionTableEntry *Pointer_Lemo
 	// Merge the partition table
 	memcpy(&Sector_Temp[SHELL_PARTITION_MENU_PARTITION_TABLE_OFFSET], Pointer_Lemon_Partition_Table, SHELL_PARTITION_MENU_PARTITION_TABLE_SIZE);
 	
-	// Write on disk
+	// Write to disk
 	HardDiskWriteSector(Pointer_Lemon_Partition_Table[0].First_Sector_LBA, Sector_Temp);
 }
 
@@ -91,17 +97,34 @@ static void ShellInstallFiles(void)
 	}
 }
 
+/** Ask a question until the user answers yes or no. Yes and no characters are represented by two constants, so they can be customized for different languages.
+ * @param String_Question The question.
+ * @return 1 if the user answered "yes" or 0 if he chose "no".
+ */
+static int ShellAskYesNoQuestion(char *String_Question)
+{
+	char String_User_Answer[2];
+	
+	while (1)
+	{
+		ScreenWriteString(String_Question);
+		
+		KeyboardReadString(String_User_Answer, 1);
+		if (String_User_Answer[0] == STRING_CHARACTER_YES) return 1;
+		if (String_User_Answer[0] == STRING_CHARACTER_NO) return 0;
+	}
+}
+
 //-------------------------------------------------------------------------------------------------------------------------------
 // Public functions
 //-------------------------------------------------------------------------------------------------------------------------------
 /** The installer specific code. */
 void Shell(void)
 {
-	char String_User_Answer[2];
-	TShellPartitionMenuPartitionTableEntry *Pointer_Lemon_Partition_Table;
+	TShellPartitionMenuPartitionTableEntry *Pointer_Lemon_Partition_Table, Default_Lemon_Partition_Table;
 	unsigned int Partition_Starting_Sector, File_System_Starting_Sector;
 	
-	// Show title
+	// Show the title
 	ScreenSetColor(SCREEN_COLOR_LIGHT_BLUE);
 	ScreenClear();
 	ScreenWriteString(STRING_TITLE);
@@ -109,27 +132,35 @@ void Shell(void)
 	ScreenSetColor(SCREEN_COLOR_BLUE);
 	ScreenWriteString(STRING_WELCOME);
 	
-	ScreenSetColor(SCREEN_COLOR_RED);
-	ScreenWriteString(STRING_CAUTION_MESSAGE_1);
-	
 	// Ask the user on continuing the installation or not
+	ScreenSetColor(SHELL_SECTION_TITLE_COLOR);
+	ScreenWriteString(STRING_SECTION_WARNING_TITLE);
 	ScreenSetColor(SCREEN_COLOR_BLUE);
-	while (1)
+	ScreenWriteString(STRING_SECTION_WARNING_MESSAGE);
+	if (!ShellAskYesNoQuestion(STRING_SECTION_WARNING_QUESTION))
 	{
-		ScreenWriteString(STRING_CAUTION_MESSAGE_2);
-		
-		KeyboardReadString(String_User_Answer, 1);
-		if (String_User_Answer[0] == STRING_CHARACTER_YES) break;
-		if (String_User_Answer[0] == STRING_CHARACTER_NO)
-		{
-			ScreenSetColor(SCREEN_COLOR_RED);
-			ScreenWriteString(STRING_INSTALLATION_ABORTED);
-			ShellReboot();
-		}
+		ScreenWriteString(STRING_SECTION_WARNING_INSTALLATION_ABORTED);
+		ShellReboot();
 	}
 	
-	// Select the installation partition
-	Pointer_Lemon_Partition_Table = ShellPartitionMenu();
+	// Ask the user whether he wants to use the whole disk or not
+	ScreenSetColor(SHELL_SECTION_TITLE_COLOR);
+	ScreenWriteString(STRING_SECTION_HARD_DISK_TITLE);
+	ScreenSetColor(SCREEN_COLOR_BLUE);
+	ScreenWriteString(STRING_SECTION_HARD_DISK_MESSAGE);
+	if (ShellAskYesNoQuestion(STRING_SECTION_HARD_DISK_QUESTION))
+	{
+		// Fill the default partition table
+		memset(&Default_Lemon_Partition_Table, 0, sizeof(Default_Lemon_Partition_Table)); // Partitions 1 to 3 are not used, so force them to zero
+		Default_Lemon_Partition_Table.Status = 0x80; // Tell that the partition is bootable
+		Default_Lemon_Partition_Table.Type = SHELL_PARTITION_MENU_LEMON_PARTITION_TYPE;
+		Default_Lemon_Partition_Table.First_Sector_LBA = 0; // Start from the disk beginning
+		Default_Lemon_Partition_Table.Sectors_Count = 64 * 1024 * 1024 / 512; // 64MB, TODO : compute this in a clean way
+		Pointer_Lemon_Partition_Table = &Default_Lemon_Partition_Table;
+	}
+	else Pointer_Lemon_Partition_Table = ShellPartitionMenu(); // Select the installation partition
+	
+	// Compute the selected partition necessary offsets
 	Partition_Starting_Sector = Pointer_Lemon_Partition_Table[0].First_Sector_LBA;
 	File_System_Starting_Sector = Partition_Starting_Sector + CONFIGURATION_FILE_SYSTEM_STARTING_SECTOR_OFFSET;
 	

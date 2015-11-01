@@ -35,8 +35,6 @@ modif bibliothèques pour gérer nouveaux codes touches
 Applications
 ------------
 
-- faire en sorte que Text Viewer n'ouvre pas les fichiers binaires (utile ?)
-
 - hexdump ?
 
 Installer
