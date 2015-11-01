@@ -29,6 +29,6 @@
 #define CONFIGURATION_SYSTEM_TOTAL_RAM_SIZE_MEGA_BYTES 16
 
 /** Enable or disable debug informations. */
-#define CONFIGURATION_IS_DEBUG_ENABLED 1
+#define CONFIGURATION_IS_DEBUG_ENABLED 0
 
 #endif

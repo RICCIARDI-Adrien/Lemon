@@ -6,10 +6,9 @@
 #define H_DEBUG_H
 
 #include <Configuration.h>
-#if CONFIGURATION_IS_DEBUG_ENABLED == 1
-	#include <Drivers/Driver_Screen.h> // The debugging code will write informations to the screen
-	#include <Standard_Functions.h> // The debugging code will certainly use itoa()
-#endif
+// The following includes must always be included or the disabled debug code (between if (0) {}) will issue warnings due to undefined ScreenXXX() functions
+#include <Drivers/Driver_Screen.h> // The debugging code will write informations to the screen
+#include <Standard_Functions.h> // The debugging code will certainly use itoa()
 
 //-------------------------------------------------------------------------------------------------
 // Constants and macros
