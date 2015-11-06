@@ -19,9 +19,6 @@
 /** The system can't open more files than specified here simultaneously. */
 #define CONFIGURATION_FILE_SYSTEM_MAXIMUM_OPENED_FILES_COUNT 8
 
-/** Set to 1 to use LBA-48 addressing, set to 0 to use LBA-28. */
-#define CONFIGURATION_HARD_DISK_ADDRESSING_IS_LBA48 1
-
 /** Maximum length of a file name in characters. */
 #define CONFIGURATION_FILE_NAME_LENGTH 12
 
