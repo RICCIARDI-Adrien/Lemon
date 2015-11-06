@@ -25,6 +25,7 @@
 	#define STRING_KERNEL_CONSOLE_STACK_EXCEPTION "Erreur fatale : la pile noyau a d\202bord\202.\nAppuyez sur Entr\202e pour red\202marrer.\n"
 	#define STRING_KERNEL_CONSOLE_FILE_SYSTEM_ERROR "Erreur fatale : le syst\212me de fichiers du disque dur n'est pas valide !\nAppuyez sur Entr\202e pour red\202marrer."
 	#define STRING_KERNEL_CONSOLE_UNKNWOWN_SYSTEM_CALL_ERROR "Erreur : le programme a demand\202 un appel syst\212me inconnu.\nAppuyez sur Entr\202e pour continuer.\n"
+	#define STRING_KERNEL_CONSOLE_HARD_DISK_NOT_LBA_COMPATIBLE_ERROR "Erreur : le disque dur n'est pas compatible avec l'adressage LBA.\n"
 
 	// Shell welcoming message shown only at system startup
 	#define STRING_SHELL_WELCOME "Bienvenue sur Lemon !\n"
@@ -77,7 +78,7 @@
 	#define STRING_SHELL_FILE_SIZE_SHOW_SIZE_2 " octets.\n"
 
 	// Shell version command
-	#define STRING_SHELL_VERSION "Version du syst\212me : 2.2.0 (" __DATE__ ", " __TIME__ ")\nCopyright (C) Adrien Ricciardi\n"
+	#define STRING_SHELL_VERSION "Version du syst\212me : 2.2.1 (" __DATE__ ", " __TIME__ ")\nCopyright (C) Adrien Ricciardi\n"
 
 	// Shell error strings
 	#define STRING_SHELL_ERROR_FILE_NOT_EXECUTABLE "Ce fichier n'est pas un programme !\n"

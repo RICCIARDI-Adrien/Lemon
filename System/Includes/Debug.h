@@ -7,6 +7,7 @@
 
 #include <Configuration.h>
 // The following includes must always be included or the disabled debug code (between if (0) {}) will issue warnings due to undefined ScreenXXX() functions
+#include <Drivers/Driver_Keyboard.h>
 #include <Drivers/Driver_Screen.h> // The debugging code will write informations to the screen
 #include <Standard_Functions.h> // The debugging code will certainly use itoa()
 

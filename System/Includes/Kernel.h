@@ -21,6 +21,7 @@
  * @version 2.1.9 : 10/05/2015, fixed a bug preventing the extended memory (above 1MB+64KB) to be enabled on old CPUs.
  * @version 2.1.10 : 29/05/2015, made the Installer boot from USB stick.
  * @version 2.2.0 : 06/06/2015, the system is now MBR partitions aware and can install to and boot from a partition. All hard disk drivers (MBR and system) are 48-LBA.
+ * @version 2.2.1 : 03/11/2015, the hard disk driver automatically chooses between LBA28 and LBA48 at boot time.
  */
 #ifndef H_KERNEL_H
 #define H_KERNEL_H

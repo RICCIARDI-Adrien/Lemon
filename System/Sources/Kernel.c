@@ -3,6 +3,7 @@
  * @author Adrien RICCIARDI
  */
 #include <Architecture.h>
+#include <Drivers/Driver_Hard_Disk.h>
 #include <Drivers/Driver_Keyboard.h>
 #include <Drivers/Driver_PIC.h>
 #include <Drivers/Driver_Screen.h>
@@ -67,6 +68,18 @@ void __attribute__((section(".init"))) KernelEntryPoint(void)
 	outb(0x3F2, 0x0C); // Floppy disk (for now it only disables the motor)
 	KeyboardInitialize();
 	TimerInitialize();
+	if (HardDiskInitialize() == 1)
+	{
+		// Show error message
+		ScreenSetColor(SCREEN_COLOR_RED); // Color must be set before in order to clear screen with this value
+		ScreenClear();
+		ScreenWriteString(STRING_KERNEL_CONSOLE_HARD_DISK_NOT_LBA_COMPATIBLE_ERROR);
+		
+		// Wait for Enter key to reboot
+		KERNEL_ENABLE_INTERRUPTS();
+		while (KeyboardReadCharacter() != '\n');
+		KeyboardRebootSystem();
+	}
 	
 	// Load file system (can't do that in the Installer program)
 	#ifndef INSTALLER
