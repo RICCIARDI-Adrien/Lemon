@@ -292,6 +292,7 @@ Entry_Point:
 		mov al, 1
 		mov dx, HARD_DISK_PORT_SECTOR_COUNT
 		out dx, al
+		jmp .Send_Read_Command
 			
 	.Use_LBA48:
 		; Use LBA48
@@ -334,6 +335,7 @@ Entry_Point:
 		mov dx, HARD_DISK_PORT_LBA_ADDRESS_HIGH
 		out dx, al
 
+	.Send_Read_Command:
 		; Send read command with automatic retries
 		mov al, HARD_DISK_COMMAND_READ_WITH_RETRIES
 		mov dx, HARD_DISK_PORT_COMMAND
