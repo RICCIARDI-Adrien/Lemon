@@ -22,13 +22,29 @@ void CursorGoToNextLine(void);
 //int CursorGoToPreviousWord(void);
 //int CursorGoToNextWord(void);
 
+/** Go one line upper.
+ * @return 0 if there is no need to redraw the text page (no scrolling is needed),
+ * @return 1 if the text page must be redrawn.
+ */
 int CursorMoveToUp(void);
-int CursorMoveToDown(void);
-void CursorMoveToLeft(void); // TODO peut remonter une ligne
-void CursorMoveToRight(void); // TODO peut descendre une ligne
 
-//void CursorSetLocation(unsigned int Row, unsigned int Column); // TODO si position trop éloignée pour la fin mettre en bas du fichier
-void CursorSetToHome(void);
+/** Go down line upper.
+ * @return 0 if there is no need to redraw the text page (no scrolling is needed),
+ * @return 1 if the text page must be redrawn.
+ */
+int CursorMoveToDown(void);
+
+/** Go one character to the left. The cursor goes to the upper line if it reached the line beginning.
+ * @return 0 if there is no need to redraw the text page (no scrolling is needed),
+ * @return 1 if the text page must be redrawn.
+ */
+int CursorMoveToLeft(void);
+
+/** Go one character to the right. The cursor goes to the downer line if it reached the line end.
+ * @return 0 if there is no need to redraw the text page (no scrolling is needed),
+ * @return 1 if the text page must be redrawn.
+ */
+int CursorMoveToRight(void);
 
 /** Retrieve the cursor location in the buffer.
  * @return The character index.

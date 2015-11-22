@@ -68,6 +68,10 @@ int BufferAddCharacter(unsigned int Index, char Character)
 	return 0;
 }
 
+/** Find the first character of the specified line.
+ * @param Line_Index The line to find index.
+ * @return The character index. It is equal to Buffer_Characters_Count if the line index was too far from the text end.
+ */
 unsigned int BufferFindLineBeginning(unsigned int Line_Index)
 {
 	unsigned int Lines_Count = 0, i = 0, Characters_Counter = 0;
@@ -167,6 +171,8 @@ int BufferGetLineLength(unsigned int Line_Index, unsigned int *Pointer_Length)
 		if (Character == '\n') break;
 		// Is the end of the buffer reached ?
 		if (i >= Buffer_Characters_Count) break;
+		
+		i++;
 	}
 	*Pointer_Length = Characters_Counter;
 	

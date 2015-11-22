@@ -164,16 +164,25 @@ int main(int argc, char *argv[])
 				break;
 				
 			case KEYBOARD_KEY_CODE_ARROW_LEFT:
-				//if (CursorGetDisplayColumn() == 0)
+				if (CursorMoveToLeft()) BufferDisplayPage(CursorGetBufferRow());
 				break;
 				
 			case KEYBOARD_KEY_CODE_ARROW_RIGHT:
-				
+				if (CursorMoveToRight())
+				{
+					Temp = CursorGetBufferRow();
+					if (Temp < CONFIGURATION_DISPLAY_ROWS_COUNT) Temp = 0;
+					else Temp = Temp - (CONFIGURATION_DISPLAY_ROWS_COUNT - 1); // Start displaying one line after the current first one
+					BufferDisplayPage(Temp);
+				}
 				break;
 				
+			// TODO : backspace
+			// TODO : delete
+			
 			// Add the character to the buffer
 			default:
-				//BufferAddCharacter(CursorGetCharacterIndex(), (char) Character);
+				//BufferAddCharacter(CursorGetBufferCharacterIndex(), (char) Character);
 				
 				// ++ cursor
 				
