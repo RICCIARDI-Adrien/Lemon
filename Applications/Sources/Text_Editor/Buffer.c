@@ -4,6 +4,7 @@
  */
 #include "Buffer.h"
 #include "Configuration.h"
+#include "Display.h"
 
 //-------------------------------------------------------------------------------------------------
 // Public variables
@@ -14,6 +15,35 @@ unsigned int Buffer_Characters_Count = 0;
 //-------------------------------------------------------------------------------------------------
 // Private functions
 //-------------------------------------------------------------------------------------------------
+/** Display a line until the display's end is reached or a new line is found.
+ * @param Line_Index The line to display (starting from 0 to BufferGetLinesCount() - 1).
+ * @note The function displays nothing if the provided index is out of text size range.
+ */
+static inline void BufferDisplayLine(unsigned int Line_Index)
+{
+	unsigned int i, Characters_Counter;
+	char Character;
+	
+	i = BufferFindLineBeginning(Line_Index);
+	
+	// The line was found, display it
+	if (i < Buffer_Characters_Count)
+	{
+		for (Characters_Counter = 0; Characters_Counter < CONFIGURATION_DISPLAY_COLUMNS_COUNT; Characters_Counter++)
+		{
+			// Display the character
+			Character = Buffer[i]; // Cache the character value
+			DisplayWriteCharacter(Character);
+			i++; // Must be incremented before the test as there may be only one character to display
+			
+			// Is the end of the line reached ?
+			if (Character == '\n') break;
+			// Is the end of the buffer reached ?
+			if (i >= Buffer_Characters_Count) break;
+		}
+	}
+}
+
 //-------------------------------------------------------------------------------------------------
 // Public functions
 //-------------------------------------------------------------------------------------------------
@@ -48,7 +78,7 @@ unsigned int BufferFindLineBeginning(unsigned int Line_Index)
 		// Start counting at the loop beginning to count from 1
 		Characters_Counter++;
 		
-		if ((Buffer[i] == '\n') || (Characters_Counter == CONFIGURATION_SCREEN_COLUMNS_COUNT))
+		if ((Buffer[i] == '\n') || (Characters_Counter == CONFIGURATION_DISPLAY_COLUMNS_COUNT))
 		{
 			Lines_Count++;
 			Characters_Counter = 0; // Start counting a new line
@@ -70,7 +100,7 @@ unsigned int BufferGetLinesCount(void)
 		// Start counting at the loop beginning to count from 1
 		Characters_Counter++;
 		
-		if ((Buffer[i] == '\n') || (Characters_Counter == CONFIGURATION_SCREEN_COLUMNS_COUNT))
+		if ((Buffer[i] == '\n') || (Characters_Counter == CONFIGURATION_DISPLAY_COLUMNS_COUNT))
 		{
 			Lines_Count++;
 			Characters_Counter = 0; // Start counting a new line
@@ -95,7 +125,7 @@ unsigned int BufferGetLinesCount(void)
 		// Start counting at the loop beginning to count from 1
 		Characters_Counter++;
 		
-		if ((Buffer[i] == '\n') || (Characters_Counter == CONFIGURATION_SCREEN_COLUMNS_COUNT))
+		if ((Buffer[i] == '\n') || (Characters_Counter == CONFIGURATION_DISPLAY_COLUMNS_COUNT))
 		{
 			Lines_Count++;
 			Characters_Counter = 0; // Start counting a new line
@@ -109,45 +139,12 @@ unsigned int BufferGetLinesCount(void)
 	return &Buffer[i];
 }*/
 
-void BufferDisplayLine(unsigned int Line_Index)
+void BufferDisplayPage(unsigned int Beginning_Line_Index)
 {
-	//unsigned int Lines_Count = 0, i = 0, Characters_Counter = 0;
-	unsigned int i, Characters_Counter;
-	char Character;
+	int i;
 	
-	// Parse the whole buffer until the line is found
-	/*while ((i < Buffer_Characters_Count) && (Lines_Count < Line_Index))
-	{
-		// Start counting at the loop beginning to count from 1
-		Characters_Counter++;
-		
-		if ((Buffer[i] == '\n') || (Characters_Counter == CONFIGURATION_SCREEN_COLUMNS_COUNT))
-		{
-			Lines_Count++;
-			Characters_Counter = 0; // Start counting a new line
-		}
-		
-		i++;
-	}*/
-	
-	i = BufferFindLineBeginning(Line_Index);
-	
-	// The line was found, display it
-	if (i < Buffer_Characters_Count)
-	{
-		for (Characters_Counter = 0; Characters_Counter < CONFIGURATION_SCREEN_COLUMNS_COUNT; Characters_Counter++)
-		{
-			// Display the character
-			Character = Buffer[i]; // Cache the character value
-			ScreenWriteCharacter(Character);
-			i++; // Must be incremented before the test as there may be only one character to display
-			
-			// Is the end of the line reached ?
-			if (Character == '\n') break;
-			// Is the end of the buffer reached ?
-			if (i >= Buffer_Characters_Count) break;
-		}
-	}
+	DisplayClear();
+	for (i = 0; i < CONFIGURATION_DISPLAY_ROWS_COUNT; i++) BufferDisplayLine(Beginning_Line_Index + i);
 }
 
 int BufferGetLineLength(unsigned int Line_Index, unsigned int *Pointer_Length)
@@ -161,7 +158,7 @@ int BufferGetLineLength(unsigned int Line_Index, unsigned int *Pointer_Length)
 	if (i >= Buffer_Characters_Count) return 1;
 	
 	// Compute the line length
-	for (Characters_Counter = 0; Characters_Counter < CONFIGURATION_SCREEN_COLUMNS_COUNT; Characters_Counter++)
+	for (Characters_Counter = 0; Characters_Counter < CONFIGURATION_DISPLAY_COLUMNS_COUNT; Characters_Counter++)
 	{
 		// Cache the character value
 		Character = Buffer[i];

@@ -35,6 +35,8 @@ modif bibliothèques pour gérer nouveaux codes touches
 
 - utiliser les fonctions de conversion de string pour les fonctions screenwriteint...
 
+mettre void * pour fonction ScreenDisplayBuffer()
+
 Applications
 ------------
 

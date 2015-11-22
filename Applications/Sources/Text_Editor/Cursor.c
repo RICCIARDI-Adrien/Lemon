@@ -9,53 +9,87 @@
 //-------------------------------------------------------------------------------------------------
 // Private variables
 //-------------------------------------------------------------------------------------------------
-/** The cursor row location. */
-static unsigned int Cursor_Row = 0;
-/** The cursor column location. */
-static unsigned int Cursor_Column = 0;
+/** The cursor row location on display. */
+static unsigned int Cursor_Display_Row = 0;
+/** The cursor column location on display. */
+static unsigned int Cursor_Display_Column = 0;
+
+/** The cursor row location in the text buffer. */
+static unsigned int Cursor_Buffer_Row = 0;
 
 //-------------------------------------------------------------------------------------------------
 // Public functions
 //-------------------------------------------------------------------------------------------------
-void CursorMoveToBottom(void)
+int CursorMoveToUp(void)
 {
 	unsigned int Line_Length;
 	
-	// Get the length of the bottom line
-	if (BufferGetLineLength(Cursor_Row + 1, &Line_Length) == 0)
+	if (Cursor_Display_Row > 0) // The cursor will remain on display
 	{
-		// The line exists, go to the same column location if possible
-		if (Line_Length < Cursor_Column) Cursor_Column = Line_Length; // The cursor column can't reach the CONFIGURATION_SCREEN_COLUMNS_COUNT value
-		Cursor_Row++;
+		Cursor_Display_Row--;
+		Cursor_Buffer_Row--;
+		return 0;
+	}
+	else // The cursor will go out of display lower bound, so the text must be scrolled
+	{
+		if ((Cursor_Buffer_Row > 0) && (BufferGetLineLength(Cursor_Buffer_Row - 1, &Line_Length) == 0))
+		{
+			// The line exists, go to the same column location on display if possible
+			if (Line_Length < Cursor_Display_Column) Cursor_Display_Column = Line_Length; // The cursor column can't reach the CONFIGURATION_DISPLAY_COLUMNS_COUNT value
+			Cursor_Buffer_Row--;
+			return 1;
+		}
+	}
+	return 0;
+}
+
+int CursorMoveToDown(void)
+{
+	unsigned int Line_Length;
+	
+	if (Cursor_Display_Row < CONFIGURATION_DISPLAY_ROWS_COUNT - 1) // The cursor will remain on display
+	{
+		Cursor_Display_Row++;
+		Cursor_Buffer_Row++;
+		return 0;
+	}
+	else // The cursor will go out of display lower bound, so the text must be scrolled
+	{
+		// Get the length of the bottom line
+		if (BufferGetLineLength(Cursor_Buffer_Row + 1, &Line_Length) == 0)
+		{
+			// The line exists, go to the same column location on display if possible
+			if (Line_Length < Cursor_Display_Column) Cursor_Display_Column = Line_Length; // The cursor column can't reach the CONFIGURATION_DISPLAY_COLUMNS_COUNT value
+			Cursor_Buffer_Row++;
+			return 1;
+		}
+		return 0;
 	}
 }
 
-unsigned int CursorGetCharacterIndex(void)
+unsigned int CursorGetBufferCharacterIndex(void)
 {
-	//ScreenWriteUnsignedInteger((Cursor_Row * CONFIGURATION_SCREEN_COLUMNS_COUNT) + Cursor_Column);
-	//ScreenWriteCharacter('\n');
-	return BufferFindLineBeginning(Cursor_Row) + Cursor_Column; //(Cursor_Row * CONFIGURATION_SCREEN_COLUMNS_COUNT) + Cursor_Column;
+	return BufferFindLineBeginning(Cursor_Buffer_Row) + Cursor_Display_Column;
 }
 
+#if 0
 unsigned int CursorGetLineLocation(void)
 {
 	return Cursor_Row;
 }
-
-unsigned int CursorGetScreenRow(void)
-{
-	return Cursor_Row % CONFIGURATION_SCREEN_ROWS_COUNT;
-}
-
-unsigned int CursorGetScreenColumn(void)
-{
-	return Cursor_Column;
-}
-
-#if 0
-void CursorConvertCharacterIndexToScreenLocation(unsigned int Character_Index, unsigned int *Pointer_Screen_Row, unsigned int *Pointer_Screen_Column)
-{
-	*Pointer_Screen_Row = Character_Index / CONFIGURATION_SCREEN_COLUMNS_COUNT;
-	*Pointer_Screen_Column = Character_Index - (*Pointer_Screen_Row * CONFIGURATION_SCREEN_COLUMNS_COUNT);
-}
 #endif
+
+unsigned int CursorGetDisplayRow(void)
+{
+	return Cursor_Display_Row;
+}
+
+unsigned int CursorGetDisplayColumn(void)
+{
+	return Cursor_Display_Column;
+}
+
+unsigned int CursorGetBufferRow(void)
+{
+	return Cursor_Buffer_Row;
+}

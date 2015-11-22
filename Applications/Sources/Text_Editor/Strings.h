@@ -1,7 +1,6 @@
 /** @file Strings.h
  * Gather all the program strings.
  * @author Adrien RICCIARDI
- * @version 1.0 : 19/02/2015
  */
 #ifndef H_STRINGS_H
 #define H_STRINGS_H

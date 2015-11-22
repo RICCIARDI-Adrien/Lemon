@@ -1,8 +1,7 @@
 /** @file Cursor.h
  * Handle the cursor movements.
- * The cursor location is relative to the whole text, not only the screen area.
+ * The cursor location is relative to the whole text, not only the display area.
  * @author Adrien RICCIARDI
- * @version 1.0 : 24/02/2015
  */
 #ifndef H_CURSOR_H
 #define H_CURSOR_H
@@ -23,8 +22,8 @@ void CursorGoToNextLine(void);
 //int CursorGoToPreviousWord(void);
 //int CursorGoToNextWord(void);
 
-void CursorMoveToTop(void);
-void CursorMoveToBottom(void);
+int CursorMoveToUp(void);
+int CursorMoveToDown(void);
 void CursorMoveToLeft(void); // TODO peut remonter une ligne
 void CursorMoveToRight(void); // TODO peut descendre une ligne
 
@@ -34,32 +33,23 @@ void CursorSetToHome(void);
 /** Retrieve the cursor location in the buffer.
  * @return The character index.
  */
-unsigned int CursorGetCharacterIndex(void);
+unsigned int CursorGetBufferCharacterIndex(void);
 
 /** Retrieve the line on which the cursor is.
  * @return The line.
  */
-unsigned int CursorGetLineLocation(void);
+//unsigned int CursorGetLineLocation(void);
 
-/** Retrieve the screen row coordinate of the cursor.
- * @return The row screen coordinate.
+/** Retrieve the display row coordinate of the cursor.
+ * @return The row display coordinate.
  */
-unsigned int CursorGetScreenRow(void);
+unsigned int CursorGetDisplayRow(void);
 
-/** Retrieve the screen column coordinate of the cursor.
- * @return The column screen coordinate.
+/** Retrieve the display column coordinate of the cursor.
+ * @return The column display coordinate.
  */
-unsigned int CursorGetScreenColumn(void);
+unsigned int CursorGetDisplayColumn(void);
 
-#if 0
-/** Convert a in-buffer character index value to the corresponding screen coordinates.
- * @param Character_Index The character index value.
- * @param Pointer_Screen_Row On output, contain the screen row coordinate.
- * @param Pointer_Screen_Column On output, contain the screen column coordinate.
- */
-void CursorConvertCharacterIndexToScreenLocation(unsigned int Character_Index, unsigned int *Pointer_Screen_Row, unsigned int *Pointer_Screen_Column);
-#endif
-
-//CursorGetDisplayLocation(*r, *c)
+unsigned int CursorGetBufferRow(void);
 
 #endif

@@ -1,7 +1,6 @@
 /** @file Buffer.h
  * This buffer contains the full text and allows some simple operations on it.
  * @author Adrien RICCIARDI
- * @version 1.0 : 24/02/2015
  */
 
 #ifndef H_BUFFER_H
@@ -60,11 +59,7 @@ unsigned int BufferGetCharactersCount(void);
 char *BufferGetLine(unsigned int Index);
 #endif
 
-/** Display a line until the screen end is reached or a new line is found.
- * @param Line_Index The line to display (starting from 0 to BufferGetLinesCount() - 1).
- * @note The function displays nothing if the provided index is out of text size range.
- */
-void BufferDisplayLine(unsigned int Line_Index);
+void BufferDisplayPage(unsigned int Beginning_Line_Index);
 
 /** Get the length in characters of the requested line.
  * @param Line_Index The line to find length.

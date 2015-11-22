@@ -1,12 +1,12 @@
 /** @file Main.c
  * Text editor main loop.
  * @author Adrien RICCIARDI
- * @version 1.0 : 19/02/2015
  */
 #include <System.h>
 #include "Buffer.h"
 #include "Configuration.h"
 #include "Cursor.h"
+#include "Display.h"
 #include "Strings.h"
 
 //-------------------------------------------------------------------------------------------------
@@ -51,6 +51,52 @@ static void MainLoadFile(char *String_File_Name)
 	}
 }
 
+/** Erase the cursor trace.
+ * @warning This function must be called BEFORE updating the cursor.
+ */
+static void MainCursorEraseTrace(void)
+{
+	unsigned int Cursor_Display_Row, Cursor_Display_Column;
+	char Character;
+	
+	// Cache values
+	Cursor_Display_Row = CursorGetDisplayRow();
+	Cursor_Display_Column = CursorGetDisplayColumn();
+	
+	// Avoid displaying non-printable characters
+	Character = Buffer[CursorGetBufferCharacterIndex()];
+	if (Character < ' ') Character = ' ';
+	
+	// Display the character at the cursor position in the normal background color
+	DisplaySetCursorPosition(Cursor_Display_Row, Cursor_Display_Column);
+	DisplayWriteCharacter(Character);
+	DisplaySetCursorPosition(Cursor_Display_Row, Cursor_Display_Column); // Reset the cursor location after it was updated by DisplayWriteCharacter()
+}
+
+/** Add the cursor trace on the display. */
+static void MainCursorDisplay(void)
+{
+	unsigned int Cursor_Display_Row, Cursor_Display_Column;
+	char Character;
+	
+	// Cache values
+	Cursor_Display_Row = CursorGetDisplayRow();
+	Cursor_Display_Column = CursorGetDisplayColumn();
+	
+	// Avoid displaying non-printable characters
+	Character = Buffer[CursorGetBufferCharacterIndex()];
+	if (Character < ' ') Character = ' ';
+	
+	// Display the character at the cursor position with a green background
+	DisplaySetBackgroundColor(CONFIGURATION_CURSOR_BACKGROUND_COLOR);
+	DisplaySetCursorPosition(Cursor_Display_Row, Cursor_Display_Column);
+	DisplayWriteCharacter(Character);
+	
+	// Reset the background color and cursor location
+	DisplaySetBackgroundColor(CONFIGURATION_TEXT_BACKGROUND_COLOR);
+	DisplaySetCursorPosition(Cursor_Display_Row, Cursor_Display_Column);
+}
+
 //-------------------------------------------------------------------------------------------------
 // Entry point
 //-------------------------------------------------------------------------------------------------
@@ -58,7 +104,7 @@ int main(int argc, char *argv[])
 {
 	char *String_File_Name;
 	unsigned char Character; // Must be unsigned as virtual key codes use values greater than 127
-	unsigned int i, Previous_Cursor_Location = 0, Cursor_Row, Cursor_Column;
+	unsigned int i, Temp;
 	
 	// Check parameters
 	if (argc != 2)
@@ -69,6 +115,7 @@ int main(int argc, char *argv[])
 	String_File_Name = argv[1];
 	
 	ScreenClear();
+	DisplayClear(); // Prepare the display with a blank screen in case it's a new file
 	
 	// The specified file does exist
 	if (FileExists(String_File_Name))
@@ -77,35 +124,47 @@ int main(int argc, char *argv[])
 		MainLoadFile(String_File_Name);
 		
 		// Fill the screen with the first lines
-		for (i = 0; i < CONFIGURATION_SCREEN_ROWS_COUNT; i++) BufferDisplayLine(i);
+		BufferDisplayPage(0);
 	}
 	
-	// Put the cursor on the top left location of the screen
-	//CursorSetToHome();
+	// Display the cursor on the upper left corner
+	MainCursorDisplay();
+	DisplayRenderToScreen();
 	
 	// Process the user keys
 	// TODO state machine to use commands like ctrl+s to save
 	while (1)
 	{
 		Character = KeyboardReadCharacter();
+		
+		// Always erase the cursor trace because the display may not be cleared
+		MainCursorEraseTrace();
+		
 		switch (Character)
 		{
 			// Exit program
 			case KEYBOARD_KEY_CODE_ESCAPE:
 				// TODO ask save message if the buffer has been modified (MainSaveFile())
 				// TODO display a new line if the cursor is not at the beginning of a line
+				ScreenClear();
 				return 0;
 				
 			case KEYBOARD_KEY_CODE_ARROW_UP:
-				// TODO
+				if (CursorMoveToUp()) BufferDisplayPage(CursorGetBufferRow());
 				break;
 				
 			case KEYBOARD_KEY_CODE_ARROW_DOWN:
-				CursorMoveToBottom();
+				if (CursorMoveToDown())
+				{
+					Temp = CursorGetBufferRow();
+					if (Temp < CONFIGURATION_DISPLAY_ROWS_COUNT) Temp = 0;
+					else Temp = Temp - (CONFIGURATION_DISPLAY_ROWS_COUNT - 1); // Start displaying one line after the current first one
+					BufferDisplayPage(Temp);
+				}
 				break;
 				
 			case KEYBOARD_KEY_CODE_ARROW_LEFT:
-				//if (CursorGetScreenColumn() == 0)
+				//if (CursorGetDisplayColumn() == 0)
 				break;
 				
 			case KEYBOARD_KEY_CODE_ARROW_RIGHT:
@@ -114,7 +173,7 @@ int main(int argc, char *argv[])
 				
 			// Add the character to the buffer
 			default:
-				BufferAddCharacter(CursorGetCharacterIndex(), (char) Character);
+				//BufferAddCharacter(CursorGetCharacterIndex(), (char) Character);
 				
 				// ++ cursor
 				
@@ -123,16 +182,8 @@ int main(int argc, char *argv[])
 				break;
 		}
 		
-		// Erase the cursor previous trace
-		/*CursorConvertCharacterIndexToScreenLocation(Previous_Cursor_Location, &Cursor_Row, &Cursor_Column);
-		ScreenSetCursorLocation(Cursor_Row, Cursor_Column);
-		ScreenWriteCharacter(Buffer[Previous_Cursor_Location]);*/
-		
-		// Display the cursor at the new location
-		ScreenSetBackgroundColor(CONFIGURATION_CURSOR_COLOR);
-		ScreenSetCursorPosition(CursorGetScreenRow(), CursorGetScreenColumn());
-		Character = Buffer[CursorGetCharacterIndex()];
-		if (Character == '\n') Character = ' '; // Convert new line character to space to allow it to be displayed
-		ScreenWriteCharacter(Character);
+		// Add the cursor trace and show on screen
+		MainCursorDisplay();
+		DisplayRenderToScreen();
 	}
 }

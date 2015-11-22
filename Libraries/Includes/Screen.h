@@ -50,12 +50,12 @@ typedef enum
 void ScreenClear(void);
 
 /** Set the screen font color.
- * @param Color_Code Must be a constant from the SCREEN_COLOR_X set.
+ * @param Color_Code The color to use.
  */
 void ScreenSetFontColor(TScreenColor Color_Code);
 
 /** Set the screen background color.
- * @param Color_Code Must be a constant from the SCREEN_COLOR_X set.
+ * @param Color_Code The color to use.
  */
 void ScreenSetBackgroundColor(TScreenColor Color_Code);
 
@@ -68,7 +68,7 @@ void ScreenGetCursorPosition(unsigned int *Pointer_Row, unsigned int *Pointer_Co
 /** Set the screen cursor position.
  * @param Row Row coordinate in range [0, SCREEN_ROWS_COUNT - 1].
  * @param Column Column coordinate in range [0, SCREEN_COLUMNS_COUNT - 1].
- * @note The function does nothing if the specified coordinates are out of the screen.
+ * @note The function does nothing if the specified coordinates are out of the screen bounds.
  */
 void ScreenSetCursorPosition(unsigned int Row, unsigned int Column);
 
