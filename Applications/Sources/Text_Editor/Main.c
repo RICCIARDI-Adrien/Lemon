@@ -65,7 +65,7 @@ static void MainCursorEraseTrace(void)
 	
 	// Avoid displaying non-printable characters
 	Character = Buffer[CursorGetBufferCharacterIndex()];
-	if (Character < ' ') Character = ' ';
+	if ((Character >= 0) && (Character < ' ')) Character = ' '; // Must compare with zero because special characters like stressed letters have an ASCII code greater than 127, which become negative due to the signed char value
 	
 	// Display the character at the cursor position in the normal background color
 	DisplaySetCursorPosition(Cursor_Display_Row, Cursor_Display_Column);
@@ -85,7 +85,7 @@ static void MainCursorDisplay(void)
 	
 	// Avoid displaying non-printable characters
 	Character = Buffer[CursorGetBufferCharacterIndex()];
-	if (Character < ' ') Character = ' ';
+	if ((Character >= 0) && (Character < ' ')) Character = ' '; // Must compare with zero because special characters like stressed letters have an ASCII code greater than 127, which become negative due to the signed char value
 	
 	// Display the character at the cursor position with a green background
 	DisplaySetBackgroundColor(CONFIGURATION_CURSOR_BACKGROUND_COLOR);
