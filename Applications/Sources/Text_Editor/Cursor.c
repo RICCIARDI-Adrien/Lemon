@@ -17,12 +17,16 @@ static unsigned int Cursor_Display_Column = 0;
 /** The cursor row location in the text buffer. */
 static unsigned int Cursor_Buffer_Row = 0;
 
+/** During a vertical move, try to keep the cursor column as possible. */
+static unsigned int Cursor_Vertical_Move_Display_Column = 0;
+
 //-------------------------------------------------------------------------------------------------
 // Public functions
 //-------------------------------------------------------------------------------------------------
 int CursorMoveToUp(void)
 {
 	unsigned int Line_Length;
+	int Return_Value = 0;
 	
 	if (Cursor_Display_Row > 0) // The cursor will remain on display
 	{
@@ -31,8 +35,8 @@ int CursorMoveToUp(void)
 		
 		// Go to the same column location on display if possible
 		BufferGetLineLength(Cursor_Buffer_Row, &Line_Length);
-		if (Line_Length < Cursor_Display_Column) Cursor_Display_Column = Line_Length; // The cursor column can't reach the CONFIGURATION_DISPLAY_COLUMNS_COUNT value
-		return 0;
+		if (Line_Length < Cursor_Vertical_Move_Display_Column) Cursor_Display_Column = Line_Length; // The cursor column can't reach the CONFIGURATION_DISPLAY_COLUMNS_COUNT value
+		else Cursor_Display_Column = Cursor_Vertical_Move_Display_Column;
 	}
 	else // The cursor will go out of display upper bound, so the text must be scrolled
 	{
@@ -40,17 +44,21 @@ int CursorMoveToUp(void)
 		{
 			// Go to the same column location on display if possible
 			BufferGetLineLength(Cursor_Buffer_Row - 1, &Line_Length);
-			if (Line_Length < Cursor_Display_Column) Cursor_Display_Column = Line_Length; // The cursor column can't reach the CONFIGURATION_DISPLAY_COLUMNS_COUNT value
+			if (Line_Length < Cursor_Vertical_Move_Display_Column) Cursor_Display_Column = Line_Length; // The cursor column can't reach the CONFIGURATION_DISPLAY_COLUMNS_COUNT value
+			else Cursor_Display_Column = Cursor_Vertical_Move_Display_Column;
 			Cursor_Buffer_Row--;
-			return 1;
+			
+			Return_Value = 1;
 		}
 	}
-	return 0;
+	
+	return Return_Value;
 }
 
 int CursorMoveToDown(void)
 {
 	unsigned int Line_Length;
+	int Return_Value = 0;
 	
 	if (Cursor_Display_Row < CONFIGURATION_DISPLAY_ROWS_COUNT - 1) // The cursor will remain on display
 	{
@@ -60,7 +68,7 @@ int CursorMoveToDown(void)
 		// Go to the same column location on display if possible
 		BufferGetLineLength(Cursor_Buffer_Row, &Line_Length);
 		if (Line_Length < Cursor_Display_Column) Cursor_Display_Column = Line_Length; // The cursor column can't reach the CONFIGURATION_DISPLAY_COLUMNS_COUNT value
-		return 0;
+		else Cursor_Display_Column = Cursor_Vertical_Move_Display_Column;
 	}
 	else // The cursor will go out of display lower bound, so the text must be scrolled
 	{
@@ -69,22 +77,22 @@ int CursorMoveToDown(void)
 		{
 			// The line exists, go to the same column location on display if possible
 			if (Line_Length < Cursor_Display_Column) Cursor_Display_Column = Line_Length; // The cursor column can't reach the CONFIGURATION_DISPLAY_COLUMNS_COUNT value
+			else Cursor_Display_Column = Cursor_Vertical_Move_Display_Column;
 			Cursor_Buffer_Row++;
-			return 1;
+			
+			Return_Value = 1;
 		}
-		return 0;
 	}
+	
+	return Return_Value;
 }
 
 int CursorMoveToLeft(void)
 {
 	unsigned int Line_Length;
+	int Return_Value = 0;
 	
-	if (Cursor_Display_Column > 0) // The cursor will remain on display
-	{
-		Cursor_Display_Column--;
-		return 0;
-	}
+	if (Cursor_Display_Column > 0) Cursor_Display_Column--; // The cursor will remain on display
 	else // The cursor will go out of display leftmost bound, so the text must be scrolled one line upper
 	{
 		if (Cursor_Buffer_Row > 0)
@@ -97,24 +105,25 @@ int CursorMoveToLeft(void)
 			Cursor_Buffer_Row--;
 			
 			// Force the text page redraw only if the new row is not displayed
-			if (Cursor_Display_Row == 0) return 1;
+			if (Cursor_Display_Row == 0) Return_Value = 1;
 		}
 	}
-	return 0;
+
+	// Keep the current column location for an eventual vertical move
+	Cursor_Vertical_Move_Display_Column = Cursor_Display_Column;
+
+	return Return_Value;
 }
 
 int CursorMoveToRight(void)
 {
 	unsigned int Line_Length;
+	int Return_Value = 0;
 	
 	// Cache the next line length and presence
 	BufferGetLineLength(Cursor_Buffer_Row, &Line_Length);
 	
-	if ((Cursor_Display_Column < Line_Length) && (Cursor_Display_Column < CONFIGURATION_DISPLAY_COLUMNS_COUNT - 1)) // The cursor will remain on this line and on the display
-	{
-		Cursor_Display_Column++;
-		return 0;
-	}
+	if ((Cursor_Display_Column < Line_Length) && (Cursor_Display_Column < CONFIGURATION_DISPLAY_COLUMNS_COUNT - 1)) Cursor_Display_Column++; // The cursor will remain on this line and on the display
 	else // The cursor will go out of display rightmost bound or the current line bound, so the text must be scrolled one line downer
 	{
 		if (BufferGetLineLength(Cursor_Buffer_Row + 1, &Line_Length) == 0)
@@ -125,15 +134,20 @@ int CursorMoveToRight(void)
 			Cursor_Buffer_Row++;
 			
 			// Force the text page redraw only if the new row is not displayed
-			if (Cursor_Display_Row == CONFIGURATION_DISPLAY_COLUMNS_COUNT - 1) return 1;
+			if (Cursor_Display_Row == CONFIGURATION_DISPLAY_COLUMNS_COUNT - 1) Return_Value = 1;
 		}
 	}
-	return 0;
+	
+	// Keep the current column location for an eventual vertical move
+	Cursor_Vertical_Move_Display_Column = Cursor_Display_Column;
+	
+	return Return_Value;
 }
 
 void CursorGoToLineBeginning(void)
 {
 	Cursor_Display_Column = 0;
+	Cursor_Vertical_Move_Display_Column = 0;
 }
 
 void CursorGoToLineEnd(void)
@@ -144,6 +158,7 @@ void CursorGoToLineEnd(void)
 	BufferGetLineLength(Cursor_Buffer_Row, &Line_Length);
 	
 	Cursor_Display_Column = Line_Length;
+	Cursor_Vertical_Move_Display_Column = Line_Length;
 }
 
 unsigned int CursorGetBufferCharacterIndex(void)
