@@ -131,6 +131,21 @@ int CursorMoveToRight(void)
 	return 0;
 }
 
+void CursorGoToLineBeginning(void)
+{
+	Cursor_Display_Column = 0;
+}
+
+void CursorGoToLineEnd(void)
+{
+	unsigned int Line_Length;
+	
+	// Get the current line length
+	BufferGetLineLength(Cursor_Buffer_Row, &Line_Length);
+	
+	Cursor_Display_Column = Line_Length;
+}
+
 unsigned int CursorGetBufferCharacterIndex(void)
 {
 	return BufferFindLineBeginning(Cursor_Buffer_Row) + Cursor_Display_Column;

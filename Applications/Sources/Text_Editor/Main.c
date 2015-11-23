@@ -177,6 +177,14 @@ int main(int argc, char *argv[])
 				}
 				break;
 				
+			case KEYBOARD_KEY_CODE_ORIGIN:
+				CursorGoToLineBeginning();
+				break;
+				
+			case KEYBOARD_KEY_CODE_END:
+				CursorGoToLineEnd();
+				break;
+				
 			// TODO : backspace
 			// TODO : delete
 			

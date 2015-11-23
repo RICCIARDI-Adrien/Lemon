@@ -46,6 +46,12 @@ int CursorMoveToLeft(void);
  */
 int CursorMoveToRight(void);
 
+/** Move the cursor to the beginning of the line. */
+void CursorGoToLineBeginning(void);
+
+/** Move the cursor to the end of the line. */
+void CursorGoToLineEnd(void);
+
 /** Retrieve the cursor location in the buffer.
  * @return The character index.
  */
