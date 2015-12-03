@@ -60,29 +60,17 @@ int CursorMoveToDown(void)
 	unsigned int Line_Length;
 	int Return_Value = 0;
 	
-	if (Cursor_Display_Row < CONFIGURATION_DISPLAY_ROWS_COUNT - 1) // The cursor will remain on display
-	{
-		Cursor_Display_Row++;
-		Cursor_Buffer_Row++;
-		
-		// Go to the same column location on display if possible
-		BufferGetLineLength(Cursor_Buffer_Row, &Line_Length);
-		if (Line_Length < Cursor_Display_Column) Cursor_Display_Column = Line_Length; // The cursor column can't reach the CONFIGURATION_DISPLAY_COLUMNS_COUNT value
-		else Cursor_Display_Column = Cursor_Vertical_Move_Display_Column;
-	}
-	else // The cursor will go out of display lower bound, so the text must be scrolled
-	{
-		// Get the length of the bottom line
-		if (BufferGetLineLength(Cursor_Buffer_Row + 1, &Line_Length) == 0)
-		{
-			// The line exists, go to the same column location on display if possible
-			if (Line_Length < Cursor_Display_Column) Cursor_Display_Column = Line_Length; // The cursor column can't reach the CONFIGURATION_DISPLAY_COLUMNS_COUNT value
-			else Cursor_Display_Column = Cursor_Vertical_Move_Display_Column;
-			Cursor_Buffer_Row++;
-			
-			Return_Value = 1;
-		}
-	}
+	// Check if the next line exists and cache its length
+	if (BufferGetLineLength(Cursor_Buffer_Row + 1, &Line_Length) != 0) return Return_Value; // Nothing to do if the downer line does not exist
+	
+	if (Cursor_Display_Row < CONFIGURATION_DISPLAY_ROWS_COUNT - 1) Cursor_Display_Row++; // The cursor will remain on display
+	else Return_Value = 1; // The cursor will go out of display lower bound, so the text must be scrolled
+	
+	Cursor_Buffer_Row++;
+	
+	// Update cursor location
+	if (Line_Length >= Cursor_Vertical_Move_Display_Column) Cursor_Display_Column = Cursor_Vertical_Move_Display_Column; // Go to the preferred location if possible
+	else if (Line_Length < Cursor_Display_Column) Cursor_Display_Column = Line_Length;
 	
 	return Return_Value;
 }
@@ -129,7 +117,7 @@ int CursorMoveToRight(void)
 		if (BufferGetLineLength(Cursor_Buffer_Row + 1, &Line_Length) == 0)
 		{
 			// The downer line exists, so put the cursor at the beginning of the line
-			Cursor_Display_Row++;
+			if (Cursor_Display_Row < CONFIGURATION_DISPLAY_ROWS_COUNT - 1) Cursor_Display_Row++; // Do not cross the display lower bound
 			Cursor_Display_Column = 0;
 			Cursor_Buffer_Row++;
 			
