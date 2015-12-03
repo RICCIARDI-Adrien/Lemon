@@ -162,7 +162,7 @@ int BufferGetLineLength(unsigned int Line_Index, unsigned int *Pointer_Length)
 	if (i >= Buffer_Characters_Count) return 1;
 	
 	// Compute the line length
-	for (Characters_Counter = 0; Characters_Counter < CONFIGURATION_DISPLAY_COLUMNS_COUNT; Characters_Counter++)
+	for (Characters_Counter = 0; Characters_Counter < CONFIGURATION_DISPLAY_COLUMNS_COUNT - 1; Characters_Counter++)
 	{
 		// Cache the character value
 		Character = Buffer[i];

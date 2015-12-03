@@ -63,7 +63,7 @@ void BufferDisplayPage(unsigned int Beginning_Line_Index);
 
 /** Get the length in characters of the requested line.
  * @param Line_Index The line to find length.
- * @param Pointer_Length On output, contain the line length.
+ * @param Pointer_Length On output, contain the line length (limited to CONFIGURATION_DISPLAY_COLUMNS_COUNT - 1 if the line is too long).
  * @return 0 if the length was found (so the line exists),
  * @return 1 if the line does not exist (so the specified index is bad).
  */
