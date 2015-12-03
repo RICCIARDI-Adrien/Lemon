@@ -4,6 +4,8 @@ MBR
 Kernel
 ../Applications/Binaries/Benchmark.32b
 benchmark
+../Applications/Binaries/Text_Editor.32b
+edit
 ../Applications/Binaries/Games.32b
 games
 ../Applications/Binaries/Help.32b

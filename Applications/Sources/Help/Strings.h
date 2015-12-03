@@ -26,6 +26,7 @@
 	#define STRING_COMMAND_SHORT_DESCRIPTION_COPY "Copie un fichier."
 	#define STRING_COMMAND_SHORT_DESCRIPTION_DELETE "Supprime un fichier."
 	#define STRING_COMMAND_SHORT_DESCRIPTION_DOWNLOAD "T\202l\202charge un fichier depuis le port s\202rie."
+	#define STRING_COMMAND_SHORT_DESCRIPTION_EDIT "Editeur de texte avanc\202."
 	#define STRING_COMMAND_SHORT_DESCRIPTION_GAMES "Comporte plusieurs jeux simples et divertissants."
 	#define STRING_COMMAND_SHORT_DESCRIPTION_HELP "Fournit de l'aide sur les commandes existantes."
 	#define STRING_COMMAND_SHORT_DESCRIPTION_LIST "Liste les fichiers pr\202sents sur le disque dur."
@@ -35,6 +36,13 @@
 	#define STRING_COMMAND_SHORT_DESCRIPTION_VERSION "Affiche la version et la date de compilation du syst\212me."
 	
 	// Commands full description
+	#define STRING_COMMAND_FULL_DESCRIPTION_EDIT "Permet d'\202diter un fichier texte.\n" \
+		"Liste des commandes :\n" \
+		"    Fl\212ches : d\202placer le curseur\n" \
+		"    Echap : quitter le programme\n" \
+		"    Ctrl + s : sauver le fichier en cours d'\202dition\n" \
+		"    Home : aller au d\202but de la ligne\n" \
+		"    End : aller \205 la fin de la ligne"
 	#define STRING_COMMAND_FULL_DESCRIPTION_GAMES "Rassemble plusieurs jeux en mode texte.\n" \
 		"Les commandes de chaque jeu sont d\202taill\202es lors du lancement, sauf pour\n"\
 		"le Jeu de la Vie dont voici les commandes :\n" \

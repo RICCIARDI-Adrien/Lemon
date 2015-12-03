@@ -35,9 +35,9 @@ endef
 #------------------------------------------------------------------------------------------------------------------------------
 # Global rules
 #------------------------------------------------------------------------------------------------------------------------------
-all: benchmark games help tests unix_commands
+all: benchmark games help tests text_editor unix_commands
 
-clean: benchmark_clean games_clean help_clean tests_clean unix_commands_clean
+clean: benchmark_clean games_clean help_clean tests_clean text_editor_clean unix_commands_clean
 	# Delete also the tools
 	rm -rf $(SERIAL_PORT_SERVER)
 
