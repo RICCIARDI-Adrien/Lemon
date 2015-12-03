@@ -185,15 +185,37 @@ int main(int argc, char *argv[])
 				CursorGoToLineEnd();
 				break;
 				
-			// TODO : backspace (better done in default)
-			// TODO : delete (better done in default)
+			// TODO : ctrl state machine
+			// TODO : ctrl + s
+			// TODO : ctrl + c
+			// TODO : ctrl + v
+			// TODO : ctrl + x
 			// TODO : page up
 			// TODO : page down
+			// TODO : insert
+				
+			case KEYBOARD_KEY_CODE_BACKSPACE:
+			case KEYBOARD_KEY_CODE_DELETE:
+				// Choose the character to remove according to the pressed key (delete removes the current character whereas backspace removes the previous character)
+				Temp = CursorGetBufferCharacterIndex();
+				if (Character == KEYBOARD_KEY_CODE_BACKSPACE)
+				{
+					Temp--; // Remove the previous character
+					CursorMoveToLeft(); // Update the cursor location before changing the buffer content to avoid the cursor going to the end of the newly created upper line (which can be longer than the previous line was)
+				}
+				
+				// Remove the character
+				BufferRemoveCharacter(Temp);
+
+				// The only characters that can make the scrolling go upper are backspace and delete, in all other cases the buffer must be redrawn from where it was displayed
+				BufferDisplayPage(CursorGetBufferRow() - CursorGetDisplayRow());
+				
+				break;
 				
 			// Add the character to the buffer
 			default:
 				// Append the character
-				BufferAppendCharacter(CursorGetBufferCharacterIndex(), (char) Character);
+				if (BufferAppendCharacter(CursorGetBufferCharacterIndex(), (char) Character) != 0) break; // Nothing to do if the characters could not be added (TODO : error message if the buffer is full)
 				
 				// Update the cursor location
 				CursorMoveToRight();

@@ -68,10 +68,18 @@ int BufferAppendCharacter(unsigned int Index, char Character)
 	return 0;
 }
 
-/** Find the first character of the specified line.
- * @param Line_Index The line to find index.
- * @return The character index. It is equal to Buffer_Characters_Count if the line index was too far from the text end.
- */
+void BufferRemoveCharacter(unsigned int Index)
+{
+	unsigned int i;
+	
+	// Make sure the index is valid
+	if (Index >= CONFIGURATION_BUFFER_MAXIMUM_SIZE) return;
+	
+	// Shift all characters one place to the left if the character is added in the middle of the buffer
+	for (i = Index; i < Buffer_Characters_Count - 1; i++) Buffer[i] = Buffer[i + 1];
+	Buffer_Characters_Count--;
+}
+
 unsigned int BufferFindLineBeginning(unsigned int Line_Index)
 {
 	unsigned int Lines_Count = 0, i = 0, Characters_Counter = 0;

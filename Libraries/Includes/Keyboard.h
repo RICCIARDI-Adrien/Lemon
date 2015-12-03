@@ -8,6 +8,8 @@
 //-------------------------------------------------------------------------------------------------
 // Constants
 //-------------------------------------------------------------------------------------------------
+/** Backspace key. */
+#define KEYBOARD_KEY_CODE_BACKSPACE '\b'
 /** Keyboard enter key. */
 #define KEYBOARD_KEY_CODE_ENTER '\n'
 /** Keyboard escape key. */

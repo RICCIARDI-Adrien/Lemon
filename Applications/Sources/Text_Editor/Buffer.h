@@ -26,7 +26,7 @@ extern unsigned int Buffer_Characters_Count;
  */
 int BufferAppendCharacter(unsigned int Index, char Character);
 
-/** Remove a character from the buffer. All the following characters are shifted.
+/** Remove a character from the buffer. All the following characters are shifted to the left.
  * @param Index Where to remove the character.
  * @note The function does nothing if the index is out of the buffer bounds or if there is no character at the specified index.
  */
