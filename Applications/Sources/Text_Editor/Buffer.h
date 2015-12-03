@@ -48,6 +48,7 @@ unsigned int BufferFindLineBeginning(unsigned int Line_Index);
  */
 unsigned int BufferGetLinesCount(void);
 
+// TODO to make a cleaner encapsulation
 unsigned int BufferGetCharactersCount(void);
 
 #if 0

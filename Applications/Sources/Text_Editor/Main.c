@@ -12,43 +12,94 @@
 //-------------------------------------------------------------------------------------------------
 // Private functions
 //-------------------------------------------------------------------------------------------------
+/** Display a full screen message.
+ * @param String_Message_Title The message title. It will be automatically centered.
+ * @param String_Message_Content The message content.
+ * @param Message_Content_Color The message content color.
+ */
+static void MainDisplayMessage(char *String_Message_Title, char *String_Message_Content, TScreenColor Message_Content_Color)
+{
+	ScreenClear();
+	
+	// Display the title
+	ScreenWriteCenteredString(String_Message_Title);
+	ScreenWriteString("\n\n");
+	
+	// Display the message content with the specified color
+	ScreenSetFontColor(Message_Content_Color);
+	ScreenWriteString(String_Message_Content);
+	ScreenSetFontColor(CONFIGURATION_TEXT_FOREGROUND_COLOR); // Restore the default color
+	
+	// Display the prompt
+	ScreenSetCursorPosition(SCREEN_ROWS_COUNT - 1, 0);
+	ScreenWriteString(STRING_HIT_ENTER_TO_CONTINUE);
+	
+	// Wait for the Enter key to be pressed
+	while (KeyboardReadCharacter() != KEYBOARD_KEY_CODE_ENTER);
+	
+	// Restore the previously displayed buffer
+	DisplayRenderToScreen();
+}
+
 /** Load a file to the internal buffer.
  * @param String_File_Name The file to load.
+ * @return 0 if the file was successfully loaded,
+ * @return 1 if an error occurred.
  */
-static void MainLoadFile(char *String_File_Name)
+static int MainLoadFile(char *String_File_Name)
 {
 	unsigned int File_ID;
 	
 	// Try to open the file
 	if (FileOpen(String_File_Name, FILE_OPENING_MODE_READ, &File_ID) != ERROR_CODE_NO_ERROR)
 	{
-		ScreenSetFontColor(SCREEN_COLOR_RED);
-		ScreenWriteString(STRING_ERROR_CANT_OPEN_FILE);
-		ScreenSetFontColor(SCREEN_COLOR_BLUE);
-		SystemExitProgram();
+		MainDisplayMessage(STRING_MESSAGE_TITLE_ERROR, STRING_ERROR_CANT_OPEN_FILE, SCREEN_COLOR_RED);
+		return 1;
 	}
 	
 	// Load file content
 	if (FileRead(File_ID, Buffer, CONFIGURATION_BUFFER_MAXIMUM_SIZE, &Buffer_Characters_Count) != ERROR_CODE_NO_ERROR)
 	{
-		ScreenSetFontColor(SCREEN_COLOR_RED);
-		ScreenWriteString(STRING_ERROR_CANT_LOAD_FILE);
-		ScreenSetFontColor(SCREEN_COLOR_BLUE);
 		FileClose(File_ID);
-		SystemExitProgram();
+		MainDisplayMessage(STRING_MESSAGE_TITLE_ERROR, STRING_ERROR_CANT_LOAD_FILE, SCREEN_COLOR_RED);
+		return 1;
 	}
 	
 	FileClose(File_ID);
 	
 	// Show a message if the file is too big for the buffer
-	if (FileGetSize(String_File_Name) > CONFIGURATION_BUFFER_MAXIMUM_SIZE)
+	if (FileGetSize(String_File_Name) > CONFIGURATION_BUFFER_MAXIMUM_SIZE) MainDisplayMessage(STRING_MESSAGE_TITLE_WARNING, STRING_WARNING_FILE_IS_TOO_BIG, SCREEN_COLOR_BROWN);
+	
+	return 0;
+}
+
+/** Save the internal buffer to a file.
+ * @param String_File_Name The file to save to.
+ * @return 0 if the file was successfully saved,
+ * @return 1 if an error occurred.
+ */
+static int MainSaveFile(char *String_File_Name)
+{
+	unsigned int File_ID;
+	
+	// Try to open the file
+	if (FileOpen(String_File_Name, FILE_OPENING_MODE_WRITE, &File_ID) != ERROR_CODE_NO_ERROR)
 	{
-		ScreenSetFontColor(SCREEN_COLOR_MAGENTA);
-		ScreenWriteString(STRING_FILE_IS_TOO_BIG);
-		ScreenSetFontColor(SCREEN_COLOR_BLUE);
-		// Wait for the user to hit a key
-		KeyboardReadCharacter();
+		MainDisplayMessage(STRING_MESSAGE_TITLE_ERROR, STRING_ERROR_CANT_OPEN_FILE, SCREEN_COLOR_RED);
+		return 1;
 	}
+	
+	// Write file content
+	if (FileWrite(File_ID, Buffer, Buffer_Characters_Count) != ERROR_CODE_NO_ERROR)
+	{
+		FileClose(File_ID);
+		MainDisplayMessage(STRING_MESSAGE_TITLE_ERROR, STRING_ERROR_CANT_SAVE_FILE, SCREEN_COLOR_RED);
+		return 1;
+	}
+	
+	FileClose(File_ID);
+	
+	return 0;
 }
 
 /** Erase the cursor trace.
@@ -97,6 +148,24 @@ static void MainCursorDisplay(void)
 	DisplaySetCursorPosition(Cursor_Display_Row, Cursor_Display_Column);
 }
 
+#if 0
+// TODO should be cleaner to light the main loop with this function
+/** Handle the Control key state machine.
+ * @param Character The character received right after the Control one.
+ */
+static inline void MainHandleControlKeyStateMachine(unsigned char Character)
+{
+	
+}
+#endif
+
+/** Gracefully exit to system. */
+static void MainExitProgram(void)
+{
+	ScreenClear();
+	SystemExitProgram();
+}
+
 //-------------------------------------------------------------------------------------------------
 // Entry point
 //-------------------------------------------------------------------------------------------------
@@ -104,7 +173,8 @@ int main(int argc, char *argv[])
 {
 	char *String_File_Name;
 	unsigned char Character; // Must be unsigned as virtual key codes use values greater than 127
-	unsigned int i, Temp;
+	unsigned int Temp;
+	int Is_Control_Key_Detected = 0;
 	
 	// Check parameters
 	if (argc != 2)
@@ -121,7 +191,7 @@ int main(int argc, char *argv[])
 	if (FileExists(String_File_Name))
 	{
 		// Load it in the buffer
-		MainLoadFile(String_File_Name);
+		if (MainLoadFile(String_File_Name) != 0) MainExitProgram();
 		
 		// Fill the screen with the first lines
 		BufferDisplayPage(0);
@@ -146,11 +216,12 @@ int main(int argc, char *argv[])
 			case KEYBOARD_KEY_CODE_ESCAPE:
 				// TODO ask save message if the buffer has been modified (MainSaveFile())
 				// TODO display a new line if the cursor is not at the beginning of a line
-				ScreenClear();
-				return 0;
+				MainExitProgram();
+				break; // To make the compiler happy
 				
 			case KEYBOARD_KEY_CODE_ARROW_UP:
 				if (CursorMoveToUp()) BufferDisplayPage(CursorGetBufferRow());
+				Is_Control_Key_Detected = 0;
 				break;
 				
 			case KEYBOARD_KEY_CODE_ARROW_DOWN:
@@ -161,10 +232,12 @@ int main(int argc, char *argv[])
 					else Temp = Temp - (CONFIGURATION_DISPLAY_ROWS_COUNT - 1); // Start displaying one line after the current first one
 					BufferDisplayPage(Temp);
 				}
+				Is_Control_Key_Detected = 0;
 				break;
 				
 			case KEYBOARD_KEY_CODE_ARROW_LEFT:
 				if (CursorMoveToLeft()) BufferDisplayPage(CursorGetBufferRow());
+				Is_Control_Key_Detected = 0;
 				break;
 				
 			case KEYBOARD_KEY_CODE_ARROW_RIGHT:
@@ -175,18 +248,19 @@ int main(int argc, char *argv[])
 					else Temp = Temp - (CONFIGURATION_DISPLAY_ROWS_COUNT - 1); // Start displaying one line after the current first one
 					BufferDisplayPage(Temp);
 				}
+				Is_Control_Key_Detected = 0;
 				break;
 				
 			case KEYBOARD_KEY_CODE_ORIGIN:
 				CursorGoToLineBeginning();
+				Is_Control_Key_Detected = 0;
 				break;
 				
 			case KEYBOARD_KEY_CODE_END:
 				CursorGoToLineEnd();
+				Is_Control_Key_Detected = 0;
 				break;
 				
-			// TODO : ctrl state machine
-			// TODO : ctrl + s
 			// TODO : ctrl + c
 			// TODO : ctrl + v
 			// TODO : ctrl + x
@@ -204,23 +278,43 @@ int main(int argc, char *argv[])
 					CursorMoveToLeft(); // Update the cursor location before changing the buffer content to avoid the cursor going to the end of the newly created upper line (which can be longer than the previous line was)
 				}
 				
-				// Remove the character
-				BufferRemoveCharacter(Temp);
-
-				// The only characters that can make the scrolling go upper are backspace and delete, in all other cases the buffer must be redrawn from where it was displayed
+				// Update the buffer and the display
+				BufferRemoveCharacter(Temp); // Remove the character
 				BufferDisplayPage(CursorGetBufferRow() - CursorGetDisplayRow());
+				
+				Is_Control_Key_Detected = 0;
+				break;
+				
+			case KEYBOARD_KEY_CODE_CONTROL_LEFT:
+			case KEYBOARD_KEY_CODE_CONTROL_RIGHT:
+				Is_Control_Key_Detected = 1;
 				break;
 				
 			// Add the character to the buffer
 			default:
-				// Append the character
-				if (BufferAppendCharacter(CursorGetBufferCharacterIndex(), (char) Character) != 0) break; // Nothing to do if the characters could not be added (TODO : error message if the buffer is full)
+				// Handle the Control key state machine
+				if (Is_Control_Key_Detected)
+				{
+					switch (Character)
+					{
+						// Save the file
+						case 'S':
+						case 's':
+							if (MainSaveFile(String_File_Name) != 0) MainExitProgram();
+							break;
+					}
+				}
+				else
+				{
+					// Append the character
+					if (BufferAppendCharacter(CursorGetBufferCharacterIndex(), (char) Character) != 0) break; // Nothing to do if the characters could not be added (TODO : error message if the buffer is full)
+					
+					// Update the cursor location and the display
+					CursorMoveToRight();
+					BufferDisplayPage(CursorGetBufferRow() - CursorGetDisplayRow());
+				}
 				
-				// Update the cursor location
-				CursorMoveToRight();
-				
-				// The only characters that can make the scrolling go upper are backspace and delete, in all other cases the buffer must be redrawn from where it was displayed
-				BufferDisplayPage(CursorGetBufferRow() - CursorGetDisplayRow());
+				Is_Control_Key_Detected = 0;
 				break;
 		}
 		

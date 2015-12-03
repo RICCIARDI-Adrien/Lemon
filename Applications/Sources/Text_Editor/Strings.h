@@ -14,9 +14,13 @@
 // French strings
 #else
 	#define STRING_USAGE "Erreur : vous devez sp\202cifier un nom de fichier.\nLe fichier sera ouvert s'il existe ou sera cr\202\202 s'il n'existe pas.\n"
-	#define STRING_ERROR_CANT_OPEN_FILE "Erreur : impossible d'ouvrir fichier.\n"
-	#define STRING_ERROR_CANT_LOAD_FILE "Erreur : impossible de charger le contenu du fichier.\n"
-	#define STRING_FILE_IS_TOO_BIG "Attention : le fichier est trop grand. Seul le d\202but a \202t\202 charg\202.\nAppuyez sur une touche pour continuer.\n"
+	#define STRING_MESSAGE_TITLE_ERROR "ERREUR"
+	#define STRING_MESSAGE_TITLE_WARNING "ATTENTION"
+	#define STRING_ERROR_CANT_OPEN_FILE "Impossible d'ouvrir le fichier."
+	#define STRING_ERROR_CANT_LOAD_FILE "Impossible de charger le contenu du fichier."
+	#define STRING_ERROR_CANT_SAVE_FILE "Impossible de sauvegarder le fichier."
+	#define STRING_WARNING_FILE_IS_TOO_BIG "Le fichier est trop grand. Seul le d\202but a \202t\202 charg\202."
+	#define STRING_HIT_ENTER_TO_CONTINUE "Appuyez sur la touche Entr\202e pour continuer."
 #endif
 
 #endif
