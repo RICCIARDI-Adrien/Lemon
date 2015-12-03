@@ -209,7 +209,6 @@ int main(int argc, char *argv[])
 
 				// The only characters that can make the scrolling go upper are backspace and delete, in all other cases the buffer must be redrawn from where it was displayed
 				BufferDisplayPage(CursorGetBufferRow() - CursorGetDisplayRow());
-				
 				break;
 				
 			// Add the character to the buffer
