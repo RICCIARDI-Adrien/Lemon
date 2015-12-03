@@ -47,7 +47,7 @@ static inline void BufferDisplayLine(unsigned int Line_Index)
 //-------------------------------------------------------------------------------------------------
 // Public functions
 //-------------------------------------------------------------------------------------------------
-int BufferAddCharacter(unsigned int Index, char Character)
+int BufferAppendCharacter(unsigned int Index, char Character)
 {
 	unsigned int i;
 	

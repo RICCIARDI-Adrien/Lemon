@@ -185,17 +185,21 @@ int main(int argc, char *argv[])
 				CursorGoToLineEnd();
 				break;
 				
-			// TODO : backspace
-			// TODO : delete
-			
+			// TODO : backspace (better done in default)
+			// TODO : delete (better done in default)
+			// TODO : page up
+			// TODO : page down
+				
 			// Add the character to the buffer
 			default:
-				//BufferAddCharacter(CursorGetBufferCharacterIndex(), (char) Character);
+				// Append the character
+				BufferAppendCharacter(CursorGetBufferCharacterIndex(), (char) Character);
 				
-				// ++ cursor
+				// Update the cursor location
+				CursorMoveToRight();
 				
-				// Display the modified line and all the lines below
-				
+				// The only characters that can make the scrolling go upper are backspace and delete, in all other cases the buffer must be redrawn from where it was displayed
+				BufferDisplayPage(CursorGetBufferRow() - CursorGetDisplayRow());
 				break;
 		}
 		

@@ -24,7 +24,7 @@ extern unsigned int Buffer_Characters_Count;
  * @return 0 if the character was successfully added,
  * @return 1 if the character is out of the buffer limits, if the buffer is full or if the index is too far from the text end.
  */
-int BufferAddCharacter(unsigned int Index, char Character);
+int BufferAppendCharacter(unsigned int Index, char Character);
 
 /** Remove a character from the buffer. All the following characters are shifted.
  * @param Index Where to remove the character.
