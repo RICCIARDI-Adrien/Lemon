@@ -21,6 +21,10 @@
 	#define STRING_ERROR_CANT_SAVE_FILE "Impossible de sauvegarder le fichier."
 	#define STRING_WARNING_FILE_IS_TOO_BIG "Le fichier est trop grand. Seul le d\202but a \202t\202 charg\202."
 	#define STRING_HIT_ENTER_TO_CONTINUE "Appuyez sur la touche Entr\202e pour continuer."
+	
+	#define STRING_TEXT_INFORMATION_MESSAGE_TITLE "Statistiques du document"
+	#define STRING_TEXT_INFORMATION_MESSAGE_CONTENT_1 "Nombre de lignes : "
+	#define STRING_TEXT_INFORMATION_MESSAGE_CONTENT_2 "\nNombre de caract\212res : "
 #endif
 
 #endif

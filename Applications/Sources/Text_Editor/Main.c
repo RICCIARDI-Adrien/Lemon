@@ -148,6 +148,24 @@ static void MainCursorDisplay(void)
 	DisplaySetCursorPosition(Cursor_Display_Row, Cursor_Display_Column);
 }
 
+/** Display text information (lines count, characters count and so on). */
+static void MainDisplayTextInformation(void)
+{
+	char String_Content[256], String_Number[11];
+	
+	// Create the "lines count" string
+	StringCopy(STRING_TEXT_INFORMATION_MESSAGE_CONTENT_1, String_Content);
+	StringConvertUnsignedIntegerToString(BufferGetLinesCount(), String_Number);
+	StringConcatenate(String_Content, String_Number);
+	
+	// Create the "characters count" string
+	StringConcatenate(String_Content, STRING_TEXT_INFORMATION_MESSAGE_CONTENT_2);
+	StringConvertUnsignedIntegerToString(Buffer_Characters_Count, String_Number);
+	StringConcatenate(String_Content, String_Number);
+	
+	MainDisplayMessage(STRING_TEXT_INFORMATION_MESSAGE_TITLE, String_Content, SCREEN_COLOR_BLUE);
+}
+
 #if 0
 // TODO should be cleaner to light the main loop with this function
 /** Handle the Control key state machine.
@@ -174,7 +192,7 @@ int main(int argc, char *argv[])
 	char *String_File_Name;
 	unsigned char Character; // Must be unsigned as virtual key codes use values greater than 127
 	unsigned int Temp;
-	int Is_Control_Key_Detected = 0;
+	int Is_Control_Key_Detected = 0, Is_Text_Modified = 0;
 	
 	// Check parameters
 	if (argc != 2)
@@ -216,6 +234,7 @@ int main(int argc, char *argv[])
 			case KEYBOARD_KEY_CODE_ESCAPE:
 				// TODO ask save message if the buffer has been modified (MainSaveFile())
 				// TODO display a new line if the cursor is not at the beginning of a line
+				// if (Is_Text_Modified) message
 				MainExitProgram();
 				break; // To make the compiler happy
 				
@@ -283,6 +302,7 @@ int main(int argc, char *argv[])
 				BufferDisplayPage(CursorGetBufferRow() - CursorGetDisplayRow());
 				
 				Is_Control_Key_Detected = 0;
+				Is_Text_Modified = 1;
 				break;
 				
 			case KEYBOARD_KEY_CODE_CONTROL_LEFT:
@@ -297,6 +317,12 @@ int main(int argc, char *argv[])
 				{
 					switch (Character)
 					{
+						// Display current text information
+						case 'I':
+						case 'i':
+							MainDisplayTextInformation();
+							break;
+						
 						// Save the file
 						case 'S':
 						case 's':
@@ -312,6 +338,8 @@ int main(int argc, char *argv[])
 					// Update the cursor location and the display
 					CursorMoveToRight();
 					BufferDisplayPage(CursorGetBufferRow() - CursorGetDisplayRow());
+					
+					Is_Text_Modified = 1;
 				}
 				
 				Is_Control_Key_Detected = 0;
