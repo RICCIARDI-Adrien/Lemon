@@ -103,7 +103,7 @@ static int MainSaveFile(char *String_File_Name)
 }
 
 /** Erase the cursor trace.
- * @warning This function must be called BEFORE updating the cursor.
+ * @warning This function must be called BEFORE updating the cursor position.
  */
 static void MainCursorEraseTrace(void)
 {
@@ -205,7 +205,7 @@ int main(int argc, char *argv[])
 	ScreenClear();
 	DisplayClear(); // Prepare the display with a blank screen in case it's a new file
 	
-	// The specified file does exist
+	// Does the specified file exist ?
 	if (FileExists(String_File_Name))
 	{
 		// Load it in the buffer
@@ -220,7 +220,6 @@ int main(int argc, char *argv[])
 	DisplayRenderToScreen();
 	
 	// Process the user keys
-	// TODO state machine to use commands like ctrl+s to save
 	while (1)
 	{
 		Character = KeyboardReadCharacter();
@@ -289,12 +288,19 @@ int main(int argc, char *argv[])
 				
 			case KEYBOARD_KEY_CODE_BACKSPACE:
 			case KEYBOARD_KEY_CODE_DELETE:
+				if (Buffer_Characters_Count == 0) break; // Nothing to delete if the buffer is empty
+				
 				// Choose the character to remove according to the pressed key (delete removes the current character whereas backspace removes the previous character)
 				Temp = CursorGetBufferCharacterIndex();
 				if (Character == KEYBOARD_KEY_CODE_BACKSPACE)
 				{
 					Temp--; // Remove the previous character
 					CursorMoveToLeft(); // Update the cursor location before changing the buffer content to avoid the cursor going to the end of the newly created upper line (which can be longer than the previous line was)
+				}
+				else
+				{
+					// Is there a character under the cursor or to the right of it ?
+					if (Temp == Buffer_Characters_Count - 1) break;
 				}
 				
 				// Update the buffer and the display
