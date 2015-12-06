@@ -1,9 +1,7 @@
 # System makefile.
 # There is no need to take dependencies into account as the whole system must be entirely rebuilded each time.
 # Author : Adrien RICCIARDI
-CC = gcc
-LD = ld
-AS = nasm
+include ../Rules.mk
 
 PATH_SOURCES = Sources
 PATH_OBJECTS = Objects
@@ -12,7 +10,7 @@ PATH_INCLUDES = Includes
 INCLUDES = -I$(PATH_INCLUDES)
 
 # Option -fno-asynchronous-unwind-tables avoid generating the .eh_frame section, which is heavy and useless here
-CCFLAGS += -masm=intel -m32 -fno-builtin -finline-functions-called-once -nostdlib -nostartfiles -fno-asynchronous-unwind-tables -W -Wall -Wunused $(INCLUDES)
+CCFLAGS += -W -Wall -Wunused $(INCLUDES)
 LDFLAGS = -T Linker_Script.ld --strip-all -nostdlib -nostartfile
 MBR_FLAGS = -DSECTORS_TO_LOAD_COUNT=64
 

@@ -1,9 +1,8 @@
 # Installer makefile.
 # There is no need to take dependencies into account as the whole system must be entirely rebuilded every time.
 # Author : Adrien RICCIARDI
-CC = gcc
-LD = ld
-AS = nasm
+include ../Rules.mk
+
 ISO_GENERATOR = genisoimage
 
 SYSTEM_SOURCES_PATH = ../System/Sources
@@ -20,7 +19,7 @@ OBJECTS = $(OBJECTS_CORE) $(OBJECTS_DRIVERS) $(OBJECTS_FILE_SYSTEM) $(OBJECTS_SH
 
 INCLUDES = $(SYSTEM_INCLUDES_PATH)
 
-CCFLAGS += -masm=intel -m32 -fno-builtin -finline-functions-called-once -nostdlib -nostartfiles -W -Wall -Wunused -fno-asynchronous-unwind-tables -I$(INCLUDES) -DINSTALLER
+CCFLAGS += -W -Wall -Wunused -I$(INCLUDES) -DINSTALLER
 LDFLAGS = -T ../System/Linker_Script.ld --strip-all -nostdlib -nostartfile
 MBR_FLAGS = -DSECTORS_TO_LOAD_COUNT=512 -DINSTALLER
 

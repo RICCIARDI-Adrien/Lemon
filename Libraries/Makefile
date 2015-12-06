@@ -7,6 +7,8 @@
 # V 1.4 : 06/07/2014, added Newlib 2.1.0 support and removed custom libc.
 # V 1.5 : 25/10/2014, completely removed UNIX libc, using only Lemon libraries.
 # V 1.6 : 07/12/2014, added dependencies generation for each file.
+include ../Rules.mk
+
 PATH_BINARIES = Binaries
 PATH_INCLUDES = Includes
 PATH_OBJECTS = Objects
@@ -27,8 +29,7 @@ OBJECTS = $(OBJECTS_FILE) $(OBJECTS_KEYBOARD) $(OBJECTS_MATH) $(OBJECTS_MEMORY) 
 ARCHIVE_NAME = Libraries.a
 INCLUDES = -IIncludes -I../System/Includes
 
-CC = gcc
-CCFLAGS += -c -nostdlib -fno-builtin -masm=intel -m32 -W -Wall -fno-asynchronous-unwind-tables -O2 $(INCLUDES)
+CCFLAGS += -c -O2 $(INCLUDES)
 
 all: $(OBJECTS)
 	ar -rvsc $(PATH_BINARIES)/$(ARCHIVE_NAME) $(OBJECTS)

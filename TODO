@@ -7,9 +7,6 @@ Système
 
 - virer @version sauf dans kernel.h
 
-- infos debug activables dans configuration.h et non compilées si non activées
-- choix auto lba48 si taille disque > 137Go (harddiskinitialize())
-
 Doc
 ---
 Rajouter dans doc la liste des programmes nécessaires pour compiler l'OS

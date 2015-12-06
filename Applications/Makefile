@@ -1,5 +1,7 @@
 # Applications main makefile.
 # Author : Adrien RICCIARDI
+include ../Rules.mk
+
 BINARIES_PATH = $(realpath Binaries)
 LIBRARIES_PATH = $(realpath ../Libraries)
 OBJECTS_PATH = $(realpath Objects)
@@ -7,11 +9,9 @@ SOURCES_PATH = $(realpath Sources)
 SYSTEM_PATH = $(realpath ../System)
 TOOLS_PATH = $(realpath Tools)
 
-CC = gcc
-LD = ld
 SERIAL_PORT_SERVER = $(TOOLS_PATH)/Serial_Port_Server.out
 
-CCFLAGS += -nostdlib -fno-builtin -masm=intel -m32 -W -Wall -Wunused -fno-asynchronous-unwind-tables -I$(LIBRARIES_PATH)/Includes -I$(SYSTEM_PATH)/Includes
+CCFLAGS += -W -Wall -Wunused -I$(LIBRARIES_PATH)/Includes -I$(SYSTEM_PATH)/Includes
 LDFLAGS = -T $(TOOLS_PATH)/Linker_Script.ld --strip-all -s -L$(LIBRARIES_PATH)/Binaries -l:Libraries.a
 SERIAL_PORT_SERVER_FLAGS = /tmp/Lemon_Serial_Port_Pipe
 
