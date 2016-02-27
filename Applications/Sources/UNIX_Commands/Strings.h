@@ -36,7 +36,7 @@
 	
 	// "more" command
 	#define STRING_COMMAND_MORE_USAGE "Affiche le contenu d'un fichier texte ligne apr\212s ligne.\n" \
-		"L'unique param\212tre de cette fonction est le fichier \205 afficher.\n" \
+		"L'unique param\212tre de cette commande est le fichier \205 afficher.\n" \
 		"Utilisation des touches :\n" \
 		"  - Entr\202e : affiche la ligne suivante\n" \
 		"  - Espace : affiche la page suivante\n" \
