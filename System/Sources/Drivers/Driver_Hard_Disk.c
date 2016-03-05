@@ -2,6 +2,7 @@
  * @see Driver_Hard_Disk.h for description.
  * @author Adrien RICCIARDI
  */
+#include <Architecture.h>
 #include <Configuration.h>
 #include <Debug.h>
 #include <Drivers/Driver_Hard_Disk.h>
@@ -58,7 +59,7 @@ static unsigned long long Hard_Disk_LBA_Sectors_Count;
 static inline __attribute__((always_inline)) void HardDiskSendIdentifyDeviceCommand(void *Pointer_Buffer)
 {
 	// Wait for the controller to be ready
-	asm("cli");
+	ARCHITECTURE_INTERRUPTS_DISABLE();
 	WAIT_BUSY_CONTROLLER();
 	
 	// Select the master device
@@ -81,12 +82,13 @@ static inline __attribute__((always_inline)) void HardDiskSendIdentifyDeviceComm
 		"rep insw\n"
 		"pop edx\n"
 		"pop ecx\n"
-		"pop edi\n"
-		"sti"
+		"pop edi"
 		: // No output
 		: "g" (HARD_DISK_SECTOR_SIZE / 2), "g" (Pointer_Buffer), "g" (HARD_DISK_PORT_DATA)
 		: "ecx", "edx", "edi"
 	);
+	
+	ARCHITECTURE_INTERRUPTS_ENABLE();
 }
 
 //-------------------------------------------------------------------------------------------------
@@ -135,7 +137,7 @@ void HardDiskReadSector(unsigned int Logical_Sector_Number, void *Pointer_Buffer
 	unsigned char *Pointer_Buffer_Bytes = Pointer_Buffer;
 	
 	// Wait for the controller to be ready
-	asm("cli");
+	ARCHITECTURE_INTERRUPTS_DISABLE();
 	WAIT_BUSY_CONTROLLER();
 	
 	if (Hard_Disk_Is_LBA48_Addressing_Used)
@@ -186,12 +188,13 @@ void HardDiskReadSector(unsigned int Logical_Sector_Number, void *Pointer_Buffer
 		"rep insw\n"
 		"pop edx\n"
 		"pop ecx\n"
-		"pop edi\n"
-		"sti"
+		"pop edi"
 		: // No output
 		: "g" (HARD_DISK_SECTOR_SIZE / 2), "g" (Pointer_Buffer_Bytes), "g" (HARD_DISK_PORT_DATA)
 		: "ecx", "edx", "edi"
 	);
+	
+	ARCHITECTURE_INTERRUPTS_ENABLE();
 }
 
 void HardDiskWriteSector(unsigned int Logical_Sector_Number, void *Pointer_Buffer)
@@ -199,7 +202,7 @@ void HardDiskWriteSector(unsigned int Logical_Sector_Number, void *Pointer_Buffe
 	unsigned char *Pointer_Buffer_Bytes = Pointer_Buffer;
 	
 	// Wait for the controller to be ready
-	asm("cli");
+	ARCHITECTURE_INTERRUPTS_DISABLE();
 	WAIT_BUSY_CONTROLLER();
 	
 	if (Hard_Disk_Is_LBA48_Addressing_Used)
@@ -250,12 +253,13 @@ void HardDiskWriteSector(unsigned int Logical_Sector_Number, void *Pointer_Buffe
 		"rep outsw\n"
 		"pop edx\n"
 		"pop ecx\n"
-		"pop esi\n"
-		"sti"
+		"pop esi"
 		: // No output
 		: "g" (HARD_DISK_SECTOR_SIZE / 2), "g" (Pointer_Buffer_Bytes), "g" (HARD_DISK_PORT_DATA)
 		: "ecx", "edx", "esi"
 	);
+	
+	ARCHITECTURE_INTERRUPTS_ENABLE();
 }
 
 unsigned int HardDiskGetDriveSizeSectors(void)

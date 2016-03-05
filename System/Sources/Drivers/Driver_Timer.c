@@ -53,7 +53,7 @@ void TimerWait(unsigned int Periods_Count)
 	if (Periods_Count > 0)
 	{
 		// Interrupts are disabled when entering the interrupt vector
-		asm("sti");
+		ARCHITECTURE_INTERRUPTS_ENABLE();
 		
 		// Wait for the next period to start
 		Current_Counter_Value = Timer_Counter;

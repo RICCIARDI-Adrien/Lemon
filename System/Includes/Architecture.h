@@ -1,10 +1,19 @@
 /** @file Architecture.h
- * Intel IA-32 dependant functions.
+ * Intel IA-32 dependent functions.
  * @author Adrien RICCIARDI
  * @version 1.0 : 12/05/2014
  */
 #ifndef H_ARCHITECTURE_H
 #define H_ARCHITECTURE_H
+
+//-------------------------------------------------------------------------------------------------
+// Constants and macros
+//-------------------------------------------------------------------------------------------------
+/** Disable the interrupts. */
+#define ARCHITECTURE_INTERRUPTS_DISABLE() asm("cli")
+
+/** Enable the interrupts. */
+#define ARCHITECTURE_INTERRUPTS_ENABLE() asm("sti")
 
 //-------------------------------------------------------------------------------------------------
 // Functions

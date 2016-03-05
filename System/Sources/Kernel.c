@@ -29,9 +29,6 @@
 		: "i" (KERNEL_STACK_ADDRESS) \
 		: "esp" \
 	)
-	
-/** Enable interrupts. */
-#define KERNEL_ENABLE_INTERRUPTS() asm("sti")
 
 //-------------------------------------------------------------------------------------------------
 // Public variables
@@ -40,11 +37,19 @@
 extern unsigned int *_bss_start, *_bss_end;
 
 //-------------------------------------------------------------------------------------------------
+// Private functions
+//-------------------------------------------------------------------------------------------------
+/** Wait for the user to hit the Enter key. */
+static inline __attribute__((always_inline)) void KernelWaitForEnterKey(void)
+{
+	ARCHITECTURE_INTERRUPTS_ENABLE();
+	while (KeyboardReadCharacter() != '\n');
+}
+
+//-------------------------------------------------------------------------------------------------
 // Kernel entry point
 //-------------------------------------------------------------------------------------------------
-/** The MBR directly calls this function.
- * @param Partition_Starting_Sector The partition first LBA sector.
- */
+/** The MBR directly calls this function. */
 void __attribute__((section(".init"))) KernelEntryPoint(void)
 {
 	unsigned int *Pointer_Dword;
@@ -76,8 +81,7 @@ void __attribute__((section(".init"))) KernelEntryPoint(void)
 		ScreenWriteString(STRING_KERNEL_CONSOLE_HARD_DISK_NOT_LBA_COMPATIBLE_ERROR);
 		
 		// Wait for Enter key to reboot
-		KERNEL_ENABLE_INTERRUPTS();
-		while (KeyboardReadCharacter() != '\n');
+		KernelWaitForEnterKey();
 		KeyboardRebootSystem();
 	}
 	
@@ -94,8 +98,7 @@ void __attribute__((section(".init"))) KernelEntryPoint(void)
 			ScreenWriteString(STRING_KERNEL_CONSOLE_FILE_SYSTEM_ERROR);
 			
 			// Wait for Enter key to reboot
-			KERNEL_ENABLE_INTERRUPTS();
-			while (KeyboardReadCharacter() != '\n');
+			KernelWaitForEnterKey();
 			KeyboardRebootSystem();
 		}
 	#endif
@@ -115,7 +118,7 @@ void __attribute__((section(".init"))) KernelEntryPoint(void)
 void KernelStartShell(void)
 {
 	KERNEL_RESET_STACK();
-	KERNEL_ENABLE_INTERRUPTS();
+	ARCHITECTURE_INTERRUPTS_ENABLE();
 	Shell();
 }
 
@@ -135,9 +138,7 @@ void KernelUnknownSystemCallErrorHandler(void)
 	ScreenClear();
 	ScreenWriteString(STRING_KERNEL_CONSOLE_UNKNWOWN_SYSTEM_CALL_ERROR);
 	
-	// Wait for the user to hit the Enter key
-	KERNEL_ENABLE_INTERRUPTS();
-	while (KeyboardReadCharacter() != '\n');
+	KernelWaitForEnterKey();
 	
 	// Restart the shell
 	KernelStartShell();
@@ -154,9 +155,7 @@ void KernelDivisionErrorExceptionInterruptHandler(void) // Can't be static as it
 	ScreenClear();
 	ScreenWriteString(STRING_KERNEL_CONSOLE_DIVISION_ERROR_EXCEPTION);
 	
-	// Wait for the user to hit the Enter key
-	KERNEL_ENABLE_INTERRUPTS();
-	while (KeyboardReadCharacter() != '\n');
+	KernelWaitForEnterKey();
 	
 	// Restart the shell
 	KernelStartShell();
@@ -170,9 +169,7 @@ void KernelGeneralProtectionFaultExceptionInterruptHandler(void) // Can't be sta
 	ScreenClear();
 	ScreenWriteString(STRING_KERNEL_CONSOLE_GENERAL_PROTECTION_FAULT_EXCEPTION);
 	
-	// Wait for the user to hit the Enter key
-	KERNEL_ENABLE_INTERRUPTS();
-	while (KeyboardReadCharacter() != '\n');
+	KernelWaitForEnterKey();
 	
 	// Restart the shell
 	KernelStartShell();
@@ -186,9 +183,7 @@ void KernelStackExceptionInterruptHandler(void) // Can't be static as it must be
 	ScreenClear();
 	ScreenWriteString(STRING_KERNEL_CONSOLE_STACK_EXCEPTION);
 	
-	// Wait for the user to hit the Enter key
-	KERNEL_ENABLE_INTERRUPTS();
-	while (KeyboardReadCharacter() != '\n');
+	KernelWaitForEnterKey();
 	
 	// This is the safest way
 	KeyboardRebootSystem();

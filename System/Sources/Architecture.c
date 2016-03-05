@@ -374,11 +374,11 @@ void ArchitectureInitializeMemoryProtection(void)
 
 void ArchitectureSwitchToUserSpace(void)
 {
+	ARCHITECTURE_INTERRUPTS_DISABLE();
+	
 	// Switch from kernel space to user space using a fake interrupt return
 	asm
 	(
-		"cli\n"
-		
 		"push %0\n" // User stack segment descriptor offset in GDT (same than data segment) OR'ed with ring 3 Requested Privilege Level
 		"push %1\n" // Initial stack pointer value (top of user space, so we need to substract kernel segments to total RAM amount)
 	

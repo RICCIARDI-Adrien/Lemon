@@ -2,6 +2,7 @@
  * @see System_Calls.h for description.
  * @author Adrien RICCIARDI
  */
+#include <Architecture.h>
 #include <Configuration.h>
 #include <Drivers/Driver_Keyboard.h>
 #include <Drivers/Driver_Screen.h>
@@ -163,7 +164,7 @@ static void SystemCallScreenDisplayBuffer(void)
 //====================================================================================================================
 static void SystemCallKeyboardReadCharacter(void)
 {
-	asm("sti");
+	ARCHITECTURE_INTERRUPTS_ENABLE();
 	Return_Value = KeyboardReadCharacter();
 }
 

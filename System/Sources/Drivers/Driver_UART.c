@@ -2,6 +2,7 @@
  * @see Driver_UART.h for description.
  * @author Adrien RICCIARDI
  */
+#include <Architecture.h>
 #include <Drivers/Driver_UART.h>
 #include <Error_Codes.h>
 #include <Hardware_Functions.h> // Needed for inb() and outb() functions
@@ -44,7 +45,7 @@ int UARTInitialize(unsigned char Frame_Format, unsigned short Data_Rate_Bauds)
 	}
 			
 	// Disable interrupts
-	asm("cli");
+	ARCHITECTURE_INTERRUPTS_DISABLE();
 	
 	// Rate configuration
 	outb(UART_BASE_PORT + 3, 0x80); // Force DLAB bit to '1'
@@ -66,7 +67,7 @@ int UARTInitialize(unsigned char Frame_Format, unsigned short Data_Rate_Bauds)
 	inb(UART_BASE_PORT);
 	
 	// Enable interrupts
-	asm("sti");
+	ARCHITECTURE_INTERRUPTS_ENABLE();
 	
 	return ERROR_CODE_NO_ERROR;
 }
