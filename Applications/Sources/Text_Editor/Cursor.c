@@ -139,7 +139,7 @@ void CursorGoToLineEnd(void)
 	unsigned int Line_Length;
 	
 	// Get the current line length
-	BufferGetLineLength(Cursor_Buffer_Row, &Line_Length);
+	if (BufferGetLineLength(Cursor_Buffer_Row, &Line_Length) != 0) return; // The current line does not exist (the buffer is probably empty), do nothing
 	
 	Cursor_Display_Column = Line_Length;
 	Cursor_Vertical_Move_Display_Column = Line_Length;
