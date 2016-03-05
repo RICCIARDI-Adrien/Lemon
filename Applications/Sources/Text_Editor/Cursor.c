@@ -104,8 +104,8 @@ int CursorMoveToRight(void)
 	unsigned int Line_Length;
 	int Return_Value = 0;
 	
-	// Cache the next line length and presence
-	BufferGetLineLength(Cursor_Buffer_Row, &Line_Length);
+	// Cache the current line length and presence
+	if (BufferGetLineLength(Cursor_Buffer_Row, &Line_Length) != 0) return Return_Value; // Nothing to do if the current line does not exist (i.e. the buffer is empty)
 	
 	if ((Cursor_Display_Column < Line_Length) && (Cursor_Display_Column < CONFIGURATION_DISPLAY_COLUMNS_COUNT - 1)) Cursor_Display_Column++; // The cursor will remain on this line and on the display
 	else // The cursor will go out of display rightmost bound or the current line bound, so the text must be scrolled one line downer

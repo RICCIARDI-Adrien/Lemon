@@ -9,14 +9,10 @@
 //-------------------------------------------------------------------------------------------------
 // Functions
 //-------------------------------------------------------------------------------------------------
-// /** Go to the beginning of the previous line.
-//  * @return 1 if the cursor is located at the previous line beginning,
-//  * @return 0 if the beginning of the file is reached.
-//  */
-// int CursorGoToPreviousLine(void);
-// int CursorGoToNextLine(void);
-
+/** Go to the beginning of the previous line. Does nothing if the buffer beginning is reached. */
 void CursorGoToPreviousLine(void);
+
+/** Go to the beginning of the next line. Does nothing if the buffer end is reached. */
 void CursorGoToNextLine(void);
 
 //int CursorGoToPreviousWord(void);
@@ -57,11 +53,6 @@ void CursorGoToLineEnd(void);
  */
 unsigned int CursorGetBufferCharacterIndex(void);
 
-/** Retrieve the line on which the cursor is.
- * @return The line.
- */
-//unsigned int CursorGetLineLocation(void);
-
 /** Retrieve the display row coordinate of the cursor.
  * @return The row display coordinate.
  */
@@ -72,6 +63,7 @@ unsigned int CursorGetDisplayRow(void);
  */
 unsigned int CursorGetDisplayColumn(void);
 
+/** TODO */
 unsigned int CursorGetBufferRow(void);
 
 #endif
