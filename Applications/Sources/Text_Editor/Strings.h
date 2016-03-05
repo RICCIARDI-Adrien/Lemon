@@ -22,9 +22,12 @@
 	#define STRING_WARNING_FILE_IS_TOO_BIG "Le fichier est trop grand. Seul le d\202but a \202t\202 charg\202."
 	#define STRING_HIT_ENTER_TO_CONTINUE "Appuyez sur la touche Entr\202e pour continuer."
 	
-	#define STRING_TEXT_INFORMATION_MESSAGE_TITLE "Statistiques du document"
-	#define STRING_TEXT_INFORMATION_MESSAGE_CONTENT_1 "Nombre de lignes : "
-	#define STRING_TEXT_INFORMATION_MESSAGE_CONTENT_2 "\nNombre de caract\212res : "
+	#define STRING_MESSAGE_TEXT_INFORMATION_TITLE "Statistiques du document"
+	#define STRING_MESSAGE_TEXT_INFORMATION_CONTENT_1 "Nombre de lignes : "
+	#define STRING_MESSAGE_TEXT_INFORMATION_CONTENT_2 "\nNombre de caract\212res : "
+	
+	#define STRING_MESSAGE_UNSAVED_TEXT_WARNING_CONTENT "Les derni\212res modifications n'ont pas \202t\202 enregistr\202es.\nAppuyez sur Entr\202e pour sauver les modifications ou sur Echap pour quitter sans sauvegarder."
+	#define STRING_MESSAGE_UNSAVED_TEXT_WARNING_FOOTER "Entr\202e : sauvegarder, Echap : quitter."
 #endif
 
 #endif

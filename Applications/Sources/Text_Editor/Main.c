@@ -15,30 +15,32 @@
 /** Display a full screen message.
  * @param String_Message_Title The message title. It will be automatically centered.
  * @param String_Message_Content The message content.
- * @param Message_Content_Color The message content color.
+ * @param String_Message_Footer What to display on the screen bottom line.
+ * @param Message_Title_Color The message content color.
  */
-static void MainDisplayMessage(char *String_Message_Title, char *String_Message_Content, TScreenColor Message_Content_Color)
+static void MainDisplayMessage(char *String_Message_Title, char *String_Message_Content, char *String_Message_Footer, TScreenColor Message_Title_Color)
 {
 	ScreenClear();
 	
-	// Display the title
+	// Display the title with the specified color
+	ScreenSetFontColor(Message_Title_Color);
 	ScreenWriteCenteredString(String_Message_Title);
+	ScreenSetFontColor(CONFIGURATION_TEXT_FOREGROUND_COLOR); // Restore the default color
 	ScreenWriteString("\n\n");
 	
-	// Display the message content with the specified color
-	ScreenSetFontColor(Message_Content_Color);
+	// Display the message content 
 	ScreenWriteString(String_Message_Content);
-	ScreenSetFontColor(CONFIGURATION_TEXT_FOREGROUND_COLOR); // Restore the default color
-	
-	// Display the prompt
+
+	// Display the footer message
 	ScreenSetCursorPosition(SCREEN_ROWS_COUNT - 1, 0);
-	ScreenWriteString(STRING_HIT_ENTER_TO_CONTINUE);
-	
+	ScreenWriteString(String_Message_Footer);
+}
+
+/** Wait for the user to press the enter key. */
+static inline void __attribute__((always_inline)) MainWaitForEnterKey(void)
+{
 	// Wait for the Enter key to be pressed
 	while (KeyboardReadCharacter() != KEYBOARD_KEY_CODE_ENTER);
-	
-	// Restore the previously displayed buffer
-	DisplayRenderToScreen();
 }
 
 /** Load a file to the internal buffer.
@@ -53,7 +55,8 @@ static int MainLoadFile(char *String_File_Name)
 	// Try to open the file
 	if (FileOpen(String_File_Name, FILE_OPENING_MODE_READ, &File_ID) != ERROR_CODE_NO_ERROR)
 	{
-		MainDisplayMessage(STRING_MESSAGE_TITLE_ERROR, STRING_ERROR_CANT_OPEN_FILE, SCREEN_COLOR_RED);
+		MainDisplayMessage(STRING_MESSAGE_TITLE_ERROR, STRING_ERROR_CANT_OPEN_FILE, STRING_HIT_ENTER_TO_CONTINUE, SCREEN_COLOR_RED);
+		MainWaitForEnterKey();
 		return 1;
 	}
 	
@@ -61,14 +64,19 @@ static int MainLoadFile(char *String_File_Name)
 	if (FileRead(File_ID, Buffer, CONFIGURATION_BUFFER_MAXIMUM_SIZE, &Buffer_Characters_Count) != ERROR_CODE_NO_ERROR)
 	{
 		FileClose(File_ID);
-		MainDisplayMessage(STRING_MESSAGE_TITLE_ERROR, STRING_ERROR_CANT_LOAD_FILE, SCREEN_COLOR_RED);
+		MainDisplayMessage(STRING_MESSAGE_TITLE_ERROR, STRING_ERROR_CANT_LOAD_FILE, STRING_HIT_ENTER_TO_CONTINUE, SCREEN_COLOR_RED);
+		MainWaitForEnterKey();
 		return 1;
 	}
 	
 	FileClose(File_ID);
 	
 	// Show a message if the file is too big for the buffer
-	if (FileGetSize(String_File_Name) > CONFIGURATION_BUFFER_MAXIMUM_SIZE) MainDisplayMessage(STRING_MESSAGE_TITLE_WARNING, STRING_WARNING_FILE_IS_TOO_BIG, SCREEN_COLOR_BROWN);
+	if (FileGetSize(String_File_Name) > CONFIGURATION_BUFFER_MAXIMUM_SIZE)
+	{
+		MainDisplayMessage(STRING_MESSAGE_TITLE_WARNING, STRING_WARNING_FILE_IS_TOO_BIG, STRING_HIT_ENTER_TO_CONTINUE, SCREEN_COLOR_BROWN);
+		MainWaitForEnterKey();
+	}
 	
 	return 0;
 }
@@ -85,7 +93,9 @@ static int MainSaveFile(char *String_File_Name)
 	// Try to open the file
 	if (FileOpen(String_File_Name, FILE_OPENING_MODE_WRITE, &File_ID) != ERROR_CODE_NO_ERROR)
 	{
-		MainDisplayMessage(STRING_MESSAGE_TITLE_ERROR, STRING_ERROR_CANT_OPEN_FILE, SCREEN_COLOR_RED);
+		MainDisplayMessage(STRING_MESSAGE_TITLE_ERROR, STRING_ERROR_CANT_OPEN_FILE, STRING_HIT_ENTER_TO_CONTINUE, SCREEN_COLOR_RED);
+		MainWaitForEnterKey();
+		DisplayRenderToScreen(); // Restore the previously displayed buffer
 		return 1;
 	}
 	
@@ -93,7 +103,9 @@ static int MainSaveFile(char *String_File_Name)
 	if (FileWrite(File_ID, Buffer, Buffer_Characters_Count) != ERROR_CODE_NO_ERROR)
 	{
 		FileClose(File_ID);
-		MainDisplayMessage(STRING_MESSAGE_TITLE_ERROR, STRING_ERROR_CANT_SAVE_FILE, SCREEN_COLOR_RED);
+		MainDisplayMessage(STRING_MESSAGE_TITLE_ERROR, STRING_ERROR_CANT_SAVE_FILE, STRING_HIT_ENTER_TO_CONTINUE, SCREEN_COLOR_RED);
+		MainWaitForEnterKey();
+		DisplayRenderToScreen(); // Restore the previously displayed buffer
 		return 1;
 	}
 	
@@ -154,16 +166,18 @@ static void MainDisplayTextInformation(void)
 	char String_Content[256], String_Number[11];
 	
 	// Create the "lines count" string
-	StringCopy(STRING_TEXT_INFORMATION_MESSAGE_CONTENT_1, String_Content);
+	StringCopy(STRING_MESSAGE_TEXT_INFORMATION_CONTENT_1, String_Content);
 	StringConvertUnsignedIntegerToString(BufferGetLinesCount(), String_Number);
 	StringConcatenate(String_Content, String_Number);
 	
 	// Create the "characters count" string
-	StringConcatenate(String_Content, STRING_TEXT_INFORMATION_MESSAGE_CONTENT_2);
+	StringConcatenate(String_Content, STRING_MESSAGE_TEXT_INFORMATION_CONTENT_2);
 	StringConvertUnsignedIntegerToString(Buffer_Characters_Count, String_Number);
 	StringConcatenate(String_Content, String_Number);
 	
-	MainDisplayMessage(STRING_TEXT_INFORMATION_MESSAGE_TITLE, String_Content, SCREEN_COLOR_BLUE);
+	MainDisplayMessage(STRING_MESSAGE_TEXT_INFORMATION_TITLE, String_Content, STRING_HIT_ENTER_TO_CONTINUE, SCREEN_COLOR_BLUE);
+	MainWaitForEnterKey();
+	DisplayRenderToScreen(); // Restore the previously displayed buffer
 }
 
 #if 0
@@ -231,9 +245,20 @@ int main(int argc, char *argv[])
 		{
 			// Exit program
 			case KEYBOARD_KEY_CODE_ESCAPE:
-				// TODO ask save message if the buffer has been modified (MainSaveFile())
-				// TODO display a new line if the cursor is not at the beginning of a line
-				// if (Is_Text_Modified) message
+				// Ask the whether to save the document if the buffer has been modified without being saved
+				if (Is_Text_Modified)
+				{
+					MainDisplayMessage(STRING_MESSAGE_TITLE_WARNING, STRING_MESSAGE_UNSAVED_TEXT_WARNING_CONTENT, STRING_MESSAGE_UNSAVED_TEXT_WARNING_FOOTER, SCREEN_COLOR_BROWN);
+					
+					// Wait for Enter or Escape key
+					do
+					{
+						Character = KeyboardReadCharacter();
+					} while ((Character != KEYBOARD_KEY_CODE_ENTER) && (Character != KEYBOARD_KEY_CODE_ESCAPE));
+					
+					// Save the file if requested to
+					if (Character == KEYBOARD_KEY_CODE_ENTER) MainSaveFile(String_File_Name);
+				}
 				MainExitProgram();
 				break; // To make the compiler happy
 				
@@ -333,6 +358,7 @@ int main(int argc, char *argv[])
 						case 'S':
 						case 's':
 							if (MainSaveFile(String_File_Name) != 0) MainExitProgram();
+							Is_Text_Modified = 0;
 							break;
 					}
 				}
