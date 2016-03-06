@@ -1,8 +1,6 @@
 /** @file Shell_Command_File_Size.c
  * Get the size in bytes of an existing file.
  * @author Adrien RICCIARDI
- * @version 1.0 : 25/12/2012
- * @version 1.1 : 29/12/2012, added to kernel code.
  */
 #include <Drivers/Driver_Screen.h>
 #include <File_System/File.h>

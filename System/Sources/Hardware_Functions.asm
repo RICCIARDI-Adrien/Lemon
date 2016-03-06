@@ -1,8 +1,5 @@
 ; Some useful hardware functions.
 ; Author : Adrien RICCIARDI
-; V 1.0 : 24/07/2011 
-; V 1.1 : 16/11/2011
-; V 1.2 : 01/08/2012
 [BITS 32]
 
 GLOBAL outb

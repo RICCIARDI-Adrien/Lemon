@@ -1,7 +1,6 @@
 /** @file Shell_Partition_Menu.h
  * Display all existing MBR partitions and allow to pick one of them to install the system on it.
  * @author Adrien RICCIARDI
- * @version 1.0 : 01/06/2015
  */
 #ifndef H_SHELL_PARTITION_MENU_H
 #define H_SHELL_PARTITION_MENU_H

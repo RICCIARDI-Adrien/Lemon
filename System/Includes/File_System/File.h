@@ -1,7 +1,6 @@
 /** @file File.h
  * File interface with userspace.
  * @author Adrien RICCIARDI
- * @version 1.0 : 04/04/2013
  */
 #ifndef H_FILE_H
 #define H_FILE_H

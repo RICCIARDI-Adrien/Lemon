@@ -1,12 +1,6 @@
 /** @file File_System.h
  * File system low level routines. All the blocks handling is done with virtual block numbers, only FileSystemReadBlocks() and FileSystemWriteBlocks() really access to the physical blocks.
  * @author Adrien RICCIARDI
- * @version 1.0 : 01/08/2012
- * @version 1.1 : 12/09/2012
- * @version 1.2 : 27/12/2012, added cache to file operations.
- * @version 1.3 : 04/04/2013, moved file functions to File module.
- * @version 1.4 : 05/05/2014, used normal arrays to represent the file system data.
- * @version 1.5 : 25/02/2015, renamed the BAT in Blocks List for more consistency.
  */
 #ifndef H_FILE_SYSTEM_H
 #define H_FILE_SYSTEM_H

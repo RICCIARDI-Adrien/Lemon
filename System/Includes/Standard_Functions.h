@@ -2,9 +2,6 @@
  * Standard libc functions.
  * @author Adrien RICCIARDI
  * @warning These functions have the same behaviour than libc functions, but their prototypes are customized for speed improvement.
- * @version 1.0 : 17/11/2011
- * @version 1.1 : 12/09/2012
- * @version 1.2 : 13/07/2013, code optimization.
  */
 #ifndef H_STANDARD_FUNCTIONS_H
 #define H_STANDARD_FUNCTIONS_H

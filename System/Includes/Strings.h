@@ -1,7 +1,6 @@
 /** @file Strings.h
  * Contain all system strings in order to ease translation work.
  * @author Adrien RICCIARDI
- * @version 1.0 : 22/08/2013, moved strings from Kernel.h to this file.
  */
 #ifndef H_STRINGS_H
 #define H_STRINGS_H

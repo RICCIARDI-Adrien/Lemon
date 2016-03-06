@@ -1,7 +1,6 @@
 /** @file Error_Codes.h
  * Contain all the system known error codes.
  * @author Adrien RICCIARDI
- * @version 1.0 : 11/01/2015
  */
 #ifndef H_ERROR_CODES_H
 #define H_ERROR_CODES_H

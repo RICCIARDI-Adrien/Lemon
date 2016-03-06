@@ -1,7 +1,6 @@
 /** @file Architecture.h
  * Intel IA-32 dependent functions.
  * @author Adrien RICCIARDI
- * @version 1.0 : 12/05/2014
  */
 #ifndef H_ARCHITECTURE_H
 #define H_ARCHITECTURE_H

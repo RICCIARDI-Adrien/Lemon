@@ -1,9 +1,6 @@
 /** @file Driver_Timer.h
  * Driver for hardware timer 0.
  * @author Adrien RICCIARDI
- * @version 1.0 : 12/12/2011
- * @version 1.1 : 28/07/2012
- * @version 1.2 : 13/12/2013, added period configuration function and TimerSleep() function.
  */
 #ifndef H_DRIVER_TIMER_H
 #define H_DRIVER_TIMER_H

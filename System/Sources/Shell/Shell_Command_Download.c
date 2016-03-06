@@ -1,8 +1,6 @@
 /** @file Shell_Command_Download.c
  * Download a file from the UART and save it to disk.
  * @author Adrien RICCIARDI
- * @version 1.0 : 24/12/2012
- * @version 1.1 : 29/12/2012, added to kernel code.
  */
 #include <Configuration.h> // Needed by CONFIGURATION_FILE_NAME_LENGTH
 #include <Drivers/Driver_Keyboard.h>

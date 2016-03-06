@@ -1,7 +1,6 @@
 /** @file Shell_Command_Copy_File.c
  * Copy the content of an existing file into a new one.
  * @author Adrien RICCIARDI
- * @version 1.0 : 16/04/2013.
  */
 #include <Configuration.h>
 #include <Drivers/Driver_Screen.h>

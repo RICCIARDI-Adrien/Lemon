@@ -1,12 +1,6 @@
 /** @file Driver_Keyboard.h
  * Driver for the 101/102 keys AZERTY keyboard.
  * @author Adrien RICCIARDI
- * @version 1.0 : 16/06/2011
- * @version 1.1 : 16/11/2011
- * @version 1.2 : 13/09/2012
- * @version 1.3 : 21/10/2012, added E0 state machine.
- * @version 1.4 : 18/07/2013, improved driver to support all AZERTY capabilities.
- * @version 1.5 : 12/12/2013, moved KeyboardReadString() from Console module.
  * @note Numpad is always activated and the "Num Lock" key is ignored.
  */
 #ifndef H_DRIVER_KEYBOARD_H

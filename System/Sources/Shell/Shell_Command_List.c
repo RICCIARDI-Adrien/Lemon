@@ -1,9 +1,6 @@
 /** @file Shell_Command_List.c
  * List existing files.
  * @author Adrien RICCIARDI
- * @version 1.0 : 24/12/2012
- * @version 1.1 : 29/12/2012, added to kernel code.
- * @version 1.2 : 21/04/2015, the list stops after displaying a full screen and waits for the user to hit a key.
  */
 #include <Configuration.h>
 #include <Drivers/Driver_Keyboard.h>

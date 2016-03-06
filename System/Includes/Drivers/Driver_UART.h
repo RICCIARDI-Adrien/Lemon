@@ -1,10 +1,6 @@
 /** @file Driver_UART.h
  * Universal Asynchronous Receiver Transmitter (RS-232 serial port) driver.
  * @author Adrien RICCIARDI
- * @version 1.0 : 22/07/2011
- * @version 1.1 : 17/11/2011
- * @version 1.2 : 01/08/2012
- * @version 1.3 : 24/12/2012
  */
 #ifndef H_DRIVER_UART_H
 #define H_DRIVER_UART_H
@@ -43,7 +39,7 @@
  * @param Frame_Format The format of the RS-232 frame. Use a OR combination of UART_DISABLE_PARITY, UART_EVEN_PARITY and UART_ODD_PARITY to configure serial port.
  * @param Data_Rate_Bauds The data rate from a UART_BAUD_RATE_XX constant.
  * @return ERROR_CODE_NO_ERROR if the UART was correctly initialized,
- * @return ERROR_CODE_BAD_UART_PARAMETERS if the provided parameters did not come from UART_XXX contants.
+ * @return ERROR_CODE_BAD_UART_PARAMETERS if the provided parameters did not come from UART_XXX constants.
  */
 int UARTInitialize(unsigned char Frame_Format, unsigned short Data_Rate_Bauds);
 

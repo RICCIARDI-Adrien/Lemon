@@ -1,8 +1,6 @@
 /** @file Shell_Commands.h
  * Commands compiled into the shell.
  * @author Adrien RICCIARDI
- * @version 1.0 : 22/12/2012
- * @version 1.1 : 29/12/2012, added to kernel code.
  */
 #ifndef H_SHELL_COMMANDS_H
 #define H_SHELL_COMMANDS_H

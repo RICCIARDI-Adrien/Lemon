@@ -1,11 +1,6 @@
 /** @file System_Calls.h
  * System calls handlers.
  * @author Adrien RICCIARDI
- * @version 1.0 : 21/04/2012
- * @version 1.1 : 12/09/2012
- * @version 1.2 : 13/12/2013, made system calls names clearer, reorganized them and optimized code.
- * @version 1.3 : 07/06/2014, used an enum to list the system calls (and removed never used system calls groups).
- * @version 1.4 : 09/12/2014, added the system parameters feature.
  */
 #ifndef H_SYSTEM_CALLS_H
 #define H_SYSTEM_CALLS_H

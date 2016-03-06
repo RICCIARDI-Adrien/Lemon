@@ -1,7 +1,6 @@
 /** @file Driver_Screen.h
  * Handle 80x25 text mode screen.
  * @author Adrien RICCIARDI
- * @version 1.0 : 12/12/2013
  */
 #ifndef H_DRIVER_SCREEN_H
 #define H_DRIVER_SCREEN_H

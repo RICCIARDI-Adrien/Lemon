@@ -1,7 +1,6 @@
 /** @file Shell.c
  * This is the custom Installer program shell.
  * @author Adrien RICCIARDI
- * @version 1.0 : 26/04/2014
  */
 #include <Drivers/Driver_Hard_Disk.h> // For HardDiskWriteSector() and others
 #include <Drivers/Driver_Keyboard.h>

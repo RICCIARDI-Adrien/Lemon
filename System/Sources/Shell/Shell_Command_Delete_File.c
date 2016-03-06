@@ -1,8 +1,6 @@
 /** @file Shell_Command_Delete_File.c
  * Delete an existing file.
  * @author Adrien RICCIARDI
- * @version 1.0 : 24/12/2012
- * @version 1.1 : 29/12/2012, added to kernel code.
  */
 #include <Drivers/Driver_Screen.h>
 #include <Error_Codes.h>

@@ -1,9 +1,6 @@
 /** @file Shell_Command_Rename_File.c
  * Rename an existing file.
  * @author Adrien RICCIARDI
- * @version 1.0 : 25/12/2012
- * @version 1.1 : 29/12/2012, added to kernel code.
- * @version 1.2 : 22/08/2013, added more detailed error messages.
  */
 #include <Drivers/Driver_Screen.h>
 #include <Error_Codes.h>

@@ -5,8 +5,6 @@
 Système
 -------
 
-- virer @version sauf dans kernel.h
-
 Doc
 ---
 Rajouter dans doc la liste des programmes nécessaires pour compiler l'OS
