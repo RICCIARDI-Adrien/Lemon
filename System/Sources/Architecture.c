@@ -5,6 +5,7 @@
 #include <Architecture.h>
 #include <Configuration.h>
 #include <Drivers/Driver_Keyboard.h> // To have the keyboard interrupt handler
+#include <Drivers/Driver_PIC.h> // To have the PIC acknowledge interrupt macro
 #include <Drivers/Driver_Timer.h> // To have the timer interrupt handler
 #include <Kernel.h>
 #include <Standard_Functions.h> // To have memset()
@@ -351,15 +352,9 @@ static void __attribute__((used)) ArchitectureInterruptLaunchers(void)
 	asm("jmp ArchitectureInterruptExit");
 	
 	// Default interrupt handler (do nothing)
-	asm
-	(
-	"ArchitectureInterruptExit:\n"
-		"push eax\n"
-		"mov al, 32\n" // Send End Of Interrupt code to the PIC
-		"out 0x20, al\n"
-		"pop eax\n"
-		"iret"
-	);
+	asm("ArchitectureInterruptExit:");
+	PIC_ACKNOWLEDGE_INTERRUPT();
+	asm("iret");
 }
 
 //-------------------------------------------------------------------------------------------------

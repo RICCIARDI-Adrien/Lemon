@@ -23,7 +23,7 @@
 	#define STRING_KERNEL_CONSOLE_GENERAL_PROTECTION_FAULT_EXCEPTION "Erreur de protection g\202n\202rale. Le programme a \202t\202 stopp\202.\nAppuyez sur Entr\202e pour continuer.\n"
 	#define STRING_KERNEL_CONSOLE_STACK_EXCEPTION "Erreur fatale : la pile noyau a d\202bord\202.\nAppuyez sur Entr\202e pour red\202marrer.\n"
 	#define STRING_KERNEL_CONSOLE_FILE_SYSTEM_ERROR "Erreur fatale : le syst\212me de fichiers du disque dur n'est pas valide !\nAppuyez sur Entr\202e pour red\202marrer."
-	#define STRING_KERNEL_CONSOLE_UNKNWOWN_SYSTEM_CALL_ERROR "Erreur : le programme a demand\202 un appel syst\212me inconnu.\nAppuyez sur Entr\202e pour continuer.\n"
+	#define STRING_KERNEL_CONSOLE_UNKNOWN_SYSTEM_CALL_ERROR "Erreur : le programme a demand\202 un appel syst\212me inconnu.\nAppuyez sur Entr\202e pour continuer.\n"
 	#define STRING_KERNEL_CONSOLE_HARD_DISK_NOT_LBA_COMPATIBLE_ERROR "Erreur : le disque dur n'est pas compatible avec l'adressage LBA.\n"
 
 	// Shell welcoming message shown only at system startup

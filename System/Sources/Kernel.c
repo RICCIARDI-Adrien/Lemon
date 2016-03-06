@@ -136,7 +136,7 @@ void KernelUnknownSystemCallErrorHandler(void)
 	// Show error message
 	ScreenSetColor(SCREEN_COLOR_RED);
 	ScreenClear();
-	ScreenWriteString(STRING_KERNEL_CONSOLE_UNKNWOWN_SYSTEM_CALL_ERROR);
+	ScreenWriteString(STRING_KERNEL_CONSOLE_UNKNOWN_SYSTEM_CALL_ERROR);
 	
 	KernelWaitForEnterKey();
 	

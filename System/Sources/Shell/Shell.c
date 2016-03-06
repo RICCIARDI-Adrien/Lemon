@@ -44,6 +44,7 @@ static TCommandLineArguments Command_Line_Arguments;
  * @note The function automatically stop getting input when it reaches the end of the line.
  * @note Recognized special keys :
  * @note Up arrow : show previous command.
+ * @note Down arrow : clear the typed text.
  */
 static inline void ShellReadCommandLine(char *Pointer_Buffer)
 {
@@ -113,7 +114,7 @@ static inline void ShellReadCommandLine(char *Pointer_Buffer)
 				if ((Key_Code < 32) || ((Key_Code > KEYBOARD_KEY_CODE_ARROW_UP) && (Key_Code <= KEYBOARD_KEY_CODE_F11))) break;
 				// Can't add more characters than line length
 				if (Characters_Count >= SHELL_MAXIMUM_LINE_LENGTH) break;
-				// Add character to  the string
+				// Add character to the string
 				Pointer_Buffer[Characters_Count] = Key_Code;
 				Characters_Count++;
 				ScreenWriteCharacter(Key_Code);
