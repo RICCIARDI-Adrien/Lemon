@@ -31,6 +31,9 @@ static char *String_Words[] = { STRING_HANGMAN_WORDS_LIST };
 /** Tell if a word has solved yet. */
 static int Is_Word_Solved[WORDS_TOTAL_COUNT]; // Do not initialize the array here as it seems to generate problems
 
+/** The invalid letters displaying column. */
+static int Invalid_Letters_Column;
+
 //-------------------------------------------------------------------------------------------------
 // Private functions
 //-------------------------------------------------------------------------------------------------
@@ -123,15 +126,13 @@ static void DisplayRemainingAttempts(int Remaining_Attempts)
  */
 static void DisplayInvalidLetter(char Letter)
 {
-	static unsigned int Column = 0;
-	
 	// Display the letter
-	ScreenSetCursorPosition(ROW_INVALID_LETTERS, Column);
+	ScreenSetCursorPosition(ROW_INVALID_LETTERS, Invalid_Letters_Column);
 	ScreenSetFontColor(SCREEN_COLOR_LIGHT_BLUE);
 	ScreenWriteCharacter(Letter);
 	ScreenWriteCharacter(' ');
 	ScreenSetFontColor(SCREEN_COLOR_BLUE);
-	Column += 2;
+	Invalid_Letters_Column += 2;
 }
 
 /** Let the player find the word.
@@ -153,6 +154,7 @@ static int Play(char *String_Word_To_Find, int Attempts_Count)
 	// Display the updated interface
 	ScreenSetCursorPosition(ROW_FOUND_LETTERS, 0);
 	ScreenWriteString(String_Found_Letters);
+	Invalid_Letters_Column = 0; // Reset the invalid letters column
 	DisplayRemainingAttempts(Attempts_Count);
 	
 	while (1)
@@ -188,20 +190,19 @@ static int Play(char *String_Word_To_Find, int Attempts_Count)
 		}
 		else
 		{
-			// Even a bad letter yet used will count as an attempt...
-			Attempts_Count--;
-			DisplayRemainingAttempts(Attempts_Count);
-			
-			// Add the letter to the bad letters list if it was not in the list yet
 			i = Letter - 'A'; // Address the letters from 0 to 25
 			if (!Is_Invalid_Letter_Attempted[i])
 			{
+				Attempts_Count--;
+				DisplayRemainingAttempts(Attempts_Count);
+				
+				// Add the letter to the bad letters list if it was not in the list yet
 				DisplayInvalidLetter(Letter);
 				Is_Invalid_Letter_Attempted[i] = 1;
+				
+				// Has the player squandered all his attempts ?
+				if (Attempts_Count == 0) return 1;
 			}
-			
-			// Has the player squandered all his attempts ?
-			if (Attempts_Count == 0) return 1;
 		}
 	}
 }
