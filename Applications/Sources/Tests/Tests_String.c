@@ -58,6 +58,42 @@ static int TestsStringConcatenate(void)
 	return 0;
 }
 
+/** Test the StringConcatenateUpToNumber() function.
+ * @return 0 if all tests were successful,
+ * @return 1 if a test failed.
+ */
+static int TestsStringConcatenateUpToNumber(void)
+{
+	char String_Destination[30] = "This is ", *String_To_Concatenate = "a test", *String_First_Test_Result = "This is a test", *String_Second_Test_Result = "This is a testa t";
+	int i;
+	
+	// First test
+	StringConcatenateUpToNumber(String_Destination, String_To_Concatenate, 40);
+	// Check the string
+	for (i = 0; String_First_Test_Result[i] != 0; i++)
+	{
+		if (String_Destination[i] != String_First_Test_Result[i])
+		{
+			DisplayMessageError("first concatenation failed.");
+			return 1;
+		}
+	}
+	
+	// Second test
+	StringConcatenateUpToNumber(String_Destination, String_To_Concatenate, 3);
+	// Check the string
+	for (i = 0; String_Second_Test_Result[i] != 0; i++)
+	{
+		if (String_Destination[i] != String_Second_Test_Result[i])
+		{
+			DisplayMessageError("second concatenation failed.");
+			return 1;
+		}
+	}
+	
+	return 0;
+}
+
 /** Test the StringConvertStringToUnsignedInteger() function.
  * @return 0 if all tests were successful,
  * @return 1 if a test failed.
@@ -169,6 +205,9 @@ int TestsString(void)
 	
 	ScreenWriteString("StringConcatenate()...\n");
 	if (TestsStringConcatenate() != 0) return 1;
+	
+	ScreenWriteString("StringConcatenateUpToNumber()...\n");
+	if (TestsStringConcatenateUpToNumber() != 0) return 1;
 	
 	ScreenWriteString("StringConvertStringToUnsignedInteger()...\n");
 	if (TestsStringConvertStringToUnsignedInteger() != 0) return 1;

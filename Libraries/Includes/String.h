@@ -45,6 +45,13 @@ unsigned int StringGetSize(char *String);
  */
 void StringConcatenate(char *String_Destination, char *String_To_Append);
 
+/** Concatenate up to a specified number of a string's characters at the end of another string.
+ * @param String_Destination The string to concatenate to.
+ * @param String_To_Append The string to append to the other string.
+ * @param Characters_Count The maximum amount of characters to concatenate.
+ */
+void StringConcatenateUpToNumber(char *String_Destination, char *String_To_Append, unsigned int Characters_Count);
+
 /** Tell if the character is a lowercase or an uppercase letter.
  * @param Character The character to test.
  * @return 0 if the character is not a letter,
