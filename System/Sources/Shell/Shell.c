@@ -261,7 +261,7 @@ void Shell(void)
 			// Set error color only one time
 			ScreenSetColor(SCREEN_COLOR_RED);
 			
-			switch (FileLoad(Command_Line_Arguments.Pointer_Arguments[0], (unsigned char *) KERNEL_PROGRAM_LOAD_ADDRESS, 1))
+			switch (FileLoad(Command_Line_Arguments.Pointer_Arguments[0], (void *) KERNEL_PROGRAM_LOAD_ADDRESS))
 			{
 				case ERROR_CODE_FILE_NOT_FOUND:
 					ScreenWriteString(STRING_SHELL_ERROR_UNKNOWN_COMMAND);
@@ -269,10 +269,6 @@ void Shell(void)
 					
 				case ERROR_CODE_FILE_LARGER_THAN_RAM:
 					ScreenWriteString(STRING_SHELL_ERROR_FILE_TO_LOAD_LARGER_THAN_RAM);
-					break;
-					
-				case ERROR_CODE_FILE_NOT_EXECUTABLE:
-					ScreenWriteString(STRING_SHELL_ERROR_FILE_NOT_EXECUTABLE);
 					break;
 			
 				// No error
@@ -285,9 +281,8 @@ void Shell(void)
 					// Adjust argv[] pointers to fit into user space
 					for (i = 0; i < Command_Line_Arguments.Arguments_Count; i++) Pointer_Command_Line_Arguments->Pointer_Arguments[i] -= Offset;
 					
-					// Reset normal console color
-					ScreenSetColor(SCREEN_COLOR_BLUE);
-					KernelStartProgram();
+					// Try to start the program
+					if (KernelStartProgram() == ERROR_CODE_FILE_NOT_EXECUTABLE) ScreenWriteString(STRING_SHELL_ERROR_FILE_NOT_EXECUTABLE);
 					break;
 			}
 		}

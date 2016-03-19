@@ -22,11 +22,13 @@
  * @version 2.1.10 : 29/05/2015, made the Installer boot from USB stick.
  * @version 2.2.0 : 06/06/2015, the system is now MBR partitions aware and can install to and boot from a partition. All hard disk drivers (MBR and system) are 48-LBA.
  * @version 2.2.1 : 03/11/2015, the hard disk driver automatically chooses between LBA28 and LBA48 at boot time.
+ * @version 2.2.2 : 06/03/2016, better handling of slave PIC.
  */
 #ifndef H_KERNEL_H
 #define H_KERNEL_H
 
 #include <Configuration.h>
+#include <Error_Codes.h>
 
 //-------------------------------------------------------------------------------------------------
 // Constants
@@ -58,8 +60,11 @@
 /** Clear the kernel stack and jump to shell. */
 void KernelStartShell(void);
 
-/** Switch to protection ring 3 and execute user program's entry point. */
-void KernelStartProgram(void);
+/** Switch to protection ring 3 and execute user program's entry point.
+ * @return ERROR_CODE_FILE_NOT_EXECUTABLE if the file in memory is not an executable program,
+ * @return ERROR_CODE_NO_ERROR if the file was successfully launched (should never happen as the function will jump to protection ring 3 and never return).
+ */
+TErrorCode KernelStartProgram(void);
 
 /** Called when an invalid system call is requested by the user. This function does not return. */
 void KernelUnknownSystemCallErrorHandler(void);

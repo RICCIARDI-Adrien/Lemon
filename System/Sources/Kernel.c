@@ -8,6 +8,7 @@
 #include <Drivers/Driver_PIC.h>
 #include <Drivers/Driver_Screen.h>
 #include <Drivers/Driver_Timer.h>
+#include <Error_Codes.h>
 #include <File_System/File.h>
 #include <File_System/File_System.h>
 #include <Hardware_Functions.h>
@@ -122,12 +123,23 @@ void KernelStartShell(void)
 	Shell();
 }
 
-void KernelStartProgram(void)
+TErrorCode KernelStartProgram(void)
 {
+	unsigned int *Pointer_Magic_Number = (unsigned int *) KERNEL_PROGRAM_LOAD_ADDRESS;
+	
+	// Is the magic number valid ?
+	if (*Pointer_Magic_Number != KERNEL_PROGRAM_MAGIC_NUMBER) return ERROR_CODE_FILE_NOT_EXECUTABLE;
+	
 	// Reset files opened by the previous program
 	FileResetFileDescriptors();
 	
+	// Reset normal console color
+	ScreenSetColor(SCREEN_COLOR_BLUE);
+	
 	ArchitectureSwitchToUserSpace();
+	
+	// Should never be reached
+	return ERROR_CODE_NO_ERROR;
 }
 
 // This error is not triggered by the MMU, so it is not an interrupt handler

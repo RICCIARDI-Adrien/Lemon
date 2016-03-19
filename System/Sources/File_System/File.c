@@ -185,10 +185,10 @@ unsigned int FileSize(char *String_File_Name)
 	return Pointer_Files_List_Entry->Size_Bytes;
 }
 
-int FileLoad(char *String_File_Name, unsigned char *Buffer, int Is_Executable_Check_Enabled)
+int FileLoad(char *String_File_Name, void *Pointer_Buffer)
 {
 	TFilesListEntry *Pointer_Files_List_Entry;
-	unsigned int File_Size_Bytes, File_Size_Blocks, *Pointer_Magic_Number, Next_Block;
+	unsigned int File_Size_Bytes, File_Size_Blocks;
 	
 	// Check if file name is valid
 	if (String_File_Name[0] == 0) return ERROR_CODE_FILE_NOT_FOUND;
@@ -199,31 +199,17 @@ int FileLoad(char *String_File_Name, unsigned char *Buffer, int Is_Executable_Ch
 	
 	// Do program size checks
 	File_Size_Bytes = Pointer_Files_List_Entry->Size_Bytes;
-	// Is there something to load ?
-	if (File_Size_Bytes == 0)
-	{
-		if (Is_Executable_Check_Enabled) return ERROR_CODE_FILE_NOT_EXECUTABLE; // As the file is empty, the executable magic number is not present
-		return ERROR_CODE_NO_ERROR;
-	}
+	// Nothing more to do if the file is empty
+	if (File_Size_Bytes == 0) return ERROR_CODE_NO_ERROR;
 	// Is there enough room in RAM to store the file ?
 	if (File_Size_Bytes > KERNEL_USER_SPACE_SIZE - KERNEL_PROGRAM_ENTRY_POINT) return ERROR_CODE_FILE_LARGER_THAN_RAM;
 	
-	// Load first block to check the magic number
-	Next_Block = FileSystemReadBlocks(Pointer_Files_List_Entry->Start_Block, 1, Buffer);
-	if (Is_Executable_Check_Enabled)
-	{
-		Pointer_Magic_Number = (unsigned int *) Buffer;
-		if (*Pointer_Magic_Number != KERNEL_PROGRAM_MAGIC_NUMBER) return ERROR_CODE_FILE_NOT_EXECUTABLE;
-	}
-	// Adjust buffer for next blocks
-	Buffer += CONFIGURATION_FILE_SYSTEM_BLOCK_SIZE_BYTES;
-
 	// Compute file size in blocks
 	File_Size_Blocks = File_Size_Bytes / CONFIGURATION_FILE_SYSTEM_BLOCK_SIZE_BYTES;
 	if ((File_Size_Bytes % CONFIGURATION_FILE_SYSTEM_BLOCK_SIZE_BYTES) != 0) File_Size_Blocks++;
 	
-	// Load the remaining part of the file
-	FileSystemReadBlocks(Next_Block, File_Size_Blocks - 1, Buffer); // All blocks minus the one previously loaded 
+	// Load the whole file
+	FileSystemReadBlocks(Pointer_Files_List_Entry->Start_Block, File_Size_Blocks, Pointer_Buffer);
 	return ERROR_CODE_NO_ERROR;
 }
 

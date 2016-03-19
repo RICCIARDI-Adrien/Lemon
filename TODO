@@ -5,6 +5,9 @@
 Système
 -------
 
+- optim fn standard en mettant void *
+- mettre vrai header maîtrisé devant programme
+
 Doc
 ---
 Rajouter dans doc la liste des programmes nécessaires pour compiler l'OS
@@ -36,6 +39,7 @@ Applications
 ------------
 
 - hexdump ?
+- optimiser système de build
 
 Installer
 ---------

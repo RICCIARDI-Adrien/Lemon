@@ -65,14 +65,12 @@ unsigned int FileSize(char *String_File_Name);
 
 /** Load a whole file into memory.
  * @param String_File_Name The name of the file to load.
- * @param Buffer The buffer where to store the loaded file.
- * @param Is_Executable_Check_Enabled Set to true to stop the function if the file to load is not a program. Set to false to load all file types.
+ * @param Pointer_Buffer The buffer where to store the loaded file.
  * @return ERROR_CODE_NO_ERROR if the file was correctly loaded,
  * @return ERROR_CODE_FILE_NOT_FOUND if the file was not found,
- * @return ERROR_CODE_FILE_NOT_EXECUTABLE if the executable magic number check is enabled and the file is not a program,
  * @return ERROR_CODE_FILE_LARGER_THAN_RAM if the file size is greater than the available userspace RAM.
  */
-int FileLoad(char *String_File_Name, unsigned char *Buffer, int Is_Executable_Check_Enabled);
+int FileLoad(char *String_File_Name, void *Pointer_Buffer);
 
 /** Reset all files (without closing them) to prevent a user program from opening all files and never closing them, resulting in an unusable file system. */
 void FileResetFileDescriptors(void);
