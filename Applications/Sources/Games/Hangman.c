@@ -29,7 +29,7 @@
 static char *String_Words[] = { STRING_HANGMAN_WORDS_LIST };
 
 /** Tell if a word has solved yet. */
-static int Is_Word_Solved[WORDS_TOTAL_COUNT]; // Do not initialize the array here as it seems to generate problems
+static int Is_Word_Solved[WORDS_TOTAL_COUNT];
 
 /** The invalid letters displaying column. */
 static int Invalid_Letters_Column;
@@ -213,12 +213,11 @@ static int Play(char *String_Word_To_Find, int Attempts_Count)
 void Hangman(void)
 {	
 	char *String_Current_Word;
-	unsigned int i;
 	
 	RandomInitialize();
 	
-	// Initialize the following array here to avoid problems (!?)
-	for (i = 0; i < WORDS_TOTAL_COUNT; i++) Is_Word_Solved[i] = 0;
+	// Reset the array
+	MemorySetAreaValue(Is_Word_Solved, sizeof(Is_Word_Solved), 0);
 	
 	while (1)
 	{
