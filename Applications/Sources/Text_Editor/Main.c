@@ -10,6 +10,16 @@
 #include "Strings.h"
 
 //-------------------------------------------------------------------------------------------------
+// Private variables
+//-------------------------------------------------------------------------------------------------
+/** The copied text buffer. */
+static char Main_Copy_Buffer[CONFIGURATION_COPY_BUFFER_MAXIMUM_SIZE];
+/** Tell if the copy buffer is empty because it was pasted or not. */
+static int Main_Is_Copy_Buffer_Pasted = 1;
+/** The copy buffer current length. */
+static unsigned int Main_Copy_Buffer_Length = 0;
+
+//-------------------------------------------------------------------------------------------------
 // Private functions
 //-------------------------------------------------------------------------------------------------
 /** Display a full screen message.
@@ -203,6 +213,64 @@ static inline void MainHandleControlKeyStateMachine(unsigned char Character)
 }
 #endif
 
+/** Cut the whole line at the current cursor location and concatenate it to the copy buffer content (start from the buffer beginning if a paste was done before). */
+void MainCutCurrentLine(void)
+{
+	unsigned int Line_Beginning, Line_Length, i;
+	
+	// Find the current line properties
+	i = CursorGetBufferRow(); // Recycle the 'i' variable
+	// Length and line presence in the same time
+	if (BufferGetLineLength(i, &Line_Length) != 0) return; // The line is not available
+	// Starting index
+	Line_Beginning = BufferFindLineBeginning(i);
+	if (Line_Beginning == Buffer_Characters_Count) return; // This line is not available
+	
+	// Add the trailing '\n' to the buffer or an empty line will be displayed
+	i = Line_Beginning + Line_Length; // Recycle 'i' variable
+	if ((i < Buffer_Characters_Count) && (Line_Length < CONFIGURATION_DISPLAY_COLUMNS_COUNT) && (Buffer[i] == '\n')) Line_Length++;
+	
+	// Reset the buffer if needed (the cut text is concatenated to the copy buffer until the user pastes it)
+	if (Main_Is_Copy_Buffer_Pasted)
+	{
+		Main_Copy_Buffer_Length = 0;
+		Main_Is_Copy_Buffer_Pasted = 0;
+	}
+	
+	// Do not cut if the line would not fit in the copy buffer
+	if (Main_Copy_Buffer_Length + Line_Length >= CONFIGURATION_COPY_BUFFER_MAXIMUM_SIZE) return;
+	
+	// Concatenate the cut text to the buffer
+	MemoryCopyArea(&Buffer[Line_Beginning], &Main_Copy_Buffer[Main_Copy_Buffer_Length], Line_Length);
+	Main_Copy_Buffer_Length += Line_Length;
+	
+	// Remove the string from the edition buffer (TODO optimize)
+	for (i = 0; i < Line_Length; i++) BufferRemoveCharacter(Line_Beginning);
+	
+	// Refresh the display
+	CursorGoToLineBeginning(); // Make sure the cursor is not at the middle of a now non-existent line TODO handle cut of last line (no more line in the buffer)
+	BufferDisplayPage(CursorGetBufferRow() - CursorGetDisplayRow());
+}
+
+/** Paste the copy buffer content at the current cursor location. */
+void MainPasteCopyBuffer(void)
+{
+	unsigned int i, Character_Insertion_Index;
+	
+	// Nothing to paste if the copy buffer is empty
+	if (Main_Copy_Buffer_Length == 0) return;
+	
+	// Paste at the current cursor location (start from the buffer end to add all characters in the right order)
+	Character_Insertion_Index = CursorGetBufferCharacterIndex();
+	for (i = Main_Copy_Buffer_Length - 1; i != 0xFFFFFFFF; i--) BufferAppendCharacter(Character_Insertion_Index, Main_Copy_Buffer[i]); // Preserve the copy buffer size because it's content can be pasted several times
+	
+	// Refresh the display
+	BufferDisplayPage(CursorGetBufferRow() - CursorGetDisplayRow());
+	
+	// The copy buffer will be reset on the next cut action
+	Main_Is_Copy_Buffer_Pasted = 1;
+}
+
 /** Gracefully exit to system. */
 static void MainExitProgram(void)
 {
@@ -316,9 +384,6 @@ int main(int argc, char *argv[])
 				Is_Control_Key_Detected = 0;
 				break;
 				
-			// TODO : ctrl + c
-			// TODO : ctrl + v
-			// TODO : ctrl + x
 			// TODO : page up
 			// TODO : page down
 			// TODO : insert
@@ -345,6 +410,16 @@ int main(int argc, char *argv[])
 				BufferDisplayPage(CursorGetBufferRow() - CursorGetDisplayRow());
 				
 				Is_Control_Key_Detected = 0;
+				Is_Text_Modified = 1;
+				break;
+				
+			case KEYBOARD_KEY_CODE_F3:
+				MainCutCurrentLine();
+				Is_Text_Modified = 1;
+				break;
+				
+			case KEYBOARD_KEY_CODE_F4:
+				MainPasteCopyBuffer();
 				Is_Text_Modified = 1;
 				break;
 				
