@@ -202,17 +202,6 @@ static void MainDisplayTextInformation(void)
 	DisplayRenderToScreen(); // Restore the previously displayed buffer
 }
 
-#if 0
-// TODO should be cleaner to light the main loop with this function
-/** Handle the Control key state machine.
- * @param Character The character received right after the Control one.
- */
-static inline void MainHandleControlKeyStateMachine(unsigned char Character)
-{
-	
-}
-#endif
-
 /** Cut the whole line at the current cursor location and concatenate it to the copy buffer content (start from the buffer beginning if a paste was done before). */
 void MainCutCurrentLine(void)
 {
@@ -286,7 +275,7 @@ int main(int argc, char *argv[])
 	char *String_File_Name;
 	unsigned char Character; // Must be unsigned as virtual key codes use values greater than 127
 	unsigned int Temp;
-	int Is_Control_Key_Detected = 0, Is_Text_Modified = 0;
+	int Is_Text_Modified = 0;
 	
 	// Check parameters
 	if (argc != 2)
@@ -344,7 +333,6 @@ int main(int argc, char *argv[])
 				
 			case KEYBOARD_KEY_CODE_ARROW_UP:
 				if (CursorMoveToUp()) BufferDisplayPage(CursorGetBufferRow());
-				Is_Control_Key_Detected = 0;
 				break;
 				
 			case KEYBOARD_KEY_CODE_ARROW_DOWN:
@@ -355,12 +343,10 @@ int main(int argc, char *argv[])
 					else Temp = Temp - (CONFIGURATION_DISPLAY_ROWS_COUNT - 1); // Start displaying one line after the current first one
 					BufferDisplayPage(Temp);
 				}
-				Is_Control_Key_Detected = 0;
 				break;
 				
 			case KEYBOARD_KEY_CODE_ARROW_LEFT:
 				if (CursorMoveToLeft()) BufferDisplayPage(CursorGetBufferRow());
-				Is_Control_Key_Detected = 0;
 				break;
 				
 			case KEYBOARD_KEY_CODE_ARROW_RIGHT:
@@ -371,17 +357,14 @@ int main(int argc, char *argv[])
 					else Temp = Temp - (CONFIGURATION_DISPLAY_ROWS_COUNT - 1); // Start displaying one line after the current first one
 					BufferDisplayPage(Temp);
 				}
-				Is_Control_Key_Detected = 0;
 				break;
 				
 			case KEYBOARD_KEY_CODE_ORIGIN:
 				CursorGoToLineBeginning();
-				Is_Control_Key_Detected = 0;
 				break;
 				
 			case KEYBOARD_KEY_CODE_END:
 				CursorGoToLineEnd();
-				Is_Control_Key_Detected = 0;
 				break;
 				
 			// TODO : page up
@@ -409,7 +392,6 @@ int main(int argc, char *argv[])
 				BufferRemoveCharacter(Temp); // Remove the character
 				BufferDisplayPage(CursorGetBufferRow() - CursorGetDisplayRow());
 				
-				Is_Control_Key_Detected = 0;
 				Is_Text_Modified = 1;
 				break;
 				
@@ -423,45 +405,25 @@ int main(int argc, char *argv[])
 				Is_Text_Modified = 1;
 				break;
 				
-			case KEYBOARD_KEY_CODE_CONTROL_LEFT:
-			case KEYBOARD_KEY_CODE_CONTROL_RIGHT:
-				Is_Control_Key_Detected = 1;
+			case KEYBOARD_KEY_CODE_F5:
+				if (MainSaveFile(String_File_Name) != 0) MainExitProgram();
+				Is_Text_Modified = 0;
+				break;
+				
+			case KEYBOARD_KEY_CODE_F6:
+				MainDisplayTextInformation();
 				break;
 				
 			// Add the character to the buffer
 			default:
-				// Handle the Control key state machine
-				if (Is_Control_Key_Detected)
-				{
-					switch (Character)
-					{
-						// Display current text information
-						case 'I':
-						case 'i':
-							MainDisplayTextInformation();
-							break;
-						
-						// Save the file
-						case 'S':
-						case 's':
-							if (MainSaveFile(String_File_Name) != 0) MainExitProgram();
-							Is_Text_Modified = 0;
-							break;
-					}
-				}
-				else
-				{
-					// Append the character
-					if (BufferAppendCharacter(CursorGetBufferCharacterIndex(), (char) Character) != 0) break; // Nothing to do if the characters could not be added (TODO : error message if the buffer is full)
-					
-					// Update the cursor location and the display
-					CursorMoveToRight();
-					BufferDisplayPage(CursorGetBufferRow() - CursorGetDisplayRow());
-					
-					Is_Text_Modified = 1;
-				}
+				// Append the character
+				if (BufferAppendCharacter(CursorGetBufferCharacterIndex(), (char) Character) != 0) break; // Nothing to do if the characters could not be added (TODO : error message if the buffer is full)
 				
-				Is_Control_Key_Detected = 0;
+				// Update the cursor location and the display
+				CursorMoveToRight();
+				BufferDisplayPage(CursorGetBufferRow() - CursorGetDisplayRow());
+				
+				Is_Text_Modified = 1;
 				break;
 		}
 		
