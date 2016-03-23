@@ -73,9 +73,9 @@ void BufferRemoveCharacter(unsigned int Index)
 	unsigned int i;
 	
 	// Make sure the index is valid
-	if (Index >= CONFIGURATION_BUFFER_MAXIMUM_SIZE) return;
+	if (Index >= Buffer_Characters_Count) return;
 	
-	// Shift all characters one place to the left if the character is added in the middle of the buffer
+	// Shift all characters one place to the left if the character is removed in the middle of the buffer
 	for (i = Index; i < Buffer_Characters_Count - 1; i++) Buffer[i] = Buffer[i + 1];
 	Buffer_Characters_Count--;
 }

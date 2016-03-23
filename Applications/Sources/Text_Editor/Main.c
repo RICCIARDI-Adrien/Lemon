@@ -119,16 +119,22 @@ static int MainSaveFile(char *String_File_Name)
  */
 static void MainCursorEraseTrace(void)
 {
-	unsigned int Cursor_Display_Row, Cursor_Display_Column;
+	unsigned int Cursor_Display_Row, Cursor_Display_Column, Character_Index;
 	char Character;
 	
 	// Cache values
 	Cursor_Display_Row = CursorGetDisplayRow();
 	Cursor_Display_Column = CursorGetDisplayColumn();
 	
-	// Avoid displaying non-printable characters
-	Character = Buffer[CursorGetBufferCharacterIndex()];
-	if ((Character >= 0) && (Character < ' ')) Character = ' '; // Must compare with zero because special characters like stressed letters have an ASCII code greater than 127, which become negative due to the signed char value
+	// Choose whether displaying the underneath character or an empty space
+	Character_Index = CursorGetBufferCharacterIndex();
+	if (Character_Index >= Buffer_Characters_Count) Character = ' '; // The cursor is located one character more than the buffer end (so there is no character underneath)
+	else
+	{
+		// Avoid displaying non-printable characters
+		Character = Buffer[Character_Index];
+		if ((Character >= 0) && (Character < ' ')) Character = ' '; // Must compare with zero because special characters like stressed letters have an ASCII code greater than 127, which become negative due to the signed char value
+	}
 	
 	// Display the character at the cursor position in the normal background color
 	DisplaySetCursorPosition(Cursor_Display_Row, Cursor_Display_Column);
@@ -139,16 +145,22 @@ static void MainCursorEraseTrace(void)
 /** Add the cursor trace on the display. */
 static void MainCursorDisplay(void)
 {
-	unsigned int Cursor_Display_Row, Cursor_Display_Column;
+	unsigned int Cursor_Display_Row, Cursor_Display_Column, Character_Index;
 	char Character;
 	
 	// Cache values
 	Cursor_Display_Row = CursorGetDisplayRow();
 	Cursor_Display_Column = CursorGetDisplayColumn();
 	
-	// Avoid displaying non-printable characters
-	Character = Buffer[CursorGetBufferCharacterIndex()];
-	if ((Character >= 0) && (Character < ' ')) Character = ' '; // Must compare with zero because special characters like stressed letters have an ASCII code greater than 127, which become negative due to the signed char value
+	// Choose whether displaying the underneath character or an empty space
+	Character_Index = CursorGetBufferCharacterIndex();
+	if (Character_Index >= Buffer_Characters_Count) Character = ' '; // The cursor is located one character more than the buffer end (so there is no character underneath)
+	else
+	{
+		// Avoid displaying non-printable characters
+		Character = Buffer[Character_Index];
+		if ((Character >= 0) && (Character < ' ')) Character = ' '; // Must compare with zero because special characters like stressed letters have an ASCII code greater than 127, which become negative due to the signed char value
+	}
 	
 	// Display the character at the cursor position with a green background
 	DisplaySetBackgroundColor(CONFIGURATION_CURSOR_BACKGROUND_COLOR);
@@ -324,8 +336,8 @@ int main(int argc, char *argv[])
 				}
 				else
 				{
-					// Is there a character under the cursor or to the right of it ?
-					if (Temp == Buffer_Characters_Count - 1) break;
+					// Nothing to do if there is no character to remove (i.e. the cursor is at the buffer's end)
+					if (Temp >= Buffer_Characters_Count) break;
 				}
 				
 				// Update the buffer and the display
