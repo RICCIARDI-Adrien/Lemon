@@ -28,35 +28,44 @@ italian: all
 export CCFLAGS
 
 sdk:
-	@printf "-> Prepare SDK directory..."
+	@printf "Preparing SDK directory...\n"
 	@rm -rf $(SDK_PATH)
 	@mkdir $(SDK_PATH)
-	@printf "-> Copy the whole Applications directory..."
+	@printf "Copying the whole Applications directory...\n"
 	@cp -r Applications $(SDK_PATH)
 	@# Delete serial server binary to force the target computer to recompile it (and thus to avoid some incompatibilities)
-	@rm $(SDK_PATH)/Applications/Tools/Serial_Port_Server.out
+	@rm -f $(SDK_PATH)/Applications/Tools/Serial_Port_Server.out
+	@# Copy the shared rules needed to compile the applications
+	@cp Rules.mk $(SDK_PATH)
 	@# Clean the Applications .32b and .o files
 	@make -C $(SDK_PATH)/Applications clean > /dev/null
-	@printf "-> Copy user relevant documentation..."
+	@printf "Copying user relevant documentation...\n"
 	@mkdir $(SDK_PATH)/Documentation
 	@cp -r Documentation/Documentation_Libraries $(SDK_PATH)/Documentation
 	@cp -r Documentation/User_Manual $(SDK_PATH)/Documentation
 	@cp Documentation/Manual.html $(SDK_PATH)/Documentation
-	@printf "-> Copy Libraries binaries and includes directories..."
+	@printf "Copying Libraries binaries and includes directories...\n"
 	@mkdir $(SDK_PATH)/Libraries
 	@cp -r Libraries/Binaries $(SDK_PATH)/Libraries
 	@cp -r Libraries/Includes $(SDK_PATH)/Libraries
-	@# Copy Error_Codes.h and System_Calls.h to Librairies includes directory
+	@# Copy Error_Codes.h and System_Calls.h to Libraries includes directory
 	@cp System/Includes/Error_Codes.h $(SDK_PATH)/Libraries/Includes
 	@cp System/Includes/System_Calls.h $(SDK_PATH)/Libraries/Includes
-	@printf "-> Copy installer CD image..."
+	@printf "Copying installer CD image...\n"
 	@cp Installer/Binaries/Lemon_Installer_CD_Image.iso $(SDK_PATH)
-	@printf "### SDK successfully built ###"
+	@printf "\033[32mSDK successfully built.\033[0m\n"
 
 # Copy the installation image to the floppy disk
 floppy:
-	@if (test ! -e Installer/Binaries/Lemon_Installer_Floppy_Image.img) then printf "\033[31mThe installer floppy image has not been generated. Run \'make\' before calling \'make floppy\'.\033[0m\n"; false; fi
+	@if [ ! -e Installer/Binaries/Lemon_Installer_Floppy_Image.img ]; then printf "\033[31mThe installer floppy image has not been generated. Run 'make' before calling 'make floppy'.\033[0m\n"; false; fi
+	@printf "Writing data to floppy...\n"
 	@sudo dd if=Installer/Binaries/Lemon_Installer_Floppy_Image.img of=/dev/fd0
+	@printf "Reading back data...\n"
+	@sudo dd if=/dev/fd0 of=/tmp/Lemon_Floppy_Image.img
+	@printf "Verifying data...\n"
+	@# The diff command will return 1 if the images are different, making the rule fail
+	@diff Installer/Binaries/Lemon_Installer_Floppy_Image.img /tmp/Lemon_Floppy_Image.img
+	@printf "\033[32mFloppy image OK.\033[0m\n"
 
 clean:
 	@cd Installer && $(MAKE) clean
