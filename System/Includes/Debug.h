@@ -39,4 +39,12 @@
 	#define DEBUG_DISPLAY_CURRENT_FUNCTION_NAME()
 #endif
 
+//-------------------------------------------------------------------------------------------------
+// Functions
+//-------------------------------------------------------------------------------------------------
+/** Display a double-word value converted to hexadecimal.
+ * @param Integer The value to display.
+ */
+void DebugWriteHexadecimalInteger(unsigned int Integer);
+
 #endif

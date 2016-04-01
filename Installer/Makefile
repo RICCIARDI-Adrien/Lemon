@@ -11,7 +11,7 @@ SOURCES_PATH = Sources
 OBJECTS_PATH = Objects
 BINARIES_PATH = Binaries
 
-OBJECTS_CORE = $(OBJECTS_PATH)/Architecture.o $(OBJECTS_PATH)/Hardware_Functions.o $(OBJECTS_PATH)/Kernel.o $(OBJECTS_PATH)/Standard_Functions.o $(OBJECTS_PATH)/System_Calls.o
+OBJECTS_CORE = $(OBJECTS_PATH)/Architecture.o $(OBJECTS_PATH)/Debug.o $(OBJECTS_PATH)/Hardware_Functions.o $(OBJECTS_PATH)/Kernel.o $(OBJECTS_PATH)/Standard_Functions.o $(OBJECTS_PATH)/System_Calls.o
 OBJECTS_DRIVERS = $(OBJECTS_PATH)/Driver_Keyboard.o $(OBJECTS_PATH)/Driver_Hard_Disk.o $(OBJECTS_PATH)/Driver_UART.o $(OBJECTS_PATH)/Driver_Timer.o $(OBJECTS_PATH)/Driver_Screen.o $(OBJECTS_PATH)/Driver_PIC.o
 OBJECTS_FILE_SYSTEM = $(OBJECTS_PATH)/File_System.o $(OBJECTS_PATH)/File.o
 OBJECTS_SHELL = $(OBJECTS_PATH)/Shell.o $(OBJECTS_PATH)/Shell_Partition_Menu.o
@@ -59,6 +59,9 @@ Convert_Files:
 #------------------------------------------------------------------------------------------------------------------------------
 $(OBJECTS_PATH)/MBR.32b: $(SYSTEM_SOURCES_PATH)/MBR.asm
 	$(AS) $(MBR_FLAGS) -f bin $(SYSTEM_SOURCES_PATH)/MBR.asm -o $(OBJECTS_PATH)/MBR.32b
+
+$(OBJECTS_PATH)/Debug.o: $(SYSTEM_SOURCES_PATH)/Debug.c
+	$(CC) $(CCFLAGS) -c $(SYSTEM_SOURCES_PATH)/Debug.c -o $(OBJECTS_PATH)/Debug.o
 
 $(OBJECTS_PATH)/Architecture.o: $(SYSTEM_SOURCES_PATH)/Architecture.c
 	$(CC) $(CCFLAGS) -c $(SYSTEM_SOURCES_PATH)/Architecture.c -o $(OBJECTS_PATH)/Architecture.o
