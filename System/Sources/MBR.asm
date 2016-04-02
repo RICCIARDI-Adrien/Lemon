@@ -10,6 +10,7 @@
 ; V 1.7 : 29/05/2015, added a valid partition table to be able to boot from USB stick, System now loads only from hard disk with custom LBA support whereas Installer loads only with BIOS support.
 ; V 1.8 : 31/08/2015, added the ability to choose between LBA-28 and LBA-48.
 ; V 1.9 : 06/11/2015, added automatic LBA addressing mode selection (LBA28 or LBA48).
+; V 1.10 : 02/04/2016, used BIOS INT13 extension to load the kernel from LBA hard disks in order to be compatible with SATA drivers. Really old BIOSes won't work with this extension.
 [BITS 16]
 [ORG 0]
 
@@ -20,22 +21,6 @@
 MBR_LOAD_SEGMENT EQU 07C0h
 KERNEL_LOAD_SEGMENT EQU 1000h
 KERNEL_PROTECTED_MODE_ADDRESS EQU (KERNEL_LOAD_SEGMENT * 16)
-
-HARD_DISK_INFORMATIONS_BUFFER_ADDRESS EQU 512 ; Store the Identify Command data right after the MBR code
-
-; IDE hard disk ports definition
-HARD_DISK_PORT_DATA EQU 01F0h
-HARD_DISK_PORT_SECTOR_COUNT EQU 01F2h
-HARD_DISK_PORT_LBA_ADDRESS_LOW EQU 01F3h
-HARD_DISK_PORT_LBA_ADDRESS_MIDDLE EQU 01F4h
-HARD_DISK_PORT_LBA_ADDRESS_HIGH EQU 01F5h
-HARD_DISK_PORT_DEVICE_HEAD EQU 01F6h
-HARD_DISK_PORT_COMMAND EQU 01F7h
-HARD_DISK_PORT_STATUS EQU 03F6h
-
-; IDE hard disk useful commands
-HARD_DISK_COMMAND_READ_WITH_RETRIES EQU 20h
-HARD_DISK_COMMAND_IDENTIFY_DEVICE EQU 0ECh
 
 ;--------------------------------------------------------------------------------------------------
 ; Entry point
@@ -67,13 +52,13 @@ Entry_Point:
 
 	; Load the Installer kernel from the boot device (there only one partition starting from zero, there is no need to read the partitions table)
 	%ifdef INSTALLER
-		call LoadKernelWithBIOS
+		call LoadKernelFromInstallationMedia
 	; Load the System kernel from the hard disk
 	%else
 		; Get the starting LBA sector of the first partition
 		mov eax, DWORD [First_Partition_Starting_Sector_LBA]
 		inc eax ; Bypass the first sector which is the MBR
-		mov DWORD [Logical_Sector_Number], eax
+		mov DWORD [Disk_Address_Packet_Starting_Sector_LBA_Low], eax
 		
 		; Display the first sector to load
 		%ifdef DEBUG
@@ -84,8 +69,7 @@ Entry_Point:
 			call WriteHex
 		%endif
 		
-		call SelectLBAAddressingMode
-		call LoadKernelWithLBA
+		call LoadKernelFromHardDisk
 	%endif
 	
 	; Wait for a key press in order to display the debug messages
@@ -124,7 +108,7 @@ Entry_Point:
 ;--------------------------------------------------------------------------------------------------
 %ifdef INSTALLER
 	; Use the BIOS to access to the storage disk
-	LoadKernelWithBIOS:
+	LoadKernelFromInstallationMedia:
 		; Get boot drive parameters
 		mov ah, 8
 		mov dl, [Boot_Device]
@@ -157,7 +141,7 @@ Entry_Point:
 		mov cx, SECTORS_TO_LOAD_COUNT
 
 		; Loop for loading kernel sectors
-	.Loop_Load_Kernel_With_BIOS:
+	.Load_Kernel_From_Installation_Media_Loop:
 		push cx
 
 		; Convert LBA to CHS
@@ -182,185 +166,37 @@ Entry_Point:
 
 		; Go to next memory segment if this one is full
 		or bx, bx
-		jnz .Loop_Load_Kernel_With_BIOS_Continue_Loading
+		jnz .Load_Kernel_From_Installation_Media_Loop_Continue_Loading
 		mov ax, es
 		add ax, 1000h ; 64KB / 16
 		mov es, ax
 
-	.Loop_Load_Kernel_With_BIOS_Continue_Loading:
+	.Load_Kernel_From_Installation_Media_Loop_Continue_Loading:
 		pop cx
-		loop .Loop_Load_Kernel_With_BIOS
+		loop .Load_Kernel_From_Installation_Media_Loop
 
 		ret
 %else
-	; Set the LBA addressing mode to LBA28 or LBA48 according to the hard disk size
-	SelectLBAAddressingMode:
-		cli
-		mov ax, MBR_LOAD_SEGMENT
-		mov es, ax
-		
-		; Wait for the controller to be ready
-		mov dx, HARD_DISK_PORT_STATUS
-	.Wait_Controller_Ready_1:
-		in al, dx
-		test al, 80h
-		jnz .Wait_Controller_Ready_1
-		
-		; Select master device
-		xor al, al
-		mov dx, HARD_DISK_PORT_DEVICE_HEAD
-		out dx, al
-		
-		; Send the Identify command
-		mov al, HARD_DISK_COMMAND_IDENTIFY_DEVICE
-		mov dx, HARD_DISK_PORT_COMMAND
-		out dx, al
-	
-		; Wait for read clearance
-		mov dx, HARD_DISK_PORT_STATUS
-	.Wait_Controller_Ready_2:
-		in al, dx
-		test al, 80h
-		jnz .Wait_Controller_Ready_2
-
-		; Read data
-		mov di, HARD_DISK_INFORMATIONS_BUFFER_ADDRESS
-		cld ; Auto increment di register
-		mov cx, 256 ; Sector size is divided by two because we read words from the bus
-		mov dx, HARD_DISK_PORT_DATA
-		rep insw
-		
-		; Check the LBA28 blocks count
-		mov eax, [HARD_DISK_INFORMATIONS_BUFFER_ADDRESS + 120]
-		cmp eax, 0FFFFFFFh ; If the blocks count is equal to the maximum value, enable LBA48
-		jb .Exit
-		mov BYTE [Is_LBA28_Addressing_Mode_Used], 0
-		
-	.Exit:
-		sti
-		%ifdef DEBUG
-			mov di, 160
-			movzx ax, BYTE [Is_LBA28_Addressing_Mode_Used]
-			call WriteHex
-		%endif
-		ret
-
-	; Program the IDE controller to load the kernel from the hard disk
-	LoadKernelWithLBA:
-		cli
-		mov ax, KERNEL_LOAD_SEGMENT
-		mov es, ax
-		xor di, di
+	LoadKernelFromHardDisk:
 		mov cx, SECTORS_TO_LOAD_COUNT
 		
-	.Loop_Load_Kernel_With_LBA:
-		; Wait for the controller to be ready
-		mov dx, HARD_DISK_PORT_STATUS
-	.Wait_Controller_Ready_1:
-		in al, dx
-		test al, 80h
-		jnz .Wait_Controller_Ready_1
-
-		; Select which addressing mode to use
-		mov al, [Is_LBA28_Addressing_Mode_Used]
-		or al, al
-		jz .Use_LBA48
+		; Load the kernel to the specified address
+		mov eax, KERNEL_LOAD_SEGMENT << 16 ; Intel is little-endian, so invert segment:offset order (offset value is zero)
+		mov [Disk_Address_Packet_Destination_Buffer], eax
+	
+	.Load_Kernel_From_Hard_Disk_Loop:
+		; Load a sector
+		mov ah, 42h
+		mov dl, [Boot_Device]
+		mov si, Disk_Address_Packet
+		int 13h
 		
-		; Use LBA28
-		; Select master device and send high LBA address nibble
-		mov al, BYTE [Logical_Sector_Number + 3]
-		and al, 0Fh ; Keep only the most significant byte lower nibble
-		or al, 0E0h, ; Enable ECC, select 512-byte sectors and select the drive 0
-		mov dx, HARD_DISK_PORT_DEVICE_HEAD
-		out dx, al
+		; Prepare for the next sector read
+		add DWORD [Disk_Address_Packet_Destination_Buffer], 512 ; Increment the buffer address
+		inc DWORD [Disk_Address_Packet_Starting_Sector_LBA_Low] ; Increment only the lower part of the LBA address for now, TODO use whole 64 bits
 		
-		; Send LBA address remaining bytes
-		; High byte
-		mov al, BYTE [Logical_Sector_Number + 2]
-		mov dx, HARD_DISK_PORT_LBA_ADDRESS_HIGH
-		out dx, al
-		; Middle byte
-		mov al, BYTE [Logical_Sector_Number + 1]
-		mov dx, HARD_DISK_PORT_LBA_ADDRESS_MIDDLE
-		out dx, al
-		; Low byte
-		mov al, BYTE [Logical_Sector_Number]
-		mov dx, HARD_DISK_PORT_LBA_ADDRESS_LOW
-		out dx, al
-		
-		; Send the sectors count to read (always 1 to avoid issues with the 400 ns delay between sectors)
-		mov al, 1
-		mov dx, HARD_DISK_PORT_SECTOR_COUNT
-		out dx, al
-		jmp .Send_Read_Command
-			
-	.Use_LBA48:
-		; Use LBA48
-		; Select master device
-		mov al, 40h
-		mov dx, HARD_DISK_PORT_DEVICE_HEAD
-		out dx, al
-		
-		; Send sectors count high byte (the sector count is always 1 to avoid issues with the 400ns delay between sectors)
-		xor al, al
-		mov dx, HARD_DISK_PORT_SECTOR_COUNT
-		out dx, al
-		; Send sectors count low byte
-		mov al, 1
-		mov dx, HARD_DISK_PORT_SECTOR_COUNT
-		out dx, al
-		
-		; Send 48-bit LBA byte 3
-		mov al, BYTE [Logical_Sector_Number + 3]
-		mov dx, HARD_DISK_PORT_LBA_ADDRESS_LOW
-		out dx, al
-		; Send 48-bit LBA byte 4 (always zero as the LBA value is 4-bytes long)
-		xor al, al
-		mov dx, HARD_DISK_PORT_LBA_ADDRESS_MIDDLE
-		out dx, al
-		; Send 48-bit LBA byte 5 (always zero as the LBA value is 4-bytes long)
-		xor al, al
-		mov dx, HARD_DISK_PORT_LBA_ADDRESS_HIGH
-		out dx, al
-		; Send 48-bit LBA byte 0
-		mov al, BYTE [Logical_Sector_Number]
-		mov dx, HARD_DISK_PORT_LBA_ADDRESS_LOW
-		out dx, al
-		; Send 48-bit LBA byte 1
-		mov al, BYTE [Logical_Sector_Number + 1]
-		mov dx, HARD_DISK_PORT_LBA_ADDRESS_MIDDLE
-		out dx, al
-		; Send 48-bit LBA byte 2
-		mov al, BYTE [Logical_Sector_Number + 2]
-		mov dx, HARD_DISK_PORT_LBA_ADDRESS_HIGH
-		out dx, al
-
-	.Send_Read_Command:
-		; Send read command with automatic retries
-		mov al, HARD_DISK_COMMAND_READ_WITH_RETRIES
-		mov dx, HARD_DISK_PORT_COMMAND
-		out dx, al
-
-		; Wait for read clearance
-		mov dx, HARD_DISK_PORT_STATUS
-	.Wait_Controller_Ready_2:
-		in al, dx
-		test al, 80h
-		jnz .Wait_Controller_Ready_2
-
-		; Read data
-		mov ax, cx ; Push cx
-		cld ; Auto increment di register
-		mov cx, 256 ; Sector size is divided by two because we read words from the bus
-		mov dx, HARD_DISK_PORT_DATA
-		rep insw
-		mov cx, ax ; Pop cx
-
-		inc DWORD [Logical_Sector_Number]
-		dec cx
-		jnz .Loop_Load_Kernel_With_LBA ; Can't use the "loop" instruction here as there are too much instructions in the loop
-
-		sti
+		loop .Load_Kernel_From_Hard_Disk_Loop
+	
 		ret
 %endif
 
@@ -425,12 +261,20 @@ GDT_Pointer DW 8 * 3
              DD Global_Descriptor_Table + (MBR_LOAD_SEGMENT * 16) ; Convert the load segment to protected mode address
 
 Boot_Device DB 0
-Logical_Sector_Number DD 1
-Sectors_Per_Track_Count DW 18 ; Like a 1.44MB floppy disk
-Heads_Count DW 2 ; Like a 1.44MB floppy disk
 
-%ifndef INSTALLER
-	Is_LBA28_Addressing_Mode_Used DB 1
+%ifdef INSTALLER
+	Logical_Sector_Number DD 1
+	Sectors_Per_Track_Count DW 18 ; Like a 1.44MB floppy disk
+	Heads_Count DW 2 ; Like a 1.44MB floppy disk
+%else
+	; Extended Read Sector command Disk Address Packet (only changeable parameters are named)
+	Disk_Address_Packet:
+	DB 16 ; Packet size, 16-byte long, do not use the 64-bit buffer address extension
+	DB 0 ; Unused
+	DW 1 ; Sectors to read count, always read 1 sector at a time to make it simpler
+	Disk_Address_Packet_Destination_Buffer DD 0
+	Disk_Address_Packet_Starting_Sector_LBA_Low DD 0 ; Intel is little-endian, so low first
+	Disk_Address_Packet_Starting_Sector_LBA_High DD 0
 %endif
 
 ; The partition table starts at offset 446
