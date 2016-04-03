@@ -1,5 +1,5 @@
-/** @file Driver_Hard_Disk.c
- * @see Driver_Hard_Disk.h for description.
+/** @file Driver_Hard_Disk_IDE.c
+ * Raw access to IDE hard disk.
  * @author Adrien RICCIARDI
  */
 #include <Architecture.h>
@@ -7,6 +7,8 @@
 #include <Debug.h>
 #include <Drivers/Driver_Hard_Disk.h>
 #include <Hardware_Functions.h> // To have inb() and outb()
+
+#if CONFIGURATION_IS_HARD_DISK_IDE_DRIVER_ENABLED == 1
 
 //-------------------------------------------------------------------------------------------------
 // Private constants and macros
@@ -267,3 +269,5 @@ unsigned int HardDiskGetDriveSizeSectors(void)
 	// TODO : handle the LBA48 48-bit value
 	return (unsigned int) Hard_Disk_LBA_Sectors_Count;
 }
+
+#endif

@@ -9,13 +9,12 @@ PATH_INCLUDES = Includes
 
 INCLUDES = -I$(PATH_INCLUDES)
 
-# Option -fno-asynchronous-unwind-tables avoid generating the .eh_frame section, which is heavy and useless here
 CCFLAGS += -W -Wall -Wunused $(INCLUDES)
 LDFLAGS = -T Linker_Script.ld --strip-all -nostdlib -nostartfile
 MBR_FLAGS = -DSECTORS_TO_LOAD_COUNT=64
 
 OBJECTS_CORE = $(PATH_OBJECTS)/Architecture.o $(PATH_OBJECTS)/Debug.o $(PATH_OBJECTS)/Hardware_Functions.o $(PATH_OBJECTS)/Kernel.o $(PATH_OBJECTS)/Standard_Functions.o $(PATH_OBJECTS)/System_Calls.o
-OBJECTS_DRIVERS = $(PATH_OBJECTS)/Driver_Hard_Disk.o $(PATH_OBJECTS)/Driver_Keyboard.o $(PATH_OBJECTS)/Driver_PIC.o $(PATH_OBJECTS)/Driver_Screen.o $(PATH_OBJECTS)/Driver_Timer.o $(PATH_OBJECTS)/Driver_UART.o
+OBJECTS_DRIVERS = $(PATH_OBJECTS)/Driver_Hard_Disk_IDE.o $(PATH_OBJECTS)/Driver_Keyboard.o $(PATH_OBJECTS)/Driver_PIC.o $(PATH_OBJECTS)/Driver_Screen.o $(PATH_OBJECTS)/Driver_Timer.o $(PATH_OBJECTS)/Driver_UART.o
 OBJECTS_FILE_SYSTEM = $(PATH_OBJECTS)/File.o $(PATH_OBJECTS)/File_System.o
 OBJECTS_SHELL = $(PATH_OBJECTS)/Shell.o $(PATH_OBJECTS)/Shell_Command_Copy_File.o $(PATH_OBJECTS)/Shell_Command_Delete_File.o $(PATH_OBJECTS)/Shell_Command_Download.o $(PATH_OBJECTS)/Shell_Command_File_Size.o $(PATH_OBJECTS)/Shell_Command_List.o $(PATH_OBJECTS)/Shell_Command_Rename_File.o
 OBJECTS = $(OBJECTS_CORE) $(OBJECTS_DRIVERS) $(OBJECTS_FILE_SYSTEM) $(OBJECTS_SHELL)
@@ -55,8 +54,8 @@ $(PATH_OBJECTS)/System_Calls.o: $(PATH_SOURCES)/System_Calls.c
 #------------------------------------------------------------------------------------------------------------------------------
 # Drivers
 #------------------------------------------------------------------------------------------------------------------------------
-$(PATH_OBJECTS)/Driver_Hard_Disk.o: $(PATH_SOURCES)/Drivers/Driver_Hard_Disk.c
-	$(CC) $(CCFLAGS) -c $(PATH_SOURCES)/Drivers/Driver_Hard_Disk.c -o $(PATH_OBJECTS)/Driver_Hard_Disk.o
+$(PATH_OBJECTS)/Driver_Hard_Disk_IDE.o: $(PATH_SOURCES)/Drivers/Driver_Hard_Disk_IDE.c
+	$(CC) $(CCFLAGS) -c $(PATH_SOURCES)/Drivers/Driver_Hard_Disk_IDE.c -o $(PATH_OBJECTS)/Driver_Hard_Disk_IDE.o
 	
 $(PATH_OBJECTS)/Driver_Keyboard.o: $(PATH_SOURCES)/Drivers/Driver_Keyboard.c
 	$(CC) $(CCFLAGS) -c $(PATH_SOURCES)/Drivers/Driver_Keyboard.c -o $(PATH_OBJECTS)/Driver_Keyboard.o

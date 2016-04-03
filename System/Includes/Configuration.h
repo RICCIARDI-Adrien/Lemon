@@ -25,7 +25,26 @@
 /** Size of the whole RAM that the system can use (in MB). */
 #define CONFIGURATION_SYSTEM_TOTAL_RAM_SIZE_MEGA_BYTES 16
 
+/** Enable or not the IDE hard disk driver.
+ * @note The SATA hard disk driver must be disabled when the IDE one is enabled.
+ */
+#define CONFIGURATION_IS_HARD_DISK_IDE_DRIVER_ENABLED 1
+
+/** Enable or not the SATA hard disk driver (this driver contains a PCI AHCI driver too).
+ * @note The PCI subsystem will be automatically enabled for this driver to work.
+ * @note The IDE hard disk driver must be disabled when the SATA one is enabled.
+ */
+#define CONFIGURATION_IS_HARD_DISK_SATA_DRIVER_ENABLED 0
+
 /** Enable or disable debug informations. */
 #define CONFIGURATION_IS_DEBUG_ENABLED 0
+
+// Automatic symbol definition according to needs
+// Enable or not the PCI subsystem
+#if CONFIGURATION_IS_HARD_DISK_SATA_DRIVER_ENABLED == 1
+	#define CONFIGURATION_IS_PCI_DRIVER_ENABLED 1
+#else
+	#define CONFIGURATION_IS_PCI_DRIVER_ENABLED 0
+#endif
 
 #endif

@@ -1,5 +1,5 @@
 /** @file Driver_Hard_Disk.h
- * Raw access to IDE hard disk.
+ * Generic hard disk access functions.
  * @author Adrien RICCIARDI
  */
 #ifndef H_DRIVER_HARD_DISK_H
