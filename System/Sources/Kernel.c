@@ -70,10 +70,21 @@ void __attribute__((section(".init"))) KernelEntryPoint(void)
 	// Enable access to the whole memory
 	KeyboardEnableA20Gate();
 	
-	// Others peripherals configuration
+	// Others standard peripherals configuration
 	outb(0x3F2, 0x0C); // Floppy disk (for now it only disables the motor)
 	KeyboardInitialize();
 	TimerInitialize();
+	
+	// Enable the interrupts sooner in debug mode to allow KeyboardReadCharacter() to work (be careful if the not yet initialized devices use interrupts)
+	#if CONFIGURATION_IS_DEBUG_ENABLED == 1
+		ARCHITECTURE_INTERRUPTS_ENABLE();
+	
+		// Prepare a clean screen background
+		ScreenSetColor(SCREEN_COLOR_BLUE);
+		ScreenClear();
+	#endif
+	
+	// Initialize the compilation-selected hard disk driver
 	if (HardDiskInitialize() == 1)
 	{
 		// Show error message
