@@ -75,13 +75,13 @@ void __attribute__((section(".init"))) KernelEntryPoint(void)
 	KeyboardInitialize();
 	TimerInitialize();
 	
+	// Clear the screen with the default background color
+	ScreenSetColor(SCREEN_COLOR_BLUE);
+	ScreenClear();
+	
 	// Enable the interrupts sooner in debug mode to allow KeyboardReadCharacter() to work (be careful if the not yet initialized devices use interrupts)
 	#if CONFIGURATION_IS_DEBUG_ENABLED == 1
 		ARCHITECTURE_INTERRUPTS_ENABLE();
-	
-		// Prepare a clean screen background
-		ScreenSetColor(SCREEN_COLOR_BLUE);
-		ScreenClear();
 	#endif
 	
 	// Initialize the compilation-selected hard disk driver
@@ -89,8 +89,7 @@ void __attribute__((section(".init"))) KernelEntryPoint(void)
 	{
 		// Show error message
 		ScreenSetColor(SCREEN_COLOR_RED); // Color must be set before in order to clear screen with this value
-		ScreenClear();
-		ScreenWriteString(STRING_KERNEL_CONSOLE_HARD_DISK_NOT_LBA_COMPATIBLE_ERROR);
+		ScreenWriteString(STRING_KERNEL_ERROR_HARD_DISK_NOT_LBA_COMPATIBLE);
 		
 		// Wait for Enter key to reboot
 		KernelWaitForEnterKey();
@@ -106,8 +105,7 @@ void __attribute__((section(".init"))) KernelEntryPoint(void)
 		{
 			// Show error message
 			ScreenSetColor(SCREEN_COLOR_RED); // Color must be set before in order to clear screen with this value
-			ScreenClear();
-			ScreenWriteString(STRING_KERNEL_CONSOLE_FILE_SYSTEM_ERROR);
+			ScreenWriteString(STRING_KERNEL_ERROR_INVALID_FILE_SYSTEM);
 			
 			// Wait for Enter key to reboot
 			KernelWaitForEnterKey();
@@ -117,7 +115,7 @@ void __attribute__((section(".init"))) KernelEntryPoint(void)
 	
 	// Show the welcoming message once at the system boot
 	ScreenSetColor(SCREEN_COLOR_LIGHT_BLUE);
-	ScreenClear();
+	ScreenClear(); // Clear eventual debug messages
 	ScreenWriteString(STRING_SHELL_WELCOME);
 	
 	// Jump to shell
@@ -159,7 +157,7 @@ void KernelUnknownSystemCallErrorHandler(void)
 	// Show error message
 	ScreenSetColor(SCREEN_COLOR_RED);
 	ScreenClear();
-	ScreenWriteString(STRING_KERNEL_CONSOLE_UNKNOWN_SYSTEM_CALL_ERROR);
+	ScreenWriteString(STRING_KERNEL_ERROR_UNKNOWN_SYSTEM_CALL);
 	
 	KernelWaitForEnterKey();
 	
@@ -176,7 +174,7 @@ void KernelDivisionErrorExceptionInterruptHandler(void) // Can't be static as it
 	// Show error message
 	ScreenSetColor(SCREEN_COLOR_RED);
 	ScreenClear();
-	ScreenWriteString(STRING_KERNEL_CONSOLE_DIVISION_ERROR_EXCEPTION);
+	ScreenWriteString(STRING_KERNEL_EXCEPTION_DIVISION_BY_ZERO);
 	
 	KernelWaitForEnterKey();
 	
@@ -190,7 +188,7 @@ void KernelGeneralProtectionFaultExceptionInterruptHandler(void) // Can't be sta
 	// Show error message
 	ScreenSetColor(SCREEN_COLOR_RED);
 	ScreenClear();
-	ScreenWriteString(STRING_KERNEL_CONSOLE_GENERAL_PROTECTION_FAULT_EXCEPTION);
+	ScreenWriteString(STRING_KERNEL_EXCEPTION_GENERAL_PROTECTION_FAULT);
 	
 	KernelWaitForEnterKey();
 	
@@ -204,7 +202,7 @@ void KernelStackExceptionInterruptHandler(void) // Can't be static as it must be
 	// Show error message
 	ScreenSetColor(SCREEN_COLOR_RED);
 	ScreenClear();
-	ScreenWriteString(STRING_KERNEL_CONSOLE_STACK_EXCEPTION);
+	ScreenWriteString(STRING_KERNEL_EXCEPTION_STACK_OVERFLOW);
 	
 	KernelWaitForEnterKey();
 	
