@@ -54,6 +54,7 @@ static inline __attribute__((always_inline)) void KernelWaitForEnterKey(void)
 void __attribute__((section(".init"))) KernelEntryPoint(void)
 {
 	unsigned int *Pointer_Dword;
+	int Result;
 	#ifndef INSTALLER
 		unsigned int Partition_Starting_Sector;
 	#endif
@@ -85,12 +86,22 @@ void __attribute__((section(".init"))) KernelEntryPoint(void)
 	#endif
 	
 	// Initialize the compilation-selected hard disk driver
-	if (HardDiskInitialize() == 1)
+	Result = HardDiskInitialize();
+	if (Result != 0)
 	{
-		// Show error message
-		ScreenSetColor(SCREEN_COLOR_RED); // Color must be set before in order to clear screen with this value
-		ScreenWriteString(STRING_KERNEL_ERROR_HARD_DISK_NOT_LBA_COMPATIBLE);
+		ScreenSetColor(SCREEN_COLOR_RED);
 		
+		switch (Result)
+		{
+			case 1:
+				ScreenWriteString(STRING_KERNEL_ERROR_HARD_DISK_NOT_LBA_COMPATIBLE);
+				break;
+				
+			case 2:
+				ScreenWriteString(STRING_KERNEL_ERROR_SATA_HARD_DISK_NOT_FOUND);
+				break;
+		}
+			
 		// Wait for Enter key to reboot
 		KernelWaitForEnterKey();
 		KeyboardRebootSystem();

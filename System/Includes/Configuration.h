@@ -28,23 +28,25 @@
 /** Enable or not the IDE hard disk driver.
  * @note The SATA hard disk driver must be disabled when the IDE one is enabled.
  */
-#define CONFIGURATION_IS_HARD_DISK_IDE_DRIVER_ENABLED 1
+#define CONFIGURATION_HARD_DISK_IS_IDE_DRIVER_ENABLED 1
 
 /** Enable or not the SATA hard disk driver (this driver contains a PCI AHCI driver too).
  * @note The PCI subsystem will be automatically enabled for this driver to work.
  * @note The IDE hard disk driver must be disabled when the SATA one is enabled.
  */
-#define CONFIGURATION_IS_HARD_DISK_SATA_DRIVER_ENABLED 0
+#define CONFIGURATION_HARD_DISK_IS_SATA_DRIVER_ENABLED 0
+/** Select which SATA hard disk (from 0 to 31) to use. */
+#define CONFIGURATION_HARD_DISK_SATA_DRIVE_INDEX 0
 
 /** Enable or disable debug informations. */
 #define CONFIGURATION_IS_DEBUG_ENABLED 0
 
 // Automatic symbol definition according to needs
 // Enable or not the PCI subsystem
-#if CONFIGURATION_IS_HARD_DISK_SATA_DRIVER_ENABLED == 1
-	#define CONFIGURATION_IS_PCI_DRIVER_ENABLED 1
+#if CONFIGURATION_HARD_DISK_IS_SATA_DRIVER_ENABLED == 1
+	#define CONFIGURATION_PCI_IS_DRIVER_ENABLED 1
 #else
-	#define CONFIGURATION_IS_PCI_DRIVER_ENABLED 0
+	#define CONFIGURATION_PCI_IS_DRIVER_ENABLED 0
 #endif
 
 #endif

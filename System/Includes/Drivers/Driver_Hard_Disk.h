@@ -10,7 +10,8 @@
 //-------------------------------------------------------------------------------------------------
 /** Probe the hard disk to determine the LBA addressing to use.
  * @return 0 if the LBA addressing was successfully found,
- * @return 1 if the disk does not support LBA addressing.
+ * @return 1 if the disk does not support LBA addressing,
+ * @return 2 if the SATA disk was not found.
  */
 int HardDiskInitialize(void);
 

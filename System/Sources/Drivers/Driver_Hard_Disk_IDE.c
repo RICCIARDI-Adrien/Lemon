@@ -8,7 +8,7 @@
 #include <Drivers/Driver_Hard_Disk.h>
 #include <Hardware_Functions.h> // To have inb() and outb()
 
-#if CONFIGURATION_IS_HARD_DISK_IDE_DRIVER_ENABLED == 1
+#if CONFIGURATION_HARD_DISK_IS_IDE_DRIVER_ENABLED == 1
 
 //-------------------------------------------------------------------------------------------------
 // Private constants and macros

@@ -7,7 +7,7 @@
 #include <Drivers/Driver_PCI.h>
 #include <Hardware_Functions.h>
 
-#if CONFIGURATION_IS_PCI_DRIVER_ENABLED == 1
+#if CONFIGURATION_PCI_IS_DRIVER_ENABLED == 1
 
 //-------------------------------------------------------------------------------------------------
 // Private constants and macros
