@@ -19,7 +19,7 @@ LDFLAGS = -T ../System/Linker_Script.ld --strip-all -nostdlib -nostartfile
 MBR_FLAGS = -DSECTORS_TO_LOAD_COUNT=512 -DINSTALLER
 
 OBJECTS_CORE = $(PATH_OBJECTS)/Architecture.o $(PATH_OBJECTS)/Debug.o $(PATH_OBJECTS)/Hardware_Functions.o $(PATH_OBJECTS)/Kernel.o $(PATH_OBJECTS)/Standard_Functions.o $(PATH_OBJECTS)/System_Calls.o
-OBJECTS_DRIVERS = $(PATH_OBJECTS)/Driver_Hard_Disk_IDE.o $(PATH_OBJECTS)/Driver_Keyboard.o $(PATH_OBJECTS)/Driver_PIC.o $(PATH_OBJECTS)/Driver_Screen.o $(PATH_OBJECTS)/Driver_Timer.o $(PATH_OBJECTS)/Driver_UART.o
+OBJECTS_DRIVERS = $(PATH_OBJECTS)/Driver_Hard_Disk_IDE.o $(PATH_OBJECTS)/Driver_Keyboard.o $(PATH_OBJECTS)/Driver_PCI.o $(PATH_OBJECTS)/Driver_PIC.o $(PATH_OBJECTS)/Driver_Screen.o $(PATH_OBJECTS)/Driver_Timer.o $(PATH_OBJECTS)/Driver_UART.o
 OBJECTS_FILE_SYSTEM = $(PATH_OBJECTS)/File.o $(PATH_OBJECTS)/File_System.o
 OBJECTS_SHELL = $(PATH_OBJECTS)/Shell.o $(PATH_OBJECTS)/Shell_Partition_Menu.o
 OBJECTS = $(OBJECTS_CORE) $(OBJECTS_DRIVERS) $(OBJECTS_FILE_SYSTEM) $(OBJECTS_SHELL)
@@ -86,6 +86,9 @@ $(PATH_OBJECTS)/Driver_Hard_Disk_IDE.o: $(PATH_SYSTEM_SOURCES)/Drivers/Driver_Ha
 
 $(PATH_OBJECTS)/Driver_Keyboard.o: $(PATH_SYSTEM_SOURCES)/Drivers/Driver_Keyboard.c
 	$(CC) $(CCFLAGS) -c $(PATH_SYSTEM_SOURCES)/Drivers/Driver_Keyboard.c -o $(PATH_OBJECTS)/Driver_Keyboard.o
+
+$(PATH_OBJECTS)/Driver_PCI.o: $(PATH_SYSTEM_SOURCES)/Drivers/Driver_PCI.c
+	$(CC) $(CCFLAGS) -c $(PATH_SYSTEM_SOURCES)/Drivers/Driver_PCI.c -o $(PATH_OBJECTS)/Driver_PCI.o
 
 $(PATH_OBJECTS)/Driver_PIC.o: $(PATH_SYSTEM_SOURCES)/Drivers/Driver_PIC.c
 	$(CC) $(CCFLAGS) -c $(PATH_SYSTEM_SOURCES)/Drivers/Driver_PIC.c -o $(PATH_OBJECTS)/Driver_PIC.o
