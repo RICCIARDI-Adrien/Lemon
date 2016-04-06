@@ -13,9 +13,6 @@
 //-------------------------------------------------------------------------------------------------
 // Private constants and macros
 //-------------------------------------------------------------------------------------------------
-/** A standard hard disk sector size in bytes. */
-#define HARD_DISK_SECTOR_SIZE 512
-
 /** The port used to read or to write data to the hard disk controller. */
 #define HARD_DISK_PORT_DATA 0x01F0
 /** Hold the number of sectors to read or to write. */
