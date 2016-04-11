@@ -16,8 +16,12 @@
 /** Register - Host to Device FIS type. */
 #define HARD_DISK_SATA_FRAME_INFORMATION_STRUCTURE_TYPE_REGISTER_HOST_TO_DEVICE 0x27
 
-/** The FIS command to get device properties. */
+/** The ATA "IDENTIFY DEVICE" command. */
 #define HARD_DISK_SATA_COMMAND_IDENTIFY_DEVICE 0xEC
+/** The ATA "READ WITH RETRIES" command. */
+#define HARD_DISK_SATA_COMMAND_READ_WITH_RETRIES 0x20
+/** The ATA "WRITE WITH RETRIES" command. */
+#define HARD_DISK_SATA_COMMAND_WRITE_WITH_RETRIES 0x30
 
 // Port Registers Command useful bits
 /** ST bit. */
@@ -43,6 +47,9 @@
 // FIS Information Structure Host to Device useful bits
 /** C bit. */
 #define HARD_DISK_SATA_FRAME_INFORMATION_STRUCTURE_REGISTER_HOST_TO_DEVICE_TRANSFER_WHEN_COMMAND_ISSUE_SET_BIT (1 << 7)
+
+/** SATA drive signature. */
+#define HARD_DISK_SATA_PORT_SIGNATURE_SATA_DRIVE 0x00000101
 
 //-------------------------------------------------------------------------------------------------
 // Private types
@@ -92,14 +99,16 @@ typedef struct __attribute__((packed))
 	unsigned char Device;
 	unsigned char LBA_Address_High_Bytes[3];
 	unsigned char Features_High_Byte;
-	unsigned short Sectors_Count;
+	//unsigned short Sectors_Count;
+	unsigned char Sectors_Count_Low_Byte;
+	unsigned char Sectors_Count_High_Byte;
 	unsigned char Isochronous_Command_Completion; //! Command execution timeout.
 	unsigned char Control;
 	unsigned char Reserved_2[4];
 } THardDiskSATAFrameInformationStructureRegisterHostToDevice;
 
 /** Register - Device to Host FIS. */
-typedef struct __attribute__((packed))
+/*typedef struct __attribute__((packed))
 {
 	unsigned char Frame_Information_Structure_Type; //! Set to 0x34.
 	unsigned char Port_Multiplier_Address: 4;
@@ -114,7 +123,7 @@ typedef struct __attribute__((packed))
 	unsigned char Reserved_3;
 	unsigned short Sectors_Count;
 	unsigned char Reserved_4[6];
-} THardDiskSATAFrameInformationStructureRegisterDeviceToHost;
+} THardDiskSATAFrameInformationStructureRegisterDeviceToHost;*/
 
 /** A Command List Structure, which compose a device Command List. */
 typedef struct __attribute__((packed))
@@ -132,9 +141,7 @@ typedef struct __attribute__((packed))
 	unsigned int Data_Base_Address;
 	unsigned int Data_Base_Address_High_Double_Word;
 	unsigned int Reserved_1;
-	unsigned int Data_Byte_Count: 22;
-	unsigned int Reserved_2: 9;
-	unsigned int Interrupt_On_Completion: 1;
+	unsigned int Data_Byte_Count;
 } THardDiskSATAPhysicalRegionDescriptorTable;
 
 /** A Command Table, containing a command properties. */
@@ -159,8 +166,8 @@ static volatile THardDiskSATACommandListStructure __attribute__((aligned(1024)))
 /** The first Command List slot's Command Table. */
 static volatile THardDiskSATACommandTable __attribute__((aligned(128))) Hard_Disk_SATA_Command_Table;
 
-// TODO
-static volatile unsigned char __attribute__((aligned(256))) FIS[2048]; // sz 256
+/** The FIS received from the device are stored in this structure, but it is unused in this implementation. */
+static volatile unsigned char __attribute__((aligned(256))) Hard_Disk_SATA_Received_Frame_Information_Structure[256];
 
 /** The buffer used for all data transfer. */
 static volatile unsigned char __attribute__((aligned(2))) Hard_Disk_SATA_Buffer[HARD_DISK_SECTOR_SIZE];
@@ -175,14 +182,14 @@ static void HardDiskSATAControllerExecuteCommand(void)
 	Pointer_Hard_Disk_SATA_Drive_Port_Registers->Command_Issue |= 1; // Always execute the first command as there is only one slot in the command list
 	
 	// Wait for command completion
-	while (Pointer_Hard_Disk_SATA_Drive_Port_Registers->Task_File_Data & HARD_DISK_SATA_BIT_PORT_REGISTERS_TASK_FILE_DATA_BUSY);
+	while (Pointer_Hard_Disk_SATA_Drive_Port_Registers->Command_Issue & (1 << CONFIGURATION_HARD_DISK_SATA_DRIVE_INDEX)); // The AHCI controller will clear the corresponding CI bit when a command completed successfully
 }
 
 /** Fill the Command List slot 0 needed fields.
  * @param Is_Write_Operation Set to 1 if it is a write operation, set to 0 if it is a read operation.
  * @param Is_Prefetchable Set to 1 if the data is prefetchable (the HBA can optimize the data transfer) or set to 0 if not.
  */
-static void HardDiskSATAPrepareCommandListStructure(int Is_Write_Operation, int Is_Prefetchable)
+static void HardDiskSATAPrepareCommand(int Is_Write_Operation, int Is_Prefetchable)
 {
 	Hard_Disk_SATA_Command_List.Description_Information = (sizeof(Hard_Disk_SATA_Command_Table.Command_Frame_Information_Structure) / 4) & 0x1F; // // Set the Frame Information Structure Length field (bits 4 to 0), the value unit is double-word
 	if (Is_Write_Operation) Hard_Disk_SATA_Command_List.Description_Information |= HARD_DISK_SATA_BIT_COMMAND_LIST_STRUCTURE_DESCRIPTION_INFORMATION_WRITE; // Is it a write operation ?
@@ -191,6 +198,20 @@ static void HardDiskSATAPrepareCommandListStructure(int Is_Write_Operation, int 
 	Hard_Disk_SATA_Command_List.Description_Information |= 1 << 16; // There is always a single entry in the PRDT in this implementation
 	
 	Hard_Disk_SATA_Command_List.Command_Status = 0; // This field will be incremented with the real transfered bytes amount
+}
+
+/** Tell if the port 0 (i.e. the hard disk drive) is in idle state or in running state.
+ * @return 1 if the port is in idle state,
+ * @return 0 if the port is in running state.
+ */
+static int HardDiskSATAIsPortIdle(void)
+{
+	unsigned int Temp_Double_Word;
+	
+	Temp_Double_Word = Pointer_Hard_Disk_SATA_Drive_Port_Registers->Command;
+	
+	if ((Temp_Double_Word & HARD_DISK_SATA_BIT_PORT_REGISTERS_COMMAND_START) || (Temp_Double_Word & HARD_DISK_SATA_BIT_PORT_REGISTERS_COMMAND_FRAME_INFORMATION_STRUCTURE_RECEIVE_ENABLE) || (Temp_Double_Word & HARD_DISK_SATA_BIT_PORT_REGISTERS_COMMAND_FRAME_INFORMATION_STRUCTURE_RECEIVE_RUNNING) || (Temp_Double_Word & HARD_DISK_SATA_BIT_PORT_REGISTERS_COMMAND_COMMAND_LIST_RUNNING)) return 0;
+	return 1;
 }
 
 //-------------------------------------------------------------------------------------------------
@@ -266,15 +287,51 @@ int HardDiskInitialize(void)
 	Pointer_Hard_Disk_SATA_Drive_Port_Registers = (THardDiskSATAPortRegisters *) (Device_Configuration_Space_Header.Base_Address_Registers[5] + (0x0100 + (CONFIGURATION_HARD_DISK_SATA_DRIVE_INDEX * 128)));
 	
 	// Initialize the drive
-	// Reset PxCMD.ST
-	Pointer_Hard_Disk_SATA_Drive_Port_Registers->Command &= ~HARD_DISK_SATA_BIT_PORT_REGISTERS_COMMAND_START;
-	while (Pointer_Hard_Disk_SATA_Drive_Port_Registers->Command & HARD_DISK_SATA_BIT_PORT_REGISTERS_COMMAND_COMMAND_LIST_RUNNING);
-	// Reset PxCMD.FRE
-	if (Pointer_Hard_Disk_SATA_Drive_Port_Registers->Command & HARD_DISK_SATA_BIT_PORT_REGISTERS_COMMAND_FRAME_INFORMATION_STRUCTURE_RECEIVE_ENABLE)
+	// Is the controller in idle state ?
+	Temp_Double_Word = Pointer_Hard_Disk_SATA_Drive_Port_Registers->Command;
+	if (!HardDiskSATAIsPortIdle())
 	{
-		Pointer_Hard_Disk_SATA_Drive_Port_Registers->Command &= ~HARD_DISK_SATA_BIT_PORT_REGISTERS_COMMAND_FRAME_INFORMATION_STRUCTURE_RECEIVE_ENABLE;
-		while (Pointer_Hard_Disk_SATA_Drive_Port_Registers->Command & HARD_DISK_SATA_BIT_PORT_REGISTERS_COMMAND_FRAME_INFORMATION_STRUCTURE_RECEIVE_RUNNING);
+		DEBUG_SECTION_START
+			DEBUG_DISPLAY_CURRENT_FUNCTION_NAME()
+			ScreenWriteString("Controller is not idle, putting it in idle state.\n");
+			KeyboardReadCharacter();
+		DEBUG_SECTION_END
+		
+		// Reset PxCMD.ST
+		Pointer_Hard_Disk_SATA_Drive_Port_Registers->Command &= ~HARD_DISK_SATA_BIT_PORT_REGISTERS_COMMAND_START;
+		while (Pointer_Hard_Disk_SATA_Drive_Port_Registers->Command & HARD_DISK_SATA_BIT_PORT_REGISTERS_COMMAND_COMMAND_LIST_RUNNING);
+		
+		// Reset PxCMD.FRE
+		if (Pointer_Hard_Disk_SATA_Drive_Port_Registers->Command & HARD_DISK_SATA_BIT_PORT_REGISTERS_COMMAND_FRAME_INFORMATION_STRUCTURE_RECEIVE_ENABLE)
+		{
+			Pointer_Hard_Disk_SATA_Drive_Port_Registers->Command &= ~HARD_DISK_SATA_BIT_PORT_REGISTERS_COMMAND_FRAME_INFORMATION_STRUCTURE_RECEIVE_ENABLE;
+			while (Pointer_Hard_Disk_SATA_Drive_Port_Registers->Command & HARD_DISK_SATA_BIT_PORT_REGISTERS_COMMAND_FRAME_INFORMATION_STRUCTURE_RECEIVE_RUNNING);
+		}
+		
+		// Did the idle operation succeeded ?
+		if (!HardDiskSATAIsPortIdle())
+		{
+			DEBUG_SECTION_START
+				DEBUG_DISPLAY_CURRENT_FUNCTION_NAME()
+				ScreenWriteString("Error : failed to put the controller into idle state.\n");
+				KeyboardReadCharacter();
+			DEBUG_SECTION_END
+		}
 	}
+	
+	// Configure the port's memory areas
+	// Set the Command List address
+	Pointer_Hard_Disk_SATA_Drive_Port_Registers->Command_List_Base_Address = (unsigned int) &Hard_Disk_SATA_Command_List;
+	Pointer_Hard_Disk_SATA_Drive_Port_Registers->Command_List_Base_Address_High_Double_Word = 0;
+	// Set the received FIS address
+	Pointer_Hard_Disk_SATA_Drive_Port_Registers->Frame_Information_Structure_Base_Address = (unsigned int) Hard_Disk_SATA_Received_Frame_Information_Structure;
+	Pointer_Hard_Disk_SATA_Drive_Port_Registers->Frame_Information_Structure_Base_Address_High_Double_Word = 0;
+	
+	// Allow the device FIS to be received
+	Pointer_Hard_Disk_SATA_Drive_Port_Registers->Command |= HARD_DISK_SATA_BIT_PORT_REGISTERS_COMMAND_FRAME_INFORMATION_STRUCTURE_RECEIVE_ENABLE;
+	
+	// Clear PxSERR
+	Pointer_Hard_Disk_SATA_Drive_Port_Registers->SATA_Error = 0x07FF0F03; // Put ones in all implemented bits (as asked by the specification)
 	
 	DEBUG_SECTION_START
 		DEBUG_DISPLAY_CURRENT_FUNCTION_NAME()
@@ -305,31 +362,36 @@ int HardDiskInitialize(void)
 		return 2;
 	}
 	
-	// Configure the Command List
-	// Set the Command List address
-	Pointer_Hard_Disk_SATA_Drive_Port_Registers->Command_List_Base_Address = (unsigned int) &Hard_Disk_SATA_Command_List;
-	Pointer_Hard_Disk_SATA_Drive_Port_Registers->Command_List_Base_Address_High_Double_Word = 0;
+	// Check the drive signature (only SATA devices are allowed)
+	Temp_Double_Word = Pointer_Hard_Disk_SATA_Drive_Port_Registers->Signature;
+	DEBUG_SECTION_START
+		DEBUG_DISPLAY_CURRENT_FUNCTION_NAME()
+		ScreenWriteString("Drive signature : 0x");
+		DebugWriteHexadecimalInteger(Temp_Double_Word);
+		ScreenWriteCharacter('\n');
+		KeyboardReadCharacter();
+	DEBUG_SECTION_END
+	if (Temp_Double_Word != HARD_DISK_SATA_PORT_SIGNATURE_SATA_DRIVE)
+	{
+		DEBUG_SECTION_START
+			DEBUG_DISPLAY_CURRENT_FUNCTION_NAME()
+			ScreenWriteString("Error : the port signature does not refer to a SATA drive.\n");
+			KeyboardReadCharacter();
+		DEBUG_SECTION_END
+		return 2;
+	}
 	
+	// Configure the Command List
 	// Set the first Command List slot's Command Table address
 	Hard_Disk_SATA_Command_List.Command_Table_Descriptor_Base_Address = (unsigned int) &Hard_Disk_SATA_Command_Table;
 	Hard_Disk_SATA_Command_List.Command_Table_Descriptor_Base_Address_High_Double_Word = 0;
-	
 	// Set the command table data address once and for all
 	Hard_Disk_SATA_Command_Table.Physical_Region_Descriptor_Table.Data_Base_Address = (unsigned int) Hard_Disk_SATA_Buffer;
 	Hard_Disk_SATA_Command_Table.Physical_Region_Descriptor_Table.Data_Base_Address_High_Double_Word = 0;
 	Hard_Disk_SATA_Command_Table.Physical_Region_Descriptor_Table.Data_Byte_Count = HARD_DISK_SECTOR_SIZE - 1; // The size is zero-based, so a value of 0 = a size of 1 byte
 	
-	// TODO
-	
-	// Set the received FIS address TODO
-	Pointer_Hard_Disk_SATA_Drive_Port_Registers->Frame_Information_Structure_Base_Address = (unsigned int) FIS;
-	Pointer_Hard_Disk_SATA_Drive_Port_Registers->Frame_Information_Structure_Base_Address_High_Double_Word = 0;
-	
-	// Clear PxSERR
-	Pointer_Hard_Disk_SATA_Drive_Port_Registers->SATA_Error = 0x07FF0F03; // Put ones in all implemented bits (as asked by the specification)
-	
-	// Start Command Engine (allow the commands to be processed)
-	Pointer_Hard_Disk_SATA_Drive_Port_Registers->Command |= HARD_DISK_SATA_BIT_PORT_REGISTERS_COMMAND_START;
+	// Start Command Engine
+	Pointer_Hard_Disk_SATA_Drive_Port_Registers->Command |= HARD_DISK_SATA_BIT_PORT_REGISTERS_COMMAND_START; // ST bit, allow the commands to be processed
 	
 	DEBUG_SECTION_START
 		DEBUG_DISPLAY_CURRENT_FUNCTION_NAME()
@@ -337,28 +399,87 @@ int HardDiskInitialize(void)
 		KeyboardReadCharacter();
 	DEBUG_SECTION_END
 	
-	// The first command will fail, so execute a dumb command to make the following work TODO : fix this
-	HardDiskGetDriveSizeSectors();
-	
 	return 0;
 }
 
 void HardDiskReadSector(unsigned int Logical_Sector_Number, void *Pointer_Buffer)
 {
+	// Configure the Command List slot
+	HardDiskSATAPrepareCommand(0, 0); // Read operation, do not prefetch data (TODO is data prefetchable ?)
+	
+	// Create the H2D FIS content
+	memset((void *) &Hard_Disk_SATA_Command_Table.Command_Frame_Information_Structure, 0, sizeof(Hard_Disk_SATA_Command_Table.Command_Frame_Information_Structure));
+	Hard_Disk_SATA_Command_Table.Command_Frame_Information_Structure.Frame_Information_Structure_Type = HARD_DISK_SATA_FRAME_INFORMATION_STRUCTURE_TYPE_REGISTER_HOST_TO_DEVICE; // Set the FIS type
+	Hard_Disk_SATA_Command_Table.Command_Frame_Information_Structure.Command = HARD_DISK_SATA_COMMAND_READ_WITH_RETRIES; // Set the command
+	Hard_Disk_SATA_Command_Table.Command_Frame_Information_Structure.Port_Multiplier_Port_And_Transfer_When_Command_Issue_Set_Bit = HARD_DISK_SATA_FRAME_INFORMATION_STRUCTURE_REGISTER_HOST_TO_DEVICE_TRANSFER_WHEN_COMMAND_ISSUE_SET_BIT; // The command will be executed when the corresponding bit in CI register will be set
+	// Set the LBA sector to read from
+	Hard_Disk_SATA_Command_Table.Command_Frame_Information_Structure.LBA_Address_Low_Bytes[0] = (unsigned char) Logical_Sector_Number;
+	Hard_Disk_SATA_Command_Table.Command_Frame_Information_Structure.LBA_Address_Low_Bytes[1] = Logical_Sector_Number >> 8;
+	Hard_Disk_SATA_Command_Table.Command_Frame_Information_Structure.LBA_Address_Low_Bytes[2] = Logical_Sector_Number >> 16;
+	Hard_Disk_SATA_Command_Table.Command_Frame_Information_Structure.LBA_Address_Low_Bytes[3] = Logical_Sector_Number >> 24;
+	// Set the sectors count
+	Hard_Disk_SATA_Command_Table.Command_Frame_Information_Structure.Sectors_Count_Low_Byte = 1;
+	// Select master device and configure for 48-LBA TODO LBA 48 detection at initialization
+	//Hard_Disk_SATA_Command_Table.Command_Frame_Information_Structure.Device = 0xA0;
+	//Hard_Disk_SATA_Command_Table.Command_Frame_Information_Structure.Device = 0xE0;
+	//Hard_Disk_SATA_Command_Table.Command_Frame_Information_Structure.Device = 0x40;
+	
+	/*Hard_Disk_SATA_Command_Table.Command_Frame_Information_Structure.LBA_Address_Low_Bytes[0] = (unsigned char) Logical_Sector_Number;
+	Hard_Disk_SATA_Command_Table.Command_Frame_Information_Structure.LBA_Address_Low_Bytes[1] = Logical_Sector_Number >> 8;
+	Hard_Disk_SATA_Command_Table.Command_Frame_Information_Structure.LBA_Address_Low_Bytes[2] = Logical_Sector_Number >> 16;
+	Hard_Disk_SATA_Command_Table.Command_Frame_Information_Structure.Device = 1 << 6;
+	Hard_Disk_SATA_Command_Table.Command_Frame_Information_Structure.LBA_Address_Low_Bytes[3] = Logical_Sector_Number >> 24;
+	Hard_Disk_SATA_Command_Table.Command_Frame_Information_Structure.LBA_Address_Low_Bytes[4] = 0;
+	Hard_Disk_SATA_Command_Table.Command_Frame_Information_Structure.LBA_Address_Low_Bytes[5] = 0;
+	
+	/// Set the sectors count
+	Hard_Disk_SATA_Command_Table.Command_Frame_Information_Structure.Sectors_Count_Low_Byte = 1;
+	Hard_Disk_SATA_Command_Table.Command_Frame_Information_Structure.Sectors_Count_High_Byte = 0;*/
+
+	// Execute the command and wait for its completion
+	HardDiskSATAControllerExecuteCommand();
+	
+	// Copy the data to the buffer (can't directly use the provided data pointer because the buffer must aligned on 2 bytes)
+	memcpy(Pointer_Buffer, (void *) Hard_Disk_SATA_Buffer, HARD_DISK_SECTOR_SIZE);
 }
 
 void HardDiskWriteSector(unsigned int Logical_Sector_Number, void *Pointer_Buffer)
 {
+	// Configure the Command List slot
+	HardDiskSATAPrepareCommand(1, 0); // Write operation, do not prefetch data (TODO is data prefetchable ?)
+	
+	// Create the H2D FIS content (send an ATA IDENTIFY DEVICE command)
+	//memset((void *) &Hard_Disk_SATA_Command_Table.Command_Frame_Information_Structure, 0, sizeof(Hard_Disk_SATA_Command_Table.Command_Frame_Information_Structure));
+	/*Hard_Disk_SATA_Command_Table.Command_Frame_Information_Structure.Frame_Information_Structure_Type = HARD_DISK_SATA_FRAME_INFORMATION_STRUCTURE_TYPE_REGISTER_HOST_TO_DEVICE; // Set the FIS type
+	Hard_Disk_SATA_Command_Table.Command_Frame_Information_Structure.Command = 0x35;//HARD_DISK_SATA_COMMAND_WRITE_WITH_RETRIES; // Set the command
+	Hard_Disk_SATA_Command_Table.Command_Frame_Information_Structure.Port_Multiplier_Port_And_Transfer_When_Command_Issue_Set_Bit = HARD_DISK_SATA_FRAME_INFORMATION_STRUCTURE_REGISTER_HOST_TO_DEVICE_TRANSFER_WHEN_COMMAND_ISSUE_SET_BIT; // The command will be executed when the corresponding bit in CI register will be set
+	// Set the LBA sector to read from
+	Hard_Disk_SATA_Command_Table.Command_Frame_Information_Structure.LBA_Address_Low_Bytes[0] = (unsigned char) Logical_Sector_Number;
+	Hard_Disk_SATA_Command_Table.Command_Frame_Information_Structure.LBA_Address_Low_Bytes[1] = Logical_Sector_Number >> 8;
+	Hard_Disk_SATA_Command_Table.Command_Frame_Information_Structure.LBA_Address_Low_Bytes[2] = Logical_Sector_Number >> 16;
+	Hard_Disk_SATA_Command_Table.Command_Frame_Information_Structure.Device = 1 << 6;
+	Hard_Disk_SATA_Command_Table.Command_Frame_Information_Structure.LBA_Address_Low_Bytes[3] = Logical_Sector_Number >> 24;
+	Hard_Disk_SATA_Command_Table.Command_Frame_Information_Structure.LBA_Address_Low_Bytes[4] = 0;
+	Hard_Disk_SATA_Command_Table.Command_Frame_Information_Structure.LBA_Address_Low_Bytes[5] = 0;
+	
+	/// Set the sectors count
+	Hard_Disk_SATA_Command_Table.Command_Frame_Information_Structure.Sectors_Count_Low_Byte = 1;
+	Hard_Disk_SATA_Command_Table.Command_Frame_Information_Structure.Sectors_Count_High_Byte = 0;*/
+	
+	
+	// Copy the data to the buffer (can't directly use the provided data pointer because the buffer must aligned on 2 bytes)
+	memcpy((void *) Hard_Disk_SATA_Buffer, Pointer_Buffer, HARD_DISK_SECTOR_SIZE);
+	
+	// Execute the command and wait for its completion
+	HardDiskSATAControllerExecuteCommand();
 }
 
 unsigned int HardDiskGetDriveSizeSectors(void)
 {
 	unsigned int Sectors_Count;
 	
-	// Send an IDENTIFY DEVICE ATA command
-	
 	// Configure the Command List slot
-	HardDiskSATAPrepareCommandListStructure(0, 0); // Read operation, do not prefetch data (TODO is data prefetchable ?)
+	HardDiskSATAPrepareCommand(0, 0); // Read operation, do not prefetch data (TODO is data prefetchable ?)
 	
 	// Create the H2D FIS content
 	memset((void *) &Hard_Disk_SATA_Command_Table.Command_Frame_Information_Structure, 0, sizeof(Hard_Disk_SATA_Command_Table.Command_Frame_Information_Structure));
