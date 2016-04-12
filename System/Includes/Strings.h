@@ -26,6 +26,9 @@
 	#define STRING_KERNEL_ERROR_UNKNOWN_SYSTEM_CALL "Erreur : le programme a demand\202 un appel syst\212me inconnu.\nAppuyez sur Entr\202e pour continuer.\n"
 	#define STRING_KERNEL_ERROR_HARD_DISK_NOT_LBA_COMPATIBLE "Erreur : le disque dur n'est pas compatible avec l'adressage LBA.\n"
 	#define STRING_KERNEL_ERROR_SATA_HARD_DISK_NOT_FOUND "Erreur : le disque dur SATA est introuvable.\n"
+	
+	// SATA hard disk driver
+	#define STRING_DRIVER_HARD_DISK_SATA_ERROR_INPUT_OUTPUT "Erreur : impossible d'acc\202der au disque dur SATA.\nAppuyez sur Entr\202e pour continuer.\n"
 
 	// Shell welcoming message shown only at system startup
 	#define STRING_SHELL_WELCOME "Bienvenue sur Lemon !\n"

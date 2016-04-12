@@ -7,6 +7,7 @@
 #include <Drivers/Driver_Hard_Disk.h>
 #include <Drivers/Driver_PCI.h>
 #include <Standard_Functions.h>
+#include <Strings.h>
 
 #if CONFIGURATION_HARD_DISK_IS_SATA_DRIVER_ENABLED == 1
 
@@ -18,10 +19,10 @@
 
 /** The ATA "IDENTIFY DEVICE" command. */
 #define HARD_DISK_SATA_COMMAND_IDENTIFY_DEVICE 0xEC
-/** The ATA "READ WITH RETRIES" command. */
-#define HARD_DISK_SATA_COMMAND_READ_WITH_RETRIES 0x20
-/** The ATA "WRITE WITH RETRIES" command. */
-#define HARD_DISK_SATA_COMMAND_WRITE_WITH_RETRIES 0x30
+/** The ATA "READ DMA EXT" command. */
+#define HARD_DISK_SATA_COMMAND_READ_DMA_EXTENDED 0x25
+/** The ATA "WRITE DMA EXT" command. */
+#define HARD_DISK_SATA_COMMAND_WRITE_DMA_EXTENDED 0x35
 
 // Port Registers Command useful bits
 /** ST bit. */
@@ -35,6 +36,9 @@
 // Port Registers Task File Data useful bits
 /** BSY bit. */
 #define HARD_DISK_SATA_BIT_PORT_REGISTERS_TASK_FILE_DATA_BUSY (1 << 7)
+// Port Registers Interrupt Status useful bits
+/** TFES bit. */
+#define HARD_DISK_SATA_BIT_PORT_REGISTERS_INTERRUPT_STATUS_TASK_FILE_ERROR_STATUS (1 << 30)
 
 // Command List Structure Description Information useful bits
 /** W bit. */
@@ -99,31 +103,12 @@ typedef struct __attribute__((packed))
 	unsigned char Device;
 	unsigned char LBA_Address_High_Bytes[3];
 	unsigned char Features_High_Byte;
-	//unsigned short Sectors_Count;
 	unsigned char Sectors_Count_Low_Byte;
 	unsigned char Sectors_Count_High_Byte;
 	unsigned char Isochronous_Command_Completion; //! Command execution timeout.
 	unsigned char Control;
 	unsigned char Reserved_2[4];
 } THardDiskSATAFrameInformationStructureRegisterHostToDevice;
-
-/** Register - Device to Host FIS. */
-/*typedef struct __attribute__((packed))
-{
-	unsigned char Frame_Information_Structure_Type; //! Set to 0x34.
-	unsigned char Port_Multiplier_Address: 4;
-	unsigned char Reserved_1: 2;
-	unsigned char Interrupt_Bit: 1;
-	unsigned char Reserved_2: 1;
-	unsigned char Status;
-	unsigned char Error;
-	unsigned char LBA_Address_Low_Bytes[3];
-	unsigned char Device;
-	unsigned char LBA_Address_High_Bytes[3];
-	unsigned char Reserved_3;
-	unsigned short Sectors_Count;
-	unsigned char Reserved_4[6];
-} THardDiskSATAFrameInformationStructureRegisterDeviceToHost;*/
 
 /** A Command List Structure, which compose a device Command List. */
 typedef struct __attribute__((packed))
@@ -182,7 +167,16 @@ static void HardDiskSATAControllerExecuteCommand(void)
 	Pointer_Hard_Disk_SATA_Drive_Port_Registers->Command_Issue |= 1; // Always execute the first command as there is only one slot in the command list
 	
 	// Wait for command completion
-	while (Pointer_Hard_Disk_SATA_Drive_Port_Registers->Command_Issue & (1 << CONFIGURATION_HARD_DISK_SATA_DRIVE_INDEX)); // The AHCI controller will clear the corresponding CI bit when a command completed successfully
+	while ((Pointer_Hard_Disk_SATA_Drive_Port_Registers->Command_Issue & (1 << CONFIGURATION_HARD_DISK_SATA_DRIVE_INDEX)) && !(Pointer_Hard_Disk_SATA_Drive_Port_Registers->Interrupt_Status & HARD_DISK_SATA_BIT_PORT_REGISTERS_INTERRUPT_STATUS_TASK_FILE_ERROR_STATUS)); // The AHCI controller will clear the corresponding CI bit when a command completed successfully
+	
+	// Was the command successful ?
+	if (Pointer_Hard_Disk_SATA_Drive_Port_Registers->Interrupt_Status & HARD_DISK_SATA_BIT_PORT_REGISTERS_INTERRUPT_STATUS_TASK_FILE_ERROR_STATUS)
+	{
+		ScreenSetColor(SCREEN_COLOR_RED);
+		ScreenWriteString(STRING_DRIVER_HARD_DISK_SATA_ERROR_INPUT_OUTPUT);
+		ScreenSetColor(SCREEN_COLOR_BLUE);
+		KeyboardReadCharacter();
+	}
 }
 
 /** Fill the Command List slot 0 needed fields.
@@ -410,36 +404,22 @@ void HardDiskReadSector(unsigned int Logical_Sector_Number, void *Pointer_Buffer
 	// Create the H2D FIS content
 	memset((void *) &Hard_Disk_SATA_Command_Table.Command_Frame_Information_Structure, 0, sizeof(Hard_Disk_SATA_Command_Table.Command_Frame_Information_Structure));
 	Hard_Disk_SATA_Command_Table.Command_Frame_Information_Structure.Frame_Information_Structure_Type = HARD_DISK_SATA_FRAME_INFORMATION_STRUCTURE_TYPE_REGISTER_HOST_TO_DEVICE; // Set the FIS type
-	Hard_Disk_SATA_Command_Table.Command_Frame_Information_Structure.Command = HARD_DISK_SATA_COMMAND_READ_WITH_RETRIES; // Set the command
+	Hard_Disk_SATA_Command_Table.Command_Frame_Information_Structure.Command = HARD_DISK_SATA_COMMAND_READ_DMA_EXTENDED; // Set the command
 	Hard_Disk_SATA_Command_Table.Command_Frame_Information_Structure.Port_Multiplier_Port_And_Transfer_When_Command_Issue_Set_Bit = HARD_DISK_SATA_FRAME_INFORMATION_STRUCTURE_REGISTER_HOST_TO_DEVICE_TRANSFER_WHEN_COMMAND_ISSUE_SET_BIT; // The command will be executed when the corresponding bit in CI register will be set
 	// Set the LBA sector to read from
 	Hard_Disk_SATA_Command_Table.Command_Frame_Information_Structure.LBA_Address_Low_Bytes[0] = (unsigned char) Logical_Sector_Number;
 	Hard_Disk_SATA_Command_Table.Command_Frame_Information_Structure.LBA_Address_Low_Bytes[1] = Logical_Sector_Number >> 8;
 	Hard_Disk_SATA_Command_Table.Command_Frame_Information_Structure.LBA_Address_Low_Bytes[2] = Logical_Sector_Number >> 16;
-	Hard_Disk_SATA_Command_Table.Command_Frame_Information_Structure.LBA_Address_Low_Bytes[3] = Logical_Sector_Number >> 24;
+	Hard_Disk_SATA_Command_Table.Command_Frame_Information_Structure.LBA_Address_High_Bytes[0] = Logical_Sector_Number >> 24;
 	// Set the sectors count
 	Hard_Disk_SATA_Command_Table.Command_Frame_Information_Structure.Sectors_Count_Low_Byte = 1;
-	// Select master device and configure for 48-LBA TODO LBA 48 detection at initialization
-	//Hard_Disk_SATA_Command_Table.Command_Frame_Information_Structure.Device = 0xA0;
-	//Hard_Disk_SATA_Command_Table.Command_Frame_Information_Structure.Device = 0xE0;
-	//Hard_Disk_SATA_Command_Table.Command_Frame_Information_Structure.Device = 0x40;
+	// Select device 0 and configure for 48-LBA TODO LBA 48 detection at initialization
+	Hard_Disk_SATA_Command_Table.Command_Frame_Information_Structure.Device = 0x40;
 	
-	/*Hard_Disk_SATA_Command_Table.Command_Frame_Information_Structure.LBA_Address_Low_Bytes[0] = (unsigned char) Logical_Sector_Number;
-	Hard_Disk_SATA_Command_Table.Command_Frame_Information_Structure.LBA_Address_Low_Bytes[1] = Logical_Sector_Number >> 8;
-	Hard_Disk_SATA_Command_Table.Command_Frame_Information_Structure.LBA_Address_Low_Bytes[2] = Logical_Sector_Number >> 16;
-	Hard_Disk_SATA_Command_Table.Command_Frame_Information_Structure.Device = 1 << 6;
-	Hard_Disk_SATA_Command_Table.Command_Frame_Information_Structure.LBA_Address_Low_Bytes[3] = Logical_Sector_Number >> 24;
-	Hard_Disk_SATA_Command_Table.Command_Frame_Information_Structure.LBA_Address_Low_Bytes[4] = 0;
-	Hard_Disk_SATA_Command_Table.Command_Frame_Information_Structure.LBA_Address_Low_Bytes[5] = 0;
-	
-	/// Set the sectors count
-	Hard_Disk_SATA_Command_Table.Command_Frame_Information_Structure.Sectors_Count_Low_Byte = 1;
-	Hard_Disk_SATA_Command_Table.Command_Frame_Information_Structure.Sectors_Count_High_Byte = 0;*/
-
 	// Execute the command and wait for its completion
 	HardDiskSATAControllerExecuteCommand();
 	
-	// Copy the data to the buffer (can't directly use the provided data pointer because the buffer must aligned on 2 bytes)
+	// Copy the data to the buffer (can't directly use the provided data pointer because the buffer must be aligned on 2 bytes)
 	memcpy(Pointer_Buffer, (void *) Hard_Disk_SATA_Buffer, HARD_DISK_SECTOR_SIZE);
 }
 
@@ -448,26 +428,22 @@ void HardDiskWriteSector(unsigned int Logical_Sector_Number, void *Pointer_Buffe
 	// Configure the Command List slot
 	HardDiskSATAPrepareCommand(1, 0); // Write operation, do not prefetch data (TODO is data prefetchable ?)
 	
-	// Create the H2D FIS content (send an ATA IDENTIFY DEVICE command)
-	//memset((void *) &Hard_Disk_SATA_Command_Table.Command_Frame_Information_Structure, 0, sizeof(Hard_Disk_SATA_Command_Table.Command_Frame_Information_Structure));
-	/*Hard_Disk_SATA_Command_Table.Command_Frame_Information_Structure.Frame_Information_Structure_Type = HARD_DISK_SATA_FRAME_INFORMATION_STRUCTURE_TYPE_REGISTER_HOST_TO_DEVICE; // Set the FIS type
-	Hard_Disk_SATA_Command_Table.Command_Frame_Information_Structure.Command = 0x35;//HARD_DISK_SATA_COMMAND_WRITE_WITH_RETRIES; // Set the command
+	// Create the H2D FIS content
+	memset((void *) &Hard_Disk_SATA_Command_Table.Command_Frame_Information_Structure, 0, sizeof(Hard_Disk_SATA_Command_Table.Command_Frame_Information_Structure));
+	Hard_Disk_SATA_Command_Table.Command_Frame_Information_Structure.Frame_Information_Structure_Type = HARD_DISK_SATA_FRAME_INFORMATION_STRUCTURE_TYPE_REGISTER_HOST_TO_DEVICE; // Set the FIS type
+	Hard_Disk_SATA_Command_Table.Command_Frame_Information_Structure.Command = HARD_DISK_SATA_COMMAND_WRITE_DMA_EXTENDED; // Set the command
 	Hard_Disk_SATA_Command_Table.Command_Frame_Information_Structure.Port_Multiplier_Port_And_Transfer_When_Command_Issue_Set_Bit = HARD_DISK_SATA_FRAME_INFORMATION_STRUCTURE_REGISTER_HOST_TO_DEVICE_TRANSFER_WHEN_COMMAND_ISSUE_SET_BIT; // The command will be executed when the corresponding bit in CI register will be set
 	// Set the LBA sector to read from
 	Hard_Disk_SATA_Command_Table.Command_Frame_Information_Structure.LBA_Address_Low_Bytes[0] = (unsigned char) Logical_Sector_Number;
 	Hard_Disk_SATA_Command_Table.Command_Frame_Information_Structure.LBA_Address_Low_Bytes[1] = Logical_Sector_Number >> 8;
 	Hard_Disk_SATA_Command_Table.Command_Frame_Information_Structure.LBA_Address_Low_Bytes[2] = Logical_Sector_Number >> 16;
-	Hard_Disk_SATA_Command_Table.Command_Frame_Information_Structure.Device = 1 << 6;
-	Hard_Disk_SATA_Command_Table.Command_Frame_Information_Structure.LBA_Address_Low_Bytes[3] = Logical_Sector_Number >> 24;
-	Hard_Disk_SATA_Command_Table.Command_Frame_Information_Structure.LBA_Address_Low_Bytes[4] = 0;
-	Hard_Disk_SATA_Command_Table.Command_Frame_Information_Structure.LBA_Address_Low_Bytes[5] = 0;
-	
-	/// Set the sectors count
+	Hard_Disk_SATA_Command_Table.Command_Frame_Information_Structure.LBA_Address_High_Bytes[0] = Logical_Sector_Number >> 24;
+	// Set the sectors count
 	Hard_Disk_SATA_Command_Table.Command_Frame_Information_Structure.Sectors_Count_Low_Byte = 1;
-	Hard_Disk_SATA_Command_Table.Command_Frame_Information_Structure.Sectors_Count_High_Byte = 0;*/
+	// Select device 0 and configure for 48-LBA TODO LBA 48 detection at initialization
+	Hard_Disk_SATA_Command_Table.Command_Frame_Information_Structure.Device = 0x40;
 	
-	
-	// Copy the data to the buffer (can't directly use the provided data pointer because the buffer must aligned on 2 bytes)
+	// Copy the data to the buffer (can't directly use the provided data pointer because the buffer must be aligned on 2 bytes)
 	memcpy((void *) Hard_Disk_SATA_Buffer, Pointer_Buffer, HARD_DISK_SECTOR_SIZE);
 	
 	// Execute the command and wait for its completion
