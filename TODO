@@ -7,6 +7,8 @@ Système
 
 - optim fn standard en mettant void *
 - mettre vrai header maîtrisé devant programme
+- faire "profils" de compilation
+- mettre struct dans architecture en typedef
 
 Doc
 ---
@@ -21,6 +23,8 @@ Rajouter dans doc la liste des programmes nécessaires pour compiler l'OS
 - qfsm pour édition machines d'état documentation
 
 Unifier tous les fichiers différents dans "Description du système"
+
+mettre à jour manuel d'installation du système
 
 Libraries
 ---------
