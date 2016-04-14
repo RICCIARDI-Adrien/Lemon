@@ -185,13 +185,18 @@ static void HardDiskSATAControllerExecuteCommand(void)
  */
 static void HardDiskSATAPrepareCommand(int Is_Write_Operation, int Is_Prefetchable)
 {
+	// Initialize the Command List slot 0
 	Hard_Disk_SATA_Command_List.Description_Information = (sizeof(Hard_Disk_SATA_Command_Table.Command_Frame_Information_Structure) / 4) & 0x1F; // // Set the Frame Information Structure Length field (bits 4 to 0), the value unit is double-word
 	if (Is_Write_Operation) Hard_Disk_SATA_Command_List.Description_Information |= HARD_DISK_SATA_BIT_COMMAND_LIST_STRUCTURE_DESCRIPTION_INFORMATION_WRITE; // Is it a write operation ?
 	if (Is_Prefetchable) Hard_Disk_SATA_Command_List.Description_Information |= HARD_DISK_SATA_BIT_COMMAND_LIST_STRUCTURE_DESCRIPTION_INFORMATION_PREFETCHABLE; // Can the data transfer be optimized without looses ?
 	Hard_Disk_SATA_Command_List.Description_Information |= HARD_DISK_SATA_BIT_COMMAND_LIST_STRUCTURE_DESCRIPTION_INFORMATION_CLEAR_BUSY_ON_ACKNOWLEDGE; // Clear PxTFD.STS.BSY and PxCI.CI(z) when command is completed
 	Hard_Disk_SATA_Command_List.Description_Information |= 1 << 16; // There is always a single entry in the PRDT in this implementation
-	
 	Hard_Disk_SATA_Command_List.Command_Status = 0; // This field will be incremented with the real transfered bytes amount
+	
+	// Initialize the H2D FIS
+	memset((void *) &Hard_Disk_SATA_Command_Table.Command_Frame_Information_Structure, 0, sizeof(Hard_Disk_SATA_Command_Table.Command_Frame_Information_Structure));
+	Hard_Disk_SATA_Command_Table.Command_Frame_Information_Structure.Frame_Information_Structure_Type = HARD_DISK_SATA_FRAME_INFORMATION_STRUCTURE_TYPE_REGISTER_HOST_TO_DEVICE; // Set the FIS type
+	Hard_Disk_SATA_Command_Table.Command_Frame_Information_Structure.Port_Multiplier_Port_And_Transfer_When_Command_Issue_Set_Bit = HARD_DISK_SATA_FRAME_INFORMATION_STRUCTURE_REGISTER_HOST_TO_DEVICE_TRANSFER_WHEN_COMMAND_ISSUE_SET_BIT; // The command will be executed when the corresponding bit in CI register will be set
 }
 
 /** Tell if the port 0 (i.e. the hard disk drive) is in idle state or in running state.
@@ -399,13 +404,10 @@ int HardDiskInitialize(void)
 void HardDiskReadSector(unsigned int Logical_Sector_Number, void *Pointer_Buffer)
 {
 	// Configure the Command List slot
-	HardDiskSATAPrepareCommand(0, 0); // Read operation, do not prefetch data (TODO is data prefetchable ?)
+	HardDiskSATAPrepareCommand(0, 1); // Read operation, allow data to be prefetched
 	
 	// Create the H2D FIS content
-	memset((void *) &Hard_Disk_SATA_Command_Table.Command_Frame_Information_Structure, 0, sizeof(Hard_Disk_SATA_Command_Table.Command_Frame_Information_Structure));
-	Hard_Disk_SATA_Command_Table.Command_Frame_Information_Structure.Frame_Information_Structure_Type = HARD_DISK_SATA_FRAME_INFORMATION_STRUCTURE_TYPE_REGISTER_HOST_TO_DEVICE; // Set the FIS type
 	Hard_Disk_SATA_Command_Table.Command_Frame_Information_Structure.Command = HARD_DISK_SATA_COMMAND_READ_DMA_EXTENDED; // Set the command
-	Hard_Disk_SATA_Command_Table.Command_Frame_Information_Structure.Port_Multiplier_Port_And_Transfer_When_Command_Issue_Set_Bit = HARD_DISK_SATA_FRAME_INFORMATION_STRUCTURE_REGISTER_HOST_TO_DEVICE_TRANSFER_WHEN_COMMAND_ISSUE_SET_BIT; // The command will be executed when the corresponding bit in CI register will be set
 	// Set the LBA sector to read from
 	Hard_Disk_SATA_Command_Table.Command_Frame_Information_Structure.LBA_Address_Low_Bytes[0] = (unsigned char) Logical_Sector_Number;
 	Hard_Disk_SATA_Command_Table.Command_Frame_Information_Structure.LBA_Address_Low_Bytes[1] = Logical_Sector_Number >> 8;
@@ -426,13 +428,10 @@ void HardDiskReadSector(unsigned int Logical_Sector_Number, void *Pointer_Buffer
 void HardDiskWriteSector(unsigned int Logical_Sector_Number, void *Pointer_Buffer)
 {
 	// Configure the Command List slot
-	HardDiskSATAPrepareCommand(1, 0); // Write operation, do not prefetch data (TODO is data prefetchable ?)
+	HardDiskSATAPrepareCommand(1, 1); // Write operation, allow data to be prefetched
 	
 	// Create the H2D FIS content
-	memset((void *) &Hard_Disk_SATA_Command_Table.Command_Frame_Information_Structure, 0, sizeof(Hard_Disk_SATA_Command_Table.Command_Frame_Information_Structure));
-	Hard_Disk_SATA_Command_Table.Command_Frame_Information_Structure.Frame_Information_Structure_Type = HARD_DISK_SATA_FRAME_INFORMATION_STRUCTURE_TYPE_REGISTER_HOST_TO_DEVICE; // Set the FIS type
 	Hard_Disk_SATA_Command_Table.Command_Frame_Information_Structure.Command = HARD_DISK_SATA_COMMAND_WRITE_DMA_EXTENDED; // Set the command
-	Hard_Disk_SATA_Command_Table.Command_Frame_Information_Structure.Port_Multiplier_Port_And_Transfer_When_Command_Issue_Set_Bit = HARD_DISK_SATA_FRAME_INFORMATION_STRUCTURE_REGISTER_HOST_TO_DEVICE_TRANSFER_WHEN_COMMAND_ISSUE_SET_BIT; // The command will be executed when the corresponding bit in CI register will be set
 	// Set the LBA sector to read from
 	Hard_Disk_SATA_Command_Table.Command_Frame_Information_Structure.LBA_Address_Low_Bytes[0] = (unsigned char) Logical_Sector_Number;
 	Hard_Disk_SATA_Command_Table.Command_Frame_Information_Structure.LBA_Address_Low_Bytes[1] = Logical_Sector_Number >> 8;
@@ -455,13 +454,10 @@ unsigned int HardDiskGetDriveSizeSectors(void)
 	unsigned int Sectors_Count;
 	
 	// Configure the Command List slot
-	HardDiskSATAPrepareCommand(0, 0); // Read operation, do not prefetch data (TODO is data prefetchable ?)
+	HardDiskSATAPrepareCommand(0, 1); // Read operation, allow data to be prefetched
 	
 	// Create the H2D FIS content
-	memset((void *) &Hard_Disk_SATA_Command_Table.Command_Frame_Information_Structure, 0, sizeof(Hard_Disk_SATA_Command_Table.Command_Frame_Information_Structure));
-	Hard_Disk_SATA_Command_Table.Command_Frame_Information_Structure.Frame_Information_Structure_Type = HARD_DISK_SATA_FRAME_INFORMATION_STRUCTURE_TYPE_REGISTER_HOST_TO_DEVICE; // Set the FIS type
 	Hard_Disk_SATA_Command_Table.Command_Frame_Information_Structure.Command = HARD_DISK_SATA_COMMAND_IDENTIFY_DEVICE; // Set the command
-	Hard_Disk_SATA_Command_Table.Command_Frame_Information_Structure.Port_Multiplier_Port_And_Transfer_When_Command_Issue_Set_Bit = HARD_DISK_SATA_FRAME_INFORMATION_STRUCTURE_REGISTER_HOST_TO_DEVICE_TRANSFER_WHEN_COMMAND_ISSUE_SET_BIT; // The command will be executed when the corresponding bit in CI register will be set
 	
 	// Execute the command and wait for its completion
 	HardDiskSATAControllerExecuteCommand();

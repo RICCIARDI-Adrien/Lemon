@@ -9,6 +9,9 @@ Système
 - mettre vrai header maîtrisé devant programme
 - faire "profils" de compilation
 - mettre struct dans architecture en typedef
+- rassembler étapes compil identiques système et installateur dans Makfile.Core (faire Makefile.Shell et Makfile tout court pour inclusion)
+- ne pas compiler drivers non sélectionnés plutôt que #if dans sources
+- passage des params de config dans ligne de commande makefiles ?
 
 Doc
 ---
