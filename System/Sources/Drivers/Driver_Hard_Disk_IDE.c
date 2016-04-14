@@ -3,12 +3,9 @@
  * @author Adrien RICCIARDI
  */
 #include <Architecture.h>
-#include <Configuration.h>
 #include <Debug.h>
 #include <Drivers/Driver_Hard_Disk.h>
 #include <Hardware_Functions.h> // To have inb() and outb()
-
-#if CONFIGURATION_HARD_DISK_IS_IDE_DRIVER_ENABLED == 1
 
 //-------------------------------------------------------------------------------------------------
 // Private constants and macros
@@ -266,5 +263,3 @@ unsigned int HardDiskGetDriveSizeSectors(void)
 	// TODO : handle the LBA48 48-bit value
 	return (unsigned int) Hard_Disk_LBA_Sectors_Count;
 }
-
-#endif

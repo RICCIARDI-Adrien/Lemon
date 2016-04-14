@@ -12,6 +12,8 @@ Système
 - rassembler étapes compil identiques système et installateur dans Makfile.Core (faire Makefile.Shell et Makfile tout court pour inclusion)
 - ne pas compiler drivers non sélectionnés plutôt que #if dans sources
 - passage des params de config dans ligne de commande makefiles ?
+- même variable CONFIGURATION_IS_DEBUG_ENABLED dans MBR ?
+- unifier les noms des constantes (LEMON_LANGUAGE, CONFIGURATION_DEBUG, INSTALLER...)
 
 Doc
 ---

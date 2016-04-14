@@ -7,8 +7,6 @@
 #include <Drivers/Driver_PCI.h>
 #include <Hardware_Functions.h>
 
-#if CONFIGURATION_PCI_IS_DRIVER_ENABLED == 1
-
 //-------------------------------------------------------------------------------------------------
 // Private constants and macros
 //-------------------------------------------------------------------------------------------------
@@ -181,6 +179,4 @@ int PCIGetConfigurationSpaceHeader(TPCIDeviceID *Pointer_Device_ID, TPCIConfigur
 			}
 		}
 	}
-#endif
-
 #endif

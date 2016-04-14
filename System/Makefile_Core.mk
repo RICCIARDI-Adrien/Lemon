@@ -4,9 +4,22 @@
 CCFLAGS += -W -Wall -Wunused -I$(PATH_INCLUDES)
 LDFLAGS += --strip-all -nostdlib -nostartfile
 
+ifeq ($(SYSTEM_IS_DEBUG_ENABLED),1)
+	CCFLAGS += -DCONFIGURATION_IS_DEBUG_ENABLED=1
+else
+	CCFLAGS += -DCONFIGURATION_IS_DEBUG_ENABLED=0
+endif
+
 OBJECTS_CORE = $(PATH_OBJECTS)/Architecture.o $(PATH_OBJECTS)/Debug.o $(PATH_OBJECTS)/Hardware_Functions.o $(PATH_OBJECTS)/Kernel.o $(PATH_OBJECTS)/Standard_Functions.o $(PATH_OBJECTS)/System_Calls.o
-OBJECTS_DRIVERS = $(PATH_OBJECTS)/Driver_Hard_Disk_IDE.o $(PATH_OBJECTS)/Driver_Hard_Disk_SATA.o $(PATH_OBJECTS)/Driver_Keyboard.o $(PATH_OBJECTS)/Driver_PCI.o $(PATH_OBJECTS)/Driver_PIC.o $(PATH_OBJECTS)/Driver_Screen.o $(PATH_OBJECTS)/Driver_Timer.o $(PATH_OBJECTS)/Driver_UART.o
+OBJECTS_DRIVERS =  $(PATH_OBJECTS)/Driver_Keyboard.o $(PATH_OBJECTS)/Driver_PIC.o $(PATH_OBJECTS)/Driver_Screen.o $(PATH_OBJECTS)/Driver_Timer.o $(PATH_OBJECTS)/Driver_UART.o
 OBJECTS_FILE_SYSTEM = $(PATH_OBJECTS)/File.o $(PATH_OBJECTS)/File_System.o
+
+# Choose which hard disk driver to compile
+ifeq ($(SYSTEM_HARD_DISK_TYPE),sata)
+	OBJECTS_DRIVERS += $(PATH_OBJECTS)/Driver_Hard_Disk_SATA.o $(PATH_OBJECTS)/Driver_PCI.o
+else
+	OBJECTS_DRIVERS += $(PATH_OBJECTS)/Driver_Hard_Disk_IDE.o
+endif
 
 # Force 'all' to be the default makefile rule
 pointer_to_all: all

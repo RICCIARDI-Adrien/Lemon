@@ -8,6 +8,15 @@ define DisplayTitle
 	@printf "################################################################################\033[0m\n"
 endef
 
+# Choose the whole system and applications language
+ifeq ($(GLOBAL_SYSTEM_LANGUAGE),english)
+	CCFLAGS += -DLEMON_LANGUAGE_ENGLISH
+else ifeq ($(GLOBAL_SYSTEM_LANGUAGE),italian)
+	CCFLAGS += -DLEMON_LANGUAGE_ITALIAN
+endif
+
+export CCFLAGS
+
 all: clean
 	@$(call DisplayTitle,Compiling system)
 	@cd System && $(MAKE)
@@ -18,14 +27,28 @@ all: clean
 	@$(call DisplayTitle,Creating installation image)
 	@cd Installer && $(MAKE)
 
-# Choose the whole system and applications language
-english: CCFLAGS += -DLEMON_LANGUAGE_ENGLISH
-english: all
-
-italian: CCFLAGS += -DLEMON_LANGUAGE_ITALIAN
-italian: all
-
-export CCFLAGS
+help:
+	@$(call DisplayTitle,Configuration variables)
+	@echo "Global variables affect the whole system (the operating system and all applications)."
+	@echo "System variables affect only the operating system, not the applications."
+	@echo
+	@echo "- GLOBAL_SYSTEM_LANGUAGE : system and applications language"
+	@echo "    + english"
+	@echo "    + french (default value)"
+	@echo "    + italian"
+	@echo "- GLOBAL_PROCESSOR_TYPE (see gcc's man page for x86 -march option for all available values) : the target processor"
+	@echo "    + i486"
+	@echo "    + pentium (default value)"
+	@echo "    + pentium4"
+	@echo "    + core2"
+	@echo "    + nehalem"
+	@echo "- SYSTEM_IS_DEBUG_ENABLED : display kernel debugging messages"
+	@echo "    + 0 (default value)"
+	@echo "    + 1"
+	@echo "- SYSTEM_HARD_DISK_TYPE : choose on which hard disk type the system will be installed"
+	@echo "    + ide  (default value)"
+	@echo "    + sata"
+	@echo
 
 sdk:
 	@printf "Preparing SDK directory...\n"

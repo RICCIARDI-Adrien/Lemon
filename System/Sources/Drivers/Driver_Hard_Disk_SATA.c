@@ -9,8 +9,6 @@
 #include <Standard_Functions.h>
 #include <Strings.h>
 
-#if CONFIGURATION_HARD_DISK_IS_SATA_DRIVER_ENABLED == 1
-
 //-------------------------------------------------------------------------------------------------
 // Private constants
 //-------------------------------------------------------------------------------------------------
@@ -475,5 +473,3 @@ unsigned int HardDiskGetDriveSizeSectors(void)
 	// TODO handle 48-bit value
 	return Sectors_Count;
 }
-
-#endif
