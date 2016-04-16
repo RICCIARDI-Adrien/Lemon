@@ -59,7 +59,7 @@ sdk:
 	@# Delete serial server binary to force the target computer to recompile it (and thus to avoid some incompatibilities)
 	@rm -f $(SDK_PATH)/Applications/Tools/Serial_Port_Server.out
 	@# Copy the shared rules needed to compile the applications
-	@cp Rules.mk $(SDK_PATH)
+	@cp Global_Rules.mk $(SDK_PATH)
 	@# Clean the Applications .32b and .o files
 	@make -C $(SDK_PATH)/Applications clean > /dev/null
 	@printf "Copying user relevant documentation...\n"

@@ -1,6 +1,6 @@
 # Applications main makefile.
 # Author : Adrien RICCIARDI
-include ../Rules.mk
+include ../Global_Rules.mk
 
 BINARIES_PATH = $(realpath Binaries)
 LIBRARIES_PATH = $(realpath ../Libraries)

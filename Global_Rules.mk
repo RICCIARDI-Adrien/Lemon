@@ -2,6 +2,7 @@
 AS = nasm
 CC = gcc
 LD = ld
+ISO_GENERATOR = genisoimage
 
 # Use the Pentium 1 as default value
 ifeq ($(GLOBAL_PROCESSOR_TYPE),)

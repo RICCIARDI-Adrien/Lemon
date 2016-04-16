@@ -8,7 +8,7 @@
 # V 1.5 : 25/10/2014, completely removed UNIX libc, using only Lemon libraries.
 # V 1.6 : 07/12/2014, added dependencies generation for each file.
 # V 1.7 : 19/03/2016, fully automated the build process.
-include ../Rules.mk
+include ../Global_Rules.mk
 
 PATH_BINARIES = Binaries
 PATH_INCLUDES = Includes

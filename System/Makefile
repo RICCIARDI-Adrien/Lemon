@@ -1,7 +1,7 @@
 # System makefile.
 # There is no need to take dependencies into account as the whole system must be entirely rebuilded each time.
 # Author : Adrien RICCIARDI
-include ../Rules.mk
+include ../Global_Rules.mk
 
 PATH_SOURCES = Sources
 PATH_OBJECTS = Objects
