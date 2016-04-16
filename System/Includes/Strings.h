@@ -9,11 +9,11 @@
 // Constants
 //-------------------------------------------------------------------------------------------------
 // English
-#ifdef LEMON_LANGUAGE_ENGLISH
+#if defined(CONFIGURATION_LANGUAGE_ENGLISH)
 	// TODO
 	#error "Not done yet..."
 // Italian
-#elif defined(LEMON_LANGUAGE_ITALIAN)
+#elif defined(CONFIGURATION_LANGUAGE_ITALIAN)
 	// TODO
 	#error "Non è stato fatto per il momento..."
 // French (default language)

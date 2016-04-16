@@ -8,15 +8,6 @@ define DisplayTitle
 	@printf "################################################################################\033[0m\n"
 endef
 
-# Choose the whole system and applications language
-ifeq ($(GLOBAL_SYSTEM_LANGUAGE),english)
-	CCFLAGS += -DLEMON_LANGUAGE_ENGLISH
-else ifeq ($(GLOBAL_SYSTEM_LANGUAGE),italian)
-	CCFLAGS += -DLEMON_LANGUAGE_ITALIAN
-endif
-
-export CCFLAGS
-
 all: clean
 	@$(call DisplayTitle,Compiling system)
 	@cd System && $(MAKE)

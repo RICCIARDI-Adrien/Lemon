@@ -10,7 +10,7 @@
 // Constants
 //-------------------------------------------------------------------------------------------------
 // English strings
-#ifdef LEMON_LANGUAGE_ENGLISH
+#ifdef CONFIGURATION_LANGUAGE_ENGLISH
 	#error "TODO"
 // French strings
 #else
