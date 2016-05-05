@@ -225,7 +225,7 @@ int HardDiskInitialize(void)
 	if (PCIFindDeviceFromClass(PCI_CLASS_CODE_BASE_MASS_STORAGE, PCI_CLASS_CODE_SUB_CLASS_SATA, &SATA_Device_ID) != 0)
 	{
 		DEBUG_SECTION_START
-			DEBUG_DISPLAY_CURRENT_FUNCTION_NAME()
+			DEBUG_DISPLAY_CURRENT_FUNCTION_NAME();
 			ScreenWriteString("Error : no SATA controller found.\n");
 			KeyboardReadCharacter();
 		DEBUG_SECTION_END
@@ -236,7 +236,7 @@ int HardDiskInitialize(void)
 	if (PCIGetConfigurationSpaceHeader(&SATA_Device_ID, &Device_Configuration_Space_Header) != 0)
 	{
 		DEBUG_SECTION_START
-			DEBUG_DISPLAY_CURRENT_FUNCTION_NAME()
+			DEBUG_DISPLAY_CURRENT_FUNCTION_NAME();
 			ScreenWriteString("Error : failed to get the SATA controller Configuration Space Header.\n");
 			KeyboardReadCharacter();
 		DEBUG_SECTION_END
@@ -244,7 +244,7 @@ int HardDiskInitialize(void)
 	}
 	
 	DEBUG_SECTION_START
-		DEBUG_DISPLAY_CURRENT_FUNCTION_NAME()
+		DEBUG_DISPLAY_CURRENT_FUNCTION_NAME();
 		ScreenWriteString("SATA controller found.\nVendor ID : 0x");
 		DebugWriteHexadecimalInteger(Device_Configuration_Space_Header.Vendor_ID);
 		ScreenWriteString(", device ID : 0x");
@@ -260,7 +260,7 @@ int HardDiskInitialize(void)
 	Pointer_Generic_Host_Control_Registers->Global_HBA_Control |= 1 << 31; // Enable use of AHCI communication mechanism only
 	
 	DEBUG_SECTION_START
-		DEBUG_DISPLAY_CURRENT_FUNCTION_NAME()
+		DEBUG_DISPLAY_CURRENT_FUNCTION_NAME();
 		ScreenWriteString("AHCI version : 0x");
 		DebugWriteHexadecimalInteger(Pointer_Generic_Host_Control_Registers->AHCI_Version);
 		ScreenWriteString("\nports implemented bit mask : 0x");
@@ -270,10 +270,17 @@ int HardDiskInitialize(void)
 	DEBUG_SECTION_END
 	
 	// Is the requested drive connected ?
+	DEBUG_SECTION_START
+		DEBUG_DISPLAY_CURRENT_FUNCTION_NAME();
+		ScreenWriteString("SATA device index : ");
+		ScreenWriteString(itoa(CONFIGURATION_HARD_DISK_SATA_DRIVE_INDEX));
+		ScreenWriteCharacter('\n');
+		KeyboardReadCharacter();
+	DEBUG_SECTION_END
 	if (!(Pointer_Generic_Host_Control_Registers->Ports_Implemented & (1 << CONFIGURATION_HARD_DISK_SATA_DRIVE_INDEX)))
 	{
 		DEBUG_SECTION_START
-			DEBUG_DISPLAY_CURRENT_FUNCTION_NAME()
+			DEBUG_DISPLAY_CURRENT_FUNCTION_NAME();
 			ScreenWriteString("Error : the requested drive is not handled by the controller.\n");
 			KeyboardReadCharacter();
 		DEBUG_SECTION_END
@@ -289,7 +296,7 @@ int HardDiskInitialize(void)
 	if (!HardDiskSATAIsPortIdle())
 	{
 		DEBUG_SECTION_START
-			DEBUG_DISPLAY_CURRENT_FUNCTION_NAME()
+			DEBUG_DISPLAY_CURRENT_FUNCTION_NAME();
 			ScreenWriteString("Controller is not idle, putting it in idle state.\n");
 			KeyboardReadCharacter();
 		DEBUG_SECTION_END
@@ -309,7 +316,7 @@ int HardDiskInitialize(void)
 		if (!HardDiskSATAIsPortIdle())
 		{
 			DEBUG_SECTION_START
-				DEBUG_DISPLAY_CURRENT_FUNCTION_NAME()
+				DEBUG_DISPLAY_CURRENT_FUNCTION_NAME();
 				ScreenWriteString("Error : failed to put the controller into idle state.\n");
 				KeyboardReadCharacter();
 			DEBUG_SECTION_END
@@ -331,7 +338,7 @@ int HardDiskInitialize(void)
 	Pointer_Hard_Disk_SATA_Drive_Port_Registers->SATA_Error = 0x07FF0F03; // Put ones in all implemented bits (as asked by the specification)
 	
 	DEBUG_SECTION_START
-		DEBUG_DISPLAY_CURRENT_FUNCTION_NAME()
+		DEBUG_DISPLAY_CURRENT_FUNCTION_NAME();
 		ScreenWriteString("Drive SATA status : 0x");
 		DebugWriteHexadecimalInteger(Pointer_Hard_Disk_SATA_Drive_Port_Registers->SATA_Status);
 		ScreenWriteCharacter('\n');
@@ -343,7 +350,7 @@ int HardDiskInitialize(void)
 	if (((Temp_Double_Word & 0x0000000F) != 3) || (((Temp_Double_Word >> 4) & 0x0000000F) == 0)) // 3 = "Device presence detected and Phy communication established", 0 = "Device not present or communication not established"
 	{
 		DEBUG_SECTION_START
-			DEBUG_DISPLAY_CURRENT_FUNCTION_NAME()
+			DEBUG_DISPLAY_CURRENT_FUNCTION_NAME();
 			ScreenWriteString("Error : the requested drive was not detected.\n");
 			KeyboardReadCharacter();
 		DEBUG_SECTION_END
@@ -352,7 +359,7 @@ int HardDiskInitialize(void)
 	if (((Temp_Double_Word >> 8) & 0x0000000F) != 1) // 1 = "Interface in active state"
 	{
 		DEBUG_SECTION_START
-			DEBUG_DISPLAY_CURRENT_FUNCTION_NAME()
+			DEBUG_DISPLAY_CURRENT_FUNCTION_NAME();
 			ScreenWriteString("Error : the drive interface is not in active state.\n");
 			KeyboardReadCharacter();
 		DEBUG_SECTION_END
@@ -362,7 +369,7 @@ int HardDiskInitialize(void)
 	// Check the drive signature (only SATA devices are allowed)
 	Temp_Double_Word = Pointer_Hard_Disk_SATA_Drive_Port_Registers->Signature;
 	DEBUG_SECTION_START
-		DEBUG_DISPLAY_CURRENT_FUNCTION_NAME()
+		DEBUG_DISPLAY_CURRENT_FUNCTION_NAME();
 		ScreenWriteString("Drive signature : 0x");
 		DebugWriteHexadecimalInteger(Temp_Double_Word);
 		ScreenWriteCharacter('\n');
@@ -371,7 +378,7 @@ int HardDiskInitialize(void)
 	if (Temp_Double_Word != HARD_DISK_SATA_PORT_SIGNATURE_SATA_DRIVE)
 	{
 		DEBUG_SECTION_START
-			DEBUG_DISPLAY_CURRENT_FUNCTION_NAME()
+			DEBUG_DISPLAY_CURRENT_FUNCTION_NAME();
 			ScreenWriteString("Error : the port signature does not refer to a SATA drive.\n");
 			KeyboardReadCharacter();
 		DEBUG_SECTION_END
@@ -391,7 +398,7 @@ int HardDiskInitialize(void)
 	Pointer_Hard_Disk_SATA_Drive_Port_Registers->Command |= HARD_DISK_SATA_BIT_PORT_REGISTERS_COMMAND_START; // ST bit, allow the commands to be processed
 	
 	DEBUG_SECTION_START
-		DEBUG_DISPLAY_CURRENT_FUNCTION_NAME()
+		DEBUG_DISPLAY_CURRENT_FUNCTION_NAME();
 		ScreenWriteString("Driver successfully initialized.\n");
 		KeyboardReadCharacter();
 	DEBUG_SECTION_END
@@ -463,7 +470,7 @@ unsigned int HardDiskGetDriveSizeSectors(void)
 	// Retrieve the sectors count value
 	Sectors_Count = (Hard_Disk_SATA_Buffer[203] << 24) | (Hard_Disk_SATA_Buffer[202] << 16) | (Hard_Disk_SATA_Buffer[201] << 8) | Hard_Disk_SATA_Buffer[200];
 	DEBUG_SECTION_START
-		DEBUG_DISPLAY_CURRENT_FUNCTION_NAME()
+		DEBUG_DISPLAY_CURRENT_FUNCTION_NAME();
 		ScreenWriteString("Total sectors count : ");
 		ScreenWriteString(itoa(Sectors_Count));
 		ScreenWriteCharacter('\n');
