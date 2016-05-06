@@ -37,6 +37,10 @@
 // Port Registers Interrupt Status useful bits
 /** TFES bit. */
 #define HARD_DISK_SATA_BIT_PORT_REGISTERS_INTERRUPT_STATUS_TASK_FILE_ERROR_STATUS (1 << 30)
+/** PSS bit. */
+#define HARD_DISK_SATA_BIT_PORT_REGISTERS_INTERRUPT_STATUS_PIO_SETUP_FIS_INTERRUPT (1 << 1)
+/** DHRS bit. */
+#define HARD_DISK_SATA_BIT_PORT_REGISTERS_INTERRUPT_STATUS_DEVICE_TO_HOST_REGISTER_FIS_INTERRUPT (1 << 0)
 
 // Command List Structure Description Information useful bits
 /** W bit. */
@@ -165,7 +169,7 @@ static void HardDiskSATAControllerExecuteCommand(void)
 	Pointer_Hard_Disk_SATA_Drive_Port_Registers->Command_Issue |= 1; // Always execute the first command as there is only one slot in the command list
 	
 	// Wait for command completion
-	while ((Pointer_Hard_Disk_SATA_Drive_Port_Registers->Command_Issue & (1 << CONFIGURATION_HARD_DISK_SATA_DRIVE_INDEX)) && !(Pointer_Hard_Disk_SATA_Drive_Port_Registers->Interrupt_Status & HARD_DISK_SATA_BIT_PORT_REGISTERS_INTERRUPT_STATUS_TASK_FILE_ERROR_STATUS)); // The AHCI controller will clear the corresponding CI bit when a command completed successfully
+	while ((Pointer_Hard_Disk_SATA_Drive_Port_Registers->Interrupt_Status & (HARD_DISK_SATA_BIT_PORT_REGISTERS_INTERRUPT_STATUS_TASK_FILE_ERROR_STATUS | HARD_DISK_SATA_BIT_PORT_REGISTERS_INTERRUPT_STATUS_PIO_SETUP_FIS_INTERRUPT | HARD_DISK_SATA_BIT_PORT_REGISTERS_INTERRUPT_STATUS_DEVICE_TO_HOST_REGISTER_FIS_INTERRUPT)) == 0); // Some SATA controller answer with a PIO interrupt to a H2D request, so check this interrupt too
 	
 	// Was the command successful ?
 	if (Pointer_Hard_Disk_SATA_Drive_Port_Registers->Interrupt_Status & HARD_DISK_SATA_BIT_PORT_REGISTERS_INTERRUPT_STATUS_TASK_FILE_ERROR_STATUS)
@@ -175,6 +179,9 @@ static void HardDiskSATAControllerExecuteCommand(void)
 		ScreenSetColor(SCREEN_COLOR_BLUE);
 		KeyboardReadCharacter();
 	}
+	
+	// Reset all interrupt flags
+	Pointer_Hard_Disk_SATA_Drive_Port_Registers->Interrupt_Status = 0xFFFFFFFF; // Set a flag to '1' to reset it
 }
 
 /** Fill the Command List slot 0 needed fields.
@@ -393,6 +400,9 @@ int HardDiskInitialize(void)
 	Hard_Disk_SATA_Command_Table.Physical_Region_Descriptor_Table.Data_Base_Address = (unsigned int) Hard_Disk_SATA_Buffer;
 	Hard_Disk_SATA_Command_Table.Physical_Region_Descriptor_Table.Data_Base_Address_High_Double_Word = 0;
 	Hard_Disk_SATA_Command_Table.Physical_Region_Descriptor_Table.Data_Byte_Count = HARD_DISK_SECTOR_SIZE - 1; // The size is zero-based, so a value of 0 = a size of 1 byte
+	
+	// Reset the port interrupt flags
+	Pointer_Hard_Disk_SATA_Drive_Port_Registers->Interrupt_Status = 0xFFFFFFFF; // Set a flag to '1' to reset it
 	
 	// Start Command Engine
 	Pointer_Hard_Disk_SATA_Drive_Port_Registers->Command |= HARD_DISK_SATA_BIT_PORT_REGISTERS_COMMAND_START; // ST bit, allow the commands to be processed

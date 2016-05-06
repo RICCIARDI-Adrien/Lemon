@@ -23,7 +23,8 @@
  * @version 2.2.0 : 06/06/2015, the system is now MBR partitions aware and can install to and boot from a partition. All hard disk drivers (MBR and system) are 48-LBA.
  * @version 2.2.1 : 03/11/2015, the hard disk driver automatically chooses between LBA28 and LBA48 at boot time.
  * @version 2.2.2 : 06/03/2016, better handling of slave PIC.
- * @version 2.3.0 : 12/04/2016, added PCI, AHCI and SATA support.
+ * @version 2.3.0 : 12/04/2016, added PCI, AHCI and SATA support (but working only on virtual machine).
+ * @version 2.3.1 : 06/05/2016, made the SATA driver works with real hardware.
  */
 #ifndef H_KERNEL_H
 #define H_KERNEL_H
