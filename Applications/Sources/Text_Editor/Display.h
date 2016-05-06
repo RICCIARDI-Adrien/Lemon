@@ -7,6 +7,9 @@
 
 #include <System.h>
 
+//-------------------------------------------------------------------------------------------------
+// Functions
+//-------------------------------------------------------------------------------------------------
 /** Erase the whole display with the default background color and put the cursor at the upper left corner. */
 void DisplayClear(void);
 
