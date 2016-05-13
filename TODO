@@ -42,13 +42,14 @@ modif bibliothèques pour gérer nouveaux codes touches
 
 - utiliser les fonctions de conversion de string pour les fonctions screenwriteint...
 
-mettre void * pour fonction ScreenDisplayBuffer()
 
 Applications
 ------------
 
 - hexdump ?
 - optimiser système de build
+
+- utiliser api buffer pour affichage éditeur de texte
 
 Installer
 ---------

@@ -6,7 +6,7 @@
 //-------------------------------------------------------------------------------------------------
 // Public functions
 //-------------------------------------------------------------------------------------------------
-void ScreenDisplayBuffer(unsigned char *Pointer_Buffer)
+void ScreenDisplayBuffer(void *Pointer_Buffer)
 {
 	SystemCall(SYSTEM_CALL_SCREEN_DISPLAY_BUFFER, 0, 0, Pointer_Buffer, 0);
 }

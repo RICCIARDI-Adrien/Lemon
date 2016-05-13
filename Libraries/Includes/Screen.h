@@ -43,6 +43,13 @@ typedef enum
 	SCREEN_COLOR_WHITE
 } TScreenColor;
 
+/** A character representation in the VGA mode 3 video memory. */
+typedef struct __attribute__((packed))
+{
+	char ASCII_Code; //! The character ASCII code.
+	unsigned char Color; //! The character color.
+} TScreenBufferCharacter;
+
 //-------------------------------------------------------------------------------------------------
 // Functions
 //-------------------------------------------------------------------------------------------------
@@ -72,13 +79,6 @@ void ScreenGetCursorPosition(unsigned int *Pointer_Row, unsigned int *Pointer_Co
  */
 void ScreenSetCursorPosition(unsigned int Row, unsigned int Column);
 
-/** Display a buffer representing the raw video memory data on the screen.
- * @param Pointer_Buffer The buffer.
- * @note The buffer must be (SCREEN_ROWS_COUNT * SCREEN_COLUMNS_COUNT * 2) bytes large. Even byte is character ASCII code and odd byte is character color attributes.
- * @see IBM BIOS text mode 3 for more informations.
- */
-void ScreenDisplayBuffer(unsigned char *Pointer_Buffer);
-
 /** Display a single character.
  * @param Character The character to display.
  */
@@ -103,5 +103,24 @@ void ScreenWriteInteger(int Integer);
  * @param Unsigned_Integer The unsigned integer number to display.
  */
 void ScreenWriteUnsignedInteger(unsigned int Unsigned_Integer);
+
+// "Rendering" functions
+/** Display a buffer representing the raw video memory data on the screen.
+ * @param Pointer_Buffer The buffer.
+ * @note The buffer must be (SCREEN_ROWS_COUNT * SCREEN_COLUMNS_COUNT * 2) bytes large. Even byte is character ASCII code and odd byte is character color attributes.
+ * @see IBM BIOS text mode 3 for more informations.
+ */
+void ScreenDisplayBuffer(void *Pointer_Buffer);
+
+/** Scroll a SCREEN_ROWS_COUNT*SCREEN_COLUMNS_COUNT bytes buffer to one column on the left. The rightmost column is left as-is.
+ * @param Pointer_Buffer The buffer to scroll.
+ */
+void ScreenScrollBufferToLeft(void *Pointer_Buffer);
+
+/** Clear the buffer with 'space' characters and the specified color.
+ * @param Pointer_Buffer The buffer to clear.
+ * @param Color The clearing color (use SCREEN_MAKE_COLOR() to specify it).
+ */
+void ScreenClearBuffer(void *Pointer_Buffer, unsigned char Color);
 
 #endif
