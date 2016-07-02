@@ -27,7 +27,7 @@ typedef struct __attribute__((packed))
 {
 	int Arguments_Count; //! Contain argc value.
 	char *Pointer_Arguments[SHELL_MAXIMUM_ARGUMENTS_COUNT]; //! The *argv[] representation.
-	char Arguments_Value[KERNEL_PROGRAM_ENTRY_POINT - ARGUMENTS_VALUE_OFFSET]; //! Hold arguments values. Fill the remaining bytes of the 256-byte area before program beginning.
+	char Arguments_Value[KERNEL_PROGRAM_LOAD_USER_ADDRESS - ARGUMENTS_VALUE_OFFSET]; //! Hold arguments values. Fill the remaining bytes of the 256-byte area before program beginning.
 } TCommandLineArguments;
 
 //-------------------------------------------------------------------------------------------------
@@ -256,12 +256,12 @@ void Shell(void)
 		else 
 		{
 			// Clear program magic number area so newly loaded program must have a valid magic number
-			memset((void *) KERNEL_PROGRAM_LOAD_ADDRESS, 0, sizeof(KERNEL_PROGRAM_MAGIC_NUMBER));
+			memset((void *) KERNEL_PROGRAM_LOAD_KERNEL_ADDRESS, 0, sizeof(KERNEL_PROGRAM_MAGIC_NUMBER));
 			
 			// Set error color only one time
 			ScreenSetColor(SCREEN_COLOR_RED);
 			
-			switch (FileLoad(Command_Line_Arguments.Pointer_Arguments[0], (void *) KERNEL_PROGRAM_LOAD_ADDRESS))
+			switch (FileLoad(Command_Line_Arguments.Pointer_Arguments[0], (void *) KERNEL_PROGRAM_LOAD_KERNEL_ADDRESS))
 			{
 				case ERROR_CODE_FILE_NOT_FOUND:
 					ScreenWriteString(STRING_SHELL_ERROR_UNKNOWN_COMMAND);

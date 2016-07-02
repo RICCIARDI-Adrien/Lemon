@@ -16,10 +16,10 @@ include Makefile_Core.mk
 OBJECTS_SHELL = $(PATH_OBJECTS)/Shell.o $(PATH_OBJECTS)/Shell_Command_Copy_File.o $(PATH_OBJECTS)/Shell_Command_Delete_File.o $(PATH_OBJECTS)/Shell_Command_Download.o $(PATH_OBJECTS)/Shell_Command_File_Size.o $(PATH_OBJECTS)/Shell_Command_List.o $(PATH_OBJECTS)/Shell_Command_Rename_File.o
 OBJECTS = $(OBJECTS_CORE) $(OBJECTS_DRIVERS) $(OBJECTS_FILE_SYSTEM) $(OBJECTS_SHELL)
 
-all: clean $(PATH_OBJECTS)/MBR.32b $(OBJECTS)
-	$(LD) $(LDFLAGS) $(OBJECTS) -o $(PATH_OBJECTS)/Kernel.32b
+all: clean $(PATH_OBJECTS)/MBR.bin $(OBJECTS)
+	$(LD) $(LDFLAGS) $(OBJECTS) -o $(PATH_OBJECTS)/Kernel.bin
 	######## Build successful ########
-	@ls -l $(PATH_OBJECTS)/Kernel.32b | awk '{print "Kernel size : " $$5 + 512 " bytes"}'
+	@ls -l $(PATH_OBJECTS)/Kernel.bin | awk '{print "Kernel size : " $$5 + 512 " bytes"}'
 
 #------------------------------------------------------------------------------------------------------------------------------
 # Shell

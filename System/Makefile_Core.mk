@@ -30,8 +30,8 @@ clean:
 #------------------------------------------------------------------------------------------------------------------------------
 # System core
 #------------------------------------------------------------------------------------------------------------------------------
-$(PATH_OBJECTS)/MBR.32b: $(PATH_SOURCES)/MBR.asm
-	$(AS) $(MBR_FLAGS) -f bin $(PATH_SOURCES)/MBR.asm -o $(PATH_OBJECTS)/MBR.32b
+$(PATH_OBJECTS)/MBR.bin: $(PATH_SOURCES)/MBR.asm
+	$(AS) $(MBR_FLAGS) -f bin $(PATH_SOURCES)/MBR.asm -o $(PATH_OBJECTS)/MBR.bin
 
 $(PATH_OBJECTS)/Architecture.o: $(PATH_SOURCES)/Architecture.c
 	$(CC) $(CCFLAGS) -c $(PATH_SOURCES)/Architecture.c -o $(PATH_OBJECTS)/Architecture.o

@@ -145,7 +145,7 @@ void KernelStartShell(void)
 
 TErrorCode KernelStartProgram(void)
 {
-	unsigned int *Pointer_Magic_Number = (unsigned int *) KERNEL_PROGRAM_LOAD_ADDRESS;
+	unsigned int *Pointer_Magic_Number = (unsigned int *) KERNEL_PROGRAM_LOAD_KERNEL_ADDRESS;
 	
 	// Is the magic number valid ?
 	if (*Pointer_Magic_Number != KERNEL_PROGRAM_MAGIC_NUMBER) return ERROR_CODE_FILE_NOT_EXECUTABLE;

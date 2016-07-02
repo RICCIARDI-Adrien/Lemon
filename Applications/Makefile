@@ -28,8 +28,17 @@ export LDFLAGS
 #------------------------------------------------------------------------------------------------------------------------------
 # Private functions
 #------------------------------------------------------------------------------------------------------------------------------
+# Display the name of the program being compiled
+# @param $(1) The program name
 define DisplayProgramToCompile
-	@printf "\033[33mCompiling $1...\033[0m\n"
+	@printf "\033[33mCompiling $(1)...\033[0m\n"
+endef
+
+# Append the Lemon file header telling the system that the program is executable
+# @param $(1) The executable file name without file extension
+define AppendExecutableHeader
+	@cat $(TOOLS_PATH)/Lemon_Executable_File_Header.dat > $(BINARIES_PATH)/$(1).lemon
+	@cat $(BINARIES_PATH)/$(1).bin >> $(BINARIES_PATH)/$(1).lemon
 endef
 
 #------------------------------------------------------------------------------------------------------------------------------
@@ -51,12 +60,13 @@ $(SERIAL_PORT_SERVER): $(TOOLS_PATH)/Serial_Port_Server.c
 benchmark:
 	@$(call DisplayProgramToCompile,Benchmark)
 	@cd $(SOURCES_PATH)/Benchmark && $(MAKE)
+	@$(call AppendExecutableHeader,Benchmark)
 
 benchmark_clean:
 	@cd $(SOURCES_PATH)/Benchmark && $(MAKE) clean
 
 benchmark_download: $(SERIAL_PORT_SERVER)
-	@$(SERIAL_PORT_SERVER) $(SERIAL_PORT_SERVER_FLAGS) $(BINARIES_PATH)/Benchmark.32b benchmark
+	@$(SERIAL_PORT_SERVER) $(SERIAL_PORT_SERVER_FLAGS) $(BINARIES_PATH)/Benchmark.lemon benchmark
 
 #------------------------------------------------------------------------------------------------------------------------------
 # Games
@@ -64,12 +74,13 @@ benchmark_download: $(SERIAL_PORT_SERVER)
 games:
 	@$(call DisplayProgramToCompile,Games)
 	@cd $(SOURCES_PATH)/Games && $(MAKE)
+	@$(call AppendExecutableHeader,Games)
 
 games_clean:
 	@cd $(SOURCES_PATH)/Games && $(MAKE) clean
 
 games_download: $(SERIAL_PORT_SERVER)
-	@$(SERIAL_PORT_SERVER) $(SERIAL_PORT_SERVER_FLAGS) $(BINARIES_PATH)/Games.32b games
+	@$(SERIAL_PORT_SERVER) $(SERIAL_PORT_SERVER_FLAGS) $(BINARIES_PATH)/Games.lemon games
 
 #------------------------------------------------------------------------------------------------------------------------------
 # Help
@@ -77,12 +88,13 @@ games_download: $(SERIAL_PORT_SERVER)
 help:
 	@$(call DisplayProgramToCompile,Help)
 	@cd $(SOURCES_PATH)/Help && $(MAKE)
+	@$(call AppendExecutableHeader,Help)
 
 help_clean:
 	@cd $(SOURCES_PATH)/Help && $(MAKE) clean
 
 help_download: $(SERIAL_PORT_SERVER)
-	@$(SERIAL_PORT_SERVER) $(SERIAL_PORT_SERVER_FLAGS) $(BINARIES_PATH)/Help.32b help
+	@$(SERIAL_PORT_SERVER) $(SERIAL_PORT_SERVER_FLAGS) $(BINARIES_PATH)/Help.lemon help
 
 #------------------------------------------------------------------------------------------------------------------------------
 # Tests
@@ -90,18 +102,21 @@ help_download: $(SERIAL_PORT_SERVER)
 tests:
 	@$(call DisplayProgramToCompile,Tests)
 	@cd $(SOURCES_PATH)/Tests && $(MAKE)
+	@$(call AppendExecutableHeader,Test_Display_ASCII_Characters)
+	@$(call AppendExecutableHeader,Test_Protection_Check)
+	@$(call AppendExecutableHeader,Tests)
 
 tests_clean:
 	@cd $(SOURCES_PATH)/Tests && $(MAKE) clean
 
 tests_download_test_display_ascii_characters: $(SERIAL_PORT_SERVER)
-	@$(SERIAL_PORT_SERVER) $(SERIAL_PORT_SERVER_FLAGS) $(BINARIES_PATH)/Test_Display_ASCII_Characters.32b test_ascii
+	@$(SERIAL_PORT_SERVER) $(SERIAL_PORT_SERVER_FLAGS) $(BINARIES_PATH)/Test_Display_ASCII_Characters.lemon test_ascii
 
 tests_download_test_protection_check: $(SERIAL_PORT_SERVER)
-	@$(SERIAL_PORT_SERVER) $(SERIAL_PORT_SERVER_FLAGS) $(BINARIES_PATH)/Test_Protection_Check.32b test_prot
+	@$(SERIAL_PORT_SERVER) $(SERIAL_PORT_SERVER_FLAGS) $(BINARIES_PATH)/Test_Protection_Check.lemon test_prot
 
 tests_download: $(SERIAL_PORT_SERVER)
-	@$(SERIAL_PORT_SERVER) $(SERIAL_PORT_SERVER_FLAGS) $(BINARIES_PATH)/Tests.32b tests
+	@$(SERIAL_PORT_SERVER) $(SERIAL_PORT_SERVER_FLAGS) $(BINARIES_PATH)/Tests.lemon tests
 	
 #------------------------------------------------------------------------------------------------------------------------------
 # Text editor
@@ -109,12 +124,13 @@ tests_download: $(SERIAL_PORT_SERVER)
 text_editor:
 	@$(call DisplayProgramToCompile,Text editor)
 	@cd $(SOURCES_PATH)/Text_Editor && $(MAKE)
+	@$(call AppendExecutableHeader,Text_Editor)
 
 text_editor_clean:
 	@cd $(SOURCES_PATH)/Text_Editor && $(MAKE) clean
 
 text_editor_download: $(SERIAL_PORT_SERVER)
-	@$(SERIAL_PORT_SERVER) $(SERIAL_PORT_SERVER_FLAGS) $(BINARIES_PATH)/Text_Editor.32b edit
+	@$(SERIAL_PORT_SERVER) $(SERIAL_PORT_SERVER_FLAGS) $(BINARIES_PATH)/Text_Editor.lemon edit
 
 #------------------------------------------------------------------------------------------------------------------------------
 # UNIX commands
@@ -122,9 +138,10 @@ text_editor_download: $(SERIAL_PORT_SERVER)
 unix_commands:
 	@$(call DisplayProgramToCompile,UNIX commands)
 	@cd $(SOURCES_PATH)/UNIX_Commands && $(MAKE)
+	@$(call AppendExecutableHeader,UNIX_Commands)
 
 unix_commands_clean:
 	@cd $(SOURCES_PATH)/UNIX_Commands && $(MAKE) clean
 
 unix_commands_download: $(SERIAL_PORT_SERVER)
-	@$(SERIAL_PORT_SERVER) $(SERIAL_PORT_SERVER_FLAGS) $(BINARIES_PATH)/UNIX_Commands.32b u
+	@$(SERIAL_PORT_SERVER) $(SERIAL_PORT_SERVER_FLAGS) $(BINARIES_PATH)/UNIX_Commands.lemon u

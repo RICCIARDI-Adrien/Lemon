@@ -3,12 +3,12 @@ OBJECTS_TESTS = $(OBJECTS_PATH)/$(PROGRAM_NAME)/crc32.o $(OBJECTS_PATH)/$(PROGRA
 OBJECTS = $(OBJECTS_PATH)/$(PROGRAM_NAME)/Test_Display_ASCII_Characters.o $(OBJECTS_PATH)/$(PROGRAM_NAME)/Test_Protection_Check.o $(OBJECTS_TESTS)
 
 all: $(OBJECTS)
-	$(LD) $(OBJECTS_PATH)/$(PROGRAM_NAME)/Test_Display_ASCII_Characters.o $(LDFLAGS) -o $(BINARIES_PATH)/Test_Display_ASCII_Characters.32b
-	$(LD) $(OBJECTS_PATH)/$(PROGRAM_NAME)/Test_Protection_Check.o $(LDFLAGS) -o $(BINARIES_PATH)/Test_Protection_Check.32b
-	$(LD) $(OBJECTS_TESTS) $(LDFLAGS) -o $(BINARIES_PATH)/Tests.32b
+	$(LD) $(OBJECTS_PATH)/$(PROGRAM_NAME)/Test_Display_ASCII_Characters.o $(LDFLAGS) -o $(BINARIES_PATH)/Test_Display_ASCII_Characters.bin
+	$(LD) $(OBJECTS_PATH)/$(PROGRAM_NAME)/Test_Protection_Check.o $(LDFLAGS) -o $(BINARIES_PATH)/Test_Protection_Check.bin
+	$(LD) $(OBJECTS_TESTS) $(LDFLAGS) -o $(BINARIES_PATH)/Tests.bin
 
 clean:
-	rm -f $(OBJECTS_PATH)/$(PROGRAM_NAME)/*.o $(BINARIES_PATH)/Test_Display_ASCII_Characters.32b $(BINARIES_PATH)/Test_Protection_Check.32b $(BINARIES_PATH)/Tests.32b
+	rm -f $(OBJECTS_PATH)/$(PROGRAM_NAME)/*.o $(BINARIES_PATH)/Test_Display_ASCII_Characters.* $(BINARIES_PATH)/Test_Protection_Check.* $(BINARIES_PATH)/Tests.*
 
 $(OBJECTS_PATH)/$(PROGRAM_NAME)/crc32.o: crc32.c crc32.h
 	$(CC) $(CCFLAGS) -c crc32.c -o $(OBJECTS_PATH)/$(PROGRAM_NAME)/crc32.o

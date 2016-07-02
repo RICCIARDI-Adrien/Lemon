@@ -25,6 +25,7 @@
  * @version 2.2.2 : 06/03/2016, better handling of slave PIC.
  * @version 2.3.0 : 12/04/2016, added PCI, AHCI and SATA support (but working only on virtual machine).
  * @version 2.3.1 : 06/05/2016, made the SATA driver works with real hardware.
+ * @version 2.3.2 : 02/07/2016, added a header containing a magic number at the beginning of the executable files.
  */
 #ifndef H_KERNEL_H
 #define H_KERNEL_H
@@ -49,12 +50,14 @@
 #define KERNEL_USER_SPACE_SIZE ((CONFIGURATION_SYSTEM_TOTAL_RAM_SIZE_MEGA_BYTES - 1) * 1024 * 1024)
 /** User space base address. This reserves the first MB of RAM for the kernel. */
 #define KERNEL_USER_SPACE_ADDRESS 0x100000
+/** Program loading address in the user space. */
+#define KERNEL_PROGRAM_LOAD_USER_ADDRESS 0x100
 /** Instruction pointer start address for user program. */
-#define KERNEL_PROGRAM_ENTRY_POINT 0x100
+#define KERNEL_PROGRAM_ENTRY_POINT_USER_ADDRESS 0x104 // The first 4 bytes contain the executable magic number
 /** User program will be loaded at this address. 256 bytes are reserved to store command line arguments. */
-#define KERNEL_PROGRAM_LOAD_ADDRESS (KERNEL_USER_SPACE_ADDRESS + KERNEL_PROGRAM_ENTRY_POINT)
+#define KERNEL_PROGRAM_LOAD_KERNEL_ADDRESS (KERNEL_USER_SPACE_ADDRESS + KERNEL_PROGRAM_LOAD_USER_ADDRESS)
 /** Executable program magic number. */
-#define KERNEL_PROGRAM_MAGIC_NUMBER 0x57E58955 // This is the hexadecimal representation of the main() stack frame (push ebp...)
+#define KERNEL_PROGRAM_MAGIC_NUMBER 0x78563412
 
 //-------------------------------------------------------------------------------------------------
 // Functions

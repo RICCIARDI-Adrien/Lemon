@@ -1,8 +1,9 @@
-*.32b
 *.a
+*.bin
 *.d
 *.img
 *.iso
+*.lemon
 *.o
 *.out
 Installer/Sources/Shell/Embedded_Files_Data.h
