@@ -1,5 +1,5 @@
 PROGRAM_NAME = Games
-OBJECTS = $(OBJECTS_PATH)/$(PROGRAM_NAME)/Brain_Calculation.o $(OBJECTS_PATH)/$(PROGRAM_NAME)/Game_Of_Life.o $(OBJECTS_PATH)/$(PROGRAM_NAME)/Hangman.o $(OBJECTS_PATH)/$(PROGRAM_NAME)/Main.o $(OBJECTS_PATH)/$(PROGRAM_NAME)/No_Match_Dealer.o $(OBJECTS_PATH)/$(PROGRAM_NAME)/Numbers.o $(OBJECTS_PATH)/$(PROGRAM_NAME)/Rain.o
+OBJECTS = $(OBJECTS_PATH)/$(PROGRAM_NAME)/Brain_Calculation.o $(OBJECTS_PATH)/$(PROGRAM_NAME)/Game_Of_Life.o $(OBJECTS_PATH)/$(PROGRAM_NAME)/Hangman.o $(OBJECTS_PATH)/$(PROGRAM_NAME)/Main.o $(OBJECTS_PATH)/$(PROGRAM_NAME)/No_Match_Dealer.o $(OBJECTS_PATH)/$(PROGRAM_NAME)/Numbers.o $(OBJECTS_PATH)/$(PROGRAM_NAME)/Rain.o $(OBJECTS_PATH)/$(PROGRAM_NAME)/Submarine.o
 
 all: $(OBJECTS)
 	$(LD) $(OBJECTS) $(LDFLAGS) -o $(BINARIES_PATH)/$(PROGRAM_NAME).32b
@@ -24,6 +24,9 @@ $(OBJECTS_PATH)/$(PROGRAM_NAME)/Numbers.o: Numbers.c Games.h Strings.h
 
 $(OBJECTS_PATH)/$(PROGRAM_NAME)/Rain.o: Rain.c Games.h Strings.h
 	$(CC) $(CCFLAGS) -c Rain.c -o $(OBJECTS_PATH)/$(PROGRAM_NAME)/Rain.o
+
+$(OBJECTS_PATH)/$(PROGRAM_NAME)/Submarine.o: Submarine.c Games.h Strings.h
+	$(CC) $(CCFLAGS) -c Submarine.c -o $(OBJECTS_PATH)/$(PROGRAM_NAME)/Submarine.o
 
 clean:
 	rm -f $(OBJECTS_PATH)/$(PROGRAM_NAME)/*.o $(BINARIES_PATH)/$(PROGRAM_NAME).32b

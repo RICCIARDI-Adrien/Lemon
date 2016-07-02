@@ -22,6 +22,7 @@
 	#define STRING_MAIN_MENU_GAME_RAIN "Gouttes de pluie"
 	#define STRING_MAIN_MENU_GAME_GAME_OF_LIFE "Jeu de la Vie"
 	#define STRING_MAIN_MENU_GAME_HANGMAN "Jeu du pendu"
+	#define STRING_MAIN_MENU_GAME_SUBMARINE "Sous-marin"
 	#define STRING_MAIN_MENU_EXIT "Quitter"
 
 	// Brain calculation
@@ -86,6 +87,9 @@
 	#define STRING_RAIN_MENU_EXIT "Retour"
 	#define STRING_RAIN_STATISTICS_1 "Gouttes de pluie "
 	#define STRING_RAIN_STATISTICS_2 " ; Boucles "
+	
+	// Submarine
+	#define STRING_SUBMARINE_PLAYER_LOST "Vous avez perdu. Appuyez sur Echap pour quitter."
 #endif
 
 #endif

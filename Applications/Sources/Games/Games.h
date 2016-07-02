@@ -26,4 +26,7 @@ void Numbers(void);
 /** Some ASCII characters are randomly raining on the screen, as in the classic BSD game (yes, it is completely useless). */
 void Rain(void);
 
+/** Control a submarine in an underwater cave : avoid obstacles to safely reach the water surface. */
+void Submarine(void);
+
 #endif
