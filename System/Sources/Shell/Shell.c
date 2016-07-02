@@ -256,7 +256,7 @@ void Shell(void)
 		else 
 		{
 			// Clear program magic number area so newly loaded program must have a valid magic number
-			memset((unsigned char *) KERNEL_PROGRAM_LOAD_ADDRESS, 0, sizeof(KERNEL_PROGRAM_MAGIC_NUMBER)); 
+			memset((void *) KERNEL_PROGRAM_LOAD_ADDRESS, 0, sizeof(KERNEL_PROGRAM_MAGIC_NUMBER));
 			
 			// Set error color only one time
 			ScreenSetColor(SCREEN_COLOR_RED);
@@ -274,7 +274,7 @@ void Shell(void)
 				// No error
 				default:
 					// Copy command line arguments to user space
-					memcpy((unsigned char *) Pointer_Command_Line_Arguments, (unsigned char *) &Command_Line_Arguments, sizeof(Command_Line_Arguments));
+					memcpy(Pointer_Command_Line_Arguments, &Command_Line_Arguments, sizeof(Command_Line_Arguments));
 					
 					// Compute the offset between user space argv[] pointers and kernel space ones
 					Offset = (unsigned int) Command_Line_Arguments.Arguments_Value - ARGUMENTS_VALUE_OFFSET;

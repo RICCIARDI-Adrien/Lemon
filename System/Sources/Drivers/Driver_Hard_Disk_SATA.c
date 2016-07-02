@@ -199,7 +199,7 @@ static void HardDiskSATAPrepareCommand(int Is_Write_Operation, int Is_Prefetchab
 	Hard_Disk_SATA_Command_List.Command_Status = 0; // This field will be incremented with the real transfered bytes amount
 	
 	// Initialize the H2D FIS
-	memset((void *) &Hard_Disk_SATA_Command_Table.Command_Frame_Information_Structure, 0, sizeof(Hard_Disk_SATA_Command_Table.Command_Frame_Information_Structure));
+	memset((void *) &Hard_Disk_SATA_Command_Table.Command_Frame_Information_Structure, 0, sizeof(Hard_Disk_SATA_Command_Table.Command_Frame_Information_Structure)); // Explicit cast to avoid warning due to pointer volatile attribute
 	Hard_Disk_SATA_Command_Table.Command_Frame_Information_Structure.Frame_Information_Structure_Type = HARD_DISK_SATA_FRAME_INFORMATION_STRUCTURE_TYPE_REGISTER_HOST_TO_DEVICE; // Set the FIS type
 	Hard_Disk_SATA_Command_Table.Command_Frame_Information_Structure.Port_Multiplier_Port_And_Transfer_When_Command_Issue_Set_Bit = HARD_DISK_SATA_FRAME_INFORMATION_STRUCTURE_REGISTER_HOST_TO_DEVICE_TRANSFER_WHEN_COMMAND_ISSUE_SET_BIT; // The command will be executed when the corresponding bit in CI register will be set
 }
@@ -458,7 +458,7 @@ void HardDiskWriteSector(unsigned int Logical_Sector_Number, void *Pointer_Buffe
 	Hard_Disk_SATA_Command_Table.Command_Frame_Information_Structure.Device = 0x40;
 	
 	// Copy the data to the buffer (can't directly use the provided data pointer because the buffer must be aligned on 2 bytes)
-	memcpy((void *) Hard_Disk_SATA_Buffer, Pointer_Buffer, HARD_DISK_SECTOR_SIZE);
+	memcpy((void *) Hard_Disk_SATA_Buffer, Pointer_Buffer, HARD_DISK_SECTOR_SIZE); // Explicit cast to avoid warning due to pointer volatile attribute
 	
 	// Execute the command and wait for its completion
 	HardDiskSATAControllerExecuteCommand();

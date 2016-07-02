@@ -214,7 +214,7 @@ static void ArchitectureMemoryProtectionAddInterruptDescriptor(unsigned int Inde
 static inline __attribute__((always_inline)) void ArchitectureInitializeGlobalDescriptorTable(void)
 {
 	// Create the dummy descriptor (descriptor 0 filled with 0 to show that the table is valid)
-	memset((struct TSegmentDescriptor *) Global_Descriptor_Table, 0, sizeof(struct TSegmentDescriptor)); // Explicit cast to avoid warning due to pointer volatile attribute
+	memset((void *) Global_Descriptor_Table, 0, sizeof(struct TSegmentDescriptor)); // Explicit cast to avoid warning due to pointer volatile attribute
 	
 	// Add system segments
 	ArchitectureMemoryProtectionAddSegmentDescriptor(ARCHITECTURE_MEMORY_PROTECTION_SEGMENT_INDEX_KERNEL_CODE, 0, 0xFFFFF, ARCHITECTURE_MEMORY_PROTECTION_SEGMENT_TYPE_KERNEL_CODE, 0x0C);
