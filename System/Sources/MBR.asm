@@ -51,7 +51,7 @@ Entry_Point:
 	int 10h
 
 	; Load the Installer kernel from the boot device (there only one partition starting from zero, there is no need to read the partitions table)
-	%ifdef INSTALLER
+	%ifdef CONFIGURATION_BUILD_INSTALLER
 		call LoadKernelFromInstallationMedia
 	; Load the System kernel from the hard disk
 	%else
@@ -106,7 +106,7 @@ Entry_Point:
 ;--------------------------------------------------------------------------------------------------
 ; Functions
 ;--------------------------------------------------------------------------------------------------
-%ifdef INSTALLER
+%ifdef CONFIGURATION_BUILD_INSTALLER
 	; Use the BIOS to access to the storage disk
 	LoadKernelFromInstallationMedia:
 		; Get boot drive parameters
@@ -262,7 +262,7 @@ GDT_Pointer DW 8 * 3
 
 Boot_Device DB 0
 
-%ifdef INSTALLER
+%ifdef CONFIGURATION_BUILD_INSTALLER
 	Logical_Sector_Number DD 1
 	Sectors_Per_Track_Count DW 18 ; Like a 1.44MB floppy disk
 	Heads_Count DW 2 ; Like a 1.44MB floppy disk

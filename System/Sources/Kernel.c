@@ -55,7 +55,7 @@ void __attribute__((section(".init"))) KernelEntryPoint(void)
 {
 	unsigned int *Pointer_Dword;
 	int Result;
-	#ifndef INSTALLER
+	#if !CONFIGURATION_BUILD_INSTALLER
 		unsigned int Partition_Starting_Sector;
 	#endif
 	
@@ -108,7 +108,7 @@ void __attribute__((section(".init"))) KernelEntryPoint(void)
 	}
 	
 	// Load file system (can't do that in the Installer program)
-	#ifndef INSTALLER
+	#if !CONFIGURATION_BUILD_INSTALLER
 		// Retrieve the partition starting sector from the partition table located in the MBR
 		Partition_Starting_Sector = *((unsigned int *) (KERNEL_MBR_ADDRESS + 446 + 8)); // The partition table is located at offset 446, and the first partition starting LBA sector is located at offset 8 of the beginning of the partition table
 		

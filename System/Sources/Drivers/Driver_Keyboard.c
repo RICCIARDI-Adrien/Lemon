@@ -279,7 +279,7 @@ void KeyboardInterruptHandler(void)
 	return;*/
 	
 	// F12 : go back instantly to the kernel console
-	#ifndef INSTALLER
+	#if !CONFIGURATION_BUILD_INSTALLER
 		if (Scan_Code == 0x58)
 		{
 			// Send the End of Interrupt code to the PIC

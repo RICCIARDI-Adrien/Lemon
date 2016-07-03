@@ -250,7 +250,7 @@ unsigned int FileSystemAllocateBlock(void)
 }
 
 // Only the Installer program needs to create a new file system
-#ifdef INSTALLER
+#if CONFIGURATION_BUILD_INSTALLER
 	int FileSystemCreate(unsigned int Blocks_Count, unsigned int Files_Count, unsigned int Starting_Sector)
 	{
 		unsigned int i, Required_Disk_Size;

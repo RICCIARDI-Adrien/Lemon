@@ -8,7 +8,6 @@ Système
 - mettre struct dans architecture en typedef
 - ne pas compiler drivers non sélectionnés plutôt que #if dans sources
 - même variable CONFIGURATION_IS_DEBUG_ENABLED dans MBR ?
-- unifier les noms des constantes (LEMON_LANGUAGE, CONFIGURATION_DEBUG, INSTALLER...)
 - remplacer #if CONFIGURATION_MACHIN == 1 par #if CONFIGURATION_MACHIN tout court
 
 Doc

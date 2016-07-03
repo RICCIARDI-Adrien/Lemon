@@ -11,9 +11,9 @@ PATH_OBJECTS = Objects
 PATH_BINARIES = Binaries
 PATH_INSTALLER_SOURCES = Sources
 
-CCFLAGS += -DINSTALLER
+CCFLAGS += -DCONFIGURATION_BUILD_INSTALLER=1
 LDFLAGS = -T ../System/Linker_Script.ld
-MBR_FLAGS = -DSECTORS_TO_LOAD_COUNT=512 -DINSTALLER
+MBR_FLAGS = -DSECTORS_TO_LOAD_COUNT=512 -DCONFIGURATION_BUILD_INSTALLER=1
 
 # The common makefile must be included after the paths and flags variables have been defined (because it uses them), and before the object variables are set (because it contains some of them)
 include ../System/Makefile_Core.mk
