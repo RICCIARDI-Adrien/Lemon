@@ -141,7 +141,7 @@ int PCIGetConfigurationSpaceHeader(TPCIDeviceID *Pointer_Device_ID, TPCIConfigur
 	return 0;
 }
 
-#if CONFIGURATION_IS_DEBUG_ENABLED == 1
+#if CONFIGURATION_IS_DEBUG_ENABLED
 	void PCIDebugShowDevices(void)
 	{
 		TPCIDeviceID Device_ID = {0};

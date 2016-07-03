@@ -81,7 +81,7 @@ void __attribute__((section(".init"))) KernelEntryPoint(void)
 	ScreenClear();
 	
 	// Enable the interrupts sooner in debug mode to allow KeyboardReadCharacter() to work (be careful if the not yet initialized devices use interrupts)
-	#if CONFIGURATION_IS_DEBUG_ENABLED == 1
+	#if CONFIGURATION_IS_DEBUG_ENABLED
 		ARCHITECTURE_INTERRUPTS_ENABLE();
 	#endif
 	

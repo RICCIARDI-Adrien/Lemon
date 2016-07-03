@@ -7,7 +7,7 @@
 #include <Drivers/Driver_Screen.h>
 
 // Debug functions are available only when debug is enabled
-#if CONFIGURATION_IS_DEBUG_ENABLED == 1
+#if CONFIGURATION_IS_DEBUG_ENABLED
 
 //-------------------------------------------------------------------------------------------------
 // Public functions
