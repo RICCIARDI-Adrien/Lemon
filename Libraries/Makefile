@@ -30,10 +30,10 @@ SOURCES = $(subst $(PATH_SOURCES)/,,$(FILTERED_SOURCES))
 # Create the objects list based on the sources list
 OBJECTS = $(patsubst %.c,$(PATH_OBJECTS)/%.o,$(SOURCES))
 # Append special files
-OBJECTS += $(PATH_OBJECTS)/System/System_Program_Entry_Point.o $(PATH_OBJECTS)/System/System_Call.o
+OBJECTS += $(PATH_OBJECTS)/System/System_Call.o
 
-all: $(OBJECTS)
-	ar -rvsc $(PATH_BINARIES)/$(ARCHIVE_NAME) $(OBJECTS)
+all: $(OBJECTS) $(PATH_OBJECTS)/System/System_Program_Entry_Point.o
+	ar -rvsc $(PATH_BINARIES)/$(ARCHIVE_NAME) $(OBJECTS) $(PATH_OBJECTS)/System/System_Program_Entry_Point.o
 	ls -lh $(PATH_BINARIES)/$(ARCHIVE_NAME)
 	
 clean:
