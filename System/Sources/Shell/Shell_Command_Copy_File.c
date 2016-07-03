@@ -7,8 +7,8 @@
 #include <Error_Codes.h>
 #include <File_System/File.h>
 #include <File_System/File_System.h>
-#include <Kernel.h> // To have the NULL definition
 #include <Shell/Shell_Commands.h>
+#include <Standard_Functions.h> // To have the NULL definition
 #include <Strings.h>
 
 //-------------------------------------------------------------------------------------------------

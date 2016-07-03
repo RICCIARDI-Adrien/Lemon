@@ -6,6 +6,8 @@ Système
 -------
 
 - même variable CONFIGURATION_IS_DEBUG_ENABLED dans MBR ?
+- bouger variables dans kernel.h vers configuration.h
+- modif timer pour 60Hz pour jeux (reload value = 1193)
 
 Doc
 ---
@@ -33,6 +35,8 @@ modif bibliothèques pour gérer nouveaux codes touches
 - mettre Lemon devant tous les noms de fonctions publics + constantes...
 
 - utiliser les fonctions de conversion de string pour les fonctions screenwriteint...
+
+- modif fonction wait pour attendre en ms si timer modif à 60Hz
 
 
 Applications

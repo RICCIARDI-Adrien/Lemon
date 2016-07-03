@@ -36,9 +36,6 @@
 //-------------------------------------------------------------------------------------------------
 // Constants
 //-------------------------------------------------------------------------------------------------
-/** The indispensable NULL value. */
-#define NULL ((void *) 0)
-
 // Kernel memory areas
 /** The MBR stores file system informations. */
 #define KERNEL_MBR_ADDRESS 0x7C00
