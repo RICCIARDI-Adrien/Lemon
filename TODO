@@ -5,7 +5,6 @@
 Système
 -------
 
-- mettre struct dans architecture en typedef
 - même variable CONFIGURATION_IS_DEBUG_ENABLED dans MBR ?
 
 Doc

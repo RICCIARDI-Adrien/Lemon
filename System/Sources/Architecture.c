@@ -79,37 +79,37 @@
 // Private types
 //-------------------------------------------------------------------------------------------------
 /** A GDT segment descriptor. */
-struct TSegmentDescriptor
+typedef struct __attribute__((packed))
 {
 	unsigned short Limit_Low, Base_Address_Low;
 	unsigned char Base_Address_Middle, Flags;
 	unsigned char Limit_High: 4;
 	unsigned char Other: 4;
 	unsigned char Base_Address_High;
-} __attribute__((packed));
+} TArchitectureSegmentDescriptor;
 
 /** The GDTR content. */
-struct TGlobalDescriptorTableRegister
+typedef struct __attribute__((packed))
 {
 	unsigned short Table_Size;
-	struct TSegmentDescriptor *Pointer_Table;
-} __attribute__((packed));
+	TArchitectureSegmentDescriptor *Pointer_Table;
+} TArchitectureGlobalDescriptorTableRegister;
 
 /** An IDT segment descriptor. */
-struct TInterruptDescriptor
+typedef struct __attribute__((packed))
 {
 	unsigned short Handler_Address_Low, Segment_Selector, Flags, Handler_Address_High;
-} __attribute__((packed));
+} TArchitectureInterruptDescriptor;
 
 /** The IDTR content. */
-struct TInterruptDescriptorTableRegister
+typedef struct __attribute__((packed))
 {
 	unsigned short Table_Size;
-	struct TInterruptDescriptor *Pointer_Table;
-} __attribute__((packed));
+	TArchitectureInterruptDescriptor *Pointer_Table;
+} TArchitectureInterruptDescriptorTableRegister;
 
 /** A TSS descriptor. */
-struct TTaskStateSegment
+typedef struct __attribute__((packed))
 {
 	unsigned short Previous_Task, Reserved_0;
 	unsigned int ESP0;
@@ -137,23 +137,23 @@ struct TTaskStateSegment
 	unsigned short GS, Reserved_10;
 	unsigned short LDT_Segment_Selector, Reserved_11;
 	unsigned short Debug_Flag, IO_Map_Base_Address;
-} __attribute__((packed));
+} TArchitectureTaskStateSegment;
 
 //-------------------------------------------------------------------------------------------------
 // Private variables
 //-------------------------------------------------------------------------------------------------
 /** The GDT. */
-static volatile struct TSegmentDescriptor Global_Descriptor_Table[256] __attribute__((aligned(8))); // Should give better performances by aligning on cache boundary
+static volatile TArchitectureSegmentDescriptor Architecture_Global_Descriptor_Table[256] __attribute__((aligned(8))); // Should give better performances by aligning on cache boundary
 /** The GDTR content. */
-static volatile struct TGlobalDescriptorTableRegister Global_Descriptor_Table_Register;
+static volatile TArchitectureGlobalDescriptorTableRegister Architecture_Global_Descriptor_Table_Register;
 
 /** The IDT. */
-static volatile struct TInterruptDescriptor Interrupt_Descriptor_Table[256] __attribute__((aligned(8))); // Should give better performances by aligning on cache boundary
+static volatile TArchitectureInterruptDescriptor Architecture_Interrupt_Descriptor_Table[256] __attribute__((aligned(8))); // Should give better performances by aligning on cache boundary
 /** The IDTR content. */
-static volatile struct TInterruptDescriptorTableRegister Interrupt_Descriptor_Table_Register;
+static volatile TArchitectureInterruptDescriptorTableRegister Architecture_Interrupt_Descriptor_Table_Register;
 
 /** The TSS involved in context switching. */
-static volatile struct TTaskStateSegment Kernel_Task_State_Segment;
+static volatile TArchitectureTaskStateSegment Architecture_Kernel_Task_State_Segment;
 
 //-------------------------------------------------------------------------------------------------
 // Function prototypes
@@ -181,16 +181,16 @@ void ArchitectureInterruptExit(void);
 static void ArchitectureMemoryProtectionAddSegmentDescriptor(unsigned int Index, unsigned int Base_Address, unsigned int Limit, unsigned char Flags, unsigned char Other)
 {
 	// Base address
-	Global_Descriptor_Table[Index].Base_Address_Low = Base_Address;
-	Global_Descriptor_Table[Index].Base_Address_Middle = Base_Address >> 16;
-	Global_Descriptor_Table[Index].Base_Address_High = Base_Address >> 24;
+	Architecture_Global_Descriptor_Table[Index].Base_Address_Low = Base_Address;
+	Architecture_Global_Descriptor_Table[Index].Base_Address_Middle = Base_Address >> 16;
+	Architecture_Global_Descriptor_Table[Index].Base_Address_High = Base_Address >> 24;
 	// Limit
-	Global_Descriptor_Table[Index].Limit_Low = Limit;
-	Global_Descriptor_Table[Index].Limit_High = Limit >> 16;
+	Architecture_Global_Descriptor_Table[Index].Limit_Low = Limit;
+	Architecture_Global_Descriptor_Table[Index].Limit_High = Limit >> 16;
 	// Flags
-	Global_Descriptor_Table[Index].Flags = Flags;
+	Architecture_Global_Descriptor_Table[Index].Flags = Flags;
 	// Other bits
-	Global_Descriptor_Table[Index].Other = Other;
+	Architecture_Global_Descriptor_Table[Index].Other = Other;
 }
 
 /** Add an interrupt descriptor to the Interrupt Descriptor Table.
@@ -201,20 +201,20 @@ static void ArchitectureMemoryProtectionAddSegmentDescriptor(unsigned int Index,
 static void ArchitectureMemoryProtectionAddInterruptDescriptor(unsigned int Index, int Is_User_Accessible, void (*Pointer_Function_Address))
 {
 	// Register handler function's address
-	Interrupt_Descriptor_Table[Index].Handler_Address_Low = (unsigned int) Pointer_Function_Address;
-	Interrupt_Descriptor_Table[Index].Handler_Address_High = (unsigned int) Pointer_Function_Address >> 16;
+	Architecture_Interrupt_Descriptor_Table[Index].Handler_Address_Low = (unsigned int) Pointer_Function_Address;
+	Architecture_Interrupt_Descriptor_Table[Index].Handler_Address_High = (unsigned int) Pointer_Function_Address >> 16;
 	// Descriptor type 
-	if (Is_User_Accessible) Interrupt_Descriptor_Table[Index].Flags = 0xEE00; // 1110 1110 0000 0000b (security level 3)
-	else Interrupt_Descriptor_Table[Index].Flags = 0x8E00; // 1000 1110 0000 0000b (security level 0)
+	if (Is_User_Accessible) Architecture_Interrupt_Descriptor_Table[Index].Flags = 0xEE00; // 1110 1110 0000 0000b (security level 3)
+	else Architecture_Interrupt_Descriptor_Table[Index].Flags = 0x8E00; // 1000 1110 0000 0000b (security level 0)
 	// Segment descriptor's number in the GDT
-	Interrupt_Descriptor_Table[Index].Segment_Selector = ARCHITECTURE_MEMORY_PROTECTION_SEGMENT_INDEX_KERNEL_CODE << 3;
+	Architecture_Interrupt_Descriptor_Table[Index].Segment_Selector = ARCHITECTURE_MEMORY_PROTECTION_SEGMENT_INDEX_KERNEL_CODE << 3;
 }
 
 /** Initialize the GDT. */
 static inline __attribute__((always_inline)) void ArchitectureInitializeGlobalDescriptorTable(void)
 {
 	// Create the dummy descriptor (descriptor 0 filled with 0 to show that the table is valid)
-	memset((void *) Global_Descriptor_Table, 0, sizeof(struct TSegmentDescriptor)); // Explicit cast to avoid warning due to pointer volatile attribute
+	memset((void *) Architecture_Global_Descriptor_Table, 0, sizeof(TArchitectureSegmentDescriptor)); // Explicit cast to avoid warning due to pointer volatile attribute
 	
 	// Add system segments
 	ArchitectureMemoryProtectionAddSegmentDescriptor(ARCHITECTURE_MEMORY_PROTECTION_SEGMENT_INDEX_KERNEL_CODE, 0, 0xFFFFF, ARCHITECTURE_MEMORY_PROTECTION_SEGMENT_TYPE_KERNEL_CODE, 0x0C);
@@ -226,12 +226,12 @@ static inline __attribute__((always_inline)) void ArchitectureInitializeGlobalDe
 	ArchitectureMemoryProtectionAddSegmentDescriptor(ARCHITECTURE_MEMORY_PROTECTION_SEGMENT_INDEX_USER_DATA, KERNEL_USER_SPACE_ADDRESS, KERNEL_USER_SPACE_SIZE >> 12, ARCHITECTURE_MEMORY_PROTECTION_SEGMENT_TYPE_USER_DATA, 0x0C);
 	
 	// Add kernel TSS descriptor
-	ArchitectureMemoryProtectionAddSegmentDescriptor(ARCHITECTURE_MEMORY_PROTECTION_SEGMENT_INDEX_TASK_STATE_SEGMENT, (unsigned int) &Kernel_Task_State_Segment, sizeof(struct TTaskStateSegment) - 1, ARCHITECTURE_MEMORY_PROTECTION_SEGMENT_TYPE_TASK_STATE_SEGMENT, 0);
+	ArchitectureMemoryProtectionAddSegmentDescriptor(ARCHITECTURE_MEMORY_PROTECTION_SEGMENT_INDEX_TASK_STATE_SEGMENT, (unsigned int) &Architecture_Kernel_Task_State_Segment, sizeof(TArchitectureTaskStateSegment) - 1, ARCHITECTURE_MEMORY_PROTECTION_SEGMENT_TYPE_TASK_STATE_SEGMENT, 0);
 	
 	// Load the GDT in memory
-	Global_Descriptor_Table_Register.Table_Size = sizeof(Global_Descriptor_Table) - 1; // As told by Intel datasheet
-	Global_Descriptor_Table_Register.Pointer_Table = (struct TSegmentDescriptor *) Global_Descriptor_Table;  // Explicit cast to avoid warning due to pointer volatile attribute
-	asm("lgdt [Global_Descriptor_Table_Register]");
+	Architecture_Global_Descriptor_Table_Register.Table_Size = sizeof(Architecture_Global_Descriptor_Table) - 1; // As told by Intel datasheet
+	Architecture_Global_Descriptor_Table_Register.Pointer_Table = (TArchitectureSegmentDescriptor *) Architecture_Global_Descriptor_Table;  // Explicit cast to avoid warning due to pointer volatile attribute
+	asm("lgdt [Architecture_Global_Descriptor_Table_Register]");
 	
 	// Reset kernel data segment selectors
 	asm
@@ -266,18 +266,18 @@ static inline __attribute__((always_inline)) void ArchitectureInitializeInterrup
 	ArchitectureMemoryProtectionAddInterruptDescriptor(0x60, 1, ArchitectureInterruptLauncherSystemCalls); // Must be accessible from user mode
 	
 	// Load the IDT in the memory
-	Interrupt_Descriptor_Table_Register.Table_Size = sizeof(Interrupt_Descriptor_Table) - 1; // As told by Intel datasheet
-	Interrupt_Descriptor_Table_Register.Pointer_Table = (struct TInterruptDescriptor *) Interrupt_Descriptor_Table; // Explicit cast to avoid warning due to pointer volatile attribute
-	asm("lidt [Interrupt_Descriptor_Table_Register]");
+	Architecture_Interrupt_Descriptor_Table_Register.Table_Size = sizeof(Architecture_Interrupt_Descriptor_Table) - 1; // As told by Intel datasheet
+	Architecture_Interrupt_Descriptor_Table_Register.Pointer_Table = (TArchitectureInterruptDescriptor *) Architecture_Interrupt_Descriptor_Table; // Explicit cast to avoid warning due to pointer volatile attribute
+	asm("lidt [Architecture_Interrupt_Descriptor_Table_Register]");
 }
 
 /** Initialize the kernel Task State Segment, needed by hardware protection when switching from protection levels. */
 static inline __attribute__((always_inline)) void ArchitectureInitializeTaskStateSegment(void)
 {
-	Kernel_Task_State_Segment.Debug_Flag = 0; // Not in debug mode
-	Kernel_Task_State_Segment.IO_Map_Base_Address = 0;
-	Kernel_Task_State_Segment.ESP0 = KERNEL_STACK_ADDRESS;
-	Kernel_Task_State_Segment.SS0 = ARCHITECTURE_MEMORY_PROTECTION_SEGMENT_INDEX_KERNEL_STACK << 3; // Corresponding segment descriptor offset in GDT
+	Architecture_Kernel_Task_State_Segment.Debug_Flag = 0; // Not in debug mode
+	Architecture_Kernel_Task_State_Segment.IO_Map_Base_Address = 0;
+	Architecture_Kernel_Task_State_Segment.ESP0 = KERNEL_STACK_ADDRESS;
+	Architecture_Kernel_Task_State_Segment.SS0 = ARCHITECTURE_MEMORY_PROTECTION_SEGMENT_INDEX_KERNEL_STACK << 3; // Corresponding segment descriptor offset in GDT
 
 	// Load TSS into memory
 	asm
