@@ -5,15 +5,11 @@
 Système
 -------
 
-- optim fn standard en mettant void *
-- mettre vrai header maîtrisé devant programme
-- faire "profils" de compilation
 - mettre struct dans architecture en typedef
-- rassembler étapes compil identiques système et installateur dans Makfile.Core (faire Makefile.Shell et Makfile tout court pour inclusion)
 - ne pas compiler drivers non sélectionnés plutôt que #if dans sources
-- passage des params de config dans ligne de commande makefiles ?
 - même variable CONFIGURATION_IS_DEBUG_ENABLED dans MBR ?
 - unifier les noms des constantes (LEMON_LANGUAGE, CONFIGURATION_DEBUG, INSTALLER...)
+- remplacer #if CONFIGURATION_MACHIN == 1 par #if CONFIGURATION_MACHIN tout court
 
 Doc
 ---
@@ -51,7 +47,10 @@ Applications
 
 - utiliser api buffer pour affichage éditeur de texte
 
+- créer règle dans makefile principal pour générer automatiquement le dossier dans Objects
+
 Installer
 ---------
 
-mettre .h dans Includes
+- mettre .h dans Includes
+- supprimer Binary_Header_Converter.out dans make clean

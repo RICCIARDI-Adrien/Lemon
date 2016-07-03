@@ -29,9 +29,11 @@ SOURCES = $(subst $(PATH_SOURCES)/,,$(FILTERED_SOURCES))
 
 # Create the objects list based on the sources list
 OBJECTS = $(patsubst %.c,$(PATH_OBJECTS)/%.o,$(SOURCES))
+# Append special files
+OBJECTS += $(PATH_OBJECTS)/System/System_Program_Entry_Point.o $(PATH_OBJECTS)/System/System_Call.o
 
-all: $(OBJECTS) $(PATH_OBJECTS)/System/System_Program_Entry_Point.o
-	ar -rvsc $(PATH_BINARIES)/$(ARCHIVE_NAME) $(OBJECTS) $(PATH_OBJECTS)/System/System_Program_Entry_Point.o
+all: $(OBJECTS)
+	ar -rvsc $(PATH_BINARIES)/$(ARCHIVE_NAME) $(OBJECTS)
 	ls -lh $(PATH_BINARIES)/$(ARCHIVE_NAME)
 	
 clean:
@@ -45,10 +47,14 @@ $(PATH_OBJECTS)/System/System_Program_Entry_Point.d: $(PATH_SOURCES)/System/Syst
 	$(CC) $(CCFLAGS) -MT $(PATH_OBJECTS)/System/System_Program_Entry_Point.o -MM $(PATH_SOURCES)/System/System_Program_Entry_Point.c -MF $(PATH_OBJECTS)/System/System_Program_Entry_Point.d
 
 # Using __attribute__((optimize(0)), __attribute__((optimize("O0")) or #pragma GCC optimize("O0") in the source file does not give the same result and builds a non-working object file, so this rule is needed as a work-around
+# EDIT : using the attribute or pragma specified above works with gcc 5.3.1 but fails with gcc 4.9.2 (current Debian 8 gcc), so keep the work-around until Debian's gcc is upgraded
 $(PATH_OBJECTS)/System/System_Program_Entry_Point.o: $(PATH_OBJECTS)/System/System_Program_Entry_Point.d
 	$(CC) $(CCFLAGS) -O0 $(PATH_SOURCES)/System/System_Program_Entry_Point.c -o $(PATH_OBJECTS)/System/System_Program_Entry_Point.o
 
 -include $(PATH_OBJECTS)/System/System_Program_Entry_Point.d
+
+$(PATH_OBJECTS)/System/System_Call.o: $(PATH_SOURCES)/System/System_Call.asm
+	$(AS) -f elf32 $(PATH_SOURCES)/System/System_Call.asm -o $(PATH_OBJECTS)/System/System_Call.o
 
 #--------------------------------------------------------------------------------------------------
 # Generic rules
