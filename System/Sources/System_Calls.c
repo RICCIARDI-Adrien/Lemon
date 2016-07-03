@@ -278,11 +278,11 @@ int SystemCalls(void)
 	if (Call_Code >= SYSTEM_CALLS_COUNT) KernelUnknownSystemCallErrorHandler(); // This function never returns
 	
 	// Adjust string pointers according to user segment base into GDT
-	Pointer_1 += KERNEL_USER_SPACE_ADDRESS;
-	Pointer_2 += KERNEL_USER_SPACE_ADDRESS;
+	Pointer_1 += CONFIGURATION_USER_SPACE_ADDRESS;
+	Pointer_2 += CONFIGURATION_USER_SPACE_ADDRESS;
 	
 	// It is possible for a user space program to provide a pointer that, when added with the user space offset, will overlap in the kernel memory area. Generate a GPF if this is the case
-	if (((unsigned int) Pointer_1 < KERNEL_USER_SPACE_ADDRESS) || ((unsigned int) Pointer_2 < KERNEL_USER_SPACE_ADDRESS)) asm("int 13"); // This interrupt will never return and will abort the current system call
+	if (((unsigned int) Pointer_1 < CONFIGURATION_USER_SPACE_ADDRESS) || ((unsigned int) Pointer_2 < CONFIGURATION_USER_SPACE_ADDRESS)) asm("int 13"); // This interrupt will never return and will abort the current system call
 	
 	// Execute requested call
 	System_Calls_Handlers[Call_Code]();

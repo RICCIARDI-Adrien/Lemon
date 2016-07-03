@@ -84,7 +84,7 @@ void ShellCommandDownload(void)
 		return;
 	}
 	// The file size is larger than the available RAM
-	if (Download_Bytes_Count > KERNEL_USER_SPACE_SIZE)
+	if (Download_Bytes_Count > CONFIGURATION_USER_SPACE_SIZE)
 	{
 		ScreenWriteString(STRING_SHELL_DOWNLOAD_FILE_SIZE_TOO_BIG);
 		UARTWriteByte(CODE_DOWNLOAD_ABORT); // Stop transfer
@@ -95,7 +95,7 @@ void ShellCommandDownload(void)
 	UARTWriteByte(CODE_DOWNLOAD_CONTINUE);
 	
 	// Copy bytes in the memory
-	Pointer_Downloaded_Data = (unsigned char *) KERNEL_USER_SPACE_ADDRESS;
+	Pointer_Downloaded_Data = (unsigned char *) CONFIGURATION_USER_SPACE_ADDRESS;
 	for (i = 0; i < Download_Bytes_Count; i++)
 	{
 		*Pointer_Downloaded_Data = UARTReadByte();
@@ -117,7 +117,7 @@ void ShellCommandDownload(void)
 	// Save the file on the hard disk
 	if (String_User_Answer[0] == 's')
 	{
-		switch (FileCreate(String_File_Name, (unsigned char *) KERNEL_USER_SPACE_ADDRESS, Download_Bytes_Count))
+		switch (FileCreate(String_File_Name, (unsigned char *) CONFIGURATION_USER_SPACE_ADDRESS, Download_Bytes_Count))
 		{
 			case  ERROR_CODE_NO_ERROR:
 				ScreenSetColor(SCREEN_COLOR_GREEN);

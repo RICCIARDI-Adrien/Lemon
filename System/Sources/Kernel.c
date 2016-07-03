@@ -27,7 +27,7 @@
 	( \
 		"mov esp, %0" \
 		: /* No output */ \
-		: "i" (KERNEL_STACK_ADDRESS) \
+		: "i" (CONFIGURATION_KERNEL_STACK_ADDRESS) \
 		: "esp" \
 	)
 
@@ -110,7 +110,7 @@ void __attribute__((section(".init"))) KernelEntryPoint(void)
 	// Load file system (can't do that in the Installer program)
 	#if !CONFIGURATION_BUILD_INSTALLER
 		// Retrieve the partition starting sector from the partition table located in the MBR
-		Partition_Starting_Sector = *((unsigned int *) (KERNEL_MBR_ADDRESS + 446 + 8)); // The partition table is located at offset 446, and the first partition starting LBA sector is located at offset 8 of the beginning of the partition table
+		Partition_Starting_Sector = *((unsigned int *) (CONFIGURATION_SYSTEM_MBR_LOAD_ADDRESS + 446 + 8)); // The partition table is located at offset 446, and the first partition starting LBA sector is located at offset 8 of the beginning of the partition table
 		
 		if (!FileSystemInitialize(Partition_Starting_Sector + CONFIGURATION_FILE_SYSTEM_STARTING_SECTOR_OFFSET))
 		{
@@ -145,10 +145,10 @@ void KernelStartShell(void)
 
 TErrorCode KernelStartProgram(void)
 {
-	unsigned int *Pointer_Magic_Number = (unsigned int *) KERNEL_PROGRAM_LOAD_KERNEL_ADDRESS;
+	unsigned int *Pointer_Magic_Number = (unsigned int *) CONFIGURATION_USER_SPACE_PROGRAM_LOAD_ADDRESS;
 	
 	// Is the magic number valid ?
-	if (*Pointer_Magic_Number != KERNEL_PROGRAM_MAGIC_NUMBER) return ERROR_CODE_FILE_NOT_EXECUTABLE;
+	if (*Pointer_Magic_Number != CONFIGURATION_USER_SPACE_PROGRAM_MAGIC_NUMBER) return ERROR_CODE_FILE_NOT_EXECUTABLE;
 	
 	// Reset files opened by the previous program
 	FileResetFileDescriptors();

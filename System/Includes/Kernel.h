@@ -30,31 +30,7 @@
 #ifndef H_KERNEL_H
 #define H_KERNEL_H
 
-#include <Configuration.h>
 #include <Error_Codes.h>
-
-//-------------------------------------------------------------------------------------------------
-// Constants
-//-------------------------------------------------------------------------------------------------
-// Kernel memory areas
-/** The MBR stores file system informations. */
-#define KERNEL_MBR_ADDRESS 0x7C00
-/** Kernel stack address. */
-#define KERNEL_STACK_ADDRESS 0x10000
-
-// Userspace and user programs stuff
-/** Amount of RAM allowed to user space. */
-#define KERNEL_USER_SPACE_SIZE ((CONFIGURATION_SYSTEM_TOTAL_RAM_SIZE_MEGA_BYTES - 1) * 1024 * 1024)
-/** User space base address. This reserves the first MB of RAM for the kernel. */
-#define KERNEL_USER_SPACE_ADDRESS 0x100000
-/** Program loading address in the user space. */
-#define KERNEL_PROGRAM_LOAD_USER_ADDRESS 0x100
-/** Instruction pointer start address for user program. */
-#define KERNEL_PROGRAM_ENTRY_POINT_USER_ADDRESS 0x104 // The first 4 bytes contain the executable magic number
-/** User program will be loaded at this address. 256 bytes are reserved to store command line arguments. */
-#define KERNEL_PROGRAM_LOAD_KERNEL_ADDRESS (KERNEL_USER_SPACE_ADDRESS + KERNEL_PROGRAM_LOAD_USER_ADDRESS)
-/** Executable program magic number. */
-#define KERNEL_PROGRAM_MAGIC_NUMBER 0x78563412
 
 //-------------------------------------------------------------------------------------------------
 // Functions

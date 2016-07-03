@@ -222,8 +222,8 @@ static inline __attribute__((always_inline)) void ArchitectureInitializeGlobalDe
 	ArchitectureMemoryProtectionAddSegmentDescriptor(ARCHITECTURE_MEMORY_PROTECTION_SEGMENT_INDEX_KERNEL_STACK, 0, 0, ARCHITECTURE_MEMORY_PROTECTION_SEGMENT_TYPE_KERNEL_STACK, 0x0C);
 	
 	// Add user's task segments
-	ArchitectureMemoryProtectionAddSegmentDescriptor(ARCHITECTURE_MEMORY_PROTECTION_SEGMENT_INDEX_USER_CODE, KERNEL_USER_SPACE_ADDRESS, KERNEL_USER_SPACE_SIZE >> 12, ARCHITECTURE_MEMORY_PROTECTION_SEGMENT_TYPE_USER_CODE, 0x0C); // The limit size must be expressed in 4096-byte pages, 0x0C is for 32-bit instructions and to enable 4KB granularity
-	ArchitectureMemoryProtectionAddSegmentDescriptor(ARCHITECTURE_MEMORY_PROTECTION_SEGMENT_INDEX_USER_DATA, KERNEL_USER_SPACE_ADDRESS, KERNEL_USER_SPACE_SIZE >> 12, ARCHITECTURE_MEMORY_PROTECTION_SEGMENT_TYPE_USER_DATA, 0x0C);
+	ArchitectureMemoryProtectionAddSegmentDescriptor(ARCHITECTURE_MEMORY_PROTECTION_SEGMENT_INDEX_USER_CODE, CONFIGURATION_USER_SPACE_ADDRESS, CONFIGURATION_USER_SPACE_SIZE >> 12, ARCHITECTURE_MEMORY_PROTECTION_SEGMENT_TYPE_USER_CODE, 0x0C); // The limit size must be expressed in 4096-byte pages, 0x0C is for 32-bit instructions and to enable 4KB granularity
+	ArchitectureMemoryProtectionAddSegmentDescriptor(ARCHITECTURE_MEMORY_PROTECTION_SEGMENT_INDEX_USER_DATA, CONFIGURATION_USER_SPACE_ADDRESS, CONFIGURATION_USER_SPACE_SIZE >> 12, ARCHITECTURE_MEMORY_PROTECTION_SEGMENT_TYPE_USER_DATA, 0x0C);
 	
 	// Add kernel TSS descriptor
 	ArchitectureMemoryProtectionAddSegmentDescriptor(ARCHITECTURE_MEMORY_PROTECTION_SEGMENT_INDEX_TASK_STATE_SEGMENT, (unsigned int) &Architecture_Kernel_Task_State_Segment, sizeof(TArchitectureTaskStateSegment) - 1, ARCHITECTURE_MEMORY_PROTECTION_SEGMENT_TYPE_TASK_STATE_SEGMENT, 0);
@@ -276,7 +276,7 @@ static inline __attribute__((always_inline)) void ArchitectureInitializeTaskStat
 {
 	Architecture_Kernel_Task_State_Segment.Debug_Flag = 0; // Not in debug mode
 	Architecture_Kernel_Task_State_Segment.IO_Map_Base_Address = 0;
-	Architecture_Kernel_Task_State_Segment.ESP0 = KERNEL_STACK_ADDRESS;
+	Architecture_Kernel_Task_State_Segment.ESP0 = CONFIGURATION_KERNEL_STACK_ADDRESS;
 	Architecture_Kernel_Task_State_Segment.SS0 = ARCHITECTURE_MEMORY_PROTECTION_SEGMENT_INDEX_KERNEL_STACK << 3; // Corresponding segment descriptor offset in GDT
 
 	// Load TSS into memory
@@ -391,7 +391,7 @@ void ArchitectureSwitchToUserSpace(void)
 		"mov es, ax\n" // Needed by Intel string instructions
 		"iret" // Go to user space (automatically re-enable interrupts)
 		: // No output parameters
-		: "i" ((ARCHITECTURE_MEMORY_PROTECTION_SEGMENT_INDEX_USER_DATA << 3) | 3), "i" (KERNEL_USER_SPACE_SIZE), "i" ((ARCHITECTURE_MEMORY_PROTECTION_SEGMENT_INDEX_USER_CODE << 3) | 3), "i" (KERNEL_PROGRAM_ENTRY_POINT_USER_ADDRESS), "i" ((ARCHITECTURE_MEMORY_PROTECTION_SEGMENT_INDEX_USER_DATA << 3) | 3)
+		: "i" ((ARCHITECTURE_MEMORY_PROTECTION_SEGMENT_INDEX_USER_DATA << 3) | 3), "i" (CONFIGURATION_USER_SPACE_SIZE), "i" ((ARCHITECTURE_MEMORY_PROTECTION_SEGMENT_INDEX_USER_CODE << 3) | 3), "i" (CONFIGURATION_USER_SPACE_PROGRAM_ENTRY_POINT_USER_ADDRESS), "i" ((ARCHITECTURE_MEMORY_PROTECTION_SEGMENT_INDEX_USER_DATA << 3) | 3)
 		: "eax"
 	);
 }

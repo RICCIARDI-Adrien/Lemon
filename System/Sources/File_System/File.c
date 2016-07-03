@@ -202,7 +202,7 @@ int FileLoad(char *String_File_Name, void *Pointer_Buffer)
 	// Nothing more to do if the file is empty
 	if (File_Size_Bytes == 0) return ERROR_CODE_NO_ERROR;
 	// Is there enough room in RAM to store the file ?
-	if (File_Size_Bytes > KERNEL_USER_SPACE_SIZE - KERNEL_PROGRAM_LOAD_USER_ADDRESS) return ERROR_CODE_FILE_LARGER_THAN_RAM;
+	if (File_Size_Bytes > CONFIGURATION_USER_SPACE_SIZE - CONFIGURATION_USER_SPACE_PROGRAM_LOAD_USER_ADDRESS) return ERROR_CODE_FILE_LARGER_THAN_RAM;
 	
 	// Compute file size in blocks
 	File_Size_Blocks = File_Size_Bytes / CONFIGURATION_FILE_SYSTEM_BLOCK_SIZE_BYTES;

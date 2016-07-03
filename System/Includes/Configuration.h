@@ -8,6 +8,7 @@
 //-------------------------------------------------------------------------------------------------
 // Constants
 //-------------------------------------------------------------------------------------------------
+// File system
 /** How many file names can be stored in the Files List. */
 #define CONFIGURATION_FILE_SYSTEM_MAXIMUM_FILES_LIST_ENTRIES 128
 /** How many blocks the file system can address. */
@@ -18,13 +19,32 @@
 #define CONFIGURATION_FILE_SYSTEM_STARTING_SECTOR_OFFSET 129 // 1 sector for the MBR + 128 sectors (= 64 KB) for the kernel
 /** The system can't open more files than specified here simultaneously. */
 #define CONFIGURATION_FILE_SYSTEM_MAXIMUM_OPENED_FILES_COUNT 8
-
 /** Maximum length of a file name in characters. */
 #define CONFIGURATION_FILE_NAME_LENGTH 12
 
+// RAM management
 /** Size of the whole RAM that the system can use (in MB). */
 #define CONFIGURATION_SYSTEM_TOTAL_RAM_SIZE_MEGA_BYTES 16
+/** The address the MBR is loaded to by the BIOS. */
+#define CONFIGURATION_SYSTEM_MBR_LOAD_ADDRESS 0x7C00
+/** Kernel stack address. */
+#define CONFIGURATION_KERNEL_STACK_ADDRESS 0x10000
 
+// User space definitions
+/** Amount of RAM allowed for user space. */
+#define CONFIGURATION_USER_SPACE_SIZE ((CONFIGURATION_SYSTEM_TOTAL_RAM_SIZE_MEGA_BYTES - 1) * 1024 * 1024) // Keep the first megabyte for the kernel
+/** User space base address. This reserves the first MB of RAM for the kernel. */
+#define CONFIGURATION_USER_SPACE_ADDRESS 0x100000
+/** Program loading address in the user space. */
+#define CONFIGURATION_USER_SPACE_PROGRAM_LOAD_USER_ADDRESS 0x100
+/** Instruction pointer start address for user program. */
+#define CONFIGURATION_USER_SPACE_PROGRAM_ENTRY_POINT_USER_ADDRESS 0x104 // The first 4 bytes contain the executable magic number
+/** User program will be loaded at this address. 256 bytes are reserved to store command line arguments. */
+#define CONFIGURATION_USER_SPACE_PROGRAM_LOAD_ADDRESS (CONFIGURATION_USER_SPACE_ADDRESS + CONFIGURATION_USER_SPACE_PROGRAM_LOAD_USER_ADDRESS)
+/** Executable program magic number. */
+#define CONFIGURATION_USER_SPACE_PROGRAM_MAGIC_NUMBER 0x78563412
+
+// Drivers
 /** Select which SATA hard disk (from 0 to 31) to use.
  * @note This option is available only when the SATA driver is enabled.
  */
