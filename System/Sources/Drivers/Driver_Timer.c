@@ -16,6 +16,8 @@
 
 /** Frequency divider value to achieve a 50 ms interrupt rate period. */
 #define TIMER_PERIOD_50_MS 59660
+/** Frequency divider value to achieve a 1 ms interrupt rate period. */
+#define TIMER_PERIOD_1_MS 1193
 
 //-------------------------------------------------------------------------------------------------
 // Private variables
@@ -39,10 +41,10 @@ void TimerInitialize(void)
 	
 	// Send period
 	// Send least significant byte
-	outb(TIMER_PORT_DATA, (unsigned char) TIMER_PERIOD_50_MS);
+	outb(TIMER_PORT_DATA, (unsigned char) TIMER_PERIOD_1_MS);
 	ArchitectureIODelay();
 	// Send most significant byte
-	outb(TIMER_PORT_DATA, TIMER_PERIOD_50_MS >> 8);
+	outb(TIMER_PORT_DATA, TIMER_PERIOD_1_MS >> 8);
 	ArchitectureIODelay();
 }
 

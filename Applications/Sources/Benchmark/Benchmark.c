@@ -50,7 +50,7 @@ int main(void)
 	
 	ScreenWriteString("Computation duration (+/- 1 second) : ");
 	ScreenSetFontColor(SCREEN_COLOR_GREEN);
-	ScreenWriteUnsignedInteger((End_Time - Start_Time) / 20); // Convert to seconds
+	ScreenWriteUnsignedInteger((End_Time - Start_Time) / 1000); // Convert to seconds
 	ScreenSetFontColor(SCREEN_COLOR_BLUE);
 	ScreenWriteString(" seconds.\n");
 	

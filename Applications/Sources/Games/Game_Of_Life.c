@@ -197,6 +197,7 @@ void GameOfLife(void)
 			}
 		}
 
-		if (Wait_Time > 0) SystemWait(Wait_Time); // Avoid a system call if there is no need to wait
+		// Wait for 50ms steps
+		if (Wait_Time > 0) SystemWait(Wait_Time * 50); // Avoid a system call if there is no need to wait
 	}
 }

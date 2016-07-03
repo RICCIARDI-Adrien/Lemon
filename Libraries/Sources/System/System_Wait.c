@@ -6,7 +6,7 @@
 //-------------------------------------------------------------------------------------------------
 // Public functions
 //-------------------------------------------------------------------------------------------------
-void SystemWait(unsigned int Periods_Count)
+void SystemWait(unsigned int Milliseconds_Count)
 {
-	SystemCall(SYSTEM_CALL_TIMER_WAIT, Periods_Count, 0, NULL, NULL);
+	SystemCall(SYSTEM_CALL_TIMER_WAIT, Milliseconds_Count, 0, NULL, NULL);
 }

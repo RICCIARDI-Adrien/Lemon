@@ -43,10 +43,10 @@
  */
 int SystemCall(TSystemCall Request_Code, int Integer_1, int Integer_2, void *Pointer_1, void *Pointer_2);
 
-/** Wait for a multiple of 50 ms.
- * @param Periods_Count How many period of 50 ms to wait.
+/** Wait for the specified number of milliseconds.
+ * @param Periods_Count How many milliseconds to wait.
  */
-void SystemWait(unsigned int Periods_Count);
+void SystemWait(unsigned int Milliseconds_Count);
 
 /** Abort the current program and return to the system. */
 void SystemExitProgram(void);
@@ -65,8 +65,8 @@ void SystemGetFileSystemTotalSize(unsigned int *Pointer_Block_Size, unsigned int
  */
 void SystemGetFileSystemFreeSize(unsigned int *Pointer_Blocks_Count, unsigned int *Pointer_Files_Count);
 
-/** Get the timer current value. This timer is incremented by one every 50 ms and starts from zero on system boot.
- * @return The timer value (the unit is 50 ms).
+/** Get the timer current value. This timer is incremented by one every millisecond and starts from zero on system boot.
+ * @return The timer value (the unit is 1 ms).
  */
 unsigned int SystemGetTimerValue(void);
 

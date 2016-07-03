@@ -14,11 +14,11 @@ extern volatile unsigned int Timer_Counter;
 //-------------------------------------------------------------------------------------------------
 // Functions
 //-------------------------------------------------------------------------------------------------
-/** Configure the timer 0 to generate an interrupt at a 50 ms period rate. */
+/** Configure the timer 0 to generate an interrupt at a 1 ms period rate. */
 void TimerInitialize(void);
 
-/** Pause system and running application for the specified periods of 50 ms.
- * @param Periods_Count How many periods of 50 ms to wait.
+/** Pause system and running application for the specified periods of 1 ms.
+ * @param Periods_Count How many periods of 1 ms to wait.
  */
 void TimerWait(unsigned int Periods_Count);
 

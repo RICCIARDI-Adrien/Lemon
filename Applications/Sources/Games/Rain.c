@@ -59,7 +59,7 @@ static int Wait(unsigned int Period_Counts)
 		{
 			if (KeyboardIsKeyAvailable() && (KeyboardReadCharacter() == KEYBOARD_KEY_CODE_ESCAPE)) return 1;
 		
-			SystemWait(1);
+			SystemWait(50);
 			Period_Counts--;
 		}
 	}
