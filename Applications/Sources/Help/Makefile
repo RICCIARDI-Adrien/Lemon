@@ -4,8 +4,8 @@ OBJECTS = $(OBJECTS_PATH)/$(PROGRAM_NAME)/Help.o
 all: $(OBJECTS)
 	$(LD) $(OBJECTS) $(LDFLAGS) -o $(BINARIES_PATH)/$(PROGRAM_NAME).bin
 
+clean:
+	rm -rf $(OBJECTS_PATH)/$(PROGRAM_NAME) $(BINARIES_PATH)/$(PROGRAM_NAME).*
+
 $(OBJECTS_PATH)/$(PROGRAM_NAME)/Help.o: Help.c Strings.h
 	$(CC) $(CCFLAGS) -c Help.c -o $(OBJECTS_PATH)/$(PROGRAM_NAME)/Help.o
-
-clean:
-	rm -f $(OBJECTS_PATH)/$(PROGRAM_NAME)/*.o $(BINARIES_PATH)/$(PROGRAM_NAME).*

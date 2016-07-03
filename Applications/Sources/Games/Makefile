@@ -4,6 +4,9 @@ OBJECTS = $(OBJECTS_PATH)/$(PROGRAM_NAME)/Brain_Calculation.o $(OBJECTS_PATH)/$(
 all: $(OBJECTS)
 	$(LD) $(OBJECTS) $(LDFLAGS) -o $(BINARIES_PATH)/$(PROGRAM_NAME).bin
 
+clean:
+	rm -rf $(OBJECTS_PATH)/$(PROGRAM_NAME) $(BINARIES_PATH)/$(PROGRAM_NAME).*
+
 $(OBJECTS_PATH)/$(PROGRAM_NAME)/Brain_Calculation.o: Brain_Calculation.c Games.h Strings.h
 	$(CC) $(CCFLAGS) -c Brain_Calculation.c -o $(OBJECTS_PATH)/$(PROGRAM_NAME)/Brain_Calculation.o
 
@@ -27,6 +30,3 @@ $(OBJECTS_PATH)/$(PROGRAM_NAME)/Rain.o: Rain.c Games.h Strings.h
 
 $(OBJECTS_PATH)/$(PROGRAM_NAME)/Submarine.o: Submarine.c Games.h Strings.h
 	$(CC) $(CCFLAGS) -c Submarine.c -o $(OBJECTS_PATH)/$(PROGRAM_NAME)/Submarine.o
-
-clean:
-	rm -f $(OBJECTS_PATH)/$(PROGRAM_NAME)/*.o $(BINARIES_PATH)/$(PROGRAM_NAME).*

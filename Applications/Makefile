@@ -28,10 +28,14 @@ export LDFLAGS
 #------------------------------------------------------------------------------------------------------------------------------
 # Private functions
 #------------------------------------------------------------------------------------------------------------------------------
-# Display the name of the program being compiled
-# @param $(1) The program name
-define DisplayProgramToCompile
+# Prepare the build environment for the program compilation and display the name of the program being compiled
+# @param $(1) The program name to display (can contain spaces)
+# @param $(2) The build directory name (must be a valid file system path)
+define StartProgramBuild
+	@# Display the name of the program being compiled
 	@printf "\033[33mCompiling $(1)...\033[0m\n"
+	@# Create the program build directory
+	@mkdir -p $(OBJECTS_PATH)/$(2)
 endef
 
 # Append the Lemon file header telling the system that the program is executable
@@ -58,7 +62,7 @@ $(SERIAL_PORT_SERVER): $(TOOLS_PATH)/Serial_Port_Server.c
 # Benchmark
 #------------------------------------------------------------------------------------------------------------------------------
 benchmark:
-	@$(call DisplayProgramToCompile,Benchmark)
+	@$(call StartProgramBuild,Benchmark,Benchmark)
 	@cd $(SOURCES_PATH)/Benchmark && $(MAKE)
 	@$(call AppendExecutableHeader,Benchmark)
 
@@ -72,7 +76,7 @@ benchmark_download: $(SERIAL_PORT_SERVER)
 # Games
 #------------------------------------------------------------------------------------------------------------------------------
 games:
-	@$(call DisplayProgramToCompile,Games)
+	@$(call StartProgramBuild,Games,Games)
 	@cd $(SOURCES_PATH)/Games && $(MAKE)
 	@$(call AppendExecutableHeader,Games)
 
@@ -86,7 +90,7 @@ games_download: $(SERIAL_PORT_SERVER)
 # Help
 #------------------------------------------------------------------------------------------------------------------------------
 help:
-	@$(call DisplayProgramToCompile,Help)
+	@$(call StartProgramBuild,Help,Help)
 	@cd $(SOURCES_PATH)/Help && $(MAKE)
 	@$(call AppendExecutableHeader,Help)
 
@@ -100,7 +104,7 @@ help_download: $(SERIAL_PORT_SERVER)
 # Tests
 #------------------------------------------------------------------------------------------------------------------------------
 tests:
-	@$(call DisplayProgramToCompile,Tests)
+	@$(call StartProgramBuild,Tests,Tests)
 	@cd $(SOURCES_PATH)/Tests && $(MAKE)
 	@$(call AppendExecutableHeader,Test_Display_ASCII_Characters)
 	@$(call AppendExecutableHeader,Test_Protection_Check)
@@ -122,7 +126,7 @@ tests_download: $(SERIAL_PORT_SERVER)
 # Text editor
 #------------------------------------------------------------------------------------------------------------------------------
 text_editor:
-	@$(call DisplayProgramToCompile,Text editor)
+	@$(call StartProgramBuild,Text editor,Text_Editor)
 	@cd $(SOURCES_PATH)/Text_Editor && $(MAKE)
 	@$(call AppendExecutableHeader,Text_Editor)
 
@@ -136,7 +140,7 @@ text_editor_download: $(SERIAL_PORT_SERVER)
 # UNIX commands
 #------------------------------------------------------------------------------------------------------------------------------
 unix_commands:
-	@$(call DisplayProgramToCompile,UNIX commands)
+	@$(call StartProgramBuild,UNIX commands,UNIX_Commands)
 	@cd $(SOURCES_PATH)/UNIX_Commands && $(MAKE)
 	@$(call AppendExecutableHeader,UNIX_Commands)
 

@@ -6,7 +6,6 @@ Système
 -------
 
 - même variable CONFIGURATION_IS_DEBUG_ENABLED dans MBR ?
-- bouger variables dans kernel.h vers configuration.h
 - modif timer pour 60Hz pour jeux (reload value = 1193)
 
 Doc
@@ -46,8 +45,6 @@ Applications
 - optimiser système de build
 
 - utiliser api buffer pour affichage éditeur de texte
-
-- créer règle dans makefile principal pour générer automatiquement le dossier dans Objects
 
 Installer
 ---------
