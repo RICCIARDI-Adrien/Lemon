@@ -19,12 +19,15 @@
 #define SUBMARINE_OBSTACLE_COLOR SCREEN_MAKE_COLOR(SCREEN_COLOR_BROWN, SCREEN_COLOR_BROWN)
 
 /** The frequency at which to generate obstacles. */
-#define SUBMARINE_OBSTACLES_GENERATION_FREQUENCY_DIVIDER 15
+#define SUBMARINE_OBSTACLES_GENERATION_FREQUENCY_DIVIDER 12
 /** The frequency at which the scene is scrolled. */
-#define SUBMARINE_SCENE_SCROLLING_FREQUENCY_DIVIDER 130
+#define SUBMARINE_SCENE_SCROLLING_FREQUENCY_DIVIDER 4
 
 /** The player column location. */
 #define SUBMARINE_PLAYER_COLUMN 3
+
+/** How many time to wait between two frames to achieve a 60Hz frame rate. */
+#define SUBMARINE_FRAME_PERIOD_MILLISECONDS 16
 
 //-------------------------------------------------------------------------------------------------
 // Private variables
@@ -90,6 +93,7 @@ void Submarine(void)
 {
 	int Scene_Scrolling_Frequency_Divider = 0, Is_Player_Dead = 0, Player_Row = SCREEN_ROWS_COUNT / 2; // Center the player
 	unsigned char Player_Color = SUBMARINE_ALIVE_PLAYER_COLOR;
+	unsigned int Start_Time, End_Time, Time_To_Wait;
 	
 	RandomInitialize();
 	
@@ -100,6 +104,8 @@ void Submarine(void)
 	
 	while (1)
 	{
+		Start_Time = SystemGetTimerValue();
+		
 		// Clear player trace before the screen is scrolled or the player moved
 		Submarine_Screen_Buffer[Player_Row][SUBMARINE_PLAYER_COLUMN].Color = SUBMARINE_SEA_COLOR;
 		
@@ -154,5 +160,10 @@ void Submarine(void)
 			while (KeyboardReadCharacter() != KEYBOARD_KEY_CODE_ESCAPE);
 			return;
 		}
+		
+		// Wait enough time to make the game work at the desired refresh rate
+		End_Time = SystemGetTimerValue();
+		Time_To_Wait = SUBMARINE_FRAME_PERIOD_MILLISECONDS - (End_Time - Start_Time); // TODO Handle roll-over, even if the system needs to be booted for 49 days for it to happen
+		if (Time_To_Wait <= SUBMARINE_FRAME_PERIOD_MILLISECONDS) SystemWait(Time_To_Wait); // Do not wait if the frame time has elapsed yet
 	}
 }
