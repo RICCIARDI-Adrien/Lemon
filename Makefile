@@ -72,10 +72,11 @@ sdk:
 # Copy the installation image to the floppy disk
 floppy:
 	@if [ ! -e Installer/Binaries/Lemon_Installer_Floppy_Image.img ]; then printf "\033[31mThe installer floppy image has not been generated. Run 'make' before calling 'make floppy'.\033[0m\n"; false; fi
+	@if [ $(shell id -u) != "0" ]; then printf "\033[31mYou must be root to execute this command.\033[0m\n"; false; fi
 	@printf "Writing data to floppy...\n"
-	@sudo dd if=Installer/Binaries/Lemon_Installer_Floppy_Image.img of=/dev/fd0
+	@dd if=Installer/Binaries/Lemon_Installer_Floppy_Image.img of=/dev/fd0
 	@printf "Reading back data...\n"
-	@sudo dd if=/dev/fd0 of=/tmp/Lemon_Floppy_Image.img
+	@dd if=/dev/fd0 of=/tmp/Lemon_Floppy_Image.img
 	@printf "Verifying data...\n"
 	@# The diff command will return 1 if the images are different, making the rule fail
 	@diff Installer/Binaries/Lemon_Installer_Floppy_Image.img /tmp/Lemon_Floppy_Image.img
