@@ -21,7 +21,7 @@ include ../System/Makefile_Core.mk
 OBJECTS_SHELL = $(PATH_OBJECTS)/Shell.o $(PATH_OBJECTS)/Shell_Partition_Menu.o
 OBJECTS = $(OBJECTS_CORE) $(OBJECTS_DRIVERS) $(OBJECTS_FILE_SYSTEM) $(OBJECTS_SHELL)
 
-all: clean Tools/Binaries_To_Header_Converter.out Convert_Files $(PATH_OBJECTS)/MBR.bin $(OBJECTS)
+all: clean Tools/Binaries_To_Header_Converter.out convert_files $(PATH_OBJECTS)/MBR.bin $(OBJECTS)
 	######## Linking installer ########
 	$(LD) $(LDFLAGS) $(OBJECTS) -o $(PATH_OBJECTS)/Kernel.bin
 	######## Creating floppy image ########
@@ -37,13 +37,21 @@ all: clean Tools/Binaries_To_Header_Converter.out Convert_Files $(PATH_OBJECTS)/
 	######## Build successful ########
 	@ls -l $(PATH_OBJECTS)/Kernel.bin | awk '{print "Installer size : " $$5 + 512 " bytes"}'
 
+# Make the clean rule always call the clean_installer_specific_files one
+clean: clean_installer_specific_files
+clean_installer_specific_files:
+	@# Clean the tools too to allow the Lemon directory to be copied on another machine (possibly running another architecture), so the old and bad binary won't be used on the new architecture
+	rm -f $(BINARIES_TO_HEADER_CONVERTER)
+	@# Clean generated images
+	rm -f $(PATH_BINARIES)/*
+
 #------------------------------------------------------------------------------------------------------------------------------
 # Converter tool program
 #------------------------------------------------------------------------------------------------------------------------------
 $(BINARIES_TO_HEADER_CONVERTER): Tools/Binaries_To_Header_Converter.c
 	gcc -W -Wall Tools/Binaries_To_Header_Converter.c -o $(BINARIES_TO_HEADER_CONVERTER)
 
-Convert_Files:
+convert_files:
 	######## Embed applications data into installer image ########
 	@$(BINARIES_TO_HEADER_CONVERTER) Tools/Binaries_To_Header_Converter_List.txt $(PATH_INSTALLER_SOURCES)/Shell/Embedded_Files_Data.h
 
