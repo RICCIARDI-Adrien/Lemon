@@ -91,7 +91,7 @@ int FileOpen(char *String_File_Name, char Opening_Mode, unsigned int *File_Descr
  * @return ERROR_CODE_FILE_NOT_OPENED if the file is not opened,
  * @return ERROR_CODE_BAD_OPENING_MODE if the file is not opened in read mode.
  */
-int FileRead(unsigned int File_Descriptor_Index, unsigned char *Pointer_Buffer, unsigned int Bytes_Count, unsigned int *Pointer_Bytes_Read);
+int FileRead(unsigned int File_Descriptor_Index, void *Pointer_Buffer, unsigned int Bytes_Count, unsigned int *Pointer_Bytes_Read);
 
 /** Write data to an opened file.
  * @param File_Descriptor_Index The file descriptor identifying the file.
@@ -103,7 +103,7 @@ int FileRead(unsigned int File_Descriptor_Index, unsigned char *Pointer_Buffer, 
  * @return ERROR_CODE_BAD_OPENING_MODE if the file is not opened in write mode,
  * @return ERROR_CODE_BLOCKS_LIST_FULL if there is no more free blocks in the Blocks List and the data could not be written.
  */
-int FileWrite(unsigned int File_Descriptor_Index, unsigned char *Pointer_Buffer, unsigned int Bytes_Count);
+int FileWrite(unsigned int File_Descriptor_Index, void *Pointer_Buffer, unsigned int Bytes_Count);
 
 /** Close a file. 
  * @param File_Descriptor_Index Index of the opened file (do nothing if the file was not opened).

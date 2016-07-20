@@ -196,7 +196,7 @@ static inline void ShellLoadAndStartProgram(char *String_Program_Name)
 	}
 	
 	// Load the program code
-	FileRead(File_Descriptor, (unsigned char *) CONFIGURATION_USER_SPACE_PROGRAM_LOAD_ADDRESS, Program_Size - sizeof(Program_Header), &Temp_Double_Word);
+	FileRead(File_Descriptor, (void *) CONFIGURATION_USER_SPACE_PROGRAM_LOAD_ADDRESS, Program_Size - sizeof(Program_Header), &Temp_Double_Word);
 	
 	// Copy command line arguments to user space
 	memcpy(Pointer_Command_Line_Arguments, &Command_Line_Arguments, sizeof(Command_Line_Arguments));

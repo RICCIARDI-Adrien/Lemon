@@ -268,10 +268,11 @@ int FileOpen(char *String_File_Name, char Opening_Mode, unsigned int *Pointer_Fi
 	return ERROR_CODE_NO_ERROR;
 }
 
-int FileRead(unsigned int File_Descriptor_Index, unsigned char *Pointer_Buffer, unsigned int Bytes_Count, unsigned int *Pointer_Bytes_Read)
+int FileRead(unsigned int File_Descriptor_Index, void *Pointer_Buffer, unsigned int Bytes_Count, unsigned int *Pointer_Bytes_Read)
 {
 	TFileDescriptor *Pointer_File_Descriptor;
 	unsigned int Bytes_To_Read;
+	unsigned char *Pointer_Buffer_Byte = Pointer_Buffer;
 	
 	// Is there something to read ?
 	if (Bytes_Count == 0)
@@ -310,8 +311,8 @@ int FileRead(unsigned int File_Descriptor_Index, unsigned char *Pointer_Buffer, 
 		}
 	
 		// Copy bytes one at a time into the destination buffer
-		*Pointer_Buffer = Pointer_File_Descriptor->Buffer[Pointer_File_Descriptor->Offset_Buffer];
-		Pointer_Buffer++;
+		*Pointer_Buffer_Byte = Pointer_File_Descriptor->Buffer[Pointer_File_Descriptor->Offset_Buffer];
+		Pointer_Buffer_Byte++;
 		Pointer_File_Descriptor->Offset_Buffer++;
 		Bytes_Count--;
 	}
@@ -322,10 +323,11 @@ int FileRead(unsigned int File_Descriptor_Index, unsigned char *Pointer_Buffer, 
 	return ERROR_CODE_NO_ERROR;
 }
 
-int FileWrite(unsigned int File_Descriptor_Index, unsigned char *Pointer_Buffer, unsigned int Bytes_Count)
+int FileWrite(unsigned int File_Descriptor_Index, void *Pointer_Buffer, unsigned int Bytes_Count)
 {
 	TFileDescriptor *Pointer_File_Descriptor;
 	unsigned int New_Block, Written_Bytes_Count;
+	unsigned char *Pointer_Buffer_Byte = Pointer_Buffer;
 
 	// Is the file opened ?
 	if (File_Descriptor_Index >= CONFIGURATION_FILE_SYSTEM_MAXIMUM_OPENED_FILES_COUNT) return ERROR_CODE_BAD_FILE_DESCRIPTOR;
@@ -361,9 +363,9 @@ int FileWrite(unsigned int File_Descriptor_Index, unsigned char *Pointer_Buffer,
 		}
 		
 		// Copy the byte to the cache
-		Pointer_File_Descriptor->Buffer[Pointer_File_Descriptor->Offset_Buffer] = *Pointer_Buffer;
+		Pointer_File_Descriptor->Buffer[Pointer_File_Descriptor->Offset_Buffer] = *Pointer_Buffer_Byte;
 		Pointer_File_Descriptor->Offset_Buffer++;
-		Pointer_Buffer++;
+		Pointer_Buffer_Byte++;
 		Bytes_Count--;
 	}
 	
