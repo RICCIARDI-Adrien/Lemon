@@ -6,7 +6,6 @@ Système
 -------
 
 - même variable CONFIGURATION_IS_DEBUG_ENABLED dans MBR ?
-- modif timer pour 60Hz pour jeux (reload value = 1193)
 
 Doc
 ---
@@ -35,9 +34,6 @@ modif bibliothèques pour gérer nouveaux codes touches
 
 - utiliser les fonctions de conversion de string pour les fonctions screenwriteint...
 
-- modif fonction wait pour attendre en ms si timer modif à 60Hz
-
-
 Applications
 ------------
 
@@ -50,4 +46,3 @@ Installer
 ---------
 
 - mettre .h dans Includes
-- supprimer Binary_Header_Converter.out dans make clean

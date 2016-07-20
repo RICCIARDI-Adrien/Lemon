@@ -122,6 +122,9 @@ void __attribute__((section(".init"))) KernelEntryPoint(void)
 			KernelWaitForEnterKey();
 			KeyboardRebootSystem();
 		}
+		
+		// Make the file API usable (allow the shell to load programs)
+		FileResetFileDescriptors();
 	#endif
 	
 	// Show the welcoming message once at the system boot
@@ -145,11 +148,6 @@ void KernelStartShell(void)
 
 TErrorCode KernelStartProgram(void)
 {
-	unsigned int *Pointer_Magic_Number = (unsigned int *) CONFIGURATION_USER_SPACE_PROGRAM_LOAD_ADDRESS;
-	
-	// Is the magic number valid ?
-	if (*Pointer_Magic_Number != CONFIGURATION_USER_SPACE_PROGRAM_MAGIC_NUMBER) return ERROR_CODE_FILE_NOT_EXECUTABLE;
-	
 	// Reset files opened by the previous program
 	FileResetFileDescriptors();
 	

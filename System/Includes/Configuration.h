@@ -35,12 +35,12 @@
 #define CONFIGURATION_USER_SPACE_SIZE ((CONFIGURATION_SYSTEM_TOTAL_RAM_SIZE_MEGA_BYTES - 1) * 1024 * 1024) // Keep the first megabyte for the kernel
 /** User space base address. This reserves the first MB of RAM for the kernel. */
 #define CONFIGURATION_USER_SPACE_ADDRESS 0x100000
-/** Program loading address in the user space. */
-#define CONFIGURATION_USER_SPACE_PROGRAM_LOAD_USER_ADDRESS 0x100
+/** A program header size. */
+#define CONFIGURATION_USER_SPACE_PROGRAM_HEADER_SIZE 4
 /** Instruction pointer start address for user program. */
-#define CONFIGURATION_USER_SPACE_PROGRAM_ENTRY_POINT_USER_ADDRESS 0x104 // The first 4 bytes contain the executable magic number
+#define CONFIGURATION_USER_SPACE_PROGRAM_ENTRY_POINT 0x100
 /** User program will be loaded at this address. 256 bytes are reserved to store command line arguments. */
-#define CONFIGURATION_USER_SPACE_PROGRAM_LOAD_ADDRESS (CONFIGURATION_USER_SPACE_ADDRESS + CONFIGURATION_USER_SPACE_PROGRAM_LOAD_USER_ADDRESS)
+#define CONFIGURATION_USER_SPACE_PROGRAM_LOAD_ADDRESS (CONFIGURATION_USER_SPACE_ADDRESS + CONFIGURATION_USER_SPACE_PROGRAM_ENTRY_POINT)
 /** Executable program magic number. */
 #define CONFIGURATION_USER_SPACE_PROGRAM_MAGIC_NUMBER 0x78563412
 

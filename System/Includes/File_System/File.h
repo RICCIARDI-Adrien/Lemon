@@ -63,15 +63,6 @@ int FileDelete(char *String_File_Name);
  */
 unsigned int FileSize(char *String_File_Name);
 
-/** Load a whole file into memory.
- * @param String_File_Name The name of the file to load.
- * @param Pointer_Buffer The buffer where to store the loaded file.
- * @return ERROR_CODE_NO_ERROR if the file was correctly loaded,
- * @return ERROR_CODE_FILE_NOT_FOUND if the file was not found,
- * @return ERROR_CODE_FILE_LARGER_THAN_RAM if the file size is greater than the available userspace RAM.
- */
-int FileLoad(char *String_File_Name, void *Pointer_Buffer);
-
 /** Reset all files (without closing them) to prevent a user program from opening all files and never closing them, resulting in an unusable file system. */
 void FileResetFileDescriptors(void);
 

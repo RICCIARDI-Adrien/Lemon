@@ -185,34 +185,6 @@ unsigned int FileSize(char *String_File_Name)
 	return Pointer_Files_List_Entry->Size_Bytes;
 }
 
-int FileLoad(char *String_File_Name, void *Pointer_Buffer)
-{
-	TFilesListEntry *Pointer_Files_List_Entry;
-	unsigned int File_Size_Bytes, File_Size_Blocks;
-	
-	// Check if file name is valid
-	if (String_File_Name[0] == 0) return ERROR_CODE_FILE_NOT_FOUND;
-	
-	// Get corresponding file entry
-	Pointer_Files_List_Entry = FileSystemReadFilesListEntry(String_File_Name);
-	if (Pointer_Files_List_Entry == NULL) return ERROR_CODE_FILE_NOT_FOUND;
-	
-	// Do program size checks
-	File_Size_Bytes = Pointer_Files_List_Entry->Size_Bytes;
-	// Nothing more to do if the file is empty
-	if (File_Size_Bytes == 0) return ERROR_CODE_NO_ERROR;
-	// Is there enough room in RAM to store the file ?
-	if (File_Size_Bytes > CONFIGURATION_USER_SPACE_SIZE - CONFIGURATION_USER_SPACE_PROGRAM_LOAD_USER_ADDRESS) return ERROR_CODE_FILE_LARGER_THAN_RAM;
-	
-	// Compute file size in blocks
-	File_Size_Blocks = File_Size_Bytes / CONFIGURATION_FILE_SYSTEM_BLOCK_SIZE_BYTES;
-	if ((File_Size_Bytes % CONFIGURATION_FILE_SYSTEM_BLOCK_SIZE_BYTES) != 0) File_Size_Blocks++;
-	
-	// Load the whole file
-	FileSystemReadBlocks(Pointer_Files_List_Entry->Start_Block, File_Size_Blocks, Pointer_Buffer);
-	return ERROR_CODE_NO_ERROR;
-}
-
 void FileResetFileDescriptors(void)
 {
 	int i;

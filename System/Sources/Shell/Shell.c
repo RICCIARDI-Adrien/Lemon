@@ -2,6 +2,7 @@
  * @see Shell.h for description.
  * @author Adrien RICCIARDI
  */
+#include <Configuration.h>
 #include <Drivers/Driver_Keyboard.h>
 #include <Drivers/Driver_Screen.h>
 #include <Error_Codes.h>
@@ -27,7 +28,7 @@ typedef struct __attribute__((packed))
 {
 	int Arguments_Count; //! Contain argc value.
 	char *Pointer_Arguments[SHELL_MAXIMUM_ARGUMENTS_COUNT]; //! The *argv[] representation.
-	char Arguments_Value[CONFIGURATION_USER_SPACE_PROGRAM_LOAD_USER_ADDRESS - ARGUMENTS_VALUE_OFFSET]; //! Hold arguments values. Fill the remaining bytes of the 256-byte area before program beginning.
+	char Arguments_Value[CONFIGURATION_USER_SPACE_PROGRAM_ENTRY_POINT - ARGUMENTS_VALUE_OFFSET]; //! Hold arguments values. Fill the remaining bytes of the 256-byte area before program beginning.
 } TCommandLineArguments;
 
 //-------------------------------------------------------------------------------------------------
@@ -156,14 +157,64 @@ static inline void ShellSplitCommandLine(char *Pointer_Buffer)
 	} while ((*Pointer_Buffer != 0) && (Command_Line_Arguments.Arguments_Count < SHELL_MAXIMUM_ARGUMENTS_COUNT));
 }
 
+/** Load a program file into memory and execute it.
+ * @param String_Program_Name The program name in the file system.
+ * @note The function returns if an error occurs, or never return if the program was successfully started.
+ */
+static inline void ShellLoadAndStartProgram(char *String_Program_Name)
+{
+	unsigned int File_Descriptor, Program_Size, Temp_Double_Word, Program_Header; // The program header can evolve to a structure when needed
+	TCommandLineArguments *Pointer_Command_Line_Arguments = (TCommandLineArguments *) CONFIGURATION_USER_SPACE_ADDRESS;
+	int i, Offset;
+	
+	// Set error color only one time
+	ScreenSetColor(SCREEN_COLOR_RED);
+	
+	// Is the file existing ?
+	if (FileOpen(String_Program_Name, 'r', &File_Descriptor) != ERROR_CODE_NO_ERROR)
+	{
+		ScreenWriteString(STRING_SHELL_ERROR_UNKNOWN_COMMAND);
+		return;
+	}
+	
+	// Check the program size
+	Program_Size = FileSize(String_Program_Name);
+	if (Program_Size > CONFIGURATION_USER_SPACE_SIZE - CONFIGURATION_USER_SPACE_PROGRAM_LOAD_ADDRESS)
+	{
+		ScreenWriteString(STRING_SHELL_ERROR_FILE_TO_LOAD_LARGER_THAN_RAM);
+		FileClose(File_Descriptor);
+		return;
+	}
+	
+	// Load and check the file header
+	FileRead(File_Descriptor, &Program_Header, sizeof(Program_Header), &Temp_Double_Word);
+	if ((Temp_Double_Word != sizeof(Program_Header)) || (Program_Header != CONFIGURATION_USER_SPACE_PROGRAM_MAGIC_NUMBER))
+	{
+		ScreenWriteString(STRING_SHELL_ERROR_FILE_NOT_EXECUTABLE);
+		FileClose(File_Descriptor);
+		return;
+	}
+	
+	// Load the program code
+	FileRead(File_Descriptor, (unsigned char *) CONFIGURATION_USER_SPACE_PROGRAM_LOAD_ADDRESS, Program_Size - sizeof(Program_Header), &Temp_Double_Word);
+	
+	// Copy command line arguments to user space
+	memcpy(Pointer_Command_Line_Arguments, &Command_Line_Arguments, sizeof(Command_Line_Arguments));
+	// Compute the offset between user space argv[] pointers and kernel space ones
+	Offset = (unsigned int) Command_Line_Arguments.Arguments_Value - ARGUMENTS_VALUE_OFFSET;
+	// Adjust argv[] pointers to fit into user space
+	for (i = 0; i < Command_Line_Arguments.Arguments_Count; i++) Pointer_Command_Line_Arguments->Pointer_Arguments[i] -= Offset;
+	
+	// Start the program
+	KernelStartProgram();
+}
+
 //-------------------------------------------------------------------------------------------------
 // Public functions
 //-------------------------------------------------------------------------------------------------
 void Shell(void)
 {
 	char String_Buffer[SHELL_MAXIMUM_LINE_LENGTH + 1]; // Length of a console line + 1
-	int i, Offset;
-	TCommandLineArguments *Pointer_Command_Line_Arguments = (TCommandLineArguments *) CONFIGURATION_USER_SPACE_ADDRESS;
 	
 	// Main loop
 	while (1)
@@ -253,38 +304,6 @@ void Shell(void)
 		//====================================================================================================================
 		// Execute a program or tell the user that the command is unknown
 		//====================================================================================================================
-		else 
-		{
-			// Clear program magic number area so newly loaded program must have a valid magic number
-			memset((void *) CONFIGURATION_USER_SPACE_PROGRAM_LOAD_ADDRESS, 0, sizeof(CONFIGURATION_USER_SPACE_PROGRAM_MAGIC_NUMBER));
-			
-			// Set error color only one time
-			ScreenSetColor(SCREEN_COLOR_RED);
-			
-			switch (FileLoad(Command_Line_Arguments.Pointer_Arguments[0], (void *) CONFIGURATION_USER_SPACE_PROGRAM_LOAD_ADDRESS))
-			{
-				case ERROR_CODE_FILE_NOT_FOUND:
-					ScreenWriteString(STRING_SHELL_ERROR_UNKNOWN_COMMAND);
-					break;
-					
-				case ERROR_CODE_FILE_LARGER_THAN_RAM:
-					ScreenWriteString(STRING_SHELL_ERROR_FILE_TO_LOAD_LARGER_THAN_RAM);
-					break;
-			
-				// No error
-				default:
-					// Copy command line arguments to user space
-					memcpy(Pointer_Command_Line_Arguments, &Command_Line_Arguments, sizeof(Command_Line_Arguments));
-					
-					// Compute the offset between user space argv[] pointers and kernel space ones
-					Offset = (unsigned int) Command_Line_Arguments.Arguments_Value - ARGUMENTS_VALUE_OFFSET;
-					// Adjust argv[] pointers to fit into user space
-					for (i = 0; i < Command_Line_Arguments.Arguments_Count; i++) Pointer_Command_Line_Arguments->Pointer_Arguments[i] -= Offset;
-					
-					// Try to start the program
-					if (KernelStartProgram() == ERROR_CODE_FILE_NOT_EXECUTABLE) ScreenWriteString(STRING_SHELL_ERROR_FILE_NOT_EXECUTABLE);
-					break;
-			}
-		}
+		else ShellLoadAndStartProgram(Command_Line_Arguments.Pointer_Arguments[0]);
 	}
 }
