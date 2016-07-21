@@ -8,6 +8,7 @@
 #include <Drivers/Driver_UART.h>
 #include <Error_Codes.h>
 #include <File_System/File.h>
+#include <File_System/File_System.h>
 #include <Kernel.h> // Needed for kernel constants
 #include <Shell/Shell_Commands.h>
 #include <Standard_Functions.h> // Needed by itoa()
@@ -33,6 +34,14 @@ void ShellCommandDownload(void)
 	char String_File_Name[CONFIGURATION_FILE_NAME_LENGTH + 1], String_User_Answer[2];
 	unsigned int Download_Bytes_Count = 0, i;
 	unsigned char *Pointer_Downloaded_Data;
+	
+	// Is there any remaining room in the Files List ? Do not start the download if the file system can't store the file
+	if (FileSystemGetFreeFilesListEntriesCount() == 0)
+	{
+		ScreenSetColor(SCREEN_COLOR_RED);
+		ScreenWriteString(STRING_SHELL_DOWNLOAD_NO_MORE_FILE_LIST_ENTRY);
+		return;
+	}
 	
 	// Configure the UART every time (to avoid problem if an other application modifies UART settings)
 	UARTInitialize(UART_DISABLE_PARITY, UART_BAUD_RATE_115200);
