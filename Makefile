@@ -39,6 +39,10 @@ help:
 	@echo "- SYSTEM_HARD_DISK_TYPE : choose on which hard disk type the system will be installed"
 	@echo "    + ide  (default value)"
 	@echo "    + sata"
+	@echo "- SYSTEM_RAM_SIZE : how many RAM can be used by the whole system (in mega bytes), use an integer value from 2 to 4096"
+	@echo "    + 2 (minimum value)"
+	@echo "    + 16 (default value)"
+	@echo "    + 4096 (maximum value)"
 	@echo
 
 sdk:

@@ -10,6 +10,12 @@ else
 	CCFLAGS += -DCONFIGURATION_IS_DEBUG_ENABLED=0
 endif
 
+# Set a default RAM size if none is specified
+ifeq ($(SYSTEM_RAM_SIZE),)
+	SYSTEM_RAM_SIZE = 16
+endif
+CCFLAGS += -DCONFIGURATION_SYSTEM_TOTAL_RAM_SIZE_MEGA_BYTES=$(SYSTEM_RAM_SIZE)
+
 OBJECTS_CORE = $(PATH_OBJECTS)/Architecture.o $(PATH_OBJECTS)/Debug.o $(PATH_OBJECTS)/Hardware_Functions.o $(PATH_OBJECTS)/Kernel.o $(PATH_OBJECTS)/Standard_Functions.o $(PATH_OBJECTS)/System_Calls.o
 OBJECTS_DRIVERS =  $(PATH_OBJECTS)/Driver_Keyboard.o $(PATH_OBJECTS)/Driver_PIC.o $(PATH_OBJECTS)/Driver_Screen.o $(PATH_OBJECTS)/Driver_Timer.o $(PATH_OBJECTS)/Driver_UART.o
 OBJECTS_FILE_SYSTEM = $(PATH_OBJECTS)/File.o $(PATH_OBJECTS)/File_System.o

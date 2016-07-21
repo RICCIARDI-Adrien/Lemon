@@ -5,9 +5,16 @@
 #ifndef H_STRINGS_H
 #define H_STRINGS_H
 
+#include <Configuration.h>
+
 //-------------------------------------------------------------------------------------------------
-// Constants
+// Constants and macros
 //-------------------------------------------------------------------------------------------------
+/** Convert the macro identifier to a C string. */
+#define STRING_CONVERT_MACRO_NAME_TO_STRING(X) #X
+/** Convert the macro value to a C string. The preprocessor needs two passes to do the conversion, so the STRING_CONVERT_MACRO_NAME_TO_STRING() is needed. */
+#define STRING_CONVERT_MACRO_VALUE_TO_STRING(X) STRING_CONVERT_MACRO_NAME_TO_STRING(X)
+
 // English
 #if defined(CONFIGURATION_LANGUAGE_ENGLISH)
 	// TODO
@@ -82,7 +89,9 @@
 	#define STRING_SHELL_FILE_SIZE_SHOW_SIZE_2 " octets.\n"
 
 	// Shell version command
-	#define STRING_SHELL_VERSION "Version du syst\212me : 2.3.2 (" __DATE__ ", " __TIME__ ")\nCopyright (C) Adrien Ricciardi\n"
+	#define STRING_SHELL_VERSION "Version du syst\212me : 2.3.2 (" __DATE__ ", " __TIME__ ")\n" \
+		"Copyright (C) Adrien Ricciardi\n" \
+		"Quantit\202 de RAM utilisable : " STRING_CONVERT_MACRO_VALUE_TO_STRING(CONFIGURATION_SYSTEM_TOTAL_RAM_SIZE_MEGA_BYTES) " Mo\n"
 
 	// Shell error strings
 	#define STRING_SHELL_ERROR_FILE_NOT_EXECUTABLE "Ce fichier n'est pas un programme !\n"

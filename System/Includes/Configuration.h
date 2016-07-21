@@ -23,8 +23,6 @@
 #define CONFIGURATION_FILE_NAME_LENGTH 12
 
 // RAM management
-/** Size of the whole RAM that the system can use (in MB). */
-#define CONFIGURATION_SYSTEM_TOTAL_RAM_SIZE_MEGA_BYTES 16
 /** The address the MBR is loaded to by the BIOS. */
 #define CONFIGURATION_SYSTEM_MBR_LOAD_ADDRESS 0x7C00
 /** Kernel stack address. */
