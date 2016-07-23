@@ -37,57 +37,6 @@ static TFileDescriptor File_Descriptors[CONFIGURATION_FILE_SYSTEM_MAXIMUM_OPENED
 //-------------------------------------------------------------------------------------------------
 // Public functions
 //-------------------------------------------------------------------------------------------------
-// Algorithm :
-// Check if the file exists yet
-//      If true, check if (Blocks_List_Free_Space + Found_File_Size) is enough to store the file
-//            If false, exit function with error code (so we keep old file version)
-//      If false, check if there is enough room in Blocks List to store the file
-//            If false, exit function with error code.
-// Store file.
-int FileCreate(char *String_File_Name, unsigned char *Pointer_Buffer, unsigned int Buffer_Size_Bytes)
-{
-	TFilesListEntry *Pointer_Files_List_Entry;
-	unsigned int New_File_Size_Blocks, Old_File_Size_Blocks;
-	
-	// Check if the new file name is valid
-	if (String_File_Name[0] == 0) return ERROR_CODE_BAD_FILE_NAME;
-	
-	// Compute new file size in blocks now because it is needed further
-	New_File_Size_Blocks = Buffer_Size_Bytes / CONFIGURATION_FILE_SYSTEM_BLOCK_SIZE_BYTES;
-	if ((Buffer_Size_Bytes % CONFIGURATION_FILE_SYSTEM_BLOCK_SIZE_BYTES) != 0) New_File_Size_Blocks++;
-	
-	// Does the file exist yet ?
-	Pointer_Files_List_Entry = FileSystemReadFilesListEntry(String_File_Name);
-	// Yes
-	if (Pointer_Files_List_Entry != NULL)
-	{
-		// Compute old file size in blocks
-		Old_File_Size_Blocks =  Pointer_Files_List_Entry->Size_Bytes / CONFIGURATION_FILE_SYSTEM_BLOCK_SIZE_BYTES;
-		if ((Pointer_Files_List_Entry->Size_Bytes % CONFIGURATION_FILE_SYSTEM_BLOCK_SIZE_BYTES) != 0) Old_File_Size_Blocks++;
-		
-		// Check if free block's space + file size is enough to store new file
-		if (FileSystemGetFreeBlocksCount() + Old_File_Size_Blocks < New_File_Size_Blocks) return ERROR_CODE_BLOCKS_LIST_FULL;
-		
-		// Delete file
-		FileDelete(String_File_Name);
-	}
-	// No, check if free blocks space is enough to store files
-	else if (FileSystemGetFreeBlocksCount() < New_File_Size_Blocks) return ERROR_CODE_BLOCKS_LIST_FULL;
-	
-	// Create a new entry in the Files List
-	if (FileSystemWriteFilesListEntry(String_File_Name, &Pointer_Files_List_Entry) == ERROR_CODE_FILES_LIST_FULL) return ERROR_CODE_FILES_LIST_FULL;
-	// Fill the file informations
-	Pointer_Files_List_Entry->Start_Block = FileSystemGetFirstFreeBlock();
-	Pointer_Files_List_Entry->Size_Bytes = Buffer_Size_Bytes;
-	
-	// Write data to disk
-	FileSystemWriteBlocks(Pointer_Files_List_Entry->Start_Block, New_File_Size_Blocks, Pointer_Buffer);
-	FileSystemSave();
-	
-	// No error
-	return ERROR_CODE_NO_ERROR;
-}
-
 int FileExists(char *String_File_Name)
 {
 	// Check if file name is valid

@@ -8,18 +8,6 @@
 //-------------------------------------------------------------------------------------------------
 // Functions
 //-------------------------------------------------------------------------------------------------
-/** Create a new file in one operation.
- * @param String_File_Name Name of the file. If the files already exists it is overwritten by the new one.
- * @param Pointer_Buffer A pointer to a buffer holding the whole file content.
- * @param Buffer_Size_Bytes Size of the buffer in bytes.
- * @return ERROR_CODE_BAD_FILE_NAME if the file name's string is empty,
- * @return ERROR_CODE_BLOCKS_LIST_FULL if there is no more room in the Blocks List,
- * @return ERROR_CODE_FILES_LIST_FULL if there is no more room in the Files List,
- * @return ERROR_CODE_NO_ERROR if the file was successfully created.
- * @note If the file already exists and the new file is bigger than the previous and there is not enough room on disk, the old file version is preserved.
- */
-int FileCreate(char *String_File_Name, unsigned char *Pointer_Buffer, unsigned int Buffer_Size_Bytes);
-
 /** Tell if a file exists or not in hard disk's file system.
  * @param String_File_Name Name of the file.
  * @return 1 if the file exists,

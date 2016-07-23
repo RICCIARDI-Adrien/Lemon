@@ -32,7 +32,7 @@
 void ShellCommandDownload(void)
 {
 	char String_File_Name[CONFIGURATION_FILE_NAME_LENGTH + 1], String_User_Answer[2];
-	unsigned int Download_Bytes_Count = 0, i;
+	unsigned int Download_Bytes_Count = 0, i, File_Descriptor;
 	unsigned char *Pointer_Downloaded_Data;
 	
 	// Is there any remaining room in the Files List ? Do not start the download if the file system can't store the file
@@ -99,6 +99,13 @@ void ShellCommandDownload(void)
 		UARTWriteByte(CODE_DOWNLOAD_ABORT); // Stop transfer
 		return;
 	}
+	// There is not enough room to store the file on the file system
+	if (Download_Bytes_Count > FileSystemGetFreeBlocksCount() * CONFIGURATION_FILE_SYSTEM_BLOCK_SIZE_BYTES)
+	{
+		ScreenWriteString(STRING_SHELL_DOWNLOAD_NO_MORE_BLOCK_LIST_ENTRY);
+		UARTWriteByte(CODE_DOWNLOAD_ABORT); // Stop transfer
+		return;
+	}
 	
 	// Accept the transfer
 	UARTWriteByte(CODE_DOWNLOAD_CONTINUE);
@@ -121,27 +128,37 @@ void ShellCommandDownload(void)
 	{
 		ScreenWriteString(STRING_SHELL_DOWNLOAD_FINAL_QUESTION);
 		KeyboardReadString(String_User_Answer, 1);
-	} while ((String_User_Answer[0] != 's') && (String_User_Answer[0] != 'a'));
-			
+	} while ((String_User_Answer[0] != 's') && (String_User_Answer[0] != 'a')); // TODO use constants that are language dependent
+	
+	// Exit if the user does not want to save the file
+	if (String_User_Answer[0] != 's') return;
+	
 	// Save the file on the hard disk
-	if (String_User_Answer[0] == 's')
+	switch (FileOpen(String_File_Name, 'w', &File_Descriptor))
 	{
-		switch (FileCreate(String_File_Name, (unsigned char *) CONFIGURATION_USER_SPACE_ADDRESS, Download_Bytes_Count))
-		{
-			case  ERROR_CODE_NO_ERROR:
+		case ERROR_CODE_NO_ERROR:
+			if (FileWrite(File_Descriptor, (void *) CONFIGURATION_USER_SPACE_ADDRESS, Download_Bytes_Count) == ERROR_CODE_NO_ERROR)
+			{
+				FileClose(File_Descriptor);
 				ScreenSetColor(SCREEN_COLOR_GREEN);
 				ScreenWriteString(STRING_SHELL_DOWNLOAD_FILE_SAVE_COMPLETED);
-				break;
-				
-			case ERROR_CODE_BAD_FILE_NAME:
-				ScreenSetColor(SCREEN_COLOR_RED);
-				ScreenWriteString(STRING_SHELL_DOWNLOAD_BAD_FILE_NAME);
-				break;
-				
-			default:
+			}
+			else
+			{
+				FileResetFileDescriptors(); // Do not close the file to avoid saving corrupted data
 				ScreenSetColor(SCREEN_COLOR_RED);
 				ScreenWriteString(STRING_SHELL_DOWNLOAD_FILE_SAVE_FAILED);
-				break;
-		}
+			}
+			break;
+		
+		case ERROR_CODE_BAD_FILE_NAME:
+			ScreenSetColor(SCREEN_COLOR_RED);
+			ScreenWriteString(STRING_SHELL_DOWNLOAD_BAD_FILE_NAME);
+			break;
+		
+		default:
+			ScreenSetColor(SCREEN_COLOR_RED);
+			ScreenWriteString(STRING_SHELL_DOWNLOAD_FILE_SAVE_FAILED);
+			break;
 	}
 }

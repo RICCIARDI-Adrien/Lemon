@@ -62,12 +62,13 @@
 	#define STRING_SHELL_DOWNLOAD_NO_MORE_FILE_LIST_ENTRY "Impossible de lancer le t\202l\202chargement : aucun emplacement libre sur le syst\212me de fichiers.\n"
 	#define STRING_SHELL_DOWNLOAD_FILE_SIZE_NULL "Abandon du t\202l\202chargement : il n'y a rien \205 t\202l\202charger.\n"
 	#define STRING_SHELL_DOWNLOAD_FILE_SIZE_TOO_BIG "Abandon du t\202l\202chargement : la taille du fichier est trop importante pour le\nstocker en m\202moire.\n"
+	#define STRING_SHELL_DOWNLOAD_NO_MORE_BLOCK_LIST_ENTRY "Abandon du t\202l\202chargement : il n'y a pas assez de place sur le syst\212me de\nfichiers pour stocker le fichier.\n"
 	#define STRING_SHELL_DOWNLOAD_DOWNLOADING_COMPLETED "T\202l\202chargement termin\202.\n"
 	#define STRING_SHELL_DOWNLOAD_FINAL_QUESTION "\nQue souhaitez-vous faire ? (s)auvegarder, (a)nnuler : "
 	#define STRING_SHELL_DOWNLOAD_ASK_FILE_NAME "Nom du fichier : "
 	#define STRING_SHELL_DOWNLOAD_FILE_SAVE_COMPLETED "Sauvegarde r\202ussie.\n"
 	#define STRING_SHELL_DOWNLOAD_BAD_FILE_NAME "Erreur : nom de fichier incorrect.\n"
-	#define STRING_SHELL_DOWNLOAD_FILE_SAVE_FAILED "Echec de la sauvegarde ! Le syst\212me de fichiers est plein !\n"
+	#define STRING_SHELL_DOWNLOAD_FILE_SAVE_FAILED "Erreur lors de l'\202criture du fichier.\n"
 	
 	// Shell list command
 	#define STRING_SHELL_LIST_WAIT_FOR_USER_INPUT "Appuyez sur une touche pour continuer."
