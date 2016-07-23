@@ -182,21 +182,29 @@ static inline void ShellLoadAndStartProgram(char *String_Program_Name)
 	if (Program_Size > CONFIGURATION_USER_SPACE_SIZE - CONFIGURATION_USER_SPACE_PROGRAM_LOAD_ADDRESS)
 	{
 		ScreenWriteString(STRING_SHELL_ERROR_FILE_TO_LOAD_LARGER_THAN_RAM);
-		FileClose(File_Descriptor);
-		return;
+		goto Exit_Close_File;
 	}
 	
-	// Load and check the file header
-	FileRead(File_Descriptor, &Program_Header, sizeof(Program_Header), &Temp_Double_Word);
+	// Load the file header
+	if (FileRead(File_Descriptor, &Program_Header, sizeof(Program_Header), &Temp_Double_Word) != ERROR_CODE_NO_ERROR)
+	{
+		ScreenWriteString(STRING_SHELL_ERROR_CANT_READ_PROGRAM_HEADER);
+		goto Exit_Close_File;
+	}
+	// Is the file header indicating the file is a program ?
 	if ((Temp_Double_Word != sizeof(Program_Header)) || (Program_Header != CONFIGURATION_USER_SPACE_PROGRAM_MAGIC_NUMBER))
 	{
 		ScreenWriteString(STRING_SHELL_ERROR_FILE_NOT_EXECUTABLE);
-		FileClose(File_Descriptor);
-		return;
+		goto Exit_Close_File;
 	}
 	
 	// Load the program code
-	FileRead(File_Descriptor, (void *) CONFIGURATION_USER_SPACE_PROGRAM_LOAD_ADDRESS, Program_Size - sizeof(Program_Header), &Temp_Double_Word);
+	if (FileRead(File_Descriptor, (void *) CONFIGURATION_USER_SPACE_PROGRAM_LOAD_ADDRESS, Program_Size - sizeof(Program_Header), &Temp_Double_Word) != ERROR_CODE_NO_ERROR)
+	{
+		ScreenWriteString(STRING_SHELL_ERROR_CANT_LOAD_PROGRAM);
+		goto Exit_Close_File;
+	}
+	FileClose(File_Descriptor);
 	
 	// Copy command line arguments to user space
 	memcpy(Pointer_Command_Line_Arguments, &Command_Line_Arguments, sizeof(Command_Line_Arguments));
@@ -207,6 +215,9 @@ static inline void ShellLoadAndStartProgram(char *String_Program_Name)
 	
 	// Start the program
 	KernelStartProgram();
+	
+Exit_Close_File:
+	FileClose(File_Descriptor);
 }
 
 //-------------------------------------------------------------------------------------------------

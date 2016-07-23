@@ -94,9 +94,11 @@
 		"Quantit\202 de RAM utilisable : " STRING_CONVERT_MACRO_VALUE_TO_STRING(CONFIGURATION_SYSTEM_TOTAL_RAM_SIZE_MEGA_BYTES) " Mo\n"
 
 	// Shell error strings
-	#define STRING_SHELL_ERROR_FILE_NOT_EXECUTABLE "Ce fichier n'est pas un programme !\n"
 	#define STRING_SHELL_ERROR_UNKNOWN_COMMAND "Ce programme est introuvable !\n"
-	#define STRING_SHELL_ERROR_FILE_TO_LOAD_LARGER_THAN_RAM "Le syst\212me ne dispose pas d'assez de m\202moire pour lancer ce programme !\n"
+	#define STRING_SHELL_ERROR_CANT_READ_PROGRAM_HEADER "Impossible de lire l'en-t\210te du fichier.\n"
+	#define STRING_SHELL_ERROR_FILE_NOT_EXECUTABLE "Ce fichier n'est pas un programme !\n"
+	#define STRING_SHELL_ERROR_CANT_LOAD_PROGRAM "Impossible de charger le programme en m\202moire.\n"
+	#define STRING_SHELL_ERROR_FILE_TO_LOAD_LARGER_THAN_RAM "Le syst\212me ne dispose pas d'assez de m\202moire pour lancer ce programme.\n"
 #endif
 
 #endif
