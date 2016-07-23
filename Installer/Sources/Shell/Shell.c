@@ -5,10 +5,12 @@
 #include <Drivers/Driver_Hard_Disk.h> // For HardDiskWriteSector() and others
 #include <Drivers/Driver_Keyboard.h>
 #include <Drivers/Driver_Screen.h>
+#include <Error_Codes.h>
 #include <File_System/File.h>
 #include <File_System/File_System.h>
 #include <Standard_Functions.h> // To have atoi()
 #include "Embedded_Files_Data.h"
+#include "Shell.h"
 #include "Shell_Partition_Menu.h"
 #include "Strings.h"
 
@@ -73,6 +75,7 @@ static void ShellInstallKernel(TEmbeddedFile *Pointer_Kernel_File, unsigned int 
 static void ShellInstallFiles(void)
 {
 	int Embedded_Files_To_Install_Count, i;
+	unsigned int File_Descriptor;
 	
 	// Compute the total number of embedded files
 	Embedded_Files_To_Install_Count = sizeof(Embedded_Files) / sizeof(TEmbeddedFile);
@@ -87,12 +90,23 @@ static void ShellInstallFiles(void)
 		ScreenWriteString(itoa(Embedded_Files[i].Size_Bytes));
 		ScreenWriteString(STRING_FILE_NAME_3);
 		
-		if (FileCreate(Embedded_Files[i].String_Name, Embedded_Files[i].Pointer_Data, Embedded_Files[i].Size_Bytes) != 0)
+		// Try to open the file
+		if (FileOpen(Embedded_Files[i].String_Name, 'w', &File_Descriptor) != ERROR_CODE_NO_ERROR)
 		{
 			ScreenSetColor(SCREEN_COLOR_RED);
-			ScreenWriteString(STRING_ERROR_CANT_CREATE_FILE);
+			ScreenWriteString(STRING_ERROR_CANT_OPEN_FILE);
 			ShellReboot();
 		}
+		
+		// Write the file content
+		if (FileWrite(File_Descriptor, Embedded_Files[i].Pointer_Data, Embedded_Files[i].Size_Bytes) != ERROR_CODE_NO_ERROR)
+		{
+			ScreenSetColor(SCREEN_COLOR_RED);
+			ScreenWriteString(STRING_ERROR_CANT_WRITE_FILE_CONTENT);
+			ShellReboot();
+		}
+		
+		FileClose(File_Descriptor);
 	}
 }
 
@@ -117,6 +131,16 @@ static int ShellAskYesNoQuestion(char *String_Question)
 //-------------------------------------------------------------------------------------------------------------------------------
 // Public functions
 //-------------------------------------------------------------------------------------------------------------------------------
+void ShellDisplayTitle(char *String_Title)
+{
+	// Display the title in a different color
+	ScreenSetColor(SHELL_SECTION_TITLE_COLOR);
+	ScreenWriteString(String_Title);
+	
+	// Reset default installer color
+	ScreenSetColor(SCREEN_COLOR_BLUE);
+}
+
 /** The installer specific code. */
 void Shell(void)
 {
@@ -132,9 +156,7 @@ void Shell(void)
 	ScreenWriteString(STRING_WELCOME);
 	
 	// Ask the user on continuing the installation or not
-	ScreenSetColor(SHELL_SECTION_TITLE_COLOR);
-	ScreenWriteString(STRING_SECTION_WARNING_TITLE);
-	ScreenSetColor(SCREEN_COLOR_BLUE);
+	ShellDisplayTitle(STRING_SECTION_WARNING_TITLE);
 	ScreenWriteString(STRING_SECTION_WARNING_MESSAGE);
 	if (!ShellAskYesNoQuestion(STRING_SECTION_WARNING_QUESTION))
 	{
@@ -143,9 +165,7 @@ void Shell(void)
 	}
 	
 	// Ask the user whether he wants to use the whole disk or not
-	ScreenSetColor(SHELL_SECTION_TITLE_COLOR);
-	ScreenWriteString(STRING_SECTION_HARD_DISK_TITLE);
-	ScreenSetColor(SCREEN_COLOR_BLUE);
+	ShellDisplayTitle(STRING_SECTION_HARD_DISK_TITLE);
 	ScreenWriteString(STRING_SECTION_HARD_DISK_MESSAGE);
 	if (ShellAskYesNoQuestion(STRING_SECTION_HARD_DISK_QUESTION))
 	{
@@ -164,9 +184,7 @@ void Shell(void)
 	File_System_Starting_Sector = Partition_Starting_Sector + CONFIGURATION_FILE_SYSTEM_STARTING_SECTOR_OFFSET;
 	
 	// Start the installation
-	ScreenSetColor(SCREEN_COLOR_LIGHT_BLUE);
-	ScreenWriteString(STRING_INSTALLATION_BEGINNING);
-	ScreenSetColor(SCREEN_COLOR_BLUE);
+	ShellDisplayTitle(STRING_INSTALLATION_BEGINNING);
 	
 	// Create file system
 	ScreenWriteString(STRING_CREATING_FILE_SYSTEM);

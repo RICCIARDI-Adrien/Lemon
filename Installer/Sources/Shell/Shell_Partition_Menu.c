@@ -7,6 +7,7 @@
 #include <Drivers/Driver_Screen.h>
 #include <File_System/File_System.h>
 #include <Standard_Functions.h>
+#include "Shell.h"
 #include "Shell_Partition_Menu.h"
 #include "Strings.h"
 
@@ -21,9 +22,7 @@ TShellPartitionMenuPartitionTableEntry *ShellPartitionMenu(void)
 	char String_User_Answer[2];
 	static TShellPartitionMenuPartitionTableEntry Lemon_Partition_Table[SHELL_PARTITION_MENU_PARTITION_TABLE_ENTRIES_COUNT];
 	
-	ScreenSetColor(SCREEN_COLOR_LIGHT_BLUE);
-	ScreenWriteString(STRING_PARTITION_MENU_SHOW_PARTITION_TABLE_1);
-	ScreenSetColor(SCREEN_COLOR_BLUE);
+	ShellDisplayTitle(STRING_PARTITION_MENU_SHOW_PARTITION_TABLE_1);
 	ScreenWriteString(STRING_PARTITION_MENU_SHOW_PARTITION_TABLE_2);
 	
 	// Load the partition table from the MBR

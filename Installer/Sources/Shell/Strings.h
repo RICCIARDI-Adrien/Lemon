@@ -30,7 +30,7 @@
 	#define STRING_SECTION_HARD_DISK_QUESTION "Utiliser tout l'espace du disque dur ? [o/n] : "
 	
 	#define STRING_REBOOT "\nRetirez le m\202dia d'installation et appuyez sur une touche pour red\202marrer.\n"
-	#define STRING_INSTALLATION_BEGINNING "\nD\202but de l'installation...\n"
+	#define STRING_INSTALLATION_BEGINNING "\nD\202but de l'installation\n"
 	#define STRING_CREATING_FILE_SYSTEM "Cr\202ation du syst\212me de fichiers...\n"
 	#define STRING_INSTALLING_FILES "Installation des fichiers...\n"
 	#define STRING_FILE_NAME_1 "Installation de '"
@@ -39,7 +39,7 @@
 	#define STRING_INSTALLATION_COMPLETED "Installation termin\202e.\n"
 	
 	// Partition selection menu
-	#define STRING_PARTITION_MENU_SHOW_PARTITION_TABLE_1 "\nChoisissez une partition sur laquelle installer le syst\212me.\n"
+	#define STRING_PARTITION_MENU_SHOW_PARTITION_TABLE_1 "\nChoisissez une partition sur laquelle installer le syst\212me\n"
 	#define STRING_PARTITION_MENU_SHOW_PARTITION_TABLE_2 "Table des partitions :\n"
 	#define STRING_PARTITION_MENU_PARTITIONS_DETAILS_1 "Partition "
 	#define STRING_PARTITION_MENU_PARTITIONS_DETAILS_2 " : type : "
@@ -52,7 +52,8 @@
 	#define STRING_ERROR_BAD_FILE_SYSTEM_PARAMETERS "Erreur : les param\212tres du syst\212me de fichiers sont invalides.\n"
 	#define STRING_ERROR_FILE_SYSTEM_TOO_BIG_FOR_HARD_DISK_1 "Erreur : le disque dur est trop petit pour stocker le syst\212me de fichiers.\nTaille du disque : "
 	#define STRING_ERROR_FILE_SYSTEM_TOO_BIG_FOR_HARD_DISK_2 " secteurs.\n"
-	#define STRING_ERROR_CANT_CREATE_FILE "Erreur : impossible de cr\202er le fichier.\n"
+	#define STRING_ERROR_CANT_OPEN_FILE "Erreur : impossible d'ouvrir le fichier en \202criture.\n"
+	#define STRING_ERROR_CANT_WRITE_FILE_CONTENT "Erreur : impossible d'\202crire le contenu du fichier.\n"
 	
 	// Question answer characters
 	#define STRING_CHARACTER_YES 'o'

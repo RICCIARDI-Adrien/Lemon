@@ -122,9 +122,6 @@ void __attribute__((section(".init"))) KernelEntryPoint(void)
 			KernelWaitForEnterKey();
 			KeyboardRebootSystem();
 		}
-		
-		// Make the file API usable (allow the shell to load programs)
-		FileResetFileDescriptors();
 	#endif
 	
 	// Show the welcoming message once at the system boot

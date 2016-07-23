@@ -5,6 +5,7 @@
 #include <Configuration.h>
 #include <Drivers/Driver_Hard_Disk.h>
 #include <Error_Codes.h>
+#include <File_System/File.h>
 #include <File_System/File_System.h>
 #include <Standard_Functions.h>
 
@@ -103,6 +104,9 @@ int FileSystemInitialize(unsigned int Starting_Sector)
 	// Load Blocks List and Files List
 	FileSystemReadSectors(Blocks_List_First_Sector_Number, Blocks_List_Size_Sectors, &File_System); // The file system informations are reloaded, but this is the easiest way
 	FileSystemReadSectors(Files_List_First_Sector_Number, Files_List_Size_Sectors, &File_System.Files_List);
+	
+	// Allow the File functions to work in kernel mode
+	FileResetFileDescriptors();
 
 	// No error
 	return 1;
