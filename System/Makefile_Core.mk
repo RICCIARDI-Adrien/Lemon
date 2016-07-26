@@ -4,6 +4,13 @@
 CCFLAGS += -W -Wall -Wunused -I$(PATH_INCLUDES)
 LDFLAGS += --strip-all -nostdlib -nostartfile
 
+OBJECTS_CORE = $(PATH_OBJECTS)/Architecture.o $(PATH_OBJECTS)/Debug.o $(PATH_OBJECTS)/Hardware_Functions.o $(PATH_OBJECTS)/Kernel.o $(PATH_OBJECTS)/Standard_Functions.o $(PATH_OBJECTS)/System_Calls.o
+OBJECTS_DRIVERS = $(PATH_OBJECTS)/Driver_Keyboard.o $(PATH_OBJECTS)/Driver_PIC.o $(PATH_OBJECTS)/Driver_Screen.o $(PATH_OBJECTS)/Driver_Timer.o $(PATH_OBJECTS)/Driver_UART.o
+OBJECTS_FILE_SYSTEM = $(PATH_OBJECTS)/File.o $(PATH_OBJECTS)/File_System.o
+
+#------------------------------------------------------------------------------------------------------------------------------
+# User configuration
+#------------------------------------------------------------------------------------------------------------------------------
 ifeq ($(SYSTEM_IS_DEBUG_ENABLED),1)
 	CCFLAGS += -DCONFIGURATION_IS_DEBUG_ENABLED=1
 else
@@ -16,10 +23,6 @@ ifeq ($(SYSTEM_RAM_SIZE),)
 endif
 CCFLAGS += -DCONFIGURATION_SYSTEM_TOTAL_RAM_SIZE_MEGA_BYTES=$(SYSTEM_RAM_SIZE)
 
-OBJECTS_CORE = $(PATH_OBJECTS)/Architecture.o $(PATH_OBJECTS)/Debug.o $(PATH_OBJECTS)/Hardware_Functions.o $(PATH_OBJECTS)/Kernel.o $(PATH_OBJECTS)/Standard_Functions.o $(PATH_OBJECTS)/System_Calls.o
-OBJECTS_DRIVERS =  $(PATH_OBJECTS)/Driver_Keyboard.o $(PATH_OBJECTS)/Driver_PIC.o $(PATH_OBJECTS)/Driver_Screen.o $(PATH_OBJECTS)/Driver_Timer.o $(PATH_OBJECTS)/Driver_UART.o
-OBJECTS_FILE_SYSTEM = $(PATH_OBJECTS)/File.o $(PATH_OBJECTS)/File_System.o
-
 # Choose which hard disk driver to compile
 ifeq ($(SYSTEM_HARD_DISK_TYPE),sata)
 	OBJECTS_DRIVERS += $(PATH_OBJECTS)/Driver_Hard_Disk_SATA.o $(PATH_OBJECTS)/Driver_PCI.o
@@ -27,11 +30,19 @@ else
 	OBJECTS_DRIVERS += $(PATH_OBJECTS)/Driver_Hard_Disk_IDE.o
 endif
 
+#------------------------------------------------------------------------------------------------------------------------------
+# Entry point and default rules
+#------------------------------------------------------------------------------------------------------------------------------
 # Force 'all' to be the default makefile rule
-pointer_to_all: all
+pointer_to_all: check_configuration_variables all
 
 clean:
 	rm -f $(PATH_OBJECTS)/*
+
+check_configuration_variables:
+	@# Check SYSTEM_RAM_SIZE value
+	@if [ $(SYSTEM_RAM_SIZE) -lt 2 ]; then printf "\033[31mError : the SYSTEM_RAM_SIZE variable minimum value is 2.\033[0m\n"; false; fi
+	@if [ $(SYSTEM_RAM_SIZE) -gt 4096 ]; then printf "\033[31mError : the SYSTEM_RAM_SIZE variable maximum value is 4096.\033[0m\n"; false; fi
 
 #------------------------------------------------------------------------------------------------------------------------------
 # System core
