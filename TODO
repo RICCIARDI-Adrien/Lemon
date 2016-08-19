@@ -17,6 +17,7 @@ Système
 -------
 
 - même variable CONFIGURATION_IS_DEBUG_ENABLED dans MBR ?
+- choix manuel LBA28 - LBA48 pour coller au design du système
 
 Doc
 ---
