@@ -2,6 +2,17 @@
 | URGENT |
 +--------+
 
+- unifier système de build :
+  + dans makefile principal, récupérer variables définies sur la ligne de commande et mettre valeur par défaut à celles indéfinies
+  + faire règles suivantes dans makefile principal
+    + system
+    + installer
+    + applications
+    + libraries
+  + les divers sous-systèmes ne doivent plus pouvoir compiler seuls
+  + make all a le même fonctionnement que maintenant
+  + les variables de compilation sont visibles via la commande version du système
+
 Système
 -------
 

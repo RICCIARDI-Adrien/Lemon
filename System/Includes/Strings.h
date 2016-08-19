@@ -91,8 +91,9 @@
 
 	// Shell version command
 	#define STRING_SHELL_VERSION "Version du syst\212me : 2.3.2 (" __DATE__ ", " __TIME__ ")\n" \
-		"Copyright (C) Adrien Ricciardi\n" \
-		"Quantit\202 de RAM utilisable : " STRING_CONVERT_MACRO_VALUE_TO_STRING(CONFIGURATION_SYSTEM_TOTAL_RAM_SIZE_MEGA_BYTES) " Mo\n"
+		"Copyright (C) Adrien Ricciardi\n\n" \
+		"Configuration :\n" \
+		STRING_BUILD_CONFIGURATION_VARIABLES
 
 	// Shell error strings
 	#define STRING_SHELL_ERROR_UNKNOWN_COMMAND "Ce programme est introuvable !\n"

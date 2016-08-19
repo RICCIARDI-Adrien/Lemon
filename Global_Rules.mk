@@ -4,11 +4,6 @@ CC = gcc
 LD = ld
 ISO_GENERATOR = genisoimage
 
-# Use the Pentium 1 as default value
-ifeq ($(GLOBAL_PROCESSOR_TYPE),)
-	GLOBAL_PROCESSOR_TYPE = pentium
-endif
-
 # Choose the whole system and applications language
 ifeq ($(GLOBAL_SYSTEM_LANGUAGE),english)
 	LANGUAGE_DEFINE = -DCONFIGURATION_LANGUAGE_ENGLISH

@@ -2,21 +2,44 @@
 # Author : Adrien RICCIARDI
 SDK_PATH = ../Lemon_SDK
 
+#--------------------------------------------------------------------------------------------------
+# Set default configuration variables value if variables are not defined
+#--------------------------------------------------------------------------------------------------
+GLOBAL_SYSTEM_LANGUAGE ?= french
+GLOBAL_PROCESSOR_TYPE ?= pentium
+SYSTEM_IS_DEBUG_ENABLED ?= 0
+SYSTEM_HARD_DISK_TYPE ?= ide
+SYSTEM_RAM_SIZE ?= 16
+
+# Make the build options available as a C string to be used by the system "version" command
+STRING_BUILD_CONFIGURATION_VARIABLES = "\"GLOBAL_SYSTEM_LANGUAGE=$(GLOBAL_SYSTEM_LANGUAGE)\nGLOBAL_PROCESSOR_TYPE=$(GLOBAL_PROCESSOR_TYPE)\nSYSTEM_IS_DEBUG_ENABLED=$(SYSTEM_IS_DEBUG_ENABLED)\nSYSTEM_HARD_DISK_TYPE=$(SYSTEM_HARD_DISK_TYPE)\nSYSTEM_RAM_SIZE=$(SYSTEM_RAM_SIZE)\n\""
+
+export GLOBAL_SYSTEM_LANGUAGE
+export GLOBAL_PROCESSOR_TYPE
+export SYSTEM_IS_DEBUG_ENABLED
+export SYSTEM_HARD_DISK_TYPE
+export SYSTEM_RAM_SIZE
+export STRING_BUILD_CONFIGURATION_VARIABLES
+
+#--------------------------------------------------------------------------------------------------
+# Private functions
+#--------------------------------------------------------------------------------------------------
 define DisplayTitle
 	@printf "\033[32m################################################################################\n"
 	@printf "## $1\n"
 	@printf "################################################################################\033[0m\n"
 endef
 
-all: clean
-	@$(call DisplayTitle,Compiling system)
-	@cd System && $(MAKE)
-	@$(call DisplayTitle,Compiling libraries)
-	@cd Libraries && $(MAKE)
-	@$(call DisplayTitle,Compiling applications)
-	@cd Applications && $(MAKE)
-	@$(call DisplayTitle,Creating installation image)
-	@cd Installer && $(MAKE)
+#--------------------------------------------------------------------------------------------------
+# Rules
+#--------------------------------------------------------------------------------------------------
+all: clean system libraries applications installer
+
+clean:
+	@cd Installer && $(MAKE) clean
+	@cd Libraries && $(MAKE) clean
+	@cd Applications && $(MAKE) clean
+	@cd System && $(MAKE) clean
 
 help:
 	@$(call DisplayTitle,Configuration variables)
@@ -86,8 +109,18 @@ floppy:
 	@diff Installer/Binaries/Lemon_Installer_Floppy_Image.img /tmp/Lemon_Floppy_Image.img
 	@printf "\033[32mFloppy image OK.\033[0m\n"
 
-clean:
-	@cd Installer && $(MAKE) clean
-	@cd Libraries && $(MAKE) clean
-	@cd Applications && $(MAKE) clean
-	@cd System && $(MAKE) clean
+applications:
+	@$(call DisplayTitle,Compiling applications)
+	@cd Applications && $(MAKE)
+
+installer:
+	@$(call DisplayTitle,Creating installation image)
+	@cd Installer && $(MAKE)
+
+libraries:
+	@$(call DisplayTitle,Compiling libraries)
+	@cd Libraries && $(MAKE)
+
+system:
+	@$(call DisplayTitle,Compiling system)
+	@cd System && $(MAKE)

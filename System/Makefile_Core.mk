@@ -1,7 +1,7 @@
 # Core makefile.
 # Contains the common core for the system and the installer. There is no need to take dependencies into account as the whole system must be entirely rebuilded each time.
 # Author : Adrien RICCIARDI
-CCFLAGS += -W -Wall -Wunused -I$(PATH_INCLUDES)
+CCFLAGS += -W -Wall -Wunused -I$(PATH_INCLUDES) -DCONFIGURATION_SYSTEM_TOTAL_RAM_SIZE_MEGA_BYTES=$(SYSTEM_RAM_SIZE)
 LDFLAGS += --strip-all -nostdlib -nostartfile
 
 OBJECTS_CORE = $(PATH_OBJECTS)/Architecture.o $(PATH_OBJECTS)/Debug.o $(PATH_OBJECTS)/Hardware_Functions.o $(PATH_OBJECTS)/Kernel.o $(PATH_OBJECTS)/Standard_Functions.o $(PATH_OBJECTS)/System_Calls.o
@@ -16,12 +16,6 @@ ifeq ($(SYSTEM_IS_DEBUG_ENABLED),1)
 else
 	CCFLAGS += -DCONFIGURATION_IS_DEBUG_ENABLED=0
 endif
-
-# Set a default RAM size if none is specified
-ifeq ($(SYSTEM_RAM_SIZE),)
-	SYSTEM_RAM_SIZE = 16
-endif
-CCFLAGS += -DCONFIGURATION_SYSTEM_TOTAL_RAM_SIZE_MEGA_BYTES=$(SYSTEM_RAM_SIZE)
 
 # Choose which hard disk driver to compile
 ifeq ($(SYSTEM_HARD_DISK_TYPE),sata)
