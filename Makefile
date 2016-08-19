@@ -8,15 +8,17 @@ SDK_PATH = ../Lemon_SDK
 GLOBAL_SYSTEM_LANGUAGE ?= french
 GLOBAL_PROCESSOR_TYPE ?= pentium
 SYSTEM_IS_DEBUG_ENABLED ?= 0
+SYSTEM_HARD_DISK_LOGICAL_BLOCK_ADDRESSING_MODE ?= 28
 SYSTEM_HARD_DISK_TYPE ?= ide
 SYSTEM_RAM_SIZE ?= 16
 
 # Make the build options available as a C string to be used by the system "version" command
-STRING_BUILD_CONFIGURATION_VARIABLES = "\"GLOBAL_SYSTEM_LANGUAGE=$(GLOBAL_SYSTEM_LANGUAGE)\nGLOBAL_PROCESSOR_TYPE=$(GLOBAL_PROCESSOR_TYPE)\nSYSTEM_IS_DEBUG_ENABLED=$(SYSTEM_IS_DEBUG_ENABLED)\nSYSTEM_HARD_DISK_TYPE=$(SYSTEM_HARD_DISK_TYPE)\nSYSTEM_RAM_SIZE=$(SYSTEM_RAM_SIZE)\n\""
+STRING_BUILD_CONFIGURATION_VARIABLES = "\"GLOBAL_SYSTEM_LANGUAGE=$(GLOBAL_SYSTEM_LANGUAGE)\nGLOBAL_PROCESSOR_TYPE=$(GLOBAL_PROCESSOR_TYPE)\nSYSTEM_IS_DEBUG_ENABLED=$(SYSTEM_IS_DEBUG_ENABLED)\nSYSTEM_HARD_DISK_LOGICAL_BLOCK_ADDRESSING_MODE=$(SYSTEM_HARD_DISK_LOGICAL_BLOCK_ADDRESSING_MODE)\nSYSTEM_HARD_DISK_TYPE=$(SYSTEM_HARD_DISK_TYPE)\nSYSTEM_RAM_SIZE=$(SYSTEM_RAM_SIZE)\n\""
 
 export GLOBAL_SYSTEM_LANGUAGE
 export GLOBAL_PROCESSOR_TYPE
 export SYSTEM_IS_DEBUG_ENABLED
+export SYSTEM_HARD_DISK_LOGICAL_BLOCK_ADDRESSING_MODE
 export SYSTEM_HARD_DISK_TYPE
 export SYSTEM_RAM_SIZE
 export STRING_BUILD_CONFIGURATION_VARIABLES
@@ -59,8 +61,11 @@ help:
 	@echo "- SYSTEM_IS_DEBUG_ENABLED : display kernel debugging messages"
 	@echo "    + 0 (default value)"
 	@echo "    + 1"
+	@echo "- SYSTEM_HARD_DISK_LOGICAL_BLOCK_ADDRESSING_MODE : the hard disk driver LBA mode"
+	@echo "    + 28 (default value, used for hard disk size < 128GB)"
+	@echo "    + 48 (mandatory for hard disk size > 128GB)"
 	@echo "- SYSTEM_HARD_DISK_TYPE : choose on which hard disk type the system will be installed"
-	@echo "    + ide  (default value)"
+	@echo "    + ide (default value)"
 	@echo "    + sata"
 	@echo "- SYSTEM_RAM_SIZE : how many RAM can be used by the whole system (in mega bytes), use an integer value from 2 to 4096"
 	@echo "    + 2 (minimum value)"

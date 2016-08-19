@@ -1,7 +1,7 @@
 # Core makefile.
 # Contains the common core for the system and the installer. There is no need to take dependencies into account as the whole system must be entirely rebuilded each time.
 # Author : Adrien RICCIARDI
-CCFLAGS += -W -Wall -Wunused -I$(PATH_INCLUDES) -DCONFIGURATION_SYSTEM_TOTAL_RAM_SIZE_MEGA_BYTES=$(SYSTEM_RAM_SIZE)
+CCFLAGS += -W -Wall -Wunused -I$(PATH_INCLUDES) -DCONFIGURATION_SYSTEM_TOTAL_RAM_SIZE_MEGA_BYTES=$(SYSTEM_RAM_SIZE) -DCONFIGURATION_HARD_DISK_LOGICAL_BLOCK_ADDRESSING_MODE=$(SYSTEM_HARD_DISK_LOGICAL_BLOCK_ADDRESSING_MODE)
 LDFLAGS += --strip-all -nostdlib -nostartfile
 
 OBJECTS_CORE = $(PATH_OBJECTS)/Architecture.o $(PATH_OBJECTS)/Debug.o $(PATH_OBJECTS)/Hardware_Functions.o $(PATH_OBJECTS)/Kernel.o $(PATH_OBJECTS)/Standard_Functions.o $(PATH_OBJECTS)/System_Calls.o
