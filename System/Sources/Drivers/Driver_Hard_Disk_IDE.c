@@ -35,7 +35,10 @@
 #define HARD_DISK_COMMAND_IDENTIFY_DEVICE 0xEC
 
 /** Wait until the controller signals it is ready. */
-#define WAIT_BUSY_CONTROLLER() while (inb(HARD_DISK_PORT_STATUS) & 0x80)
+#define WAIT_BUSY_CONTROLLER() \
+{ \
+	while (inb(HARD_DISK_PORT_STATUS) & 0x80); \
+}
 
 //-------------------------------------------------------------------------------------------------
 // Private variables
