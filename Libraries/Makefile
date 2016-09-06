@@ -44,17 +44,17 @@ clean:
 #--------------------------------------------------------------------------------------------------
 # This is the equivalent of the C runtime code, it must not be optimized out to preserve the system executable magic number (which is the beginning of the stack frame)
 $(PATH_OBJECTS)/System/System_Program_Entry_Point.d: $(PATH_SOURCES)/System/System_Program_Entry_Point.c
-	$(CC) $(CCFLAGS) -MT $(PATH_OBJECTS)/System/System_Program_Entry_Point.o -MM $(PATH_SOURCES)/System/System_Program_Entry_Point.c -MF $(PATH_OBJECTS)/System/System_Program_Entry_Point.d
+	$(GLOBAL_TOOL_COMPILER) $(CCFLAGS) -MT $(PATH_OBJECTS)/System/System_Program_Entry_Point.o -MM $(PATH_SOURCES)/System/System_Program_Entry_Point.c -MF $(PATH_OBJECTS)/System/System_Program_Entry_Point.d
 
 # Using __attribute__((optimize(0)), __attribute__((optimize("O0")) or #pragma GCC optimize("O0") in the source file does not give the same result and builds a non-working object file, so this rule is needed as a work-around
 # EDIT : using the attribute or pragma specified above works with gcc 5.3.1 but fails with gcc 4.9.2 (current Debian 8 gcc), so keep the work-around until Debian's gcc is upgraded
 $(PATH_OBJECTS)/System/System_Program_Entry_Point.o: $(PATH_OBJECTS)/System/System_Program_Entry_Point.d
-	$(CC) $(CCFLAGS) -O0 $(PATH_SOURCES)/System/System_Program_Entry_Point.c -o $(PATH_OBJECTS)/System/System_Program_Entry_Point.o
+	$(GLOBAL_TOOL_COMPILER) $(CCFLAGS) -O0 $(PATH_SOURCES)/System/System_Program_Entry_Point.c -o $(PATH_OBJECTS)/System/System_Program_Entry_Point.o
 
 -include $(PATH_OBJECTS)/System/System_Program_Entry_Point.d
 
 $(PATH_OBJECTS)/System/System_Call.o: $(PATH_SOURCES)/System/System_Call.asm
-	$(AS) -f elf32 $(PATH_SOURCES)/System/System_Call.asm -o $(PATH_OBJECTS)/System/System_Call.o
+	$(GLOBAL_TOOL_ASSEMBLER) -f elf32 $(PATH_SOURCES)/System/System_Call.asm -o $(PATH_OBJECTS)/System/System_Call.o
 
 #--------------------------------------------------------------------------------------------------
 # Generic rules
@@ -64,13 +64,13 @@ $(PATH_OBJECTS)/%.d: $(PATH_SOURCES)/%.c
 	@# Create the object subdirectories if needed
 	@$(shell mkdir -p $(dir $@))
 	@# Create a makefile named "Objects/.../File_Name.d" which contains a rule "Objects/.../File_Name.o: all_dependent_headers"
-	$(CC) $(CCFLAGS) -MT $(patsubst %.d,%.o,$@) -MM $< -MF $@
+	$(GLOBAL_TOOL_COMPILER) $(CCFLAGS) -MT $(patsubst %.d,%.o,$@) -MM $< -MF $@
 
 # Generic rule compiling each .c file to an .o file
 $(PATH_OBJECTS)/%.o: $(PATH_SOURCES)/%.c $(PATH_OBJECTS)/%.d
 	@# Create the object subdirectories if needed
 	@$(shell mkdir -p $(dir $@))
-	$(CC) $(CCFLAGS) $< -o $@
+	$(GLOBAL_TOOL_COMPILER) $(CCFLAGS) $< -o $@
 	
 # Include all "Objects/.../File_Name.d" makefile to add a specific rule for each file that provides all needed header prerequisites
 -include $(OBJECTS:.o=.d)

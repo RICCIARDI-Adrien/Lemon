@@ -16,8 +16,8 @@ LDFLAGS = -T $(TOOLS_PATH)/Linker_Script.ld --strip-all -s -L$(LIBRARIES_PATH)/B
 SERIAL_PORT_SERVER_FLAGS = /tmp/Lemon_Serial_Port_Pipe
 
 # The following variables are shared by all sub-makefiles
-export CC
-export LD
+export LEMON_TOOL_COMPILER
+export LEMON_TOOL_LINKER
 export BINARIES_PATH
 export LIBRARIES_PATH
 export OBJECTS_PATH

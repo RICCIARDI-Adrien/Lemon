@@ -5,6 +5,13 @@ SDK_PATH = ../Lemon_SDK
 #--------------------------------------------------------------------------------------------------
 # Set default configuration variables value if variables are not defined
 #--------------------------------------------------------------------------------------------------
+# Default tools
+GLOBAL_TOOL_ASSEMBLER ?= nasm
+GLOBAL_TOOL_COMPILER ?= gcc
+GLOBAL_TOOL_LINKER ?= ld
+GLOBAL_TOOL_ISO_GENERATOR ?= genisoimage
+
+# Configuration variables
 GLOBAL_SYSTEM_LANGUAGE ?= french
 GLOBAL_PROCESSOR_TYPE ?= pentium
 SYSTEM_IS_DEBUG_ENABLED ?= 0
@@ -15,6 +22,10 @@ SYSTEM_RAM_SIZE ?= 16
 # Make the build options available as a C string to be used by the system "version" command
 STRING_BUILD_CONFIGURATION_VARIABLES = "\"GLOBAL_SYSTEM_LANGUAGE=$(GLOBAL_SYSTEM_LANGUAGE)\nGLOBAL_PROCESSOR_TYPE=$(GLOBAL_PROCESSOR_TYPE)\nSYSTEM_IS_DEBUG_ENABLED=$(SYSTEM_IS_DEBUG_ENABLED)\nSYSTEM_HARD_DISK_LOGICAL_BLOCK_ADDRESSING_MODE=$(SYSTEM_HARD_DISK_LOGICAL_BLOCK_ADDRESSING_MODE)\nSYSTEM_HARD_DISK_TYPE=$(SYSTEM_HARD_DISK_TYPE)\nSYSTEM_RAM_SIZE=$(SYSTEM_RAM_SIZE)\n\""
 
+export GLOBAL_TOOL_ASSEMBLER
+export GLOBAL_TOOL_COMPILER
+export GLOBAL_TOOL_LINKER
+export GLOBAL_TOOL_ISO_GENERATOR
 export GLOBAL_SYSTEM_LANGUAGE
 export GLOBAL_PROCESSOR_TYPE
 export SYSTEM_IS_DEBUG_ENABLED
@@ -48,6 +59,14 @@ help:
 	@echo "Global variables affect the whole system (the operating system and all applications)."
 	@echo "System variables affect only the operating system, not the applications."
 	@echo
+	@echo "- GLOBAL_TOOL_ASSEMBLER : which x86 assembler binary to use (useful to sepcify a cross-compilation toolchain binary)"
+	@echo "    + nasm (default value)"
+	@echo "- GLOBAL_TOOL_COMPILER : which C compiler binary to use (useful to sepcify a cross-compilation toolchain binary)"
+	@echo "    + gcc (default value)"
+	@echo "- GLOBAL_TOOL_LINKER : which object linker binary to use (useful to sepcify a cross-compilation toolchain binary)"
+	@echo "    + ld (default value)"
+	@echo "- GLOBAL_TOOL_ISO_GENERATOR : which CDROM ISO image binary to use (useful to sepcify a cross-compilation toolchain binary)"
+	@echo "    + genisoimage (default value)"
 	@echo "- GLOBAL_SYSTEM_LANGUAGE : system and applications language"
 	@echo "    + english"
 	@echo "    + french (default value)"
