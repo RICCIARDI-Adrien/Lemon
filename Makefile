@@ -26,13 +26,24 @@ export GLOBAL_TOOL_ASSEMBLER
 export GLOBAL_TOOL_COMPILER
 export GLOBAL_TOOL_LINKER
 export GLOBAL_TOOL_ISO_GENERATOR
-export GLOBAL_SYSTEM_LANGUAGE
 export GLOBAL_PROCESSOR_TYPE
 export SYSTEM_IS_DEBUG_ENABLED
 export SYSTEM_HARD_DISK_LOGICAL_BLOCK_ADDRESSING_MODE
 export SYSTEM_HARD_DISK_TYPE
 export SYSTEM_RAM_SIZE
 export STRING_BUILD_CONFIGURATION_VARIABLES
+
+# Choose the whole system and applications language
+ifeq ($(GLOBAL_SYSTEM_LANGUAGE),english)
+	LANGUAGE_DEFINE = -DCONFIGURATION_LANGUAGE_ENGLISH
+else ifeq ($(GLOBAL_SYSTEM_LANGUAGE),italian)
+	LANGUAGE_DEFINE = -DCONFIGURATION_LANGUAGE_ITALIAN
+endif
+
+# Default gcc flags
+# Option -fno-asynchronous-unwind-tables avoid generating the .eh_frame section, which is heavy and useless here
+CCFLAGS = -nostdlib -fno-builtin -nostartfiles -finline-functions-called-once -fno-asynchronous-unwind-tables -masm=intel -m32 -Werror -march=$(GLOBAL_PROCESSOR_TYPE) -mtune=$(GLOBAL_PROCESSOR_TYPE) $(LANGUAGE_DEFINE)
+export CCFLAGS
 
 #--------------------------------------------------------------------------------------------------
 # Private functions

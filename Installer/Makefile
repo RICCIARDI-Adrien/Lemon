@@ -1,8 +1,6 @@
 # Installer makefile.
 # There is no need to take dependencies into account as the whole system must be entirely rebuilded every time.
 # Author : Adrien RICCIARDI
-include ../Global_Rules.mk
-
 BINARIES_TO_HEADER_CONVERTER = Tools/Binaries_To_Header_Converter.out
 
 PATH_SOURCES = ../System/Sources
