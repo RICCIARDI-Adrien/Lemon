@@ -2,22 +2,12 @@
 | URGENT |
 +--------+
 
-- unifier système de build :
-  + dans makefile principal, récupérer variables définies sur la ligne de commande et mettre valeur par défaut à celles indéfinies
-  + faire règles suivantes dans makefile principal
-    + system
-    + installer
-    + applications
-    + libraries
-  + les divers sous-systèmes ne doivent plus pouvoir compiler seuls
-  + make all a le même fonctionnement que maintenant
-  + les variables de compilation sont visibles via la commande version du système
-
 Système
 -------
 
 - même variable CONFIGURATION_IS_DEBUG_ENABLED dans MBR ?
-- choix manuel LBA28 - LBA48 pour coller au design du système
+
+- mettre Is_Opened dans descripteur fichier pour éviter boucle recherche si fichier déjà ouvert
 
 Doc
 ---
@@ -57,4 +47,4 @@ Applications
 Installer
 ---------
 
-- mettre .h dans Includes
+- mettre .h dans Includes (difficile à cause des -I nécessaires pour inclure les .h du système)

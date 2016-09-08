@@ -270,6 +270,7 @@ static int TestsFileReopenSameFile(void)
 	
 Exit:
 	ScreenWriteString("Removing the file...\n");
+	FileClose(File_ID);
 	FileDelete("_test_"); // This function can be called even if the file is not existing
 	return Function_Result;
 }
@@ -393,7 +394,7 @@ Exit:
 	ScreenWriteString("Deleting the test file...\n");
 	FileClose(File_ID);
 	FileDelete("_test_");
-	return Return_Value;	
+	return Return_Value;
 }
 
 //-------------------------------------------------------------------------------------------------
@@ -413,7 +414,7 @@ int TestsFile(void)
 	if (TestsFileMaximumOpenedFiles()) return 1;
 	DisplayMessageTestSuccessful();
 	
-	DisplayMessageTestStarting("same file reopening");
+	DisplayMessageTestStarting("Same file reopening");
 	if (TestsFileReopenSameFile()) return 1;
 	DisplayMessageTestSuccessful();
 	
