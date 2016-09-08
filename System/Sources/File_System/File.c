@@ -92,6 +92,7 @@ int FileDelete(char *String_File_Name)
 {
 	TFilesListEntry *Pointer_Files_List_Entry;
 	unsigned int Block, Next_Block;
+	int i;
 	
 	// Check if file name is valid
 	if (String_File_Name[0] == 0) return ERROR_CODE_FILE_NOT_FOUND;
@@ -99,6 +100,16 @@ int FileDelete(char *String_File_Name)
 	// Retrieve corresponding file entry
 	Pointer_Files_List_Entry = FileSystemReadFilesListEntry(String_File_Name);
 	if (Pointer_Files_List_Entry == NULL) return ERROR_CODE_FILE_NOT_FOUND;
+	
+	// Close the file if it was opened
+	for (i = 0; i < CONFIGURATION_FILE_SYSTEM_MAXIMUM_OPENED_FILES_COUNT; i++)
+	{
+		if (strcmp(File_Descriptors[i].Pointer_Files_List_Entry->String_Name, String_File_Name) == 0)
+		{
+			File_Descriptors[i].Is_Entry_Free = 1;
+			break; // A file can be opened only once at a time, no need to check other file descriptors
+		}
+	}
 	
 	// Free Blocks List blocks
 	Block = Pointer_Files_List_Entry->Start_Block;
@@ -331,6 +342,9 @@ void FileClose(unsigned int File_Descriptor_Index)
 	// Is the file descriptor index valid ?
 	if (File_Descriptor_Index >= CONFIGURATION_FILE_SYSTEM_MAXIMUM_OPENED_FILES_COUNT) return;
 	Pointer_File_Descriptor = &File_Descriptors[File_Descriptor_Index];
+	
+	// Is the file opened ?
+	if (Pointer_File_Descriptor->Is_Entry_Free) return;
 	
 	// Save file system if the file was opened in write mode to backup newly allocated Blocks List blocks
 	if (Pointer_File_Descriptor->Opening_Mode == 'w')
