@@ -7,8 +7,10 @@
 //-------------------------------------------------------------------------------------------------
 // Private constants
 //-------------------------------------------------------------------------------------------------
-/** How many iterations to compute. */
+/** How many Fibonacci iterations to compute. */
 #define BENCHMARK_PROCESSOR_ITERATIONS_COUNT 10000000
+/** How many time to create the file. */
+#define BENCHMARK_FILE_SYSTEM_ITERATIONS_COUNT 10000
 
 /** Convert the macro identifier to a C string. */
 #define BENCHMARK_CONVERT_MACRO_NAME_TO_STRING(X) #X
@@ -36,6 +38,7 @@ typedef struct
 // Prototypes
 //-------------------------------------------------------------------------------------------------
 static void BenchmarkProcessor(unsigned int *Pointer_Start_Time, unsigned int *Pointer_End_Time);
+static void BenchmarkFileSystem(unsigned int *Pointer_Start_Time, unsigned int *Pointer_End_Time);
 
 //-------------------------------------------------------------------------------------------------
 // Private variables
@@ -45,16 +48,19 @@ static TBenchmarkTest Benchmark_Tests[] =
 {
 	{
 		"processor speed",
-		"Computing Fibonacci suite up to " BENCHMARK_CONVERT_MACRO_VALUE_TO_STRING(BENCHMARK_PROCESSOR_ITERATIONS_COUNT) " iterations with 32768 bits integer\nprecision",
+		"Compute Fibonacci suite " BENCHMARK_CONVERT_MACRO_VALUE_TO_STRING(BENCHMARK_PROCESSOR_ITERATIONS_COUNT) " times with 32768 bits integer precision",
 		BenchmarkProcessor
 	},
-	// TODO
+	{
+		"file system speed",
+		"Open, write to and close a file " BENCHMARK_CONVERT_MACRO_VALUE_TO_STRING(BENCHMARK_FILE_SYSTEM_ITERATIONS_COUNT) " times",
+		BenchmarkFileSystem
+	}
 };
 
 //-------------------------------------------------------------------------------------------------
 // Private functions
 //-------------------------------------------------------------------------------------------------
-/** Compute the Fibonacci suite up to the requested numbers of iterations in order to stress the processor. */
 static void BenchmarkProcessor(unsigned int *Pointer_Start_Time, unsigned int *Pointer_End_Time)
 {
 	static TMathInteger Penultimate_Number, Last_Number, Result; // Do not store these variables on the stack as they are a bit heavy
@@ -74,6 +80,48 @@ static void BenchmarkProcessor(unsigned int *Pointer_Start_Time, unsigned int *P
 	}
 	
 	*Pointer_End_Time = SystemGetTimerValue();
+}
+
+static void BenchmarkFileSystem(unsigned int *Pointer_Start_Time, unsigned int *Pointer_End_Time)
+{
+	int i, Result;
+	unsigned int File_ID;
+	char String_Data[] = "Benchmarking...";
+	
+	// Keep benchmark starting time to compute the elapsed time at benchmark end
+	*Pointer_Start_Time = SystemGetTimerValue();
+	
+	for (i = 0; i < BENCHMARK_FILE_SYSTEM_ITERATIONS_COUNT; i++)
+	{
+		// Create the file
+		Result = FileOpen("_test_", 'w', &File_ID);
+		if (Result != ERROR_CODE_NO_ERROR)
+		{
+			ScreenWriteString("Error while opening the file for writing.\n");
+			goto Exit_Error;
+		}
+		
+		// Write some random bytes
+		Result = FileWrite(File_ID, String_Data, sizeof(String_Data));
+		if (Result != ERROR_CODE_NO_ERROR)
+		{
+			ScreenWriteString("Error while writing to the file.\n");
+			goto Exit_Error;
+		}
+
+		FileClose(File_ID);
+	}
+	
+	*Pointer_End_Time = SystemGetTimerValue();
+	FileDelete("_test_");
+	return;
+	
+Exit_Error:
+	ScreenWriteString("Error on file ");
+	ScreenWriteInteger(i);
+	ScreenWriteString(".\n");
+	FileClose(File_ID);
+	FileDelete("_test_");
 }
 
 //-------------------------------------------------------------------------------------------------
