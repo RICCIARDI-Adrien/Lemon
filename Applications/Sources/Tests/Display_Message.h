@@ -1,7 +1,6 @@
 /** @file Display_Message.c
  * Show specific messages on the screen.
  * @author Adrien RICCIARDI
- * @version 1.0 : 10/12/2014
  */
 #ifndef H_DISPLAY_MESSAGE_H
 #define H_DISPLAY_MESSAGE_H

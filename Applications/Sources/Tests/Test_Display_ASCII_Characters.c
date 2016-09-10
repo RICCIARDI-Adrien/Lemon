@@ -1,8 +1,6 @@
 /** @file Test_Display_ASCII_Characters.
  * Display all the ASCII characters the video card can generate.
  * @author Adrien RICCIARDI
- * @version 1.0 : 15/05/2014
- * @version 1.1 : 07/12/2014, ported to new Libraries version.
  */
 #include <System.h>
 

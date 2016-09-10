@@ -1,33 +1,92 @@
 /** @file Tests.c
  * Contain all automated tests that can be done on the system.
  * @author Adrien RICCIARDI
- * @version 1.0 : 20/05/2014
- * @version 1.1 : 24/05/2014, added FileRead() / FileWrite() test.
- * @version 1.2 : 11/06/2014, added ctype tests.
- * @version 1.3 : 12/06/2014, added assert() tests.
- * @version 1.4 : 07/12/2014, removed libc stuff to keep only Lemon-specific tests.
- * @version 1.5 : 09/12/2014, multiple optimizations.
  */
 #include <System.h>
 #include "Display_Message.h"
 #include "Tests.h"
 
 //-------------------------------------------------------------------------------------------------
-// Private types
-//-------------------------------------------------------------------------------------------------
-/** A test function. */
-typedef int (*TTestFunction)(void);
-
-//-------------------------------------------------------------------------------------------------
 // Private variables
 //-------------------------------------------------------------------------------------------------
 /** All the tests. */
-static TTestFunction Test_Functions[] =
+static TTest Tests[] =
 {
-	TestsFile,
-	TestsMemory,
-	TestsString,
-	NULL
+	// File API tests
+	{
+		"Libraries File functions input parameters",
+		TestsFileFunctionsInputParameters
+	},
+	{
+		"Libraries File system calls",
+		TestsFileSystemCalls
+	},
+	{
+		"System maximum opened files limit",
+		TestsFileMaximumOpenedFiles
+	},
+	{
+		"Same file reopening",
+		TestsFileReopenSameFile
+	},
+	{
+		"Automatic closing of an deleted opened file",
+		TestsFileCloseDeletedOpenedFile
+	},
+	{
+		"Files List complete fill",
+		TestsFileFillFilesList
+	},
+	{
+		"Blocks List complete fill",
+		TestsFileFillBlocksList
+	},
+	// Memory API tests
+	{
+		"MemoryCopyArea() with a small area size",
+		TestsMemoryCopySmallArea
+	},
+	{
+		"MemoryCopyArea() with a big area size",
+		TestsMemoryCopyBigArea
+	},
+	{
+		"MemorySetAreaValue() with a small area size",
+		TestsMemorySetSmallAreaValue
+	},
+	{
+		"MemorySetAreaValue() with a big area size",
+		TestsMemorySetBigAreaValue
+	},
+	// String API tests
+	{
+		"StringCompare()",
+		TestsStringCompare
+	},
+	{
+		"StringConcatenate()",
+		TestsStringConcatenate
+	},
+	{
+		"StringConcatenateUpToNumber()",
+		TestsStringConcatenateUpToNumber
+	},
+	{
+		"StringConvertStringToUnsignedInteger()",
+		TestsStringConvertStringToUnsignedInteger
+	},
+	{
+		"StringConvertUnsignedIntegerToString()",
+		TestsStringConvertUnsignedIntegerToString
+	},
+	{
+		"StringCopy()",
+		TestsStringCopy
+	},
+	{
+		"StringGetSize()",
+		TestsStringGetSize
+	}
 };
 
 //-------------------------------------------------------------------------------------------------
@@ -35,20 +94,24 @@ static TTestFunction Test_Functions[] =
 //-------------------------------------------------------------------------------------------------
 int main(void)
 {
-	int i = 0;
+	unsigned int i;
 	
 	RandomInitialize();
 	
 	ScreenWriteString("### Automated tests ###\n\n");
 	
-	while (Test_Functions[i] != NULL)
+	for (i = 0; i < sizeof(Tests) / sizeof(TTest); i++)
 	{
-		if (Test_Functions[i]() != 0)
+		// Display title
+		DisplayMessageTestStarting(Tests[i].String_Title);
+		
+		if (Tests[i].Function() != 0)
 		{
 			DisplayMessageTestFailed();
 			break;
 		}
-		i++;
+		
+		DisplayMessageTestSuccessful();
 	}
 
 	return 0;

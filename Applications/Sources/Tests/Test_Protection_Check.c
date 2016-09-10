@@ -1,8 +1,6 @@
 /** @file Test_Protection_Check.c
  * @brief Several tests to ensure that Intel memory protection is correctly enabled.
  * @author Adrien RICCIARDI
- * @version 1.0 : 08/12/2012
- * @version 1.1 : 07/12/2014, ported to new Libraries version.
  */
 #include <System.h>
 

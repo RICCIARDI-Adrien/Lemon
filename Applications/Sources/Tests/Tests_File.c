@@ -1,7 +1,6 @@
 /** @file Tests_File.c
  * Test the Libraries File API.
  * @author Adrien RICCIARDI
- * @version 1.0 : 07/12/2014
  */
 #include <System.h>
 #include "crc32.h"
@@ -21,45 +20,41 @@
 static unsigned char Buffer[TESTS_FILE_BUFFER_SIZE];
 
 //-------------------------------------------------------------------------------------------------
-// Private functions
+// Public functions
 //-------------------------------------------------------------------------------------------------
-/** Check functions input parameters. Not all parameters are tested here as some parameters need special handling and are tested elsewhere.
- * @return 1 if the test was successful,
- * @return 0 if the test failed.
- */
-static int TestsFileFunctionsInputParameters(void)
+int TestsFileFunctionsInputParameters(void)
 {
 	unsigned int File_ID;
-	int Return_Value;
+	int Result;
 	
 	// Testing FileOpen()
 	// Bad filename (empty string, checked by kernel)
 	ScreenWriteString("Checking FileOpen()...\n");
-	Return_Value = FileOpen("\0", 'r', &File_ID);
-	if (Return_Value != ERROR_CODE_BAD_FILE_NAME)
+	Result = FileOpen("\0", 'r', &File_ID);
+	if (Result != ERROR_CODE_BAD_FILE_NAME)
 	{
-		DisplayMessageErrorAndCode("when given a bad file name", Return_Value);
+		DisplayMessageErrorAndCode("when given a bad file name", Result);
 		return 1;
 	}
 	// Bad filename (NULL string, checked by Libraries)
-	Return_Value = FileOpen(NULL, 'r', &File_ID);
-	if (Return_Value != ERROR_CODE_BAD_FILE_NAME)
+	Result = FileOpen(NULL, 'r', &File_ID);
+	if (Result != ERROR_CODE_BAD_FILE_NAME)
 	{
-		DisplayMessageErrorAndCode("when given a NULL file name", Return_Value);
+		DisplayMessageErrorAndCode("when given a NULL file name", Result);
 		return 1;
 	}
 	// File not found
-	Return_Value = FileOpen("_!azerty", 'r', &File_ID);
-	if (Return_Value != ERROR_CODE_FILE_NOT_FOUND)
+	Result = FileOpen("_!azerty", 'r', &File_ID);
+	if (Result != ERROR_CODE_FILE_NOT_FOUND)
 	{
-		DisplayMessageErrorAndCode("when given an unexisting file", Return_Value);
+		DisplayMessageErrorAndCode("when given an unexisting file", Result);
 		return 1;
 	}
 	// Unknown opening mode
-	Return_Value = FileOpen("Ignored", 't', &File_ID);
-	if (Return_Value != ERROR_CODE_UNKNOWN_OPENING_MODE)
+	Result = FileOpen("Ignored", 't', &File_ID);
+	if (Result != ERROR_CODE_UNKNOWN_OPENING_MODE)
 	{
-		DisplayMessageErrorAndCode("when given a bad opening mode", Return_Value);
+		DisplayMessageErrorAndCode("when given a bad opening mode", Result);
 		return 1;
 	}
 
@@ -68,10 +63,10 @@ static int TestsFileFunctionsInputParameters(void)
 	// Open a file 
 	// Bad file ID
 	/*ScreenWriteString("Checking FileRead()...\n");
-	Return_Value = FileRead(123456, );
-	if (Return_Value != ERROR_CODE_FILE_NOT_FOUND)
+	Result = FileRead(123456, );
+	if (Result != ERROR_CODE_FILE_NOT_FOUND)
 	{
-		DisplayMessageErrorAndCode("when given an unexisting file", Return_Value);
+		DisplayMessageErrorAndCode("when given an unexisting file", Result);
 		return 1;
 	}*/
 	// Bad opening mode
@@ -79,14 +74,10 @@ static int TestsFileFunctionsInputParameters(void)
 	return 0;
 }
 
-/** Check file related system calls.
- * @return 1 if the test was successful,
- * @return 0 if the test failed.
- */
-static int TestsFileSystemCalls(void)
+int TestsFileSystemCalls(void)
 {
 	unsigned int File_Size_Bytes, Written_Data_CRC, Read_Data_CRC, i, CRC_Seed, File_ID, Read_Bytes_Count;
-	int Return_Value;
+	int Result;
 
 	// Choose a random file size between 100 KB and 3 MB
 	File_Size_Bytes = ((RandomGenerateNumber() % 32) + 1) * 1024 * 100;
@@ -107,17 +98,17 @@ static int TestsFileSystemCalls(void)
 
 	ScreenWriteString("Writing data to file... ");
 	// Open the file
-	Return_Value = SystemCall(SYSTEM_CALL_FILE_OPEN, 'w', 0, "_test_", &File_ID);
-	if (Return_Value != ERROR_CODE_NO_ERROR)
+	Result = SystemCall(SYSTEM_CALL_FILE_OPEN, 'w', 0, "_test_", &File_ID);
+	if (Result != ERROR_CODE_NO_ERROR)
 	{
-		DisplayMessageErrorAndCode("when opening the file in write mode", Return_Value);
+		DisplayMessageErrorAndCode("when opening the file in write mode", Result);
 		return 1;
 	}
 	// Write data
-	Return_Value = SystemCall(SYSTEM_CALL_FILE_WRITE, File_ID, File_Size_Bytes, Buffer, NULL);
-	if (Return_Value != ERROR_CODE_NO_ERROR)
+	Result = SystemCall(SYSTEM_CALL_FILE_WRITE, File_ID, File_Size_Bytes, Buffer, NULL);
+	if (Result != ERROR_CODE_NO_ERROR)
 	{
-		DisplayMessageErrorAndCode("when writing to the file", Return_Value);
+		DisplayMessageErrorAndCode("when writing to the file", Result);
 		return 1;
 	}
 	// Close the file
@@ -129,17 +120,17 @@ static int TestsFileSystemCalls(void)
 
 	ScreenWriteString("Reading data from file... ");
 	// Open the file
-	Return_Value = SystemCall(SYSTEM_CALL_FILE_OPEN, 'r', 0, "_test_", &File_ID);
-	if (Return_Value != ERROR_CODE_NO_ERROR)
+	Result = SystemCall(SYSTEM_CALL_FILE_OPEN, 'r', 0, "_test_", &File_ID);
+	if (Result != ERROR_CODE_NO_ERROR)
 	{
-		DisplayMessageErrorAndCode("when opening the file in read mode", Return_Value);
+		DisplayMessageErrorAndCode("when opening the file in read mode", Result);
 		return 1;
 	}
 	// Read data
-	Return_Value = SystemCall(SYSTEM_CALL_FILE_READ, File_ID, File_Size_Bytes, Buffer, &Read_Bytes_Count);
-	if (Return_Value != ERROR_CODE_NO_ERROR)
+	Result = SystemCall(SYSTEM_CALL_FILE_READ, File_ID, File_Size_Bytes, Buffer, &Read_Bytes_Count);
+	if (Result != ERROR_CODE_NO_ERROR)
 	{
-		DisplayMessageErrorAndCode("when reading from the file", Return_Value);
+		DisplayMessageErrorAndCode("when reading from the file", Result);
 		return 1;
 	}
 	// Close the file
@@ -155,10 +146,10 @@ static int TestsFileSystemCalls(void)
 	ScreenWriteString(")\n");
 
 	// Delete the file
-	Return_Value = FileDelete("_test_");
-	if (Return_Value != ERROR_CODE_NO_ERROR)
+	Result = FileDelete("_test_");
+	if (Result != ERROR_CODE_NO_ERROR)
 	{
-		DisplayMessageErrorAndCode("when deleting the file", Return_Value);
+		DisplayMessageErrorAndCode("when deleting the file", Result);
 		return 1;
 	}
 
@@ -166,14 +157,10 @@ static int TestsFileSystemCalls(void)
 	return 1;
 }
 
-/** Try to open more than the maximum allowed number of files. The FileOpen() function must fail when the limit is reached.
- * @return 0 if test was successful,
- * @return 1 if the test failed.
- */
-static int TestsFileMaximumOpenedFiles(void)
+int TestsFileMaximumOpenedFiles(void)
 {
 	unsigned int File_IDs[FILE_MAXIMUM_OPENED_COUNT + 1];
-	int i, Return_Value;
+	int i, Result;
 	char String_File_Name[FILE_NAME_LENGTH + 1], String_Number[11];
 	
 	// Open the maximum number of files
@@ -186,20 +173,20 @@ static int TestsFileMaximumOpenedFiles(void)
 		StringConcatenate(String_File_Name, String_Number);
 		
 		// Open the file in write mode so the file should not exist yet
-		Return_Value = FileOpen(String_File_Name, 'w', &File_IDs[i]);
-		if (Return_Value != ERROR_CODE_NO_ERROR)
+		Result = FileOpen(String_File_Name, 'w', &File_IDs[i]);
+		if (Result != ERROR_CODE_NO_ERROR)
 		{
-			DisplayMessageErrorAndCode("while opening the files allowed count", Return_Value);
+			DisplayMessageErrorAndCode("while opening the files allowed count", Result);
 			return 1;
 		}
 	}
 	
 	// Opening one more file
 	ScreenWriteString("Opening one more file...\n");
-	Return_Value = FileOpen("_test_!!!", 'w', &File_IDs[FILE_MAXIMUM_OPENED_COUNT]);
-	if (Return_Value != ERROR_CODE_CANT_OPEN_MORE_FILES)
+	Result = FileOpen("_test_!!!", 'w', &File_IDs[FILE_MAXIMUM_OPENED_COUNT]);
+	if (Result != ERROR_CODE_CANT_OPEN_MORE_FILES)
 	{
-		DisplayMessageErrorAndCode("while opening too much files in the same time", Return_Value);
+		DisplayMessageErrorAndCode("while opening too much files in the same time", Result);
 		return 1;
 	}
 	
@@ -219,31 +206,25 @@ static int TestsFileMaximumOpenedFiles(void)
 	return 0;
 }
 
-/** A previously opened file can't be reopened without being closed.
- * @return 0 if test was successful,
- * @return 1 if the test failed.
- */
-static int TestsFileReopenSameFile(void)
+int TestsFileReopenSameFile(void)
 {
 	unsigned int File_ID, File_ID_2;
-	int Return_Value, Function_Result = 0;
+	int Result, Return_Value = 1;
 	char *String_File_Content = "This is an empty test file.";
 	
 	// Create a file
 	ScreenWriteString("Creating a file...\n");
-	Return_Value = FileOpen("_test_", 'w', &File_ID);
-	if (Return_Value != ERROR_CODE_NO_ERROR)
+	Result = FileOpen("_test_", 'w', &File_ID);
+	if (Result != ERROR_CODE_NO_ERROR)
 	{
-		DisplayMessageErrorAndCode("while opening the file in write mode", Return_Value);
-		Function_Result = 1;
+		DisplayMessageErrorAndCode("while opening the file in write mode", Result);
 		goto Exit;
 	}
 	// Write some data
-	Return_Value = FileWrite(File_ID, String_File_Content, sizeof(String_File_Content) - 1);
-	if (Return_Value != ERROR_CODE_NO_ERROR)
+	Result = FileWrite(File_ID, String_File_Content, sizeof(String_File_Content) - 1);
+	if (Result != ERROR_CODE_NO_ERROR)
 	{
-		DisplayMessageErrorAndCode("while writing data to the file", Return_Value);
-		Function_Result = 1;
+		DisplayMessageErrorAndCode("while writing data to the file", Result);
 		goto Exit;
 	}
 	// Flush file content
@@ -252,34 +233,31 @@ static int TestsFileReopenSameFile(void)
 	// Try to open the same file 2 times
 	// The first time must succeed
 	ScreenWriteString("Opening the file for the first time...\n");
-	Return_Value = FileOpen("_test_", 'r', &File_ID);
-	if (Return_Value != ERROR_CODE_NO_ERROR)
+	Result = FileOpen("_test_", 'r', &File_ID);
+	if (Result != ERROR_CODE_NO_ERROR)
 	{
-		DisplayMessageErrorAndCode("while opening the file in read mode", Return_Value);
-		Function_Result = 1;
+		DisplayMessageErrorAndCode("while opening the file in read mode", Result);
 		goto Exit;
 	}
 	// The second time must fail
 	ScreenWriteString("Opening the file for the second time...\n");
-	Return_Value = FileOpen("_test_", 'r', &File_ID_2);
-	if (Return_Value != ERROR_CODE_FILE_OPENED_YET)
+	Result = FileOpen("_test_", 'r', &File_ID_2);
+	if (Result != ERROR_CODE_FILE_OPENED_YET)
 	{
-		DisplayMessageErrorAndCode("while reopening a previously opened file", Return_Value);
-		Function_Result = 1;
+		DisplayMessageErrorAndCode("while reopening a previously opened file", Result);
+		goto Exit;
 	}
+	
+	Return_Value = 0;
 	
 Exit:
 	ScreenWriteString("Removing the file...\n");
 	FileClose(File_ID);
 	FileDelete("_test_"); // This function can be called even if the file is not existing
-	return Function_Result;
+	return Return_Value;
 }
 
-/** Fill all available Files List entries.
- * @return 0 if test was successful,
- * @return 1 if the test failed.
- */
-static int TestsFileFillFilesList(void)
+int TestsFileFillFilesList(void)
 {
 	unsigned int i, Free_Files_Count, File_ID;
 	int Result, Return_Value = 1;
@@ -335,11 +313,7 @@ static int TestsFileFillFilesList(void)
 	return Return_Value;
 }
 
-/** Fill all available Blocks List entries.
- * @return 0 if test was successful,
- * @return 1 if the test failed.
- */
-static int TestsFileFillBlocksList(void)
+int TestsFileFillBlocksList(void)
 {
 	unsigned int Free_Blocks_Count, i, File_ID, Block_Size_Bytes;
 	int Result, Return_Value = 1;
@@ -397,11 +371,7 @@ Exit:
 	return Return_Value;
 }
 
-/** Check if a previously opened file that goes deleted is really automatically closed.
- * @return 0 if test was successful,
- * @return 1 if the test failed.
- */
-static int TestsFileCloseDeletedOpenedFile(void)
+int TestsFileCloseDeletedOpenedFile(void)
 {
 	unsigned int File_ID;
 	int Result, Return_Value = 1;
@@ -448,40 +418,4 @@ Exit:
 	FileClose(File_ID);
 	FileDelete("_test_");
 	return Return_Value;
-}
-
-//-------------------------------------------------------------------------------------------------
-// Public functions
-//-------------------------------------------------------------------------------------------------
-int TestsFile(void)
-{
-	DisplayMessageTestStarting("Libraries File functions input parameters");
-	if (TestsFileFunctionsInputParameters()) return 1;
-	DisplayMessageTestSuccessful();
-	
-	DisplayMessageTestStarting("Libraries File system calls");
-	if (TestsFileSystemCalls()) return 1;
-	DisplayMessageTestSuccessful();
-	
-	DisplayMessageTestStarting("System maximum opened files limit");
-	if (TestsFileMaximumOpenedFiles()) return 1;
-	DisplayMessageTestSuccessful();
-	
-	DisplayMessageTestStarting("Same file reopening");
-	if (TestsFileReopenSameFile()) return 1;
-	DisplayMessageTestSuccessful();
-	
-	DisplayMessageTestStarting("Files List complete fill");
-	if (TestsFileFillFilesList()) return 1;
-	DisplayMessageTestSuccessful();
-	
-	DisplayMessageTestStarting("Blocks List complete fill");
-	if (TestsFileFillBlocksList()) return 1;
-	DisplayMessageTestSuccessful();
-	
-	DisplayMessageTestStarting("Automatic closing of an deleted opened file");
-	if (TestsFileCloseDeletedOpenedFile()) return 1;
-	DisplayMessageTestSuccessful();
-	
-	return 0;
 }

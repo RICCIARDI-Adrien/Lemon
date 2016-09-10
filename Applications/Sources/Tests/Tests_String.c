@@ -1,20 +1,15 @@
 /** @file Tests_String.c
  * Test the Libraries String API.
  * @author Adrien RICCIARDI
- * @version 1.0 : 13/12/2014
  */
 #include <System.h>
 #include "Display_Message.h"
 #include "Tests.h"
 
 //-------------------------------------------------------------------------------------------------
-// Private functions
+// Public functions
 //-------------------------------------------------------------------------------------------------
-/** Test the StringCompare() function.
- * @return 0 if all tests were successful,
- * @return 1 if a test failed.
- */
-static int TestsStringCompare(void)
+int TestsStringCompare(void)
 {
 	char *String_1 = "abcdefgh", *String_2 = "abcd", *String_3 = "abcdefgh";
 	
@@ -35,11 +30,7 @@ static int TestsStringCompare(void)
 	return 0;
 }
 
-/** Test the StringConcatenate() function.
- * @return 0 if all tests were successful,
- * @return 1 if a test failed.
- */
-static int TestsStringConcatenate(void)
+int TestsStringConcatenate(void)
 {
 	char String_Destination[30] = "This is ", *String_To_Concatenate = "a test", *String_Full = "This is a test";
 	int i;
@@ -58,11 +49,7 @@ static int TestsStringConcatenate(void)
 	return 0;
 }
 
-/** Test the StringConcatenateUpToNumber() function.
- * @return 0 if all tests were successful,
- * @return 1 if a test failed.
- */
-static int TestsStringConcatenateUpToNumber(void)
+int TestsStringConcatenateUpToNumber(void)
 {
 	char String_Destination[30] = "This is ", *String_To_Concatenate = "a test", *String_First_Test_Result = "This is a test", *String_Second_Test_Result = "This is a testa t";
 	int i;
@@ -94,11 +81,7 @@ static int TestsStringConcatenateUpToNumber(void)
 	return 0;
 }
 
-/** Test the StringConvertStringToUnsignedInteger() function.
- * @return 0 if all tests were successful,
- * @return 1 if a test failed.
- */
-static int TestsStringConvertStringToUnsignedInteger(void)
+int TestsStringConvertStringToUnsignedInteger(void)
 {
 	char *String_Numbers[] = {"12345", "0", "16", "4294967295", "1000000"};
 	unsigned int i, Results[] = {12345, 0, 16, 4294967295UL, 1000000};
@@ -119,11 +102,7 @@ static int TestsStringConvertStringToUnsignedInteger(void)
 	return 0;
 }
 
-/** Test the StringConvertUnsignedIntegerToString() function.
- * @return 0 if all tests were successful,
- * @return 1 if a test failed.
- */
-static int TestsStringConvertUnsignedIntegerToString(void)
+int TestsStringConvertUnsignedIntegerToString(void)
 {
 	char *String_Results[] = {"12345", "0", "16", "4294967295", "1000000"}, String_Result[20];
 	unsigned int i, Numbers[] = {12345, 0, 16, 4294967295UL, 1000000};
@@ -145,11 +124,7 @@ static int TestsStringConvertUnsignedIntegerToString(void)
 	return 0;
 }
 
-/** Test the StringCopy() function.
- * @return 0 if all tests were successful,
- * @return 1 if a test failed.
- */
-static int TestsStringCopy(void)
+int TestsStringCopy(void)
 {
 	int i;
 	char *String_Source = "Irrelevant string content.", String_Destination[50];
@@ -168,11 +143,7 @@ static int TestsStringCopy(void)
 	return 0;
 }
 
-/** Test the StringGetSize() function.
- * @return 0 if all tests were successful,
- * @return 1 if a test failed.
- */
-static int TestsStringGetSize(void)
+int TestsStringGetSize(void)
 {
 	char *String_Empty = "", String[] = "123456789"; // String must be an array in order to use sizeof() to get its size
 	
@@ -190,37 +161,5 @@ static int TestsStringGetSize(void)
 		return 1;
 	}
 	
-	return 0;
-}
-
-//-------------------------------------------------------------------------------------------------
-// Public functions
-//-------------------------------------------------------------------------------------------------
-int TestsString(void)
-{
-	DisplayMessageTestStarting("Libraries String API");
-	
-	ScreenWriteString("StringCompare()...\n");
-	if (TestsStringCompare() != 0) return 1;
-	
-	ScreenWriteString("StringConcatenate()...\n");
-	if (TestsStringConcatenate() != 0) return 1;
-	
-	ScreenWriteString("StringConcatenateUpToNumber()...\n");
-	if (TestsStringConcatenateUpToNumber() != 0) return 1;
-	
-	ScreenWriteString("StringConvertStringToUnsignedInteger()...\n");
-	if (TestsStringConvertStringToUnsignedInteger() != 0) return 1;
-	
-	ScreenWriteString("StringConvertUnsignedIntegerToString()...\n");
-	if (TestsStringConvertUnsignedIntegerToString() != 0) return 1;
-	
-	ScreenWriteString("StringCopy()...\n");
-	if (TestsStringCopy() != 0) return 1;
-	
-	ScreenWriteString("StringGetSize()...\n");
-	if (TestsStringGetSize() != 0) return 1;
-	
-	DisplayMessageTestSuccessful();
 	return 0;
 }
