@@ -397,6 +397,59 @@ Exit:
 	return Return_Value;
 }
 
+/** Check if a previously opened file that goes deleted is really automatically closed.
+ * @return 0 if test was successful,
+ * @return 1 if the test failed.
+ */
+static int TestsFileCloseDeletedOpenedFile(void)
+{
+	unsigned int File_ID;
+	int Result, Return_Value = 1;
+	char String_Data[] = "Test data";
+	
+	// Create a file
+	Result = FileOpen("_test_", 'w', &File_ID);
+	if (Result != ERROR_CODE_NO_ERROR)
+	{
+		DisplayMessageErrorAndCode("while creating the file to delete", Result);
+		goto Exit;
+	}
+	// Write some data to it
+	Result = FileWrite(File_ID, String_Data, sizeof(String_Data));
+	if (Result != ERROR_CODE_NO_ERROR)
+	{
+		DisplayMessageErrorAndCode("while writing data to the file", Result);
+		goto Exit;
+	}
+	FileClose(File_ID);
+	
+	// Open the file for reading
+	Result = FileOpen("_test_", 'r', &File_ID);
+	if (Result != ERROR_CODE_NO_ERROR)
+	{
+		DisplayMessageErrorAndCode("while opening the file to delete for reading", Result);
+		goto Exit;
+	}
+	
+	// Delete the file (the file must be automatically closed)
+	FileDelete("_test_");
+	
+	// Try to open the file another time (this must succeed because the previous file has been closed)
+	Result = FileOpen("_test_", 'w', &File_ID);
+	if (Result != ERROR_CODE_NO_ERROR)
+	{
+		DisplayMessageErrorAndCode("while opening the deleted file a second time", Result);
+		goto Exit;
+	}
+	
+	Return_Value = 0;
+	
+Exit:
+	FileClose(File_ID);
+	FileDelete("_test_");
+	return Return_Value;
+}
+
 //-------------------------------------------------------------------------------------------------
 // Public functions
 //-------------------------------------------------------------------------------------------------
@@ -424,6 +477,10 @@ int TestsFile(void)
 	
 	DisplayMessageTestStarting("Blocks List complete fill");
 	if (TestsFileFillBlocksList()) return 1;
+	DisplayMessageTestSuccessful();
+	
+	DisplayMessageTestStarting("Automatic closing of an deleted opened file");
+	if (TestsFileCloseDeletedOpenedFile()) return 1;
 	DisplayMessageTestSuccessful();
 	
 	return 0;
