@@ -9,11 +9,11 @@
 	<body>
 		<h1 align="center">Keyboard driver implementation</h1>
 		
-		<h2>1. IBM keyboard functionning</h2>
+		<h2>1. IBM keyboard functioning</h2>
 		<p>
-			The keyboard behaviour is really simple, it tells if a key is pressed or released.<br />
+			The keyboard behavior is really simple, it tells if a key is pressed or released.<br />
 			Each keystroke owns an identifying 7-bit scan code. The state of the keystroke (pressed or released) is indicated by the value of the eighth bit of the byte sent by the keyboard.<br />
-			Some keys have been added after the first keyboard version, they are called "extended keys". To differenciate between normal scan codes and extended scan codes, the byte value <b>0xE0</b> is sent before an extended scan code.<br />
+			Some keys have been added after the first keyboard version, they are called "extended keys". To differentiate between normal scan codes and extended scan codes, the byte value <b>0xE0</b> is sent before an extended scan code.<br />
 			Using keyboards terminology, to press a key generates a "make code" and to release a key generates a "release code" or "break code".
 		</p>
 		
@@ -498,7 +498,7 @@
 			<li>When pressing a shift key and caps lock is active, caps lock mode is not disabled, and the letter is not written in lowercase.</li>
 			<li>Stress key (¨ ^) can be used only to create stressed vowels, because the ^ symbol can be done with Alt Gr + 9 and the ¨ symbol does not exist into the ASCII code.</li>
 			<li>Alt Gr + c = &Ccedil;</li>
-			<li>Only 3 keys are not supported for now due to their special 4-byte scan code sequences (pressing them can lead to an undetermined behaviour) :
+			<li>Only 3 keys are not supported for now due to their special 4-byte scan code sequences (pressing them can lead to an undetermined behavior) :
 				<ul>
 					<li>Print screen</li>
 					<li>Scroll lock</li>
