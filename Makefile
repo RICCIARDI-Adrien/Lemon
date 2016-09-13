@@ -17,10 +17,11 @@ GLOBAL_PROCESSOR_TYPE ?= pentium
 SYSTEM_IS_DEBUG_ENABLED ?= 0
 SYSTEM_HARD_DISK_LOGICAL_BLOCK_ADDRESSING_MODE ?= 28
 SYSTEM_HARD_DISK_TYPE ?= ide
+SYSTEM_ETHERNET_CONTROLLER_DRIVER ?= none
 SYSTEM_RAM_SIZE ?= 16
 
 # Make the build options available as a C string to be used by the system "version" command
-STRING_BUILD_CONFIGURATION_VARIABLES = "\"GLOBAL_SYSTEM_LANGUAGE=$(GLOBAL_SYSTEM_LANGUAGE)\nGLOBAL_PROCESSOR_TYPE=$(GLOBAL_PROCESSOR_TYPE)\nSYSTEM_IS_DEBUG_ENABLED=$(SYSTEM_IS_DEBUG_ENABLED)\nSYSTEM_HARD_DISK_LOGICAL_BLOCK_ADDRESSING_MODE=$(SYSTEM_HARD_DISK_LOGICAL_BLOCK_ADDRESSING_MODE)\nSYSTEM_HARD_DISK_TYPE=$(SYSTEM_HARD_DISK_TYPE)\nSYSTEM_RAM_SIZE=$(SYSTEM_RAM_SIZE)\n\""
+STRING_BUILD_CONFIGURATION_VARIABLES = "\"GLOBAL_SYSTEM_LANGUAGE=$(GLOBAL_SYSTEM_LANGUAGE)\nGLOBAL_PROCESSOR_TYPE=$(GLOBAL_PROCESSOR_TYPE)\nSYSTEM_IS_DEBUG_ENABLED=$(SYSTEM_IS_DEBUG_ENABLED)\nSYSTEM_HARD_DISK_LOGICAL_BLOCK_ADDRESSING_MODE=$(SYSTEM_HARD_DISK_LOGICAL_BLOCK_ADDRESSING_MODE)\nSYSTEM_HARD_DISK_TYPE=$(SYSTEM_HARD_DISK_TYPE)\nSYSTEM_ETHERNET_CONTROLLER_DRIVER=$(SYSTEM_ETHERNET_CONTROLLER_DRIVER)\nSYSTEM_RAM_SIZE=$(SYSTEM_RAM_SIZE)\n\""
 
 export GLOBAL_TOOL_ASSEMBLER
 export GLOBAL_TOOL_COMPILER
@@ -30,6 +31,7 @@ export GLOBAL_PROCESSOR_TYPE
 export SYSTEM_IS_DEBUG_ENABLED
 export SYSTEM_HARD_DISK_LOGICAL_BLOCK_ADDRESSING_MODE
 export SYSTEM_HARD_DISK_TYPE
+export SYSTEM_ETHERNET_CONTROLLER_DRIVER
 export SYSTEM_RAM_SIZE
 export STRING_BUILD_CONFIGURATION_VARIABLES
 
@@ -70,13 +72,13 @@ help:
 	@echo "Global variables affect the whole system (the operating system and all applications)."
 	@echo "System variables affect only the operating system, not the applications."
 	@echo
-	@echo "- GLOBAL_TOOL_ASSEMBLER : which x86 assembler binary to use (useful to sepcify a cross-compilation toolchain binary)"
+	@echo "- GLOBAL_TOOL_ASSEMBLER : which x86 assembler binary to use (useful to specify a cross-compilation toolchain binary)"
 	@echo "    + nasm (default value)"
-	@echo "- GLOBAL_TOOL_COMPILER : which C compiler binary to use (useful to sepcify a cross-compilation toolchain binary)"
+	@echo "- GLOBAL_TOOL_COMPILER : which C compiler binary to use (useful to specify a cross-compilation toolchain binary)"
 	@echo "    + gcc (default value)"
-	@echo "- GLOBAL_TOOL_LINKER : which object linker binary to use (useful to sepcify a cross-compilation toolchain binary)"
+	@echo "- GLOBAL_TOOL_LINKER : which object linker binary to use (useful to specify a cross-compilation toolchain binary)"
 	@echo "    + ld (default value)"
-	@echo "- GLOBAL_TOOL_ISO_GENERATOR : which CDROM ISO image binary to use (useful to sepcify a cross-compilation toolchain binary)"
+	@echo "- GLOBAL_TOOL_ISO_GENERATOR : which CDROM ISO image binary to use (useful to specify a cross-compilation toolchain binary)"
 	@echo "    + genisoimage (default value)"
 	@echo "- GLOBAL_SYSTEM_LANGUAGE : system and applications language"
 	@echo "    + english"
@@ -97,6 +99,9 @@ help:
 	@echo "- SYSTEM_HARD_DISK_TYPE : choose on which hard disk type the system will be installed"
 	@echo "    + ide (default value)"
 	@echo "    + sata"
+	@echo "- SYSTEM_ETHERNET_CONTROLLER_DRIVER : the driver to use for the network controller"
+	@echo "    + none (default value, disabling ethernet controller)"
+	@echo "    + 82540em (Intel PRO/1000 board)"
 	@echo "- SYSTEM_RAM_SIZE : how many RAM can be used by the whole system (in mega bytes), use an integer value from 2 to 4096"
 	@echo "    + 2 (minimum value)"
 	@echo "    + 16 (default value)"

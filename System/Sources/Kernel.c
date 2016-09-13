@@ -3,6 +3,7 @@
  * @author Adrien RICCIARDI
  */
 #include <Architecture.h>
+#include <Drivers/Driver_Ethernet.h>
 #include <Drivers/Driver_Hard_Disk.h>
 #include <Drivers/Driver_Keyboard.h>
 #include <Drivers/Driver_PIC.h>
@@ -106,6 +107,23 @@ void __attribute__((section(".init"))) KernelEntryPoint(void)
 		KernelWaitForEnterKey();
 		KeyboardRebootSystem();
 	}
+	
+	#if (!CONFIGURATION_BUILD_INSTALLER) && CONFIGURATION_IS_ETHERNET_CONTROLLER_ENABLED
+		switch (EthernetInitialize())
+		{
+			case 1:
+				ScreenWriteString("ERR 1\n"); // TODO
+				KeyboardReadCharacter();
+				break;
+			case 2:
+				ScreenWriteString("ERR 2\n"); // TODO
+				KeyboardReadCharacter();
+				break;
+				
+			default:
+				break;
+		}
+	#endif
 	
 	// Load file system (can't do that in the Installer program)
 	#if !CONFIGURATION_BUILD_INSTALLER

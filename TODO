@@ -5,6 +5,8 @@
 Système
 -------
 
+- renommer hard_disk_type en hard_disk_driver
+
 - même variable CONFIGURATION_IS_DEBUG_ENABLED dans MBR ?
 
 - mettre Is_Opened dans descripteur fichier pour éviter boucle recherche si fichier déjà ouvert

@@ -13,7 +13,11 @@
 
 /** Mass storage class base code. */
 #define PCI_CLASS_CODE_BASE_MASS_STORAGE 0x01
+/** Network controller class base code. */
+#define PCI_CLASS_CODE_BASE_NETWORK_CONTROLLER 0x02
 
+/** Ethernet controller sub-class code. */
+#define PCI_CLASS_CODE_SUB_CLASS_ETHERNET 0x00
 /** SATA controller sub-class code. */
 #define PCI_CLASS_CODE_SUB_CLASS_SATA 0x06
 

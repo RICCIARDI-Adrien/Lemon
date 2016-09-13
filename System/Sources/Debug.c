@@ -12,6 +12,23 @@
 //-------------------------------------------------------------------------------------------------
 // Public functions
 //-------------------------------------------------------------------------------------------------
+void DebugWriteHexadecimalByte(unsigned char Byte)
+{
+	unsigned char Nibble;
+	
+	// Convert the high nibble to ASCII
+	Nibble = Byte >> 4;
+	if (Nibble < 10) Nibble += '0';
+	else Nibble += 'A' - 10; // Don't forget that 0x0A is decimal 10...
+	ScreenWriteCharacter(Nibble);
+	
+	// Convert the low nibble to ASCII
+	Nibble = Byte & 0x0F;
+	if (Nibble < 10) Nibble += '0';
+	else Nibble += 'A' - 10;
+	ScreenWriteCharacter(Nibble);
+}
+
 void DebugWriteHexadecimalInteger(unsigned int Integer)
 {
 	unsigned int i, Nibble;

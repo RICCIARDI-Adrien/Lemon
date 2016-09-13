@@ -42,6 +42,11 @@
 //-------------------------------------------------------------------------------------------------
 // Functions
 //-------------------------------------------------------------------------------------------------
+/** Display a byte value converted to hexadecimal.
+ * @param Byte The value to display.
+ */
+void DebugWriteHexadecimalByte(unsigned char Byte);
+
 /** Display a double-word value converted to hexadecimal.
  * @param Integer The value to display.
  */

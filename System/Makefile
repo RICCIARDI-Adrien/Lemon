@@ -9,6 +9,16 @@ CCFLAGS += -DCONFIGURATION_BUILD_INSTALLER=0 -DSTRING_BUILD_CONFIGURATION_VARIAB
 LDFLAGS = -T Linker_Script.ld
 MBR_FLAGS = -DSECTORS_TO_LOAD_COUNT=64
 
+#------------------------------------------------------------------------------------------------------------------------------
+# User configuration
+#------------------------------------------------------------------------------------------------------------------------------
+ifeq ($(SYSTEM_ETHERNET_CONTROLLER_DRIVER),82540em)
+	CCFLAGS += -DCONFIGURATION_IS_ETHERNET_CONTROLLER_ENABLED=1
+	OBJECTS_DRIVERS += $(PATH_OBJECTS)/Driver_PCI.o $(PATH_OBJECTS)/Driver_Ethernet_Intel_82540EM.o
+else
+	CCFLAGS += -DCONFIGURATION_IS_ETHERNET_CONTROLLER_ENABLED=0
+endif
+
 # The common makefile must be included after the paths and flags variables have been defined (because it uses them), and before the object variables are set (because it contains some of them)
 include Makefile_Core.mk
 
@@ -19,6 +29,12 @@ all: clean $(PATH_OBJECTS)/MBR.bin $(OBJECTS)
 	$(GLOBAL_TOOL_LINKER) $(LDFLAGS) $(OBJECTS) -o $(PATH_OBJECTS)/Kernel.bin
 	######## Build successful ########
 	@ls -l $(PATH_OBJECTS)/Kernel.bin | awk '{print "Kernel size : " $$5 + 512 " bytes"}'
+	
+#------------------------------------------------------------------------------------------------------------------------------
+# System-specific drivers (not needed by the Installer)
+#------------------------------------------------------------------------------------------------------------------------------
+$(PATH_OBJECTS)/Driver_Ethernet_Intel_82540EM.o: $(PATH_SOURCES)/Drivers/Driver_Ethernet_Intel_82540EM.c
+	$(GLOBAL_TOOL_COMPILER) $(CCFLAGS) -c $(PATH_SOURCES)/Drivers/Driver_Ethernet_Intel_82540EM.c -o $(PATH_OBJECTS)/Driver_Ethernet_Intel_82540EM.o
 
 #------------------------------------------------------------------------------------------------------------------------------
 # Shell
