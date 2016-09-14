@@ -48,4 +48,7 @@
  */
 #define CONFIGURATION_HARD_DISK_SATA_DRIVE_INDEX 0
 
+/** Ethernet receive and transmit buffers size in byte (Intel 82540EM available values are 256 bytes, 512 bytes, 1024 bytes and 2048 bytes as jumbo frames are not enabled). As the equipements default MTU is 1500 bytes, 2048 bytes should be fine). */
+#define CONFIGURATION_ETHERNET_BUFFER_SIZE 2048 // TODO this value does not change the controller value
+
 #endif
