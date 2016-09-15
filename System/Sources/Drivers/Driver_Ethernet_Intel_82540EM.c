@@ -25,6 +25,11 @@
 /** Set to 1 to receive broadcast packets, set to 0 to disable broadcast packets reception. */
 #define ETHERNET_CONTROLLER_RECEIVE_CONTROL_REGISTER_BROADCAST_ACCEPT_MODE_BIT 15
 
+/** Enable transmission when set to 1, disable transmission when set to 0. */
+#define ETHERNET_CONTROLLER_TRANSMIT_CONTROL_REGISTER_TRANSMIT_ENABLE_BIT 1
+/** Enable or disable short packets padding. */
+#define ETHERNET_CONTROLLER_TRANSMIT_CONTROL_REGISTER_PAD_SHORT_PACKETS_BIT 3
+
 //-------------------------------------------------------------------------------------------------
 // Private types
 //-------------------------------------------------------------------------------------------------
@@ -45,7 +50,7 @@ typedef struct __attribute__((packed))
 	unsigned int MDI_Control;
 	unsigned int MDI_Control_High; // Not used in 32 bits mode
 	
-	unsigned int Reserved_2[38];
+	unsigned char Reserved_2[0xC0 - 0x28];
 	
 	// Offset 0xC0
 	unsigned int Interrupt_Cause_Read;
@@ -64,15 +69,23 @@ typedef struct __attribute__((packed))
 	// Offset 0x100
 	unsigned int Receive_Control;
 	
-	unsigned char Reserved_5[0x2800 - 0x104];
+	unsigned char Reserved_5[0x400 - 0x104];
+	
+	// Offset 0x400
+	unsigned int Transmit_Control;
+	unsigned int Reserved_6[3];
+	// Offset 0x410
+	unsigned int Transmit_Inter_Packet_Gap;
+	
+	unsigned char Reserved_7[0x2800 - 0x414];
 	
 	// Offset 0x2800
 	void *Pointer_Receive_Descriptor_Base_Address_Low;
 	// Offset 0x2804
 	void *Pointer_Receive_Descriptor_Base_Address_High;
 	// Offset 0x2808
-	unsigned int Receive_Descriptors_Length;
-	unsigned int Receive_Descriptors_Length_High;
+	unsigned int Receive_Descriptor_Length;
+	unsigned int Receive_Descriptor_Length_High;
 	// Offset 0x2810
 	unsigned int Receive_Descriptor_Head;
 	unsigned int Receive_Descriptor_Head_High;
@@ -82,7 +95,23 @@ typedef struct __attribute__((packed))
 	// Offset 0x2820
 	unsigned int Receive_Delay_Timer; //<! Set to zero to generate an interrupt each time a packet is received.
 	
-	unsigned char Reserved_6[0x5200 - 0x2824];
+	unsigned char Reserved_8[0x3800 - 0x2824];
+	
+	// Offset 0x3800
+	void *Pointer_Transmit_Descriptor_Base_Address_Low;
+	// Offset 0x3804
+	void *Pointer_Transmit_Descriptor_Base_Address_High;
+	// Offset 0x3808
+	unsigned int Transmit_Descriptor_Length;
+	unsigned int Transmit_Descriptor_Length_High;
+	// Offset 0x3810
+	unsigned int Transmit_Descriptor_Head;
+	unsigned int Transmit_Descriptor_Head_High;
+	// Offset 0x3818
+	unsigned int Transmit_Descriptor_Tail;
+	unsigned int Transmit_Descriptor_Tail_High;
+	
+	unsigned char Reserved_9[0x5200 - 0x3820];
 	
 	// Offset 0x5200
 	unsigned int Multicast_Table_Array_Entries[128];
@@ -102,6 +131,17 @@ typedef struct __attribute__((packed))
 	unsigned short Special;
 } TEthernetControllerReceiveDescriptor;
 
+/** A transmit buffer descriptor. */
+typedef struct __attribute__((packed))
+{
+	void *Pointer_Buffer_Address;
+	void *Pointer_Buffer_Address_High;
+	unsigned short Length;
+	unsigned short Command_And_Checksum_Offset;
+	unsigned short Checksum_Start_Field;
+	unsigned short Special;
+} TEthernetControllerTransmitDescriptor;
+
 //-------------------------------------------------------------------------------------------------
 // Private variables
 //-------------------------------------------------------------------------------------------------
@@ -110,11 +150,13 @@ static TEthernetControllerRegisters *Pointer_Ethernet_Controller_Registers;
 
 /** The receive buffer descriptors list (currently limited to only one descriptor). */
 static TEthernetControllerReceiveDescriptor __attribute__((aligned(16))) Ethernet_Controller_Receive_Descriptor; // Must be aligned on an Intel paragraph
+/** The transmit buffer descriptors list (currently limited to only one descriptor). */
+static TEthernetControllerTransmitDescriptor __attribute__((aligned(16))) Ethernet_Controller_Transmit_Descriptor; // Must be aligned on an Intel paragraph
 
 /** The buffer dedicated to packets reception. */
 static unsigned char Ethernet_Controller_Reception_Buffer[CONFIGURATION_ETHERNET_BUFFER_SIZE];
 /** The buffer dedicated to packets transmission. */
-//static unsigned char Ethernet_Controller_Transmission_Buffer[CONFIGURATION_ETHERNET_BUFFER_SIZE];
+static unsigned char Ethernet_Controller_Transmission_Buffer[CONFIGURATION_ETHERNET_BUFFER_SIZE];
 
 //-------------------------------------------------------------------------------------------------
 // Public functions
@@ -135,15 +177,21 @@ int EthernetInitialize(void)
 	// Give access to registers
 	Pointer_Ethernet_Controller_Registers = (TEthernetControllerRegisters *) Configuration_Space_Header.Base_Address_Registers[0];
 	
+	//===============================================
 	// General configuration section of the datasheet
+	//===============================================
 	Pointer_Ethernet_Controller_Registers->Device_Control = (1 << ETHERNET_CONTROLLER_DEVICE_CONTROL_REGISTER_SET_LINK_UP_BIT) | (1 << ETHERNET_CONTROLLER_DEVICE_CONTROL_REGISTER_AUTO_SPEED_DETECTION_ENABLE_BIT);
+	Pointer_Ethernet_Controller_Registers->Extended_Device_Control = 0; // Use GMII internal PHY mode, as recommended for 82540EM chip
 	
+	//===============================================
 	// Receive initialization section of the datasheet
+	//===============================================
 	// Set all multicast entries to zero
 	for (i = 0; i < sizeof(Pointer_Ethernet_Controller_Registers->Multicast_Table_Array_Entries) / sizeof(Pointer_Ethernet_Controller_Registers->Multicast_Table_Array_Entries[0]); i++) Pointer_Ethernet_Controller_Registers->Multicast_Table_Array_Entries[i] = 0;
 	
+	Pointer_Ethernet_Controller_Registers->Interrupt_Cause_Read = 0;
 	// Clear interrupts mask
-	Pointer_Ethernet_Controller_Registers->Interrupt_Mask_Set_Read = 0;
+	Pointer_Ethernet_Controller_Registers->Interrupt_Mask_Set_Read = 1 << 7; // TODO bit define
 	// Disable all interrupts (the system does not need to be told whether a packet arrived or not)
 	Pointer_Ethernet_Controller_Registers->Interrupt_Mask_Clear = 0xFFFFFFFF;
 	
@@ -151,18 +199,39 @@ int EthernetInitialize(void)
 	Pointer_Ethernet_Controller_Registers->Pointer_Receive_Descriptor_Base_Address_High = NULL;
 	Pointer_Ethernet_Controller_Registers->Pointer_Receive_Descriptor_Base_Address_Low = &Ethernet_Controller_Receive_Descriptor;
 	// Set the receive descriptors list length
-	Pointer_Ethernet_Controller_Registers->Receive_Descriptors_Length = sizeof(Ethernet_Controller_Receive_Descriptor) << 6; // The value must be 128-bit aligned
+	Pointer_Ethernet_Controller_Registers->Receive_Descriptor_Length = sizeof(Ethernet_Controller_Receive_Descriptor) << 6; // The value must be 128-bit aligned
 	// Select the only available descriptor
 	Pointer_Ethernet_Controller_Registers->Receive_Descriptor_Head = 0;
-	Pointer_Ethernet_Controller_Registers->Receive_Descriptor_Tail = 0;
+	Pointer_Ethernet_Controller_Registers->Receive_Descriptor_Tail = 1;
 	
 	// Configure the receive descriptor
+	Ethernet_Controller_Receive_Descriptor.Status_And_Errors = 0;
 	Ethernet_Controller_Receive_Descriptor.Pointer_Buffer_Address = Ethernet_Controller_Reception_Buffer;
 	
 	// Configure the reception behaviour
 	// TODO switch with available buffer values or always use 2048 ?
 	Pointer_Ethernet_Controller_Registers->Receive_Control = 1 << ETHERNET_CONTROLLER_RECEIVE_CONTROL_REGISTER_BROADCAST_ACCEPT_MODE_BIT;
 	Pointer_Ethernet_Controller_Registers->Receive_Delay_Timer = 0; // Generate an interrupt each time a packet is received
+	
+	//===============================================
+	// Transmission initialization section of the datasheet
+	//===============================================
+	// Set the transmit descriptors list starting address
+	Pointer_Ethernet_Controller_Registers->Pointer_Transmit_Descriptor_Base_Address_High = NULL;
+	Pointer_Ethernet_Controller_Registers->Pointer_Transmit_Descriptor_Base_Address_Low = &Ethernet_Controller_Transmit_Descriptor;
+	// Set the receive descriptors list length
+	Pointer_Ethernet_Controller_Registers->Transmit_Descriptor_Length = sizeof(Ethernet_Controller_Transmit_Descriptor) << 6; // The value must be 128-bit aligned
+	// Select the only available descriptor
+	Pointer_Ethernet_Controller_Registers->Transmit_Descriptor_Head = 0;
+	Pointer_Ethernet_Controller_Registers->Transmit_Descriptor_Tail = 0;
+	
+	// Configure the transmit descriptor
+	Ethernet_Controller_Transmit_Descriptor.Pointer_Buffer_Address = Ethernet_Controller_Transmission_Buffer;
+	
+	// Configure the transmission behaviour
+	Pointer_Ethernet_Controller_Registers->Transmit_Control = (0x40 << 12) | (0x0F << 4) | (1 << ETHERNET_CONTROLLER_TRANSMIT_CONTROL_REGISTER_PAD_SHORT_PACKETS_BIT);
+	// Set the Inter Packet Gap value
+	Pointer_Ethernet_Controller_Registers->Transmit_Inter_Packet_Gap = (10 << 20) | (10 << 10) | 10;
 	
 	// The controller MAC address is loaded from the board EEPROM, no need to set it. Display it at the initialization end to make sure the field was not overwritten by previous initialization
 	DEBUG_SECTION_START
@@ -194,8 +263,10 @@ int EthernetInitialize(void)
 	}
 	DEBUG_SECTION_END
 	
+	// Enable transmission
+	Pointer_Ethernet_Controller_Registers->Transmit_Control |= 1 << ETHERNET_CONTROLLER_TRANSMIT_CONTROL_REGISTER_TRANSMIT_ENABLE_BIT;
 	// Enable reception
-	Pointer_Ethernet_Controller_Registers->Receive_Control |= 1 << ETHERNET_CONTROLLER_RECEIVE_CONTROL_REGISTER_RECEIVER_ENABLE_BIT;
+	Pointer_Ethernet_Controller_Registers->Receive_Control |= 1 << ETHERNET_CONTROLLER_RECEIVE_CONTROL_REGISTER_RECEIVER_ENABLE_BIT | 1;
 	
 	DEBUG_SECTION_START
 	DEBUG_DISPLAY_CURRENT_FUNCTION_NAME();
@@ -238,10 +309,42 @@ int EthernetInitialize(void)
 	}
 	DEBUG_SECTION_END
 	
-#if 0
+	/*Ethernet_Controller_Transmission_Buffer[0] = 0xFF;
+	Ethernet_Controller_Transmission_Buffer[1] = 0xFF;
+	Ethernet_Controller_Transmission_Buffer[2] = 0xFF;
+	Ethernet_Controller_Transmission_Buffer[3] = 0xFF;
+	Ethernet_Controller_Transmission_Buffer[4] = 0xFF;
+	Ethernet_Controller_Transmission_Buffer[5] = 0xFF;
+	Ethernet_Controller_Transmission_Buffer[6] = 0x08;
+	Ethernet_Controller_Transmission_Buffer[7] = 0x00;
+	Ethernet_Controller_Transmission_Buffer[8] = 0x27;
+	Ethernet_Controller_Transmission_Buffer[9] = 0x04;
+	Ethernet_Controller_Transmission_Buffer[10] = 0x64;
+	Ethernet_Controller_Transmission_Buffer[11] = 0xA3;
+	Ethernet_Controller_Transmission_Buffer[12] = 0x08;
+	Ethernet_Controller_Transmission_Buffer[13] = 0x00;
+	Ethernet_Controller_Transmit_Descriptor.Length = 256;
+	Ethernet_Controller_Transmit_Descriptor.Command_And_Checksum_Offset = 1;*/
+
+	
+#if 1
 	while (1)
 	{
 		if (Pointer_Ethernet_Controller_Registers->Interrupt_Cause_Read /*& (1 << 7)*/) ScreenWriteString("INT\n");
+		if (Ethernet_Controller_Receive_Descriptor.Status_And_Errors)
+		{
+			DebugWriteHexadecimalInteger(Ethernet_Controller_Receive_Descriptor.Status_And_Errors);
+			ScreenWriteCharacter('\n');
+			DebugWriteHexadecimalByte(Ethernet_Controller_Reception_Buffer[12]);
+			DebugWriteHexadecimalByte(Ethernet_Controller_Reception_Buffer[13]);
+			ScreenWriteCharacter('\n');
+			
+			Pointer_Ethernet_Controller_Registers->Receive_Descriptor_Head = 0;
+			Pointer_Ethernet_Controller_Registers->Receive_Descriptor_Tail = 1;
+			
+			Ethernet_Controller_Receive_Descriptor.Status_And_Errors = 0;
+			//KeyboardReadCharacter();
+		}
 	}
 #endif
 	
