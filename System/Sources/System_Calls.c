@@ -4,6 +4,7 @@
  */
 #include <Architecture.h>
 #include <Configuration.h>
+#include <Drivers/Driver_Ethernet.h>
 #include <Drivers/Driver_Keyboard.h>
 #include <Drivers/Driver_Screen.h>
 #include <Drivers/Driver_Timer.h>
@@ -174,6 +175,16 @@ static void SystemCallKeyboardIsKeyAvailable(void)
 }
 
 //====================================================================================================================
+// Ethernet controller calls
+//====================================================================================================================
+static void SystemCallEthernetReceivePacket(void)
+{
+	#if CONFIGURATION_IS_ETHERNET_CONTROLLER_ENABLED
+		EthernetReceivePacket(Pointer_1, Pointer_2);
+	#endif
+}
+
+//====================================================================================================================
 // File system calls
 //====================================================================================================================
 static void SystemCallFileExists(void)
@@ -244,6 +255,7 @@ TSystemCallHandler System_Calls_Handlers[] =
 	SystemCallScreenDisplayBuffer, // SYSTEM_CALL_SCREEN_DISPLAY_BUFFER
 	SystemCallKeyboardReadCharacter, // SYSTEM_CALL_KEYBOARD_READ_CHARACTER
 	SystemCallKeyboardIsKeyAvailable, // SYSTEM_CALL_KEYBOARD_IS_KEY_AVAILABLE
+	SystemCallEthernetReceivePacket, // SYSTEM_CALL_ETHERNET_RECEIVE_PACKET
 	SystemCallFileExists, // SYSTEM_CALL_FILE_EXISTS
 	FileListInitialize, // SYSTEM_CALL_FILE_LIST_INITIALIZE
 	SystemCallFileListNext, // SYSTEM_CALL_FILE_LIST_NEXT

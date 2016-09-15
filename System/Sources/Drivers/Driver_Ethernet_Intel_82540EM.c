@@ -6,6 +6,7 @@
 #include <Debug.h>
 #include <Drivers/Driver_Ethernet.h>
 #include <Drivers/Driver_PCI.h>
+#include <Standard_Functions.h>
 
 //-------------------------------------------------------------------------------------------------
 // Private constants
@@ -189,9 +190,8 @@ int EthernetInitialize(void)
 	// Set all multicast entries to zero
 	for (i = 0; i < sizeof(Pointer_Ethernet_Controller_Registers->Multicast_Table_Array_Entries) / sizeof(Pointer_Ethernet_Controller_Registers->Multicast_Table_Array_Entries[0]); i++) Pointer_Ethernet_Controller_Registers->Multicast_Table_Array_Entries[i] = 0;
 	
-	Pointer_Ethernet_Controller_Registers->Interrupt_Cause_Read = 0;
 	// Clear interrupts mask
-	Pointer_Ethernet_Controller_Registers->Interrupt_Mask_Set_Read = 1 << 7; // TODO bit define
+	Pointer_Ethernet_Controller_Registers->Interrupt_Mask_Set_Read = 0;
 	// Disable all interrupts (the system does not need to be told whether a packet arrived or not)
 	Pointer_Ethernet_Controller_Registers->Interrupt_Mask_Clear = 0xFFFFFFFF;
 	
@@ -266,7 +266,7 @@ int EthernetInitialize(void)
 	// Enable transmission
 	Pointer_Ethernet_Controller_Registers->Transmit_Control |= 1 << ETHERNET_CONTROLLER_TRANSMIT_CONTROL_REGISTER_TRANSMIT_ENABLE_BIT;
 	// Enable reception
-	Pointer_Ethernet_Controller_Registers->Receive_Control |= 1 << ETHERNET_CONTROLLER_RECEIVE_CONTROL_REGISTER_RECEIVER_ENABLE_BIT | 1;
+	Pointer_Ethernet_Controller_Registers->Receive_Control |= 1 << ETHERNET_CONTROLLER_RECEIVE_CONTROL_REGISTER_RECEIVER_ENABLE_BIT;
 	
 	DEBUG_SECTION_START
 	DEBUG_DISPLAY_CURRENT_FUNCTION_NAME();
@@ -325,37 +325,28 @@ int EthernetInitialize(void)
 	Ethernet_Controller_Transmission_Buffer[13] = 0x00;
 	Ethernet_Controller_Transmit_Descriptor.Length = 256;
 	Ethernet_Controller_Transmit_Descriptor.Command_And_Checksum_Offset = 1;*/
-
-	
-#if 1
-	while (1)
-	{
-		if (Pointer_Ethernet_Controller_Registers->Interrupt_Cause_Read /*& (1 << 7)*/) ScreenWriteString("INT\n");
-		if (Ethernet_Controller_Receive_Descriptor.Status_And_Errors)
-		{
-			DebugWriteHexadecimalInteger(Ethernet_Controller_Receive_Descriptor.Status_And_Errors);
-			ScreenWriteCharacter('\n');
-			DebugWriteHexadecimalByte(Ethernet_Controller_Reception_Buffer[12]);
-			DebugWriteHexadecimalByte(Ethernet_Controller_Reception_Buffer[13]);
-			ScreenWriteCharacter('\n');
-			
-			Pointer_Ethernet_Controller_Registers->Receive_Descriptor_Head = 0;
-			Pointer_Ethernet_Controller_Registers->Receive_Descriptor_Tail = 1;
-			
-			Ethernet_Controller_Receive_Descriptor.Status_And_Errors = 0;
-			//KeyboardReadCharacter();
-		}
-	}
-#endif
 	
 	return 0;
 }
 
-/*int EthernetReceivePacket(unsigned int Buffer_Size, void *Pointer_Buffer)
+void EthernetReceivePacket(unsigned int *Pointer_Buffer_Size, void *Pointer_Buffer)
 {
+	// Wait for a packet to be received
+	while (!Ethernet_Controller_Receive_Descriptor.Status_And_Errors);
+	
+	// TODO check for max packet size ?
+	
+	// Get packet to userspace
+	*Pointer_Buffer_Size = Ethernet_Controller_Receive_Descriptor.Length; // Get packet size
+	memcpy(Pointer_Buffer, Ethernet_Controller_Reception_Buffer, Ethernet_Controller_Receive_Descriptor.Length); // Copy the packet content to userspace
+	
+	// Re-enable packet reception
+	Ethernet_Controller_Receive_Descriptor.Status_And_Errors = 0; // Reset status bits as suggested in datasheet
+	Pointer_Ethernet_Controller_Registers->Receive_Descriptor_Head = 0; // Reset reception buffer descriptors queue
+	Pointer_Ethernet_Controller_Registers->Receive_Descriptor_Tail = 1;
 }
 
-int EthernetSendPacket(unsigned int Buffer_Size, void *Pointer_Buffer)
+/*int EthernetSendPacket(unsigned int Buffer_Size, void *Pointer_Buffer)
 {
 }*/
 

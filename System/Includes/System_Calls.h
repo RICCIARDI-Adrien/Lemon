@@ -27,7 +27,6 @@ typedef enum
 {
 	// System related
 	/** Exit from an application and return to the system.
-	 * @param eax = 0
 	 * @param ebx = don't care
 	 * @param ecx = don't care
 	 * @param edx = don't care
@@ -37,7 +36,6 @@ typedef enum
 	SYSTEM_CALL_SYSTEM_EXIT_PROGRAM,
 
 	/** Get a specific system parameter.
-	 * @param eax = 1
 	 * @param ebx = The parameter ID (see TSystemCallSystemParameterID).
 	 * @param ecx = don't care
 	 * @param edx = Pointer on parameter output data (type may change according to requested parameter).
@@ -49,7 +47,6 @@ typedef enum
 
 	// Timer
 	/** Read the hardware timer 0 counter.
-	 * @param eax = 2
 	 * @param ebx = don't care
 	 * @param ecx = don't care
 	 * @param edx = don't care
@@ -59,7 +56,6 @@ typedef enum
 	SYSTEM_CALL_TIMER_READ_VALUE,
 
 	/** Pause system and running application for the specified periods of 50 ms.
-	 * @param eax = 3
 	 * @param ebx = How many periods of 50 ms to wait.
 	 * @param ecx = don't care
 	 * @param edx = don't care
@@ -70,7 +66,6 @@ typedef enum
 
 	// UART
 	/** Initialize the Universal Asynchronous Receiver Transmitter (serial port) 0.
-	 * @param eax = 4
 	 * @param ebx = Parity mode.
 	 * @param ecx = Baud rate in bit/s.
 	 * @param edx = don't care
@@ -82,7 +77,6 @@ typedef enum
 	SYSTEM_CALL_UART_INITIALIZE,
 
 	/** Read a byte from the UART.
-	 * @param eax = 5
 	 * @param ebx = don't care
 	 * @param ecx = don't care
 	 * @param edx = don't care
@@ -93,7 +87,6 @@ typedef enum
 	SYSTEM_CALL_UART_READ_BYTE,
 
 	/** Write a byte to the UART.
-	 * @param eax = 6
 	 * @param ebx = The byte to write.
 	 * @param ecx = don't care
 	 * @param edx = don't care
@@ -103,7 +96,6 @@ typedef enum
 	SYSTEM_CALL_UART_WRITE_BYTE,
 
 	/** Check if the UART received a byte.
-	 * @param eax = 7
 	 * @param ebx = don't care
 	 * @param ecx = don't care
 	 * @param edx = don't care
@@ -114,7 +106,6 @@ typedef enum
 
 	// Screen
 	/** Clear the kernel console screen.
-	 * @param eax = 0x10
 	 * @param ebx = don't care
 	 * @param ecx = don't care
 	 * @param edx = don't care
@@ -124,7 +115,6 @@ typedef enum
 	SYSTEM_CALL_SCREEN_CLEAR,
 
 	/** Write a character to the kernel console screen.
-	 * @param eax = 0x11
 	 * @param ebx = ASCII code of the character.
 	 * @param ecx = don't care
 	 * @param edx = don't care
@@ -134,7 +124,6 @@ typedef enum
 	SYSTEM_CALL_SCREEN_WRITE_CHARACTER,
 
 	/** Write an ASCIIZ string of characters to the kernel console screen.
-	 * @param eax = 0x12
 	 * @param ebx = don't care
 	 * @param ecx = don't care
 	 * @param edx = Pointer on the string.
@@ -145,7 +134,6 @@ typedef enum
 	SYSTEM_CALL_SCREEN_WRITE_STRING,
 
 	/** Get the current screen color.
-	 * @param eax = 0x13
 	 * @param ebx = don't care
 	 * @param ecx = don't care
 	 * @param edx = don't care
@@ -155,7 +143,6 @@ typedef enum
 	SYSTEM_CALL_SCREEN_GET_COLOR,
 
 	/** Set the screen color.
- 	 * @param eax = 0x14
 	 * @param ebx = Color code.
 	 * @param ecx = don't care
 	 * @param edx = don't care
@@ -165,7 +152,6 @@ typedef enum
 	SYSTEM_CALL_SCREEN_SET_COLOR,
 
 	/** Get the cursor position.
-	 * @param eax = 0x15
 	 * @param ebx = don't care
 	 * @param ecx = don't care
 	 * @param edx = X pointer.
@@ -175,7 +161,6 @@ typedef enum
 	SYSTEM_CALL_SCREEN_GET_CURSOR_POSITION,
 
 	/** Set the cursor position. Do nothing if the location is out of range.
-	 * @param eax = 0x16
 	 * @param ebx = Row value.
 	 * @param ecx = Column value.
 	 * @param edx = don't care
@@ -185,7 +170,6 @@ typedef enum
 	SYSTEM_CALL_SCREEN_SET_CURSOR_POSITION,
 
 	/** Display a buffer representing the raw video memory data on the screen.
-	 * @param eax = 0x17
 	 * @param ebx = don't care
 	 * @param ecx = don't care
 	 * @param edx = Buffer pointer.
@@ -196,7 +180,6 @@ typedef enum
 
 	// Keyboard
 	/** Wait until the user hits a key and return the corresponding character code.
-	 * @param eax = 0x20
 	 * @param ebx = don't care
 	 * @param ecx = don't care
 	 * @param edx = don't care
@@ -206,7 +189,6 @@ typedef enum
 	SYSTEM_CALL_KEYBOARD_READ_CHARACTER,
 
 	/** Tell if a key is available in the keyboard buffer or not.
-	 * @param eax = 0x21
 	 * @param ebx = don't care
 	 * @param ecx = don't care
 	 * @param edx = don't care
@@ -214,10 +196,17 @@ typedef enum
 	 * @return 0 if no key is available or 1 if a key is present.
 	 */
 	SYSTEM_CALL_KEYBOARD_IS_KEY_AVAILABLE,
+	
+	/** Wait for an ethernet frame to be received.
+	 * @param ebx = don't care
+	 * @param ecx = don't care
+	 * @param edx = On output, contain the frame size in bytes.
+	 * @param esi = Output buffer address.
+	 */
+	SYSTEM_CALL_ETHERNET_RECEIVE_PACKET,
 
 	// File system
 	/** Check if a file exists or not in the file system.
-	 * @param eax = 0x30
 	 * @param ebx = don't care
 	 * @param ecx = don't care
 	 * @param edx = don't care
@@ -228,7 +217,6 @@ typedef enum
 	SYSTEM_CALL_FILE_EXISTS,
 
 	/** Start a file listing.
-	 * @param eax = 0x31
 	 * @param ebx = don't care
 	 * @param ecx = don't care
 	 * @param edx = Pointer to a string containing the file name.
@@ -238,7 +226,6 @@ typedef enum
 	SYSTEM_CALL_FILE_LIST_INITIALIZE,
 
 	/** Get the next file name in a file listing.
-	 * @param eax = 0x32
 	 * @param ebx = don't care
 	 * @param ecx = don't care
 	 * @param edx = Pointer on a FILE_NAME_LENGTH + 1 wide string which will receive the file name.
@@ -249,7 +236,6 @@ typedef enum
 	SYSTEM_CALL_FILE_LIST_NEXT,
 
 	/** Get the size in bytes of a file.
-	 * @param eax = 0x33
 	 * @param ebx = don't care
 	 * @param ecx = don't care
 	 * @param edx = Pointer to a string containing the file name.
@@ -259,7 +245,6 @@ typedef enum
 	SYSTEM_CALL_FILE_SIZE,
 
 	/** Delete a file from the file system.
-	 * @param eax = 0x34
 	 * @param ebx = don't care
 	 * @param ecx = don't care
 	 * @param edx = Pointer to a string containing the file name.
@@ -271,7 +256,6 @@ typedef enum
 	SYSTEM_CALL_FILE_DELETE,
 
 	/** Rename an existing file.
-	 * @param eax = 0x34
 	 * @param ebx = don't care
 	 * @param ecx = don't care
 	 * @param edx = Pointer to a string containing the current file name.
@@ -284,7 +268,6 @@ typedef enum
 	SYSTEM_CALL_FILE_RENAME,
 
 	/** Open a file.
-	 * @param eax = 0x36
 	 * @param ebx = A byte representing the opening mode ('r' or 'w').
 	 * @param ecx = don't care
 	 * @param edx = Pointer to a string holding the file name.
@@ -301,7 +284,6 @@ typedef enum
 	SYSTEM_CALL_FILE_OPEN,
 
 	/** Read data from an opened file.
-	 * @param eax = 0x37
 	 * @param ebx = File descriptor index.
 	 * @param ecx = How many bytes to read.
 	 * @param edx = Pointer to a buffer which will be filled with file data. The buffer must have enough room to fit data.
@@ -314,7 +296,6 @@ typedef enum
 	SYSTEM_CALL_FILE_READ,
 
 	/** Write data to an opened file.
-	 * @param eax = 0x38
 	 * @param ebx = File descriptor index.
 	 * @param ecx = How many bytes to write.
 	 * @param edx = Pointer to a buffer which holds the data to write.
@@ -328,7 +309,6 @@ typedef enum
 	SYSTEM_CALL_FILE_WRITE,
 
 	/** Close a previously opened file. If the file was not opened, do nothing.
-	 * @param eax = 0x39
 	 * @param ebx = File descriptor index.
 	 * @param ecx = don't care
 	 * @param edx = don't care
