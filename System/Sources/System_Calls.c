@@ -180,6 +180,7 @@ static void SystemCallKeyboardIsKeyAvailable(void)
 static void SystemCallEthernetReceivePacket(void)
 {
 	#if CONFIGURATION_IS_ETHERNET_CONTROLLER_ENABLED
+		ARCHITECTURE_INTERRUPTS_ENABLE(); // Allow F12 key to work
 		EthernetReceivePacket(Pointer_1, Pointer_2);
 	#endif
 }
@@ -187,6 +188,7 @@ static void SystemCallEthernetReceivePacket(void)
 static void SystemCallEthernetSendPacket(void)
 {
 	#if CONFIGURATION_IS_ETHERNET_CONTROLLER_ENABLED
+		ARCHITECTURE_INTERRUPTS_ENABLE(); // Allow F12 key to work
 		EthernetSendPacket(Integer_1, Pointer_1);
 	#endif
 }

@@ -92,7 +92,7 @@ typedef struct __attribute__((packed))
 	unsigned char Reserved_7[0x2800 - 0x414];
 	
 	// Offset 0x2800
-	void *Pointer_Receive_Descriptor_Base_Address_Low;
+	volatile void *Pointer_Receive_Descriptor_Base_Address_Low;
 	// Offset 0x2804
 	void *Pointer_Receive_Descriptor_Base_Address_High;
 	// Offset 0x2808
@@ -110,7 +110,7 @@ typedef struct __attribute__((packed))
 	unsigned char Reserved_8[0x3800 - 0x2824];
 	
 	// Offset 0x3800
-	void *Pointer_Transmit_Descriptor_Base_Address_Low;
+	volatile void *Pointer_Transmit_Descriptor_Base_Address_Low;
 	// Offset 0x3804
 	void *Pointer_Transmit_Descriptor_Base_Address_High;
 	// Offset 0x3808
@@ -162,9 +162,9 @@ typedef struct __attribute__((packed))
 static TEthernetControllerRegisters *Pointer_Ethernet_Controller_Registers;
 
 /** The receive buffer descriptors list (currently limited to only one descriptor). */
-static TEthernetControllerReceiveDescriptor __attribute__((aligned(16))) Ethernet_Controller_Receive_Descriptor; // Must be aligned on an Intel paragraph
+static volatile TEthernetControllerReceiveDescriptor __attribute__((aligned(16))) Ethernet_Controller_Receive_Descriptor; // Must be aligned on an Intel paragraph
 /** The transmit buffer descriptors list (currently limited to only one descriptor). */
-static TEthernetControllerTransmitDescriptor __attribute__((aligned(16))) Ethernet_Controller_Transmit_Descriptor; // Must be aligned on an Intel paragraph
+static volatile TEthernetControllerTransmitDescriptor __attribute__((aligned(16))) Ethernet_Controller_Transmit_Descriptor; // Must be aligned on an Intel paragraph
 
 /** The buffer dedicated to packets reception. */
 static unsigned char Ethernet_Controller_Reception_Buffer[CONFIGURATION_ETHERNET_BUFFER_SIZE];
