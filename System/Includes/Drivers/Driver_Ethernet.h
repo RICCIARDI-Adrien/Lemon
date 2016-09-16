@@ -21,7 +21,12 @@ int EthernetInitialize(void);
  */
 void EthernetReceivePacket(unsigned int *Pointer_Buffer_Size, void *Pointer_Buffer);
 
-// TODO
-int EthernetSendPacket(unsigned int Buffer_Size, void *Pointer_Buffer);
+/** Send an ethernet frame. Destination MAC address and layer 3 data type must be set.
+ * @param Buffer_Size The ethernet frame size in bytes.
+ * @param Pointer_Buffer The ethernet frame content.
+ * @note There is no need to set the source MAC address, the driver will automatically set it.
+ * @warning Only CONFIGURATION_ETHERNET_BUFFER_SIZE bytes will be sent if the packet is too large.
+ */
+void EthernetSendPacket(unsigned int Buffer_Size, void *Pointer_Buffer);
 
 #endif

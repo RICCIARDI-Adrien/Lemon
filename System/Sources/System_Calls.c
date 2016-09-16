@@ -184,6 +184,13 @@ static void SystemCallEthernetReceivePacket(void)
 	#endif
 }
 
+static void SystemCallEthernetSendPacket(void)
+{
+	#if CONFIGURATION_IS_ETHERNET_CONTROLLER_ENABLED
+		EthernetSendPacket(Integer_1, Pointer_1);
+	#endif
+}
+
 //====================================================================================================================
 // File system calls
 //====================================================================================================================
@@ -256,6 +263,7 @@ TSystemCallHandler System_Calls_Handlers[] =
 	SystemCallKeyboardReadCharacter, // SYSTEM_CALL_KEYBOARD_READ_CHARACTER
 	SystemCallKeyboardIsKeyAvailable, // SYSTEM_CALL_KEYBOARD_IS_KEY_AVAILABLE
 	SystemCallEthernetReceivePacket, // SYSTEM_CALL_ETHERNET_RECEIVE_PACKET
+	SystemCallEthernetSendPacket, // SYSTEM_CALL_ETHERNET_SEND_PACKET
 	SystemCallFileExists, // SYSTEM_CALL_FILE_EXISTS
 	FileListInitialize, // SYSTEM_CALL_FILE_LIST_INITIALIZE
 	SystemCallFileListNext, // SYSTEM_CALL_FILE_LIST_NEXT

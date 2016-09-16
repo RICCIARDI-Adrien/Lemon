@@ -196,7 +196,7 @@ typedef enum
 	 * @return 0 if no key is available or 1 if a key is present.
 	 */
 	SYSTEM_CALL_KEYBOARD_IS_KEY_AVAILABLE,
-	
+
 	/** Wait for an ethernet frame to be received.
 	 * @param ebx = don't care
 	 * @param ecx = don't care
@@ -204,6 +204,14 @@ typedef enum
 	 * @param esi = Output buffer address.
 	 */
 	SYSTEM_CALL_ETHERNET_RECEIVE_PACKET,
+
+	/** Send an ethernet frame.
+	 * @param ebx = Frame length in bytes.
+	 * @param ecx = don't care
+	 * @param edx = Buffer address.
+	 * @param esi = don't care
+	 */
+	SYSTEM_CALL_ETHERNET_SEND_PACKET,
 
 	// File system
 	/** Check if a file exists or not in the file system.

@@ -31,6 +31,17 @@
 /** Enable or disable short packets padding. */
 #define ETHERNET_CONTROLLER_TRANSMIT_CONTROL_REGISTER_PAD_SHORT_PACKETS_BIT 3
 
+/** Tell that the packet contained in the buffer pointed by the transmit descriptor can be transmitted. */
+#define ETHERNET_CONTROLLER_TRANSMIT_DESCRIPTOR_COMMAND_REGISTER_END_OF_PACKET_BIT (0 + 8) // Add 8 because the command byte is accessed as a 16-bit word with a little-endian processor
+/** Tell the ethernet controller to set the Descriptor Done bit in the transmit descriptor when a packet has been successfully transmitted. */
+#define ETHERNET_CONTROLLER_TRANSMIT_DESCRIPTOR_COMMAND_REGISTER_REPORT_STATUS_BIT (3 + 8) // Add 8 because the command byte is accessed as a 16-bit word with a little-endian processor
+
+/** Tell that the packet has been successfully transmitted. */
+#define ETHERNET_CONTROLLER_TRANSMIT_DESCRIPTOR_STATUS_REGISTER_DESCRIPTOR_DONE 0
+
+/** A standard 48-bit MAC address size in bytes. */
+#define ETHERNET_CONTROLLER_MAC_ADDRESS_SIZE 6
+
 //-------------------------------------------------------------------------------------------------
 // Private types
 //-------------------------------------------------------------------------------------------------
@@ -118,7 +129,6 @@ typedef struct __attribute__((packed))
 	unsigned int Multicast_Table_Array_Entries[128];
 	// Offset 0x5400
 	unsigned int Receive_Addresses[32]; //<! There are 16 slots available. First slot is board MAC address, other slots are used as filters. All addresses are stored consecutively.
-	// TODO
 } TEthernetControllerRegisters;
 
 /** A receive buffer descriptor. */
@@ -128,7 +138,8 @@ typedef struct __attribute__((packed))
 	void *Pointer_Buffer_Address_High;
 	unsigned short Length;
 	unsigned short Packet_Checksum;
-	unsigned short Status_And_Errors;
+	unsigned char Status;
+	unsigned char Errors;
 	unsigned short Special;
 } TEthernetControllerReceiveDescriptor;
 
@@ -139,7 +150,8 @@ typedef struct __attribute__((packed))
 	void *Pointer_Buffer_Address_High;
 	unsigned short Length;
 	unsigned short Command_And_Checksum_Offset;
-	unsigned short Checksum_Start_Field;
+	unsigned char Status;
+	unsigned char Checksum_Start_Field;
 	unsigned short Special;
 } TEthernetControllerTransmitDescriptor;
 
@@ -159,6 +171,9 @@ static unsigned char Ethernet_Controller_Reception_Buffer[CONFIGURATION_ETHERNET
 /** The buffer dedicated to packets transmission. */
 static unsigned char Ethernet_Controller_Transmission_Buffer[CONFIGURATION_ETHERNET_BUFFER_SIZE];
 
+/** Hold the controller MAC address once the controller is initialized. */
+static unsigned char Ethernet_Controller_MAC_Address[ETHERNET_CONTROLLER_MAC_ADDRESS_SIZE];
+
 //-------------------------------------------------------------------------------------------------
 // Public functions
 //-------------------------------------------------------------------------------------------------
@@ -166,7 +181,7 @@ int EthernetInitialize(void)
 {
 	TPCIDeviceID Device_ID;
 	TPCIConfigurationSpaceHeader Configuration_Space_Header;
-	unsigned int i;
+	unsigned int i, MAC_Address_Double_Words[2];
 	
 	// Try to find an ethernet controller (can't directly use the device ID to find the device as the device ID is programmed by the board manufacturer with an unknown value)
 	if (PCIFindDeviceFromClass(PCI_CLASS_CODE_BASE_NETWORK_CONTROLLER, PCI_CLASS_CODE_SUB_CLASS_ETHERNET, &Device_ID) != 0) return 1;
@@ -205,7 +220,8 @@ int EthernetInitialize(void)
 	Pointer_Ethernet_Controller_Registers->Receive_Descriptor_Tail = 1;
 	
 	// Configure the receive descriptor
-	Ethernet_Controller_Receive_Descriptor.Status_And_Errors = 0;
+	Ethernet_Controller_Receive_Descriptor.Status = 0;
+	Ethernet_Controller_Receive_Descriptor.Errors = 0;
 	Ethernet_Controller_Receive_Descriptor.Pointer_Buffer_Address = Ethernet_Controller_Reception_Buffer;
 	
 	// Configure the reception behaviour
@@ -233,35 +249,18 @@ int EthernetInitialize(void)
 	// Set the Inter Packet Gap value
 	Pointer_Ethernet_Controller_Registers->Transmit_Inter_Packet_Gap = (10 << 20) | (10 << 10) | 10;
 	
-	// The controller MAC address is loaded from the board EEPROM, no need to set it. Display it at the initialization end to make sure the field was not overwritten by previous initialization
-	DEBUG_SECTION_START
-	DEBUG_DISPLAY_CURRENT_FUNCTION_NAME();
-	{
-		unsigned int MAC_Address_Double_Words[2];
-		unsigned char MAC_Address_Bytes[6];
-		
-		// Get the MAC address (this PCI registers must be read using 32-bit accesses)
-		MAC_Address_Double_Words[0] = Pointer_Ethernet_Controller_Registers->Receive_Addresses[0];
-		MAC_Address_Double_Words[1] = Pointer_Ethernet_Controller_Registers->Receive_Addresses[1];
-		
-		// Put bytes in displayable order
-		MAC_Address_Bytes[0] = (unsigned char) MAC_Address_Double_Words[0];
-		MAC_Address_Bytes[1] = MAC_Address_Double_Words[0] >> 8;
-		MAC_Address_Bytes[2] = MAC_Address_Double_Words[0] >> 16;
-		MAC_Address_Bytes[3] = MAC_Address_Double_Words[0] >> 24;
-		MAC_Address_Bytes[4] = (unsigned char) MAC_Address_Double_Words[1];
-		MAC_Address_Bytes[5] = MAC_Address_Double_Words[1] >> 8;
-		
-		// Display MAC address
-		ScreenWriteString("MAC address : ");
-		for (i = 0; i < sizeof(MAC_Address_Bytes); i++)
-		{
-			DebugWriteHexadecimalByte(MAC_Address_Bytes[i]);
-			if (i < sizeof(MAC_Address_Bytes) - 1) ScreenWriteCharacter(':');
-		}
-		ScreenWriteCharacter('\n');
-	}
-	DEBUG_SECTION_END
+	// The controller MAC address is loaded from the board EEPROM, no need to set it. Get it at the initialization end to make sure the field was not overwritten by previous initialization
+	// Get the MAC address (this PCI registers must be read using 32-bit accesses)
+	MAC_Address_Double_Words[0] = Pointer_Ethernet_Controller_Registers->Receive_Addresses[0];
+	MAC_Address_Double_Words[1] = Pointer_Ethernet_Controller_Registers->Receive_Addresses[1];
+	
+	// Put bytes in displayable order
+	Ethernet_Controller_MAC_Address[0] = (unsigned char) MAC_Address_Double_Words[0];
+	Ethernet_Controller_MAC_Address[1] = MAC_Address_Double_Words[0] >> 8;
+	Ethernet_Controller_MAC_Address[2] = MAC_Address_Double_Words[0] >> 16;
+	Ethernet_Controller_MAC_Address[3] = MAC_Address_Double_Words[0] >> 24;
+	Ethernet_Controller_MAC_Address[4] = (unsigned char) MAC_Address_Double_Words[1];
+	Ethernet_Controller_MAC_Address[5] = MAC_Address_Double_Words[1] >> 8;
 	
 	// Enable transmission
 	Pointer_Ethernet_Controller_Registers->Transmit_Control |= 1 << ETHERNET_CONTROLLER_TRANSMIT_CONTROL_REGISTER_TRANSMIT_ENABLE_BIT;
@@ -273,6 +272,15 @@ int EthernetInitialize(void)
 	{
 		unsigned int Device_Status;
 		char *String_Text;
+		
+		// Display MAC address
+		ScreenWriteString("MAC address : ");
+		for (i = 0; i < sizeof(Ethernet_Controller_MAC_Address); i++)
+		{
+			DebugWriteHexadecimalByte(Ethernet_Controller_MAC_Address[i]);
+			if (i < sizeof(Ethernet_Controller_MAC_Address) - 1) ScreenWriteCharacter(':');
+		}
+		ScreenWriteCharacter('\n');
 		
 		// Cache device status
 		Device_Status = Pointer_Ethernet_Controller_Registers->Device_Status;
@@ -309,46 +317,47 @@ int EthernetInitialize(void)
 	}
 	DEBUG_SECTION_END
 	
-	/*Ethernet_Controller_Transmission_Buffer[0] = 0xFF;
-	Ethernet_Controller_Transmission_Buffer[1] = 0xFF;
-	Ethernet_Controller_Transmission_Buffer[2] = 0xFF;
-	Ethernet_Controller_Transmission_Buffer[3] = 0xFF;
-	Ethernet_Controller_Transmission_Buffer[4] = 0xFF;
-	Ethernet_Controller_Transmission_Buffer[5] = 0xFF;
-	Ethernet_Controller_Transmission_Buffer[6] = 0x08;
-	Ethernet_Controller_Transmission_Buffer[7] = 0x00;
-	Ethernet_Controller_Transmission_Buffer[8] = 0x27;
-	Ethernet_Controller_Transmission_Buffer[9] = 0x04;
-	Ethernet_Controller_Transmission_Buffer[10] = 0x64;
-	Ethernet_Controller_Transmission_Buffer[11] = 0xA3;
-	Ethernet_Controller_Transmission_Buffer[12] = 0x08;
-	Ethernet_Controller_Transmission_Buffer[13] = 0x00;
-	Ethernet_Controller_Transmit_Descriptor.Length = 256;
-	Ethernet_Controller_Transmit_Descriptor.Command_And_Checksum_Offset = 1;*/
-	
 	return 0;
 }
 
 void EthernetReceivePacket(unsigned int *Pointer_Buffer_Size, void *Pointer_Buffer)
 {
 	// Wait for a packet to be received
-	while (!Ethernet_Controller_Receive_Descriptor.Status_And_Errors);
+	while (!Ethernet_Controller_Receive_Descriptor.Status);
 	
 	// TODO check for max packet size ?
 	
-	// Get packet to userspace
+	// Send packet to userspace
 	*Pointer_Buffer_Size = Ethernet_Controller_Receive_Descriptor.Length; // Get packet size
 	memcpy(Pointer_Buffer, Ethernet_Controller_Reception_Buffer, Ethernet_Controller_Receive_Descriptor.Length); // Copy the packet content to userspace
 	
 	// Re-enable packet reception
-	Ethernet_Controller_Receive_Descriptor.Status_And_Errors = 0; // Reset status bits as suggested in datasheet
+	Ethernet_Controller_Receive_Descriptor.Status = 0; // Reset status bits as suggested in datasheet
 	Pointer_Ethernet_Controller_Registers->Receive_Descriptor_Head = 0; // Reset reception buffer descriptors queue
 	Pointer_Ethernet_Controller_Registers->Receive_Descriptor_Tail = 1;
 }
 
-/*int EthernetSendPacket(unsigned int Buffer_Size, void *Pointer_Buffer)
+void EthernetSendPacket(unsigned int Buffer_Size, void *Pointer_Buffer)
 {
-}*/
+	// Set the source MAC address
+	memcpy(Pointer_Buffer + ETHERNET_CONTROLLER_MAC_ADDRESS_SIZE, Ethernet_Controller_MAC_Address, ETHERNET_CONTROLLER_MAC_ADDRESS_SIZE);
+	
+	// Copy the packet content to the ethernet controller transmission buffer
+	if (Buffer_Size > CONFIGURATION_ETHERNET_BUFFER_SIZE) Buffer_Size = CONFIGURATION_ETHERNET_BUFFER_SIZE; // Make sure the packet is not too big for the destination buffer
+	memcpy(Ethernet_Controller_Transmission_Buffer, Pointer_Buffer, Buffer_Size);
+	
+	// Configure the transmission descriptor
+	Ethernet_Controller_Transmit_Descriptor.Status = 0;
+	Ethernet_Controller_Transmit_Descriptor.Length = Buffer_Size;
+	Ethernet_Controller_Transmit_Descriptor.Command_And_Checksum_Offset = (1 << ETHERNET_CONTROLLER_TRANSMIT_DESCRIPTOR_COMMAND_REGISTER_END_OF_PACKET_BIT) | (1 << ETHERNET_CONTROLLER_TRANSMIT_DESCRIPTOR_COMMAND_REGISTER_REPORT_STATUS_BIT); // Tell that the packet is fully contained in the descriptor so it can be sent; make the "descriptor done" status bit be set when the packet has been transmitted
+	
+	// Send the packet
+	Pointer_Ethernet_Controller_Registers->Transmit_Descriptor_Head = 0; // Reset transmision buffer descriptors queue
+	Pointer_Ethernet_Controller_Registers->Transmit_Descriptor_Tail = 1;
+	
+	// Wait for the packet to be transmitted
+	while (!(Ethernet_Controller_Transmit_Descriptor.Status & (1 << ETHERNET_CONTROLLER_TRANSMIT_DESCRIPTOR_STATUS_REGISTER_DESCRIPTOR_DONE)));
+}
 
 // TODO
 //int EthernetGetStatistics()
