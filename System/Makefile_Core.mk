@@ -18,7 +18,7 @@ else
 endif
 
 # Choose which hard disk driver to compile
-ifeq ($(SYSTEM_HARD_DISK_TYPE),sata)
+ifeq ($(SYSTEM_HARD_DISK_DRIVER),sata)
 	OBJECTS_DRIVERS += $(PATH_OBJECTS)/Driver_Hard_Disk_SATA.o $(PATH_OBJECTS)/Driver_PCI.o
 else
 	OBJECTS_DRIVERS += $(PATH_OBJECTS)/Driver_Hard_Disk_IDE.o
