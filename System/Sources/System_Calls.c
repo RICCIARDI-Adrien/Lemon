@@ -12,6 +12,7 @@
 #include <File_System/File.h>
 #include <File_System/File_System.h>
 #include <Kernel.h>
+#include <Standard_Functions.h>
 #include <System_Calls.h>
 
 //-------------------------------------------------------------------------------------------------
@@ -83,6 +84,10 @@ static void SystemCallSystemGetParameter(void)
 			
 		case SYSTEM_CALL_SYSTEM_PARAMETER_ID_FILE_SYSTEM_FREE_BLOCKS_LIST_ENTRIES_COUNT:
 			*Pointer_Result = FileSystemGetFreeBlocksCount();
+			break;
+			
+		case SYSTEM_CALL_SYSTEM_PARAMETER_ID_ETHERNET_CONTROLLER_MAC_ADDRESS:
+			memcpy(Pointer_Result, Ethernet_Controller_MAC_Address, ETHERNET_CONTROLLER_MAC_ADDRESS_SIZE);
 			break;
 			
 		// Unknown parameter
@@ -193,6 +198,15 @@ static void SystemCallEthernetSendPacket(void)
 	#endif
 }
 
+static void SystemCallEthernetIsPacketReceived(void)
+{
+	#if CONFIGURATION_IS_ETHERNET_CONTROLLER_ENABLED
+		Return_Value = EthernetIsPacketReceived();
+	#else
+		Return_Value = 0;
+	#endif
+}
+
 //====================================================================================================================
 // File system calls
 //====================================================================================================================
@@ -266,6 +280,7 @@ TSystemCallHandler System_Calls_Handlers[] =
 	SystemCallKeyboardIsKeyAvailable, // SYSTEM_CALL_KEYBOARD_IS_KEY_AVAILABLE
 	SystemCallEthernetReceivePacket, // SYSTEM_CALL_ETHERNET_RECEIVE_PACKET
 	SystemCallEthernetSendPacket, // SYSTEM_CALL_ETHERNET_SEND_PACKET
+	SystemCallEthernetIsPacketReceived, // SYSTEM_CALL_ETHERNET_IS_PACKET_RECEIVED
 	SystemCallFileExists, // SYSTEM_CALL_FILE_EXISTS
 	FileListInitialize, // SYSTEM_CALL_FILE_LIST_INITIALIZE
 	SystemCallFileListNext, // SYSTEM_CALL_FILE_LIST_NEXT

@@ -11,14 +11,15 @@
 /** All the available system parameters. */
 typedef enum
 {
-	SYSTEM_CALL_SYSTEM_PARAMETER_ID_MEMORY_TOTAL_SIZE, //! How many RAM the system can address (in mega bytes).
-	SYSTEM_CALL_SYSTEM_PARAMETER_ID_MEMORY_USER_SIZE, //! How many RAM a user program can access (in mega bytes).
-	SYSTEM_CALL_SYSTEM_PARAMETER_ID_FILE_MAXIMUM_OPENED_FILES_COUNT, //! How many files can be opened in the same time.
-	SYSTEM_CALL_SYSTEM_PARAMETER_ID_FILE_SYSTEM_BLOCK_SIZE, //! A block size in bytes.
-	SYSTEM_CALL_SYSTEM_PARAMETER_ID_FILE_SYSTEM_MAXIMUM_FILES_LIST_ENTRIES_COUNT, //! Maximum number of entries in the file system Files List (i.e. the maximum number of files that can be stored in the file system).
-	SYSTEM_CALL_SYSTEM_PARAMETER_ID_FILE_SYSTEM_MAXIMUM_BLOCKS_LIST_ENTRIES_COUNT, //! Maximum number of file system blocks.
-	SYSTEM_CALL_SYSTEM_PARAMETER_ID_FILE_SYSTEM_FREE_FILES_LIST_ENTRIES_COUNT, //! How many Files List entries are available.
-	SYSTEM_CALL_SYSTEM_PARAMETER_ID_FILE_SYSTEM_FREE_BLOCKS_LIST_ENTRIES_COUNT, //! How many Blocks List entries are available.
+	SYSTEM_CALL_SYSTEM_PARAMETER_ID_MEMORY_TOTAL_SIZE, //!< How many RAM the system can address (in mega bytes).
+	SYSTEM_CALL_SYSTEM_PARAMETER_ID_MEMORY_USER_SIZE, //!< How many RAM a user program can access (in mega bytes).
+	SYSTEM_CALL_SYSTEM_PARAMETER_ID_FILE_MAXIMUM_OPENED_FILES_COUNT, //!< How many files can be opened in the same time.
+	SYSTEM_CALL_SYSTEM_PARAMETER_ID_FILE_SYSTEM_BLOCK_SIZE, //!< A block size in bytes.
+	SYSTEM_CALL_SYSTEM_PARAMETER_ID_FILE_SYSTEM_MAXIMUM_FILES_LIST_ENTRIES_COUNT, //!< Maximum number of entries in the file system Files List (i.e. the maximum number of files that can be stored in the file system).
+	SYSTEM_CALL_SYSTEM_PARAMETER_ID_FILE_SYSTEM_MAXIMUM_BLOCKS_LIST_ENTRIES_COUNT, //!< Maximum number of file system blocks.
+	SYSTEM_CALL_SYSTEM_PARAMETER_ID_FILE_SYSTEM_FREE_FILES_LIST_ENTRIES_COUNT, //!< How many Files List entries are available.
+	SYSTEM_CALL_SYSTEM_PARAMETER_ID_FILE_SYSTEM_FREE_BLOCKS_LIST_ENTRIES_COUNT, //!< How many Blocks List entries are available.
+	SYSTEM_CALL_SYSTEM_PARAMETER_ID_ETHERNET_CONTROLLER_MAC_ADDRESS, //!< Get the ethernet board MAC address.
 	SYSTEM_CALL_SYSTEM_PARAMETER_IDS_COUNT //! The total number of parameters.
 } TSystemCallSystemParameterID;
 
@@ -202,6 +203,7 @@ typedef enum
 	 * @param ecx = don't care
 	 * @param edx = On output, contain the frame size in bytes.
 	 * @param esi = Output buffer address.
+	 * @return Nothing.
 	 */
 	SYSTEM_CALL_ETHERNET_RECEIVE_PACKET,
 
@@ -210,8 +212,18 @@ typedef enum
 	 * @param ecx = don't care
 	 * @param edx = Buffer address.
 	 * @param esi = don't care
+	 * @return Nothing.
 	 */
 	SYSTEM_CALL_ETHERNET_SEND_PACKET,
+
+	/** Check if the ethernet controller received a packet.
+	 * @param ebx = don't care
+	 * @param ecx = don't care
+	 * @param edx = don't care
+	 * @param esi = don't care
+	 * @return 1 if a packet is available or 0 if not.
+	 */
+	SYSTEM_CALL_ETHERNET_IS_PACKET_RECEIVED,
 
 	// File system
 	/** Check if a file exists or not in the file system.

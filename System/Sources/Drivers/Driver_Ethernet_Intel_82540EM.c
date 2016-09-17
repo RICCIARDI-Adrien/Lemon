@@ -39,9 +39,6 @@
 /** Tell that the packet has been successfully transmitted. */
 #define ETHERNET_CONTROLLER_TRANSMIT_DESCRIPTOR_STATUS_REGISTER_DESCRIPTOR_DONE 0
 
-/** A standard 48-bit MAC address size in bytes. */
-#define ETHERNET_CONTROLLER_MAC_ADDRESS_SIZE 6
-
 //-------------------------------------------------------------------------------------------------
 // Private types
 //-------------------------------------------------------------------------------------------------
@@ -171,8 +168,10 @@ static unsigned char Ethernet_Controller_Reception_Buffer[CONFIGURATION_ETHERNET
 /** The buffer dedicated to packets transmission. */
 static unsigned char Ethernet_Controller_Transmission_Buffer[CONFIGURATION_ETHERNET_BUFFER_SIZE];
 
-/** Hold the controller MAC address once the controller is initialized. */
-static unsigned char Ethernet_Controller_MAC_Address[ETHERNET_CONTROLLER_MAC_ADDRESS_SIZE];
+//-------------------------------------------------------------------------------------------------
+// Public variables
+//-------------------------------------------------------------------------------------------------
+unsigned char Ethernet_Controller_MAC_Address[ETHERNET_CONTROLLER_MAC_ADDRESS_SIZE];
 
 //-------------------------------------------------------------------------------------------------
 // Public functions
@@ -357,6 +356,12 @@ void EthernetSendPacket(unsigned int Buffer_Size, void *Pointer_Buffer)
 	
 	// Wait for the packet to be transmitted
 	while (!(Ethernet_Controller_Transmit_Descriptor.Status & (1 << ETHERNET_CONTROLLER_TRANSMIT_DESCRIPTOR_STATUS_REGISTER_DESCRIPTOR_DONE)));
+}
+
+int EthernetIsPacketReceived(void)
+{
+	if (Ethernet_Controller_Receive_Descriptor.Status) return 1;
+	return 0;
 }
 
 // TODO

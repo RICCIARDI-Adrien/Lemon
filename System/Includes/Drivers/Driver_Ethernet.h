@@ -6,6 +6,18 @@
 #define H_DRIVER_ETHERNET_H
 
 //-------------------------------------------------------------------------------------------------
+// Constants
+//-------------------------------------------------------------------------------------------------
+/** A standard 48-bit MAC address size in bytes. */
+#define ETHERNET_CONTROLLER_MAC_ADDRESS_SIZE 6
+
+//-------------------------------------------------------------------------------------------------
+// Variables
+//-------------------------------------------------------------------------------------------------
+/** Hold the controller MAC address once the controller is initialized. */
+unsigned char Ethernet_Controller_MAC_Address[ETHERNET_CONTROLLER_MAC_ADDRESS_SIZE];
+
+//-------------------------------------------------------------------------------------------------
 // Functions
 //-------------------------------------------------------------------------------------------------
 /** Configure the underlying ethernet hardware for reception and transmission.
@@ -28,5 +40,11 @@ void EthernetReceivePacket(unsigned int *Pointer_Buffer_Size, void *Pointer_Buff
  * @warning Only CONFIGURATION_ETHERNET_BUFFER_SIZE bytes will be sent if the packet is too large.
  */
 void EthernetSendPacket(unsigned int Buffer_Size, void *Pointer_Buffer);
+
+/** Tell whether a packet is available or not.
+ * @return 1 if a packet has been received,
+ * @return 0 if not.
+ */
+int EthernetIsPacketReceived(void);
 
 #endif
