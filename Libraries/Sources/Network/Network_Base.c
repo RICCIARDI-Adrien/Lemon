@@ -10,9 +10,9 @@
 // Private constants
 //-------------------------------------------------------------------------------------------------
 /** Tell that the ethernet frame contains an IP packet. */
-#define NETWORK_BASE_ETHERNET_TYPE_IP NETWORK_SWAP_WORD(0x0800)
+#define NETWORK_BASE_ETHERNET_PROTOCOL_TYPE_IP NETWORK_SWAP_WORD(0x0800)
 /** Tell that the ethernet frame contains an ARP packet. */
-#define NETWORK_BASE_ETHERNET_TYPE_ARP NETWORK_SWAP_WORD(0x0806)
+#define NETWORK_BASE_ETHERNET_PROTOCOL_TYPE_ARP NETWORK_SWAP_WORD(0x0806)
 
 /** The hardware address space corresponding to ethernet. */
 #define NETWORK_BASE_ARP_HARDWARE_ADDRESS_SPACE_ETHERNET NETWORK_SWAP_WORD(0x0001)
@@ -24,13 +24,14 @@
 /** An ARP reply opcode value. */
 #define NETWORK_BASE_ARP_OPCODE_REPLY NETWORK_SWAP_WORD(0x0002)
 
-/** The length in bytes of a MAC address. */
-#define NETWORK_BASE_MAC_ADDRESS_SIZE 6
 /** The length in bytes of an IPv4 address. */
 #define NETWORK_BASE_IP_ADDRESS_SIZE sizeof(int)
 
 /** The ARP table entries count. */
 #define NETWORK_BASE_ARP_TABLE_SIZE 16
+
+/** How many equipments the packet can cross before being dropped. */
+#define NETWORK_BASE_IP_DEFAULT_TIME_TO_LIVE_VALUE 255
 
 //-------------------------------------------------------------------------------------------------
 // Private types
@@ -38,8 +39,8 @@
 /** An ethernet header. */
 typedef struct __attribute__((packed))
 {
-	unsigned char Destination_MAC_Address[NETWORK_BASE_MAC_ADDRESS_SIZE]; //!< The receiver address.
-	unsigned char Source_MAC_Address[NETWORK_BASE_MAC_ADDRESS_SIZE]; //!< The sender address.
+	unsigned char Destination_MAC_Address[NETWORK_MAC_ADDRESS_SIZE]; //!< The receiver address.
+	unsigned char Source_MAC_Address[NETWORK_MAC_ADDRESS_SIZE]; //!< The sender address.
 	unsigned short Protocol_Type; //!< What protocol is encapsulated in the ethernet frame.
 } TNetworkBaseEthernetHeader;
 
@@ -51,9 +52,9 @@ typedef struct __attribute__((packed))
 	unsigned char Hardware_Address_Size; //!< The size in bytes of the hardware address.
 	unsigned char Protocol_Address_Size; //!< The size in bytes of the protocol address.
 	unsigned short Opcode; //!< Tell if it is a request or a reply.
-	unsigned char Sender_Hardware_Address[NETWORK_BASE_MAC_ADDRESS_SIZE]; //!< The sender MAC address.
+	unsigned char Sender_Hardware_Address[NETWORK_MAC_ADDRESS_SIZE]; //!< The sender MAC address.
 	unsigned int Sender_Protocol_Address; //!< The sender IPv4 address;
-	unsigned char Target_Harware_Address[NETWORK_BASE_MAC_ADDRESS_SIZE]; //!< The destination MAC address.
+	unsigned char Target_Harware_Address[NETWORK_MAC_ADDRESS_SIZE]; //!< The destination MAC address.
 	unsigned int Target_Protocol_Address; //!< The destination IPv4 address;
 } TNetworkBaseARPPayload;
 
@@ -61,24 +62,22 @@ typedef struct __attribute__((packed))
 typedef struct
 {
 	unsigned int IP_Address; //!< The IPv4 address (no need for subnet mask here).
-	unsigned char MAC_Address[NETWORK_BASE_MAC_ADDRESS_SIZE]; //!< The MAC address corresponding to the IP address.
+	unsigned char MAC_Address[NETWORK_MAC_ADDRESS_SIZE]; //!< The MAC address corresponding to the IP address.
 	int Is_Entry_Free; //!< Tell if this record contains valid data or not.
 } TNetworkBaseARPTableEntry;
 
 //-------------------------------------------------------------------------------------------------
 // Public variables
 //-------------------------------------------------------------------------------------------------
-/** The system MAC address. */
-static unsigned char Network_Base_System_MAC_Address[NETWORK_BASE_MAC_ADDRESS_SIZE];
-/** The system IP address. */
-static TNetworkIPAddress Network_Base_System_IP_Address;
-
-/** The gateway IP address. */
-static TNetworkIPAddress Network_Base_Gateway_IP_Address;
+TNetworkIPAddress Network_Base_System_IP_Address;
+TNetworkIPAddress Network_Base_Gateway_IP_Address;
 
 //-------------------------------------------------------------------------------------------------
 // Private variables
 //-------------------------------------------------------------------------------------------------
+/** The system MAC address. */
+static unsigned char Network_Base_System_MAC_Address[NETWORK_MAC_ADDRESS_SIZE];
+
 /** The ARP table. */
 static TNetworkBaseARPTableEntry Network_Base_ARP_Table_Entries[NETWORK_BASE_ARP_TABLE_SIZE];
 /** The ARP table current size (how many entries are occupied). */
@@ -115,7 +114,7 @@ static inline int NetworkBaseEthernetIsPacketReceived(void)
 }
 
 /** Retrieve the board MAC address.
- * @param Pointer_MAC_Address On output, contain the board MAC address. The MAC address buffer must be NETWORK_BASE_MAC_ADDRESS_SIZE bytes long.
+ * @param Pointer_MAC_Address On output, contain the board MAC address. The MAC address buffer must be NETWORK_MAC_ADDRESS_SIZE bytes long.
  */
 static inline void NetworkBaseGetEthernetControllerMACAddress(unsigned char *Pointer_MAC_Address)
 {
@@ -130,28 +129,28 @@ static inline void NetworkBaseGetEthernetControllerMACAddress(unsigned char *Poi
  */
 static int NetworkBaseARPSendRequest(TNetworkIPAddress *Pointer_Known_IP_Address, unsigned char *Pointer_Found_MAC_Address)
 {
-	unsigned char Transmission_Packet[NETWORK_PACKET_BUFFER_MAXIMUM_SIZE], Reception_Packet[NETWORK_PACKET_BUFFER_MAXIMUM_SIZE];
-	TNetworkBaseEthernetHeader *Pointer_Ethernet_Address = (TNetworkBaseEthernetHeader *) Transmission_Packet;
+	unsigned char Transmission_Packet[NETWORK_MAXIMUM_PACKET_SIZE], Reception_Packet[NETWORK_MAXIMUM_PACKET_SIZE];
+	TNetworkBaseEthernetHeader *Pointer_Ethernet_Header = (TNetworkBaseEthernetHeader *) Transmission_Packet;
 	TNetworkBaseARPPayload *Pointer_ARP_Payload = (TNetworkBaseARPPayload *) &Transmission_Packet[sizeof(TNetworkBaseEthernetHeader)];
 	int i, Is_Packet_Received;
 	unsigned int Timer_Value, Timeout_Value, Received_Packet_Size;
 	
 	// Prepare the ethernet header
-	MemorySetAreaValue(Pointer_Ethernet_Address->Destination_MAC_Address, NETWORK_BASE_MAC_ADDRESS_SIZE, 0xFF); // Broadcast the frame to everyone on the local network
-	Pointer_Ethernet_Address->Protocol_Type = NETWORK_BASE_ETHERNET_TYPE_ARP;
+	MemorySetAreaValue(Pointer_Ethernet_Header->Destination_MAC_Address, NETWORK_MAC_ADDRESS_SIZE, 0xFF); // Broadcast the frame to everyone on the local network
+	Pointer_Ethernet_Header->Protocol_Type = NETWORK_BASE_ETHERNET_PROTOCOL_TYPE_ARP;
 	
 	// Prepare the ARP request
 	Pointer_ARP_Payload->Hardware_Address_Space = NETWORK_BASE_ARP_HARDWARE_ADDRESS_SPACE_ETHERNET;
 	Pointer_ARP_Payload->Protocol_Address_Space = NETWORK_BASE_ARP_PROTOCOL_ADDRESS_SPACE_IP;
-	Pointer_ARP_Payload->Hardware_Address_Size = NETWORK_BASE_MAC_ADDRESS_SIZE;
+	Pointer_ARP_Payload->Hardware_Address_Size = NETWORK_MAC_ADDRESS_SIZE;
 	Pointer_ARP_Payload->Protocol_Address_Size = NETWORK_BASE_IP_ADDRESS_SIZE;
 	Pointer_ARP_Payload->Opcode = NETWORK_BASE_ARP_OPCODE_REQUEST;
-	MemoryCopyArea(Network_Base_System_MAC_Address, Pointer_ARP_Payload->Sender_Hardware_Address, NETWORK_BASE_MAC_ADDRESS_SIZE);
+	MemoryCopyArea(Network_Base_System_MAC_Address, Pointer_ARP_Payload->Sender_Hardware_Address, NETWORK_MAC_ADDRESS_SIZE);
 	Pointer_ARP_Payload->Sender_Protocol_Address = Network_Base_System_IP_Address.Address;
 	Pointer_ARP_Payload->Target_Protocol_Address = Pointer_Known_IP_Address->Address;
 	
 	// Now that the transmission packet is built, reuse the pointers for the reception packet
-	Pointer_Ethernet_Address = (TNetworkBaseEthernetHeader *) Reception_Packet;
+	Pointer_Ethernet_Header = (TNetworkBaseEthernetHeader *) Reception_Packet;
 	Pointer_ARP_Payload = (TNetworkBaseARPPayload *) &Reception_Packet[sizeof(TNetworkBaseEthernetHeader)];
 	
 	// Send the request and try to get a reply
@@ -176,13 +175,13 @@ static int NetworkBaseARPSendRequest(TNetworkIPAddress *Pointer_Known_IP_Address
 		if (Received_Packet_Size < sizeof(TNetworkBaseEthernetHeader) + sizeof(TNetworkBaseARPPayload)) continue;
 		
 		// Is it an ARP packet ?
-		if (Pointer_Ethernet_Address->Protocol_Type != NETWORK_BASE_ETHERNET_TYPE_ARP) continue;
+		if (Pointer_Ethernet_Header->Protocol_Type != NETWORK_BASE_ETHERNET_PROTOCOL_TYPE_ARP) continue;
 		
 		// Is the IP address the one we are looking for (the IP address is faster to compare than the MAC address) ?
 		if (Pointer_ARP_Payload->Sender_Protocol_Address != Pointer_Known_IP_Address->Address) continue;
 		
 		// This is our reply, get the MAC address
-		MemoryCopyArea(Pointer_ARP_Payload->Sender_Hardware_Address, Pointer_Found_MAC_Address, NETWORK_BASE_MAC_ADDRESS_SIZE);
+		MemoryCopyArea(Pointer_ARP_Payload->Sender_Hardware_Address, Pointer_Found_MAC_Address, NETWORK_MAC_ADDRESS_SIZE);
 		return 0;
 	}
 	
@@ -190,8 +189,36 @@ static int NetworkBaseARPSendRequest(TNetworkIPAddress *Pointer_Known_IP_Address
 	return 1;
 }
 
-/** TODO */
-/*static */int NetworkBaseGetMACAddressFromARPTable(TNetworkIPAddress *Pointer_IP_Address, unsigned char *Pointer_MAC_Address)
+/** Send an IP packet.
+ * @param
+ */
+//static inline void NetworkBaseIPSendPacket(unsigned int Packet_Size, 
+// si gw => envoyer à mac gw
+// sinon, regarder table arp pour trouver mac
+
+//-------------------------------------------------------------------------------------------------
+// Public functions
+//-------------------------------------------------------------------------------------------------
+int NetworkBaseInitialize(TNetworkIPAddress *Pointer_System_IP_Address, TNetworkIPAddress *Pointer_Gateway_IP_Address)
+{
+	int i;
+	unsigned char Gateway_MAC_Address[NETWORK_MAC_ADDRESS_SIZE];
+	
+	// Clear ARP table
+	for (i = 0; i < NETWORK_BASE_ARP_TABLE_SIZE; i++) Network_Base_ARP_Table_Entries[i].Is_Entry_Free = 1;
+	Network_Base_ARP_Table_Used_Entries_Count = 0;
+	
+	// Set the network stack source MAC address
+	SystemCall(SYSTEM_CALL_SYSTEM_GET_PARAMETER, SYSTEM_CALL_SYSTEM_PARAMETER_ID_ETHERNET_CONTROLLER_MAC_ADDRESS, 0, Network_Base_System_MAC_Address, NULL);
+	
+	// Set IP addresses
+	MemoryCopyArea(Pointer_System_IP_Address, &Network_Base_System_IP_Address, sizeof(TNetworkIPAddress));
+	MemoryCopyArea(Pointer_Gateway_IP_Address, &Network_Base_Gateway_IP_Address, sizeof(TNetworkIPAddress)); // Do not cache the gateway MAC address now because this equipment could be down at the network configuration time
+	
+	return 0;
+}
+
+int NetworkBaseGetMACAddressFromARPTable(TNetworkIPAddress *Pointer_IP_Address, unsigned char *Pointer_MAC_Address)
 {
 	int i, Return_Value = 1;
 	
@@ -206,7 +233,7 @@ static int NetworkBaseARPSendRequest(TNetworkIPAddress *Pointer_Known_IP_Address
 			if (Network_Base_ARP_Table_Entries[i].IP_Address == Pointer_IP_Address->Address)
 			{
 				// The IP was found, get the corresponding MAC
-				MemoryCopyArea(Network_Base_ARP_Table_Entries[i].MAC_Address, Pointer_MAC_Address, NETWORK_BASE_MAC_ADDRESS_SIZE);
+				MemoryCopyArea(Network_Base_ARP_Table_Entries[i].MAC_Address, Pointer_MAC_Address, NETWORK_MAC_ADDRESS_SIZE);
 				return 0;
 			}
 		}
@@ -225,7 +252,7 @@ static int NetworkBaseARPSendRequest(TNetworkIPAddress *Pointer_Known_IP_Address
 			if (Network_Base_ARP_Table_Entries[i].Is_Entry_Free)
 			{
 				Network_Base_ARP_Table_Entries[i].IP_Address = Pointer_IP_Address->Address;
-				MemoryCopyArea(Pointer_MAC_Address, Network_Base_ARP_Table_Entries[i].MAC_Address, NETWORK_BASE_MAC_ADDRESS_SIZE);
+				MemoryCopyArea(Pointer_MAC_Address, Network_Base_ARP_Table_Entries[i].MAC_Address, NETWORK_MAC_ADDRESS_SIZE);
 				Network_Base_ARP_Table_Entries[i].Is_Entry_Free = 0;
 				
 				Network_Base_ARP_Table_Used_Entries_Count++;
@@ -237,50 +264,37 @@ static int NetworkBaseARPSendRequest(TNetworkIPAddress *Pointer_Known_IP_Address
 	return 0;
 }
 
-/** Send an IP packet.
- * @param
- */
-//static inline void NetworkBaseIPSendPacket(unsigned int Packet_Size, 
-// si gw => envoyer à mac gw
-// sinon, regarder table arp pour trouver mac
-
-//-------------------------------------------------------------------------------------------------
-// Public functions
-//-------------------------------------------------------------------------------------------------
-int NetworkBaseInitialize(TNetworkIPAddress *Pointer_System_IP_Address, TNetworkIPAddress *Pointer_Gateway_IP_Address)
+int NetworkBaseIPSendPacket(TNetworkSocket *Pointer_Socket, unsigned int Payload_Size, unsigned char *Pointer_Payload_Buffer)
 {
-	int i;
-	unsigned char Gateway_MAC_Address[NETWORK_BASE_MAC_ADDRESS_SIZE];
+	TNetworkBaseEthernetHeader *Pointer_Ethernet_Header;
+	TNetworkIPv4Header *Pointer_IP_Header;
+	unsigned char Packet_Buffer[NETWORK_MAXIMUM_PACKET_SIZE];
+	unsigned int Total_Packet_Size;
 	
-	// Clear ARP table
-	for (i = 0; i < NETWORK_BASE_ARP_TABLE_SIZE; i++) Network_Base_ARP_Table_Entries[i].Is_Entry_Free = 1;
-	Network_Base_ARP_Table_Used_Entries_Count = 0;
+	// Discard the packet if it is too big
+	Total_Packet_Size = sizeof(TNetworkBaseEthernetHeader) + sizeof(TNetworkIPv4Header) + Payload_Size;
+	if (Total_Packet_Size > NETWORK_MAXIMUM_PACKET_SIZE) return 1;
 	
-	// Set the network stack source MAC address
-	SystemCall(SYSTEM_CALL_SYSTEM_GET_PARAMETER, SYSTEM_CALL_SYSTEM_PARAMETER_ID_ETHERNET_CONTROLLER_MAC_ADDRESS, 0, Network_Base_System_MAC_Address, NULL);
+	// Make the headers point at the right place
+	Pointer_Ethernet_Header = (TNetworkBaseEthernetHeader *) Packet_Buffer;
+	Pointer_IP_Header = (TNetworkIPv4Header *) &Packet_Buffer[sizeof(TNetworkBaseEthernetHeader)];
 	
-	// Set IP addresses
-	MemoryCopyArea(Pointer_System_IP_Address, &Network_Base_System_IP_Address, sizeof(TNetworkIPAddress));
-	MemoryCopyArea(Pointer_Gateway_IP_Address, &Network_Base_Gateway_IP_Address, sizeof(TNetworkIPAddress)); // Do not cache the gateway MAC address now because this equipment could be down at the network configuration time
+	// Fill the ethernet header
+	MemoryCopyArea(Pointer_Socket->Destination_MAC_Address, Pointer_Ethernet_Header->Destination_MAC_Address, NETWORK_MAC_ADDRESS_SIZE); // Set the destination MAC address
+	Pointer_Ethernet_Header->Protocol_Type = NETWORK_BASE_ETHERNET_PROTOCOL_TYPE_IP; // Tell that the frame contains IP data
 	
-	return 0;
+	// Fill the IPv4 header
+	Pointer_IP_Header->Version_And_Size = (4 << 4) | ((sizeof(TNetworkIPv4Header) / 4) & 0x0F); // IP version 4, fixed header size (header size will never change as options won't be used)
+	Pointer_IP_Header->Differentiated_Services_Code_Point_And_Explicit_Congestion_Notification = 0; // Not used
+	Pointer_IP_Header->Total_Length = NETWORK_SWAP_WORD(sizeof(TNetworkIPv4Header) + Payload_Size); // Header length + payload length
+	Pointer_IP_Header->Identification = 0; // Unused
+	Pointer_IP_Header->Flags_And_Fragment_Offset = 0; // Unused
+	Pointer_IP_Header->Time_To_Live = NETWORK_BASE_IP_DEFAULT_TIME_TO_LIVE_VALUE; // How much hops the packet can do before being dropped
+	Pointer_IP_Header->Protocol = Pointer_Socket->IP_Protocol; //!< What does the payload contain
+	//Pointer_IP_Header->Header_Checksum
+	Pointer_IP_Header->Source_IP_Address = Network_Base_System_IP_Address.Address; // This system is the packet sender
+	Pointer_IP_Header->Destination_IP_Address = Pointer_Socket->Destination_IP_Address; // Who will receive this packet
+	
+	// Transmit the packet
+	NetworkBaseEthernetSendPacket(Total_Packet_Size, Packet_Buffer);
 }
-
-#if 0
-void NetworkBaseIPSendPacket(TNetworkIPAddress who, proto, unsigned int Packet_Size, data)
-{
-	// Is the destination IP address in the local subnet ?
-	
-	/*oui, ip
-	
-	non, mettre ip gw
-	
-	trouver mac
-	sinon arp
-	
-	si pas mac return 1*/
-	
-	
-	
-}
-#endif

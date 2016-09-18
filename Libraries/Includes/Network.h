@@ -8,8 +8,11 @@
 //-------------------------------------------------------------------------------------------------
 // Constants and macros
 //-------------------------------------------------------------------------------------------------
-/** A packet buffer maximum length in bytes. */
-#define NETWORK_PACKET_BUFFER_MAXIMUM_SIZE 2048
+/** A packet buffer maximum length in bytes (this is the interface Maximum Transfer Unit (MTU)). */
+#define NETWORK_MAXIMUM_PACKET_SIZE 1500
+
+/** The length in bytes of a MAC address. */
+#define NETWORK_MAC_ADDRESS_SIZE 6
 
 /** Swap a 32-bit value from one endianness mode to the other.
  * @param Double_Word The value to swap.
@@ -42,7 +45,37 @@ typedef struct
 	unsigned int Mask; //!< The subnet mask.
 } TNetworkIPAddress;
 
-// TNetworkIPProtocol (tcp ou udp)
+/** Available IP protocols. */
+typedef enum
+{
+	NETWORK_IP_PROTOCOL_TCP = 6, //<! Heavy connection-oriented protocol.
+	NETWORK_IP_PROTOCOL_UDP = 17 //<! Lightweight connectionless protocol.
+} TNetworkIPProtocol;
+
+/** TODO */
+typedef struct
+{
+	unsigned char Destination_MAC_Address[NETWORK_MAC_ADDRESS_SIZE];
+	unsigned int Destination_IP_Address;
+	unsigned short Source_Port;
+	unsigned short Destination_Port;
+	unsigned char IP_Protocol; //<! The type of the data embedded in the IP packet.
+} TNetworkSocket;
+
+/** An IPv4 header. Header options are not used by this network stack. */
+typedef struct __attribute__((packed))
+{
+	unsigned char Version_And_Size; //!< Bits 7..4 must be set to the value '4', bits 3..0 represent the header length in double word unit.
+	unsigned char Differentiated_Services_Code_Point_And_Explicit_Congestion_Notification; //!< Not needed by this network stack.
+	unsigned short Total_Length; //!< The IPv4 header length plus the data length (in bytes).
+	unsigned short Identification; //!< Not needed by this network stack.
+	unsigned short Flags_And_Fragment_Offset; //!< Not needed by this network stack.
+	unsigned char Time_To_Live; //!< How many equipment the packet can cross.
+	unsigned char Protocol; //!< What is embedded in the IP data.
+	unsigned short Header_Checksum; //!< The whole header checksum.
+	unsigned int Source_IP_Address; //!< The packet sender address.
+	unsigned int Destination_IP_Address; //!< The packet receiver address.
+} TNetworkIPv4Header;
 
 //-------------------------------------------------------------------------------------------------
 // Functions
@@ -62,5 +95,11 @@ int NetworkInitialize(TNetworkIPAddress *Pointer_System_IP_Address, TNetworkIPAd
 
 //int NetworkUDPReceiveBuffer(port, siz, buf)
 //int NetworkUDPSendBuffer(IP, port, siz, buf)
+
+/** TODO */
+int NetworkIPConvertFromString(char *String_IP_Address, char *String_Subnet_Mask, TNetworkIPAddress *Pointer_IP_Address);
+
+/** TODO */
+int NetworkInitializeTransmissionSocket(TNetworkIPAddress *Pointer_Destination_IP_Address, unsigned short Destination_Port, TNetworkIPProtocol Used_Protocol, TNetworkSocket *Pointer_Socket);
 
 #endif
