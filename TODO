@@ -5,7 +5,7 @@
 Système
 -------
 
-- renommer hard_disk_type en hard_disk_driver
+- supprimer network_base.h du SDK
 
 - même variable CONFIGURATION_IS_DEBUG_ENABLED dans MBR ?
 

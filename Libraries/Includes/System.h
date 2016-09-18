@@ -12,6 +12,7 @@
 #include <Math.h>
 #include <Memory.h>
 #include <Menu.h>
+#include <Network.h>
 #include <Random.h>
 #include <Screen.h>
 #include <String.h>
