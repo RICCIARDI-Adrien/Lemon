@@ -11,6 +11,8 @@ int NetworkInitializeTransmissionSocket(TNetworkIPAddress *Pointer_Destination_I
 {
 	TNetworkIPAddress *Pointer_ARP_Resolution_IP_Address;
 	
+	RandomInitialize();
+	
 	// Set the destination IP address
 	Pointer_Socket->Destination_IP_Address = Pointer_Destination_IP_Address->Address;
 	
@@ -21,6 +23,7 @@ int NetworkInitializeTransmissionSocket(TNetworkIPAddress *Pointer_Destination_I
 	if (NetworkBaseGetMACAddressFromARPTable(Pointer_ARP_Resolution_IP_Address, Pointer_Socket->Destination_MAC_Address) != 0) return 1;
 	
 	// Set remaining useful fields
+	Pointer_Socket->Source_Port = NETWORK_SWAP_WORD(((RandomGenerateNumber() % (65536 - 1024)) + 1024)); // Choose a random non-reserved port as the source port
 	Pointer_Socket->Destination_Port = NETWORK_SWAP_WORD(Destination_Port);
 	Pointer_Socket->IP_Protocol = (unsigned char) Used_Protocol;
 	

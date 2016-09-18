@@ -6,6 +6,7 @@ Système
 -------
 
 - supprimer network_base.h du SDK
+- éviter de copier 50 fois les données dans la stack réseau
 
 - même variable CONFIGURATION_IS_DEBUG_ENABLED dans MBR ?
 

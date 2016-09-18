@@ -36,14 +36,6 @@
 //-------------------------------------------------------------------------------------------------
 // Private types
 //-------------------------------------------------------------------------------------------------
-/** An ethernet header. */
-typedef struct __attribute__((packed))
-{
-	unsigned char Destination_MAC_Address[NETWORK_MAC_ADDRESS_SIZE]; //!< The receiver address.
-	unsigned char Source_MAC_Address[NETWORK_MAC_ADDRESS_SIZE]; //!< The sender address.
-	unsigned short Protocol_Type; //!< What protocol is encapsulated in the ethernet frame.
-} TNetworkBaseEthernetHeader;
-
 /** An ARP protocol payload (ethernet network version). */
 typedef struct __attribute__((packed))
 {
@@ -130,8 +122,8 @@ static inline void NetworkBaseGetEthernetControllerMACAddress(unsigned char *Poi
 static int NetworkBaseARPSendRequest(TNetworkIPAddress *Pointer_Known_IP_Address, unsigned char *Pointer_Found_MAC_Address)
 {
 	unsigned char Transmission_Packet[NETWORK_MAXIMUM_PACKET_SIZE], Reception_Packet[NETWORK_MAXIMUM_PACKET_SIZE];
-	TNetworkBaseEthernetHeader *Pointer_Ethernet_Header = (TNetworkBaseEthernetHeader *) Transmission_Packet;
-	TNetworkBaseARPPayload *Pointer_ARP_Payload = (TNetworkBaseARPPayload *) &Transmission_Packet[sizeof(TNetworkBaseEthernetHeader)];
+	TNetworkEthernetHeader *Pointer_Ethernet_Header = (TNetworkEthernetHeader *) Transmission_Packet;
+	TNetworkBaseARPPayload *Pointer_ARP_Payload = (TNetworkBaseARPPayload *) &Transmission_Packet[sizeof(TNetworkEthernetHeader)];
 	int i, Is_Packet_Received;
 	unsigned int Timer_Value, Timeout_Value, Received_Packet_Size;
 	
@@ -150,13 +142,13 @@ static int NetworkBaseARPSendRequest(TNetworkIPAddress *Pointer_Known_IP_Address
 	Pointer_ARP_Payload->Target_Protocol_Address = Pointer_Known_IP_Address->Address;
 	
 	// Now that the transmission packet is built, reuse the pointers for the reception packet
-	Pointer_Ethernet_Header = (TNetworkBaseEthernetHeader *) Reception_Packet;
-	Pointer_ARP_Payload = (TNetworkBaseARPPayload *) &Reception_Packet[sizeof(TNetworkBaseEthernetHeader)];
+	Pointer_Ethernet_Header = (TNetworkEthernetHeader *) Reception_Packet;
+	Pointer_ARP_Payload = (TNetworkBaseARPPayload *) &Reception_Packet[sizeof(TNetworkEthernetHeader)];
 	
 	// Send the request and try to get a reply
 	for (i = 0; i < 5; i++)
 	{
-		NetworkBaseEthernetSendPacket(sizeof(TNetworkBaseEthernetHeader) + sizeof(TNetworkBaseARPPayload), Transmission_Packet);
+		NetworkBaseEthernetSendPacket(sizeof(TNetworkEthernetHeader) + sizeof(TNetworkBaseARPPayload), Transmission_Packet);
 		
 		// Wait 3ms for a reply
 		Timeout_Value = SystemGetTimerValue() + 3;
@@ -172,7 +164,7 @@ static int NetworkBaseARPSendRequest(TNetworkIPAddress *Pointer_Known_IP_Address
 		NetworkBaseEthernetReceivePacket(&Received_Packet_Size, Reception_Packet);
 		
 		// Is the packet big enough ?
-		if (Received_Packet_Size < sizeof(TNetworkBaseEthernetHeader) + sizeof(TNetworkBaseARPPayload)) continue;
+		if (Received_Packet_Size < sizeof(TNetworkEthernetHeader) + sizeof(TNetworkBaseARPPayload)) continue;
 		
 		// Is it an ARP packet ?
 		if (Pointer_Ethernet_Header->Protocol_Type != NETWORK_BASE_ETHERNET_PROTOCOL_TYPE_ARP) continue;
@@ -264,20 +256,19 @@ int NetworkBaseGetMACAddressFromARPTable(TNetworkIPAddress *Pointer_IP_Address, 
 	return 0;
 }
 
-int NetworkBaseIPSendPacket(TNetworkSocket *Pointer_Socket, unsigned int Payload_Size, unsigned char *Pointer_Payload_Buffer)
+int NetworkBaseIPSendPacket(TNetworkSocket *Pointer_Socket, unsigned int Payload_Size, unsigned char *Pointer_Packet_Buffer)
 {
-	TNetworkBaseEthernetHeader *Pointer_Ethernet_Header;
+	TNetworkEthernetHeader *Pointer_Ethernet_Header;
 	TNetworkIPv4Header *Pointer_IP_Header;
-	unsigned char Packet_Buffer[NETWORK_MAXIMUM_PACKET_SIZE];
 	unsigned int Total_Packet_Size;
 	
 	// Discard the packet if it is too big
-	Total_Packet_Size = sizeof(TNetworkBaseEthernetHeader) + sizeof(TNetworkIPv4Header) + Payload_Size;
+	Total_Packet_Size = sizeof(TNetworkEthernetHeader) + sizeof(TNetworkIPv4Header) + Payload_Size;
 	if (Total_Packet_Size > NETWORK_MAXIMUM_PACKET_SIZE) return 1;
 	
 	// Make the headers point at the right place
-	Pointer_Ethernet_Header = (TNetworkBaseEthernetHeader *) Packet_Buffer;
-	Pointer_IP_Header = (TNetworkIPv4Header *) &Packet_Buffer[sizeof(TNetworkBaseEthernetHeader)];
+	Pointer_Ethernet_Header = (TNetworkEthernetHeader *) Pointer_Packet_Buffer;
+	Pointer_IP_Header = (TNetworkIPv4Header *) &Pointer_Packet_Buffer[sizeof(TNetworkEthernetHeader)];
 	
 	// Fill the ethernet header
 	MemoryCopyArea(Pointer_Socket->Destination_MAC_Address, Pointer_Ethernet_Header->Destination_MAC_Address, NETWORK_MAC_ADDRESS_SIZE); // Set the destination MAC address
@@ -296,5 +287,7 @@ int NetworkBaseIPSendPacket(TNetworkSocket *Pointer_Socket, unsigned int Payload
 	Pointer_IP_Header->Destination_IP_Address = Pointer_Socket->Destination_IP_Address; // Who will receive this packet
 	
 	// Transmit the packet
-	NetworkBaseEthernetSendPacket(Total_Packet_Size, Packet_Buffer);
+	NetworkBaseEthernetSendPacket(Total_Packet_Size, Pointer_Packet_Buffer);
+	
+	return 0;
 }

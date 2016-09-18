@@ -62,6 +62,14 @@ typedef struct
 	unsigned char IP_Protocol; //<! The type of the data embedded in the IP packet.
 } TNetworkSocket;
 
+/** An ethernet header. No VLAN field is allowed. */
+typedef struct __attribute__((packed))
+{
+	unsigned char Destination_MAC_Address[NETWORK_MAC_ADDRESS_SIZE]; //!< The receiver address.
+	unsigned char Source_MAC_Address[NETWORK_MAC_ADDRESS_SIZE]; //!< The sender address.
+	unsigned short Protocol_Type; //!< What protocol is encapsulated in the ethernet frame.
+} TNetworkEthernetHeader;
+
 /** An IPv4 header. Header options are not used by this network stack. */
 typedef struct __attribute__((packed))
 {
@@ -77,6 +85,15 @@ typedef struct __attribute__((packed))
 	unsigned int Destination_IP_Address; //!< The packet receiver address.
 } TNetworkIPv4Header;
 
+/** An UDP header. */
+typedef struct __attribute__((packed))
+{
+	unsigned short Source_Port; //!< The sender's port.
+	unsigned short Destination_Port; //!< The receiver's port.
+	unsigned short Length; //!< Length in bytes of the UDP header plus the payload.
+	unsigned short Checksum; //!< Optional checksum.
+} TNetworkUDPHeader;
+
 //-------------------------------------------------------------------------------------------------
 // Functions
 //-------------------------------------------------------------------------------------------------
@@ -88,18 +105,20 @@ typedef struct __attribute__((packed))
  */
 int NetworkInitialize(TNetworkIPAddress *Pointer_System_IP_Address, TNetworkIPAddress *Pointer_Gateway_IP_Address);
 
-/** TODO
- * dire swap valeurs
+/** Initialize a socket content to transmit data to the specified IP address.
+ * @param Pointer_Destination_IP_Address The data recipient.
+ * @param Destination_Port The IP encapsulated protocol destination port (this value is automatically swapped to big endian).
+ * @param Used_Protocol Which protocol is encapsulated in the IP packet.
+ * @param Pointer_Socket On output, contain the initialized socket.
+ * @return 0 if the socket was successfully initialized,
+ * @return 1 if the MAC address corresponding to the destination address could not be retrieved.
  */
-//void NetworkUDPReceiveDatagram(unsigned int Listening_IP_Address, unsigned short Listening_Port, unsigned int *Pointer_Data_Size, void *Pointer_Buffer);
-
-//int NetworkUDPReceiveBuffer(port, siz, buf)
-//int NetworkUDPSendBuffer(IP, port, siz, buf)
+int NetworkInitializeTransmissionSocket(TNetworkIPAddress *Pointer_Destination_IP_Address, unsigned short Destination_Port, TNetworkIPProtocol Used_Protocol, TNetworkSocket *Pointer_Socket);
 
 /** TODO */
 int NetworkIPConvertFromString(char *String_IP_Address, char *String_Subnet_Mask, TNetworkIPAddress *Pointer_IP_Address);
 
 /** TODO */
-int NetworkInitializeTransmissionSocket(TNetworkIPAddress *Pointer_Destination_IP_Address, unsigned short Destination_Port, TNetworkIPProtocol Used_Protocol, TNetworkSocket *Pointer_Socket);
+int NetworkUDPSendBuffer(TNetworkSocket *Pointer_Socket, unsigned int Buffer_Size, unsigned char *Pointer_Buffer);
 
 #endif
