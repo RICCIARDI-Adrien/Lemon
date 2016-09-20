@@ -25,7 +25,7 @@ int NetworkInitializeTransmissionSocket(TNetworkIPAddress *Pointer_Destination_I
 	// Set remaining useful fields
 	Pointer_Socket->Source_Port = NETWORK_SWAP_WORD(((RandomGenerateNumber() % (65536 - 1024)) + 1024)); // Choose a random non-reserved port as the source port
 	Pointer_Socket->Destination_Port = NETWORK_SWAP_WORD(Destination_Port);
-	Pointer_Socket->IP_Protocol = (unsigned char) Used_Protocol;
+	Pointer_Socket->IP_Protocol = Used_Protocol;
 	
 	return 0;
 }

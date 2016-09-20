@@ -24,6 +24,9 @@ int NetworkBaseInitialize(TNetworkIPAddress *Pointer_System_IP_Address, TNetwork
 /** TODO */
 int NetworkBaseGetMACAddressFromARPTable(TNetworkIPAddress *Pointer_IP_Address, unsigned char *Pointer_MAC_Address);
 
+/** TODO */
+int NetworkBaseIPReceivePacket(TNetworkSocket *Pointer_Socket, unsigned int *Pointer_Packet_Size, void *Pointer_Packet_Buffer);
+
 /** Encapsulate the provided payload in an IPv4 packet and transmit it.
  * @param Pointer_Socket The socket containing all useful connection parameters.
  * @param Payload_Size The IP packet payload (starting from OSI layer 4) size in bytes.
@@ -32,6 +35,6 @@ int NetworkBaseGetMACAddressFromARPTable(TNetworkIPAddress *Pointer_IP_Address, 
  * @return 1 if the packet was not sent because it's size was too big.
  * @warning The packet buffer layer 4 header must let enough room to put an ethernet header and an IPv4 header before it. The layer 4 header must start at sizeof(TNetworkEthernetHeader) + sizeof(TNetworkIPv4Header) bytes offset.
  */
-int NetworkBaseIPSendPacket(TNetworkSocket *Pointer_Socket, unsigned int Payload_Size, unsigned char *Pointer_Packet_Buffer);
+int NetworkBaseIPSendPacket(TNetworkSocket *Pointer_Socket, unsigned int Payload_Size, unsigned char *Pointer_Packet_Buffer); // TODO void
 
 #endif

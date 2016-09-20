@@ -52,14 +52,14 @@ typedef enum
 	NETWORK_IP_PROTOCOL_UDP = 17 //<! Lightweight connectionless protocol.
 } TNetworkIPProtocol;
 
-/** TODO */
+/** A network structure that contain all needed information to send and to receive layer 4 data. */
 typedef struct
 {
 	unsigned char Destination_MAC_Address[NETWORK_MAC_ADDRESS_SIZE];
 	unsigned int Destination_IP_Address;
 	unsigned short Source_Port;
 	unsigned short Destination_Port;
-	unsigned char IP_Protocol; //<! The type of the data embedded in the IP packet.
+	TNetworkIPProtocol IP_Protocol; //<! The type of the data embedded in the IP packet.
 } TNetworkSocket;
 
 /** An ethernet header. No VLAN field is allowed. */
@@ -105,6 +105,9 @@ typedef struct __attribute__((packed))
  */
 int NetworkInitialize(TNetworkIPAddress *Pointer_System_IP_Address, TNetworkIPAddress *Pointer_Gateway_IP_Address);
 
+/** TODO */
+int NetworkInitializeReceptionSocket(TNetworkIPAddress *Pointer_Source_IP_Address, unsigned short Destination_Port, TNetworkIPProtocol Used_Protocol, TNetworkSocket *Pointer_Socket);
+
 /** Initialize a socket content to transmit data to the specified IP address.
  * @param Pointer_Destination_IP_Address The data recipient.
  * @param Destination_Port The IP encapsulated protocol destination port (this value is automatically swapped to big endian).
@@ -119,6 +122,9 @@ int NetworkInitializeTransmissionSocket(TNetworkIPAddress *Pointer_Destination_I
 int NetworkIPConvertFromString(char *String_IP_Address, char *String_Subnet_Mask, TNetworkIPAddress *Pointer_IP_Address);
 
 /** TODO */
-int NetworkUDPSendBuffer(TNetworkSocket *Pointer_Socket, unsigned int Buffer_Size, unsigned char *Pointer_Buffer);
+int NetworkUDPSendBuffer(TNetworkSocket *Pointer_Socket, unsigned int Buffer_Size, void *Pointer_Buffer);
+
+/** TODO */
+int NetworkUDPReceiveBuffer(TNetworkSocket *Pointer_Socket, int Is_Call_Blocking, unsigned int *Pointer_Buffer_Size, void *Pointer_Buffer);
 
 #endif
