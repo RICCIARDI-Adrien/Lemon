@@ -46,9 +46,9 @@ endef
 #------------------------------------------------------------------------------------------------------------------------------
 # Global rules
 #------------------------------------------------------------------------------------------------------------------------------
-all: benchmark games help tests text_editor unix_commands
+all: benchmark games help network_chat tests text_editor unix_commands
 
-clean: benchmark_clean games_clean help_clean tests_clean text_editor_clean unix_commands_clean
+clean: benchmark_clean games_clean help_clean network_chat_clean tests_clean text_editor_clean unix_commands_clean
 	# Delete also the tools
 	rm -rf $(SERIAL_PORT_SERVER)
 
@@ -97,6 +97,21 @@ help_clean:
 
 help_download: $(SERIAL_PORT_SERVER)
 	@$(SERIAL_PORT_SERVER) $(SERIAL_PORT_SERVER_FLAGS) $(BINARIES_PATH)/Help.lemon help
+
+#------------------------------------------------------------------------------------------------------------------------------
+# Network_Chat
+#------------------------------------------------------------------------------------------------------------------------------
+network_chat:
+	@$(call StartProgramBuild,Network Chat,Network_Chat)
+	@cd $(SOURCES_PATH)/Network_Chat && $(MAKE)
+	@$(call AppendExecutableHeader,Network_Chat)
+
+network_chat_clean:
+	@cd $(SOURCES_PATH)/Network_Chat && $(MAKE) clean
+
+network_chat_download: $(SERIAL_PORT_SERVER)
+	@$(SERIAL_PORT_SERVER) $(SERIAL_PORT_SERVER_FLAGS) $(BINARIES_PATH)/Network_Chat.lemon chat
+
 
 #------------------------------------------------------------------------------------------------------------------------------
 # Tests
