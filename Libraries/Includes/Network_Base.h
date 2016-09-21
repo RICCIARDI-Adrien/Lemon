@@ -25,7 +25,7 @@ int NetworkBaseInitialize(TNetworkIPAddress *Pointer_System_IP_Address, TNetwork
 int NetworkBaseGetMACAddressFromARPTable(TNetworkIPAddress *Pointer_IP_Address, unsigned char *Pointer_MAC_Address);
 
 /** TODO */
-int NetworkBaseIPReceivePacket(TNetworkSocket *Pointer_Socket, unsigned int *Pointer_Packet_Size, void *Pointer_Packet_Buffer);
+int NetworkBaseIPReceivePacket(TNetworkSocket *Pointer_Socket, int Is_Call_Blocking, unsigned int *Pointer_Packet_Size, void *Pointer_Packet_Buffer);
 
 /** Encapsulate the provided payload in an IPv4 packet and transmit it.
  * @param Pointer_Socket The socket containing all useful connection parameters.
