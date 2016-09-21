@@ -212,6 +212,34 @@ static void NetworkBaseARPSendReply(unsigned char *Pointer_Packet_Buffer)
 	NetworkBaseEthernetSendPacket(sizeof(TNetworkEthernetHeader) + sizeof(TNetworkBaseARPPayload), Pointer_Packet_Buffer);
 }
 
+/** Compute the IPv4 header checksum.
+ * @param Pointer_IP_Header The IP header to compute checksum for.
+ * @return The checksum value (the result is directly in big endian if the header content is in big endian yet).
+ */
+static inline unsigned short NetworkBaseIPComputeChecksum(TNetworkIPv4Header *Pointer_IP_Header)
+{
+	unsigned int Checksum = 0, i;
+	unsigned short *Pointer_Header_Words = (unsigned short *) Pointer_IP_Header;
+	
+	// Set the checksum field to zero as told by the RFC
+	Pointer_IP_Header->Header_Checksum = 0;
+	
+	// Compute the header sum
+	for (i = 0; i < sizeof(TNetworkIPv4Header) / sizeof(unsigned short); i++)
+	{
+		Checksum += *Pointer_Header_Words;
+		Pointer_Header_Words++;
+	}
+	
+	// Add carry
+	Checksum += Checksum >> 16;
+	
+	// Do checksum one's complement according to RFC
+	Checksum = ~Checksum;
+	
+	return (unsigned short) Checksum;
+}
+
 //-------------------------------------------------------------------------------------------------
 // Public functions
 //-------------------------------------------------------------------------------------------------
@@ -331,9 +359,11 @@ int NetworkBaseIPSendPacket(TNetworkSocket *Pointer_Socket, unsigned int Payload
 	Pointer_IP_Header->Flags_And_Fragment_Offset = 0; // Unused
 	Pointer_IP_Header->Time_To_Live = NETWORK_BASE_IP_DEFAULT_TIME_TO_LIVE_VALUE; // How much hops the packet can do before being dropped
 	Pointer_IP_Header->Protocol = (unsigned char) Pointer_Socket->IP_Protocol; // What does the payload contain
-	//Pointer_IP_Header->Header_Checksum
 	Pointer_IP_Header->Source_IP_Address = Network_Base_System_IP_Address.Address; // This system is the packet sender
 	Pointer_IP_Header->Destination_IP_Address = Pointer_Socket->Destination_IP_Address; // Who will receive this packet
+	
+	// Compute the IP header checksum
+	Pointer_IP_Header->Header_Checksum = NetworkBaseIPComputeChecksum(Pointer_IP_Header); // No need to swap result to big endian because input data were swapped yet, giving a good result
 	
 	// Transmit the packet
 	NetworkBaseEthernetSendPacket(Total_Packet_Size, Pointer_Packet_Buffer);
