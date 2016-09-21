@@ -55,10 +55,10 @@ typedef enum
 /** A network structure that contain all needed information to send and to receive layer 4 data. */
 typedef struct
 {
-	unsigned char Destination_MAC_Address[NETWORK_MAC_ADDRESS_SIZE];
-	unsigned int Destination_IP_Address;
-	unsigned short Source_Port;
-	unsigned short Destination_Port;
+	unsigned char Destination_MAC_Address[NETWORK_MAC_ADDRESS_SIZE]; //!< Cache the MAC address corresponding to the IP machine to reach on the LAN when transmitting (target machine or gateway).
+	unsigned int Destination_IP_Address; //!< The IP address of the target machine (when transmitting), used also to check the source of a received packet.
+	unsigned short Source_Port; //!< When transmitting, indicate the layer 4 port from where data were transmitted. When receiving, allow to match the received packet destination port with it to be sure that the packet is destined to this socket.
+	unsigned short Destination_Port; //!< Indicate the target machine port on transmission.
 	TNetworkIPProtocol IP_Protocol; //<! The type of the data embedded in the IP packet.
 } TNetworkSocket;
 
@@ -105,10 +105,7 @@ typedef struct __attribute__((packed))
  */
 int NetworkInitialize(TNetworkIPAddress *Pointer_System_IP_Address, TNetworkIPAddress *Pointer_Gateway_IP_Address);
 
-/** TODO */
-int NetworkInitializeReceptionSocket(TNetworkIPAddress *Pointer_Source_IP_Address, unsigned short Destination_Port, TNetworkIPProtocol Used_Protocol, TNetworkSocket *Pointer_Socket);
-
-/** Initialize a socket content to transmit data to the specified IP address.
+/** Initialize a socket content to transmit data to the specified IP address and to receive data from it.
  * @param Pointer_Destination_IP_Address The data recipient.
  * @param Destination_Port The IP encapsulated protocol destination port (this value is automatically swapped to big endian).
  * @param Used_Protocol Which protocol is encapsulated in the IP packet.
@@ -116,15 +113,29 @@ int NetworkInitializeReceptionSocket(TNetworkIPAddress *Pointer_Source_IP_Addres
  * @return 0 if the socket was successfully initialized,
  * @return 1 if the MAC address corresponding to the destination address could not be retrieved.
  */
-int NetworkInitializeTransmissionSocket(TNetworkIPAddress *Pointer_Destination_IP_Address, unsigned short Destination_Port, TNetworkIPProtocol Used_Protocol, TNetworkSocket *Pointer_Socket);
+int NetworkInitializeSocket(TNetworkIPAddress *Pointer_Destination_IP_Address, unsigned short Destination_Port, TNetworkIPProtocol Used_Protocol, TNetworkSocket *Pointer_Socket);
 
 /** TODO */
 int NetworkIPConvertFromString(char *String_IP_Address, char *String_Subnet_Mask, TNetworkIPAddress *Pointer_IP_Address);
 
-/** TODO */
+/** Send data over an UDP datagram.
+ * @param Pointer_Socket The initialized socket indicating the destination machine.
+ * @param Buffer_Size The data size in bytes.
+ * @param Pointer_Buffer The data content.
+ * @return 0 if data were transmitted,
+ * @return 1 if data were too big for the device transfer size (lower data size and retry).
+ */
 int NetworkUDPSendBuffer(TNetworkSocket *Pointer_Socket, unsigned int Buffer_Size, void *Pointer_Buffer);
 
-/** TODO */
+/** Receive data from carried by an UDP datagram.
+ * @param Pointer_Socket The initialized socket describing the sender machine.
+ * @param Is_Call_Blocking Set to 1 to wait indefinitely for a packet to be received, set to 0 to immediately exit with a return code telling if a packet has been received or not.
+ * @param Pointer_Buffer_Size On output, contain the received data size.
+ * @param Pointer_Buffer On output, contain the received data.
+ * @return 0 if a packet has been received,
+ * @return 1 if an error happened,
+ * @return 2 in non-blocking mode only to tell that no packet was received.
+ */
 int NetworkUDPReceiveBuffer(TNetworkSocket *Pointer_Socket, int Is_Call_Blocking, unsigned int *Pointer_Buffer_Size, void *Pointer_Buffer);
 
 #endif

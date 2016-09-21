@@ -88,7 +88,7 @@ int main(int __attribute__((unused)) argc, char __attribute__((unused)) *argv[])
 		return 1;
 	}
 	
-	if (NetworkInitializeTransmissionSocket(&Destination_IP_Address, 1234, NETWORK_IP_PROTOCOL_UDP, &Socket) != 0)
+	if (NetworkInitializeSocket(&Destination_IP_Address, 1234, NETWORK_IP_PROTOCOL_UDP, &Socket) != 0)
 	{
 		ScreenSetFontColor(SCREEN_COLOR_RED);
 		ScreenWriteString(STRING_ERROR_NETWORK_SOCKET_INITIALIZATION);

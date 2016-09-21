@@ -1,4 +1,4 @@
-/** @file Network_Initialize_Transmission_Socket.c
+/** @file Network_Initialize_Socket.c
  * @author Adrien RICCIARDI
  */
 #include <Network_Base.h>
@@ -7,7 +7,7 @@
 //-------------------------------------------------------------------------------------------------
 // Public functions
 //-------------------------------------------------------------------------------------------------
-int NetworkInitializeTransmissionSocket(TNetworkIPAddress *Pointer_Destination_IP_Address, unsigned short Destination_Port, TNetworkIPProtocol Used_Protocol, TNetworkSocket *Pointer_Socket)
+int NetworkInitializeSocket(TNetworkIPAddress *Pointer_Destination_IP_Address, unsigned short Destination_Port, TNetworkIPProtocol Used_Protocol, TNetworkSocket *Pointer_Socket)
 {
 	TNetworkIPAddress *Pointer_ARP_Resolution_IP_Address;
 	
