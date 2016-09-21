@@ -90,7 +90,7 @@
 	#define STRING_SHELL_FILE_SIZE_SHOW_SIZE_2 " octets.\n"
 
 	// Shell version command
-	#define STRING_SHELL_VERSION "Version du syst\212me : 2.3.3 (" __DATE__ ", " __TIME__ ")\n" \
+	#define STRING_SHELL_VERSION "Version du syst\212me : 2.4.0 (" __DATE__ ", " __TIME__ ")\n" \
 		"Copyright (C) Adrien Ricciardi\n\n" \
 		"Configuration :\n" \
 		STRING_BUILD_CONFIGURATION_VARIABLES
