@@ -7,8 +7,8 @@ all: $(OBJECTS)
 clean:
 	rm -rf $(OBJECTS_PATH)/$(PROGRAM_NAME) $(BINARIES_PATH)/$(PROGRAM_NAME).*
 
-$(OBJECTS_PATH)/$(PROGRAM_NAME)/Interface.o: Interface.c
+$(OBJECTS_PATH)/$(PROGRAM_NAME)/Interface.o: Interface.c Interface.h
 	$(GLOBAL_TOOL_COMPILER) $(CCFLAGS) -c Interface.c -o $(OBJECTS_PATH)/$(PROGRAM_NAME)/Interface.o
 
-$(OBJECTS_PATH)/$(PROGRAM_NAME)/Main.o: Main.c
+$(OBJECTS_PATH)/$(PROGRAM_NAME)/Main.o: Main.c Interface.h Strings.h
 	$(GLOBAL_TOOL_COMPILER) $(CCFLAGS) -c Main.c -o $(OBJECTS_PATH)/$(PROGRAM_NAME)/Main.o

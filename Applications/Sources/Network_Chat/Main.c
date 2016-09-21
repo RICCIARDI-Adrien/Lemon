@@ -4,12 +4,13 @@
  */
 #include <System.h>
 #include "Interface.h"
+#include "Strings.h"
 
 //-------------------------------------------------------------------------------------------------
 // Private variables
 //-------------------------------------------------------------------------------------------------
 /** Contain the last written user message. */
-static char String_Main_User_Message[INTERFACE_USER_MESSAGE_MAXIMUM_SIZE] = {0};
+static char String_Main_User_Message[INTERFACE_USER_MESSAGE_MAXIMUM_SIZE + 1] = {0}; // +1 for a terminating zero
 /** The user message current length. */
 static unsigned int Main_User_Message_Length = 0;
 
@@ -66,6 +67,32 @@ static int MainReadUserMessage(void)
 //-------------------------------------------------------------------------------------------------
 int main(int __attribute__((unused)) argc, char __attribute__((unused)) *argv[])
 {
+	TNetworkIPAddress System_IP_Address, Gateway_IP_Address, Destination_IP_Address;
+	TNetworkSocket Socket;
+	
+	// TEST
+	System_IP_Address.Address = NETWORK_MAKE_IP_ADDRESS(192, 168, 60, 2);
+	System_IP_Address.Mask = NETWORK_MAKE_IP_ADDRESS(255, 255, 255, 0);
+	Gateway_IP_Address.Address = NETWORK_MAKE_IP_ADDRESS(192, 168, 60, 1);
+	Gateway_IP_Address.Mask = NETWORK_MAKE_IP_ADDRESS(255, 255, 255, 0);
+	Destination_IP_Address.Address = NETWORK_MAKE_IP_ADDRESS(192, 168, 60, 1);
+	Destination_IP_Address.Mask = NETWORK_MAKE_IP_ADDRESS(255, 255, 255, 0);
+	
+	// Initialize the network stack
+	if (NetworkInitialize(&System_IP_Address, &Gateway_IP_Address) != 0)
+	{
+		ScreenSetFontColor(SCREEN_COLOR_RED);
+		ScreenWriteString(STRING_ERROR_NETWORK_INITIALIZATION);
+		return 1;
+	}
+	
+	if (NetworkInitializeTransmissionSocket(&Destination_IP_Address, 1234, NETWORK_IP_PROTOCOL_UDP, &Socket) != 0)
+	{
+		ScreenSetFontColor(SCREEN_COLOR_RED);
+		ScreenWriteString(STRING_ERROR_NETWORK_SOCKET_INITIALIZATION);
+		return 1;
+	}
+	
 	// Prepare the screen
 	ScreenClear();
 	InterfaceDisplayUserMessage(""); // Display an empty prompt
@@ -84,14 +111,18 @@ int main(int __attribute__((unused)) argc, char __attribute__((unused)) *argv[])
 				
 			// The user sent the message
 			case 2:
-				// TODO send the message
-				
 				// Display the message
 				InterfaceDisplayMessage(String_Main_User_Message, SCREEN_COLOR_BLUE);
 				
+				// Append a new line character
+				String_Main_User_Message[Main_User_Message_Length] = '\n'; // The user message buffer is one byte larger than the maximum message size to allow a terminating zero to be inserted, so the new line character appending can't overflow this buffer
+				Main_User_Message_Length++;
+				// Send the message
+				NetworkUDPSendBuffer(&Socket, Main_User_Message_Length, String_Main_User_Message);
+				
 				// Display an empty user message prompt
 				Main_User_Message_Length = 0;
-				MemorySetAreaValue(String_Main_User_Message, INTERFACE_USER_MESSAGE_MAXIMUM_SIZE, 0); // Clear all message bytes because if some data remain, there is a time when the current terminating zero will be overwritten and that the last character will become a previous message's one, resulting in displaying the previous message end
+				MemorySetAreaValue(String_Main_User_Message, sizeof(String_Main_User_Message), 0); // Clear all message bytes because if some data remain, there is a time when the current terminating zero will be overwritten and that the last character will become a previous message's one, resulting in displaying the previous message end
 				InterfaceDisplayUserMessage("");
 				break;
 			
@@ -102,6 +133,9 @@ int main(int __attribute__((unused)) argc, char __attribute__((unused)) *argv[])
 				break;
 		}
 	}
+	
+//Exit_Error:
+	
 	
 Exit:
 	// Put the cursor at the beginning of the last screen line

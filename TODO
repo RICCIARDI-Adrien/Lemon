@@ -39,6 +39,13 @@ modif bibliothèques pour gérer nouveaux codes touches
 
 - utiliser les fonctions de conversion de string pour les fonctions screenwriteint...
 
+- fichier System.cfg qui contient les IP du système et de la GW
+- récup paquet non bloquante
+
+- parsing System.cfg
+
+- dans network base initialize, nettoyer le buffer de réception en utilisant la récup de paquet ethernet non bloquante
+
 Applications
 ------------
 
