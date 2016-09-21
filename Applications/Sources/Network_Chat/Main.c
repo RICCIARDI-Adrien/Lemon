@@ -69,6 +69,8 @@ int main(int __attribute__((unused)) argc, char __attribute__((unused)) *argv[])
 {
 	TNetworkIPAddress System_IP_Address, Gateway_IP_Address, Destination_IP_Address;
 	TNetworkSocket Socket;
+	unsigned int Received_Message_Size;
+	char String_Received_Message[NETWORK_MAXIMUM_PACKET_SIZE]; // The message size will never be as big, even if the sending program sends a huge packet, because ethernet, IP and UDP headers are removed from this size
 	
 	// TEST
 	System_IP_Address.Address = NETWORK_MAKE_IP_ADDRESS(192, 168, 60, 2);
@@ -100,42 +102,52 @@ int main(int __attribute__((unused)) argc, char __attribute__((unused)) *argv[])
 	while (1)
 	{
 		// Is a message received from the network ?
+		if (NetworkUDPReceiveBuffer(&Socket, 0, &Received_Message_Size, String_Received_Message) == 0)
+		{
+			// Remove the trailing new line character if present
+			if (String_Received_Message[Received_Message_Size - 1] == '\n') String_Received_Message[Received_Message_Size - 1] = 0;
+			else String_Received_Message[Received_Message_Size] = 0; // Append a terminating zero to the message end
+			
+			// Append the message to the conversation
+			InterfaceDisplayMessage(String_Received_Message, SCREEN_COLOR_LIGHT_RED);
+			InterfaceDisplayUserMessage(String_Main_User_Message); // Redraw the input area
+		}
 		
 		// Is a key pressed ?
-		switch (MainReadUserMessage())
+		if (KeyboardIsKeyAvailable())
 		{
-			// Something changed in the user message, redraw it
-			case 1:
-				InterfaceDisplayUserMessage(String_Main_User_Message);
-				break;
+			switch (MainReadUserMessage())
+			{
+				// Something changed in the user message, redraw it
+				case 1:
+					InterfaceDisplayUserMessage(String_Main_User_Message);
+					break;
+					
+				// The user sent the message
+				case 2:
+					// Display the message
+					InterfaceDisplayMessage(String_Main_User_Message, SCREEN_COLOR_LIGHT_BLUE);
+					
+					// Append a new line character
+					String_Main_User_Message[Main_User_Message_Length] = '\n'; // The user message buffer is one byte larger than the maximum message size to allow a terminating zero to be inserted, so the new line character appending can't overflow this buffer
+					Main_User_Message_Length++;
+					// Send the message
+					NetworkUDPSendBuffer(&Socket, Main_User_Message_Length, String_Main_User_Message);
+					
+					// Display an empty user message prompt
+					Main_User_Message_Length = 0;
+					MemorySetAreaValue(String_Main_User_Message, sizeof(String_Main_User_Message), 0); // Clear all message bytes because if some data remain, there is a time when the current terminating zero will be overwritten and that the last character will become a previous message's one, resulting in displaying the previous message end
+					InterfaceDisplayUserMessage("");
+					break;
 				
-			// The user sent the message
-			case 2:
-				// Display the message
-				InterfaceDisplayMessage(String_Main_User_Message, SCREEN_COLOR_BLUE);
-				
-				// Append a new line character
-				String_Main_User_Message[Main_User_Message_Length] = '\n'; // The user message buffer is one byte larger than the maximum message size to allow a terminating zero to be inserted, so the new line character appending can't overflow this buffer
-				Main_User_Message_Length++;
-				// Send the message
-				NetworkUDPSendBuffer(&Socket, Main_User_Message_Length, String_Main_User_Message);
-				
-				// Display an empty user message prompt
-				Main_User_Message_Length = 0;
-				MemorySetAreaValue(String_Main_User_Message, sizeof(String_Main_User_Message), 0); // Clear all message bytes because if some data remain, there is a time when the current terminating zero will be overwritten and that the last character will become a previous message's one, resulting in displaying the previous message end
-				InterfaceDisplayUserMessage("");
-				break;
-			
-			case 3:
-				goto Exit;
-				
-			default:
-				break;
+				case 3:
+					goto Exit;
+					
+				default:
+					break;
+			}
 		}
 	}
-	
-//Exit_Error:
-	
 	
 Exit:
 	// Put the cursor at the beginning of the last screen line
