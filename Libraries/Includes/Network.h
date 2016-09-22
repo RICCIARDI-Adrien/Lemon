@@ -33,7 +33,29 @@
  * @param Byte_4 The fourth address byte.
  * @return The 32-bit IP address converted to big endian order.
  */
-#define NETWORK_MAKE_IP_ADDRESS(Byte_1, Byte_2, Byte_3, Byte_4) (((unsigned char) Byte_4 << 24) | ((unsigned char) Byte_3 << 16) | ((unsigned char) Byte_2 << 8) | (unsigned char) Byte_1)
+#define NETWORK_INITIALIZE_IP_ADDRESS(Byte_1, Byte_2, Byte_3, Byte_4) (((unsigned char) Byte_4 << 24) | ((unsigned char) Byte_3 << 16) | ((unsigned char) Byte_2 << 8) | (unsigned char) Byte_1)
+
+/** TODO */
+#define NETWORK_INITIALIZE_SUBNET_MASK(Byte_1, Byte_2, Byte_3, Byte_4) NETWORK_SWAP_DOUBLE_WORD((255 << 24) | (((Byte_1 & (1 << 7)) ? 255 : 0) << 16) | (((Byte_1 & (1 << 6)) ? 255 : 0) << 8))
+
+/** Find the subnet mask according to the IP address class.
+ * @param IP_Address The IP address in big endian mode.
+ * @return The corresponding subnet mask in big endian mode too.
+ */
+#define NETWORK_GET_SUBNET_MASK_FROM_IP_ADDRESS(IP_Address) ((255 << 24) | (((IP_Address & 0x00000001) ? 255 : 0) << 16) | (((IP_Address & 0x00000002) ? 255 : 0) << 8))
+
+#if 0
+/** Initialize a TNetworkSocket with the provided IP address. The subnet mask is automatically determined from the IP address.
+ * @param IP_Address_Byte_1 The first address byte.
+ * @param IP_Address_Byte_2 The second address byte.
+ * @param IP_Address_Byte_3 The third address byte.
+ * @param IP_Address_Byte_4 The fourth address byte.
+ * @return An initializer for a socket structure.
+ */
+#define NETWORK_INITIALIZE_SOCKET(IP_Address_Byte_1, IP_Address_Byte_2, IP_Address_Byte_3, IP_Address_Byte_4) \
+{ \
+	.Address = NETWORK_INITIALIZE_IP_ADDRESS(IP_Address_Byte_1, IP_Address_Byte_2, IP_Address_Byte_3, IP_Address_Byte_4)
+#endif
 
 //-------------------------------------------------------------------------------------------------
 // Types
@@ -116,7 +138,7 @@ int NetworkInitialize(TNetworkIPAddress *Pointer_System_IP_Address, TNetworkIPAd
 int NetworkInitializeSocket(TNetworkIPAddress *Pointer_Destination_IP_Address, unsigned short Destination_Port, TNetworkIPProtocol Used_Protocol, TNetworkSocket *Pointer_Socket);
 
 /** TODO */
-int NetworkIPConvertFromString(char *String_IP_Address, char *String_Subnet_Mask, TNetworkIPAddress *Pointer_IP_Address);
+int NetworkIPConvertFromString(char *String_IP_Address, unsigned int *Pointer_IP_Address);
 
 /** Send data over an UDP datagram.
  * @param Pointer_Socket The initialized socket indicating the destination machine.

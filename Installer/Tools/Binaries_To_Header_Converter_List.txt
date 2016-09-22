@@ -4,6 +4,8 @@ MBR
 Kernel
 ../Applications/Binaries/Benchmark.lemon
 benchmark
+../Applications/Binaries/Network_Chat.lemon
+chat
 ../Applications/Binaries/Text_Editor.lemon
 edit
 ../Applications/Binaries/Games.lemon

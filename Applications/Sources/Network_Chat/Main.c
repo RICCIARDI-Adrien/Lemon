@@ -65,20 +65,40 @@ static int MainReadUserMessage(void)
 //-------------------------------------------------------------------------------------------------
 // Entry point
 //-------------------------------------------------------------------------------------------------
-int main(int __attribute__((unused)) argc, char __attribute__((unused)) *argv[])
+int main(int argc, char *argv[])
 {
 	TNetworkIPAddress System_IP_Address, Gateway_IP_Address, Destination_IP_Address;
 	TNetworkSocket Socket;
 	unsigned int Received_Message_Size;
+	unsigned short Destination_Port;
 	char String_Received_Message[NETWORK_MAXIMUM_PACKET_SIZE]; // The message size will never be as big, even if the sending program sends a huge packet, because ethernet, IP and UDP headers are removed from this size
 	
+	// Check parameters
+	if (argc != 3)
+	{
+		ScreenWriteString(STRING_USAGE_1);
+		ScreenWriteString(argv[0]);
+		ScreenWriteString(STRING_USAGE_2);
+		return 1;
+	}
+	
+	// Convert parameters
+	// IP address
+	if (NetworkIPConvertFromString(argv[1], &Destination_IP_Address.Address) != 0)
+	{
+		ScreenSetFontColor(SCREEN_COLOR_RED);
+		ScreenWriteString(STRING_ERROR_INVALID_IP_ADDRESS);
+		return 1;
+	}
+	Destination_IP_Address.Mask = NETWORK_GET_SUBNET_MASK_FROM_IP_ADDRESS(Destination_IP_Address.Address);
+	// Destination port
+	Destination_Port = StringConvertStringToUnsignedInteger(argv[2]);
+	
 	// TEST
-	System_IP_Address.Address = NETWORK_MAKE_IP_ADDRESS(192, 168, 60, 2);
-	System_IP_Address.Mask = NETWORK_MAKE_IP_ADDRESS(255, 255, 255, 0);
-	Gateway_IP_Address.Address = NETWORK_MAKE_IP_ADDRESS(192, 168, 60, 1);
-	Gateway_IP_Address.Mask = NETWORK_MAKE_IP_ADDRESS(255, 255, 255, 0);
-	Destination_IP_Address.Address = NETWORK_MAKE_IP_ADDRESS(192, 168, 60, 1);
-	Destination_IP_Address.Mask = NETWORK_MAKE_IP_ADDRESS(255, 255, 255, 0);
+	System_IP_Address.Address = NETWORK_INITIALIZE_IP_ADDRESS(192, 168, 60, 2);
+	System_IP_Address.Mask = NETWORK_INITIALIZE_IP_ADDRESS(255, 255, 255, 0);
+	Gateway_IP_Address.Address = NETWORK_INITIALIZE_IP_ADDRESS(192, 168, 60, 1);
+	Gateway_IP_Address.Mask = NETWORK_INITIALIZE_IP_ADDRESS(255, 255, 255, 0);
 	
 	// Initialize the network stack
 	if (NetworkInitialize(&System_IP_Address, &Gateway_IP_Address) != 0)
@@ -88,7 +108,7 @@ int main(int __attribute__((unused)) argc, char __attribute__((unused)) *argv[])
 		return 1;
 	}
 	
-	if (NetworkInitializeSocket(&Destination_IP_Address, 1234, NETWORK_IP_PROTOCOL_UDP, &Socket) != 0)
+	if (NetworkInitializeSocket(&Destination_IP_Address, Destination_Port, NETWORK_IP_PROTOCOL_UDP, &Socket) != 0)
 	{
 		ScreenSetFontColor(SCREEN_COLOR_RED);
 		ScreenWriteString(STRING_ERROR_NETWORK_SOCKET_INITIALIZATION);
