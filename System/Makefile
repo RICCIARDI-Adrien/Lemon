@@ -14,7 +14,8 @@ MBR_FLAGS = -DSECTORS_TO_LOAD_COUNT=64
 #------------------------------------------------------------------------------------------------------------------------------
 ifeq ($(SYSTEM_ETHERNET_CONTROLLER_DRIVER),82540em)
 	CCFLAGS += -DCONFIGURATION_IS_ETHERNET_CONTROLLER_ENABLED=1
-	OBJECTS_DRIVERS += $(PATH_OBJECTS)/Driver_PCI.o $(PATH_OBJECTS)/Driver_Ethernet_Intel_82540EM.o
+	OBJECTS_DRIVERS += $(PATH_OBJECTS)/Driver_Ethernet_Intel_82540EM.o
+	DEPENDENCIES_INCLUDE_PCI = 1
 else
 	CCFLAGS += -DCONFIGURATION_IS_ETHERNET_CONTROLLER_ENABLED=0
 endif

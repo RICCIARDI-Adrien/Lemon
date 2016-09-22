@@ -19,9 +19,15 @@ endif
 
 # Choose which hard disk driver to compile
 ifeq ($(SYSTEM_HARD_DISK_DRIVER),sata)
-	OBJECTS_DRIVERS += $(PATH_OBJECTS)/Driver_Hard_Disk_SATA.o $(PATH_OBJECTS)/Driver_PCI.o
+	OBJECTS_DRIVERS += $(PATH_OBJECTS)/Driver_Hard_Disk_SATA.o
+	DEPENDENCIES_INCLUDE_PCI = 1
 else
 	OBJECTS_DRIVERS += $(PATH_OBJECTS)/Driver_Hard_Disk_IDE.o
+endif
+
+# Compile PCI driver if needed
+ifeq ($(DEPENDENCIES_INCLUDE_PCI),1)
+	OBJECTS_DRIVERS += $(PATH_OBJECTS)/Driver_PCI.o
 endif
 
 #------------------------------------------------------------------------------------------------------------------------------
