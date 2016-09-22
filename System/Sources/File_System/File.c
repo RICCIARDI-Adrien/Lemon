@@ -203,7 +203,7 @@ int FileOpen(char *String_File_Name, char Opening_Mode, unsigned int *Pointer_Fi
 			
 			// Allocate the first block
 			Pointer_File_Descriptor->Current_Block_Index = FileSystemAllocateBlock();
-			if (Pointer_File_Descriptor->Current_Block_Index == ERROR_CODE_BLOCKS_LIST_FULL) return ERROR_CODE_BLOCKS_LIST_FULL;
+			if (Pointer_File_Descriptor->Current_Block_Index == FILE_SYSTEM_BLOCKS_LIST_FULL_CODE) return ERROR_CODE_BLOCKS_LIST_FULL;
 			
 			// For now consider the file as empty
 			Pointer_Files_List_Entry->Start_Block = Pointer_File_Descriptor->Current_Block_Index;
