@@ -67,10 +67,11 @@ static int MainReadUserMessage(void)
 //-------------------------------------------------------------------------------------------------
 int main(int argc, char *argv[])
 {
-	TNetworkIPAddress System_IP_Address, Gateway_IP_Address, Destination_IP_Address;
+	TNetworkIPAddress Destination_IP_Address;
 	TNetworkSocket Socket;
 	unsigned int Received_Message_Size;
 	unsigned short Destination_Port;
+	int Result;
 	char String_Received_Message[NETWORK_MAXIMUM_PACKET_SIZE]; // The message size will never be as big, even if the sending program sends a huge packet, because ethernet, IP and UDP headers are removed from this size
 	
 	// Check parameters
@@ -94,17 +95,18 @@ int main(int argc, char *argv[])
 	// Destination port
 	Destination_Port = StringConvertStringToUnsignedInteger(argv[2]);
 	
-	// TEST
-	System_IP_Address.Address = NETWORK_INITIALIZE_IP_ADDRESS(192, 168, 60, 2);
-	System_IP_Address.Mask = NETWORK_INITIALIZE_IP_ADDRESS(255, 255, 255, 0);
-	Gateway_IP_Address.Address = NETWORK_INITIALIZE_IP_ADDRESS(192, 168, 60, 1);
-	Gateway_IP_Address.Mask = NETWORK_INITIALIZE_IP_ADDRESS(255, 255, 255, 0);
-	
 	// Initialize the network stack
-	if (NetworkInitialize(&System_IP_Address, &Gateway_IP_Address) != 0)
+	Result = NetworkInitialize();
+	if (Result == 1)
 	{
 		ScreenSetFontColor(SCREEN_COLOR_RED);
-		ScreenWriteString(STRING_ERROR_NETWORK_INITIALIZATION);
+		ScreenWriteString(STRING_ERROR_NETWORK_INITIALIZATION_NO_NETWORK_SUPPORT);
+		return 1;
+	}
+	else if (Result == 2)
+	{
+		ScreenSetFontColor(SCREEN_COLOR_RED);
+		ScreenWriteString(STRING_ERROR_NETWORK_INITIALIZATION_BAD_CONFIGURATION_PARAMETERS);
 		return 1;
 	}
 	

@@ -120,13 +120,11 @@ typedef struct __attribute__((packed))
 // Functions
 //-------------------------------------------------------------------------------------------------
 /** This function must be called once at the application startup. It allows to configure essential network parameters.
- * @param Pointer_System_IP_Address If set to NULL, use DHCP to get an IP address. If set to a valid IP address, use this address to configure the network interface.
- * @param Pointer_Gateway_IP_Address If set to NULL, use DHCP to get the default gateway address. If set to a valid IP address, use this address to configure the network interface.
  * @return 0 if the network subsystem was successfully initialized,
  * @return 1 if no network controller is available,
- * @return TODO others
+ * @return 2 if the network parameters could not be retrieved from the configuration file (parameters were missing or bad).
  */
-int NetworkInitialize(TNetworkIPAddress *Pointer_System_IP_Address, TNetworkIPAddress *Pointer_Gateway_IP_Address);
+int NetworkInitialize(void);
 
 /** Initialize a socket content to transmit data to the specified IP address and to receive data from it.
  * @param Pointer_Destination_IP_Address The data recipient.
