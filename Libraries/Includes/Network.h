@@ -123,6 +123,7 @@ typedef struct __attribute__((packed))
  * @param Pointer_System_IP_Address If set to NULL, use DHCP to get an IP address. If set to a valid IP address, use this address to configure the network interface.
  * @param Pointer_Gateway_IP_Address If set to NULL, use DHCP to get the default gateway address. If set to a valid IP address, use this address to configure the network interface.
  * @return 0 if the network subsystem was successfully initialized,
+ * @return 1 if no network controller is available,
  * @return TODO others
  */
 int NetworkInitialize(TNetworkIPAddress *Pointer_System_IP_Address, TNetworkIPAddress *Pointer_Gateway_IP_Address);
@@ -137,7 +138,12 @@ int NetworkInitialize(TNetworkIPAddress *Pointer_System_IP_Address, TNetworkIPAd
  */
 int NetworkInitializeSocket(TNetworkIPAddress *Pointer_Destination_IP_Address, unsigned short Destination_Port, TNetworkIPProtocol Used_Protocol, TNetworkSocket *Pointer_Socket);
 
-/** TODO */
+/** Convert an IPv4 dotted address string to a big endian double word.
+ * @param String_IP_Address The IP address (like "192.168.1.3").
+ * @param Pointer_IP_Address On output, contain the IP address converted to a big endian double word.
+ * @return 0 if the address was successfully converted,
+ * @return 1 if the IP address string is malformed.
+ */
 int NetworkIPConvertFromString(char *String_IP_Address, unsigned int *Pointer_IP_Address);
 
 /** Send data over an UDP datagram.

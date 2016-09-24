@@ -86,6 +86,14 @@ static void SystemCallSystemGetParameter(void)
 			*Pointer_Result = FileSystemGetFreeBlocksCount();
 			break;
 			
+		case SYSTEM_CALL_SYSTEM_PARAMETER_ID_ETHERNET_CONTROLLER_IS_ENABLED:
+			#if CONFIGURATION_IS_ETHERNET_CONTROLLER_ENABLED
+				*Pointer_Result = 1;
+			#else
+				*Pointer_Result = 0;
+			#endif
+			break;
+			
 		case SYSTEM_CALL_SYSTEM_PARAMETER_ID_ETHERNET_CONTROLLER_MAC_ADDRESS:
 			memcpy(Pointer_Result, Ethernet_Controller_MAC_Address, ETHERNET_CONTROLLER_MAC_ADDRESS_SIZE);
 			break;

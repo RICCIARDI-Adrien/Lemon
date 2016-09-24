@@ -16,7 +16,7 @@
 	#define STRING_USAGE_1 "Utilisation : "
 	#define STRING_USAGE_2 " Adresse_IP_Correspondant Port_Correspondant\n"
 	#define STRING_ERROR_INVALID_IP_ADDRESS "Erreur : l'adresse IP est invalide.\n"
-	#define STRING_ERROR_NETWORK_INITIALIZATION "Erreur lors de l'initialisation de la pile r\202seau (est-ce que la passerelle par d\202faut est op\202rationnelle ?).\n"
+	#define STRING_ERROR_NETWORK_INITIALIZATION "Erreur : le support r\202seau n'est pas activ\202.\n"
 	#define STRING_ERROR_NETWORK_SOCKET_INITIALIZATION "Erreur lors de l'initialisation de la socket r\202seau (est-ce que la machine de\ndestination est op\202rationnelle ?).\n"
 #endif
 

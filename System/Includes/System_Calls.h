@@ -19,6 +19,7 @@ typedef enum
 	SYSTEM_CALL_SYSTEM_PARAMETER_ID_FILE_SYSTEM_MAXIMUM_BLOCKS_LIST_ENTRIES_COUNT, //!< Maximum number of file system blocks.
 	SYSTEM_CALL_SYSTEM_PARAMETER_ID_FILE_SYSTEM_FREE_FILES_LIST_ENTRIES_COUNT, //!< How many Files List entries are available.
 	SYSTEM_CALL_SYSTEM_PARAMETER_ID_FILE_SYSTEM_FREE_BLOCKS_LIST_ENTRIES_COUNT, //!< How many Blocks List entries are available.
+	SYSTEM_CALL_SYSTEM_PARAMETER_ID_ETHERNET_CONTROLLER_IS_ENABLED, //!< Is the ethernet controller support available or not.
 	SYSTEM_CALL_SYSTEM_PARAMETER_ID_ETHERNET_CONTROLLER_MAC_ADDRESS, //!< Get the ethernet board MAC address.
 	SYSTEM_CALL_SYSTEM_PARAMETER_IDS_COUNT //! The total number of parameters.
 } TSystemCallSystemParameterID;
