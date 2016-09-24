@@ -41,10 +41,6 @@ modif bibliothèques pour gérer nouveaux codes touches
 
 - utiliser les fonctions de conversion de string pour les fonctions screenwriteint...
 
-- fichier System.cfg qui contient les IP du système et de la GW
-
-- parsing System.cfg
-
 - la récupération d'un paquet droppe le paquet si ce n'est pas le bon => il faudrait connaître toutes les sockets déclarées et passer le buffer à la bonne socket plutôt que de le dropper
 
 Applications
@@ -54,8 +50,6 @@ Applications
 - optimiser système de build
 
 - utiliser api buffer pour affichage éditeur de texte
-
-- doc chat dans help
 
 Installer
 ---------

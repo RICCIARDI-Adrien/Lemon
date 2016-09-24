@@ -22,6 +22,7 @@
 	#define STRING_UNKNOWN_COMMAND_2 "' n'existe pas.\n" 
 	
 	// Commands short description
+	#define STRING_COMMAND_SHORT_DESCRIPTION_CHAT "Messagerie instantan\202e bas\202e sur le protocole UDP."
 	#define STRING_COMMAND_SHORT_DESCRIPTION_CLEAR "Efface l'\202cran."
 	#define STRING_COMMAND_SHORT_DESCRIPTION_COPY "Copie un fichier."
 	#define STRING_COMMAND_SHORT_DESCRIPTION_DELETE "Supprime un fichier."
@@ -36,6 +37,11 @@
 	#define STRING_COMMAND_SHORT_DESCRIPTION_VERSION "Affiche la version et la date de compilation du syst\212me."
 	
 	// Commands full description
+	#define STRING_COMMAND_FULL_DESCRIPTION_CHAT "Le message en cours de r\202daction se trouve tout en haut de l'\202cran.\n" \
+		"Le message est envoy\202 d\212s que la touche Entr\202e est press\202e. Le message\n" \
+		"dispara\214t alors de la zone d'\202criture et appara\214t dans la zone d'affichage.\n" \
+		"Les messages re\207us sont affich\202s avec une couleur diff\202rente de ceux envoy\202s. \n" \
+		"Appuyer sur Echap pour quitter instantan\202ment le chat."
 	#define STRING_COMMAND_FULL_DESCRIPTION_EDIT "Permet d'\202diter un fichier texte.\n" \
 		"Liste des commandes :\n" \
 		"    Fl\212ches : d\202placer le curseur\n" \
