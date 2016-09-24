@@ -12,8 +12,10 @@ edit
 games
 ../Applications/Binaries/Help.lemon
 help
-../Documentation/Readme.txt
+Resources/Readme.txt
 Readme.txt
+Resources/System.cfg
+System.cfg
 ../Applications/Binaries/Tests.lemon
 tests
 ../Applications/Binaries/UNIX_Commands.lemon
