@@ -30,6 +30,11 @@
 /** Give the number of elements in an array. */
 #define SYSTEM_GET_ARRAY_ELEMENTS_COUNT(Array) (sizeof(Array) / sizeof(Array[0]))
 
+/** The configuration file name. */
+#define SYSTEM_CONFIGURATION_FILE_NAME "System.cfg"
+/** The maximum length in characters of a value string. */
+#define SYSTEM_CONFIGURATION_FILE_MAXIMUM_VALUE_SIZE 128
+
 //-------------------------------------------------------------------------------------------------
 // Functions
 //-------------------------------------------------------------------------------------------------
@@ -70,5 +75,16 @@ void SystemGetFileSystemFreeSize(unsigned int *Pointer_Blocks_Count, unsigned in
  * @return The timer value (the unit is 1 ms).
  */
 unsigned int SystemGetTimerValue(void);
+
+/** Read a configuration value from the configuration file.
+ * @param String_Key The value key (the string that identifies the value).
+ * @param String_Value On output, contain the requested value. This buffer must be large enough to hold the whole value.
+ * @return 0 if the value was successfully retrieved,
+ * @return 1 if the configuration file was not found,
+ * @return 2 if the provided key is empty,
+ * @return 3 if a read error occurred,
+ * @return 4 if the key was not found.
+ */
+int SystemConfigurationReadValue(char *String_Key, char *String_Value);
 
 #endif
