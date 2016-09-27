@@ -90,6 +90,7 @@
 	
 	// Submarine
 	#define STRING_SUBMARINE_PLAYER_LOST "Vous avez perdu. Appuyez sur Echap pour quitter."
+	#define STRING_SUBMARINE_PLAYER_SCORE "Score : "
 #endif
 
 #endif

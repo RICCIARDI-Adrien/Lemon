@@ -98,7 +98,8 @@ void Submarine(void)
 {
 	int Scene_Scrolling_Frequency_Divider = 0, Is_Player_Dead = 0, Player_Row = SCREEN_ROWS_COUNT / 2; // Center the player
 	unsigned char Player_Color = SUBMARINE_ALIVE_PLAYER_COLOR;
-	unsigned int Start_Time, End_Time, Time_To_Wait;
+	unsigned int Start_Time, End_Time, Time_To_Wait, Score = 0;
+	char String_Score[64], String_Converted_Score_Value[16];
 	
 	RandomInitialize();
 	
@@ -145,6 +146,8 @@ void Submarine(void)
 			Is_Player_Dead = 1;
 			Player_Color = SUBMARINE_DEAD_PLAYER_COLOR;
 		}
+		// Increment the score only if an obstacles column was successfully crossed
+		else if ((Scene_Scrolling_Frequency_Divider == 0) && (Submarine_Obstacles_Bitmask[SUBMARINE_PLAYER_COLUMN] != 0)) Score++; // An obstacles column is moved on the screen only when Scene_Scrolling_Frequency_Divider is zero, and an obstacles column is present only when its value is different from zero
 		
 		// Display the player
 		Submarine_Screen_Buffer[Player_Row][SUBMARINE_PLAYER_COLUMN].Color = Player_Color;
@@ -159,6 +162,14 @@ void Submarine(void)
 			ScreenSetBackgroundColor(SCREEN_COLOR_RED);
 			ScreenSetCursorPosition(SCREEN_ROWS_COUNT / 2, 0); // The column coordinate will be computed by the ScreenWriteCenteredString() function
 			ScreenWriteCenteredString(STRING_SUBMARINE_PLAYER_LOST);
+			
+			// Display the score string below
+			StringConcatenate(String_Score, STRING_SUBMARINE_PLAYER_SCORE);
+			StringConvertUnsignedIntegerToString(Score, String_Converted_Score_Value);
+			StringConcatenate(String_Score, String_Converted_Score_Value);
+			ScreenSetCursorPosition((SCREEN_ROWS_COUNT / 2) + 1, 0); // The column coordinate will be computed by the ScreenWriteCenteredString() function
+			ScreenWriteCenteredString(String_Score);
+			
 			ScreenSetBackgroundColor(SCREEN_COLOR_WHITE); // Restore the default background color
 			
 			// Wait for the player to hit "escape" key
