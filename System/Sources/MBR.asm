@@ -63,9 +63,9 @@ Entry_Point:
 		; Display the first sector to load
 		%ifdef DEBUG
 			xor di, di
-			mov ax, [Logical_Sector_Number + 2]
+			mov ax, [Disk_Address_Packet_Starting_Sector_LBA_Low + 2]
 			call WriteHex
-			mov ax, [Logical_Sector_Number]
+			mov ax, [Disk_Address_Packet_Starting_Sector_LBA_Low]
 			call WriteHex
 		%endif
 		
