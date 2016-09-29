@@ -30,7 +30,7 @@ all: clean Tools/Binaries_To_Header_Converter.out convert_files $(PATH_OBJECTS)/
 	@rm $(PATH_BINARIES)/*.bin
 	######## Creating CDROM image ########
 	@if (test -e $(PATH_BINARIES)/Lemon_Installer_CD_Image.iso); then rm $(PATH_BINARIES)/Lemon_Installer_CD_Image.iso; fi
-	$(GLOBAL_TOOL_ISO_GENERATOR) -G $(PATH_BINARIES)/Lemon_Installer_Floppy_Image.img -hard-disk-boot -r -b Lemon_Installer_Floppy_Image.img -c boot.catalog -o Lemon_Installer_CD_Image.iso $(PATH_BINARIES)
+	$(GLOBAL_TOOL_ISO_GENERATOR) -G $(PATH_BINARIES)/Lemon_Installer_Floppy_Image.img -r -b Lemon_Installer_Floppy_Image.img -c boot.catalog -o Lemon_Installer_CD_Image.iso $(PATH_BINARIES)
 	@mv Lemon_Installer_CD_Image.iso $(PATH_BINARIES)
 	######## Build successful ########
 	@ls -l $(PATH_OBJECTS)/Kernel.bin | awk '{print "Installer size : " $$5 + 512 " bytes"}'
