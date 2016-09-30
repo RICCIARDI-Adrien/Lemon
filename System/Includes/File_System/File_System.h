@@ -22,28 +22,30 @@
 //-------------------------------------------------------------------------------------------------
 // Types
 //-------------------------------------------------------------------------------------------------
-/** This structure is stored at the end of the MBR sector. It is initialized by system installer and never modified. */
+/** This structure is stored at the file system beginning. It is initialized by system installer and never modified. */
 typedef struct __attribute__((packed))
 {
-	unsigned int Magic_Number; //! Magic number to be sure that a file system is present on the device.
-	unsigned int Total_Blocks_Count; //! Total number of blocks in the Blocks List.
-	unsigned int Total_Files_Count; //! Total number of files in the Files List (ie maximum number of files allowed).
+	unsigned int Magic_Number; //!< Magic number to be sure that a file system is present on the device.
+	unsigned int Total_Blocks_Count; //!< Total number of blocks in the Blocks List.
+	unsigned int Total_Files_Count; //!< Total number of files in the Files List (ie maximum number of files allowed).
 } TFileSystemInformations;
 
 /** The Files List is an array of this structure. */
 typedef struct __attribute__((packed))
 {
-	char String_Name[CONFIGURATION_FILE_NAME_LENGTH]; //! The ASCIIZ string storing the file name.
-	unsigned int Start_Block; //! ID of the first block of the file. This is the beginning of the chained list into the Blocks List.
-	unsigned int Size_Bytes; //! Size of the file in bytes. Yes, maximum file size is limited to 4 GB...
+	char String_Name[CONFIGURATION_FILE_NAME_LENGTH]; //!< The ASCIIZ string storing the file name.
+	unsigned int Start_Block; //!< ID of the first block of the file. This is the beginning of the chained list into the Blocks List.
+	unsigned int Size_Bytes; //!< Size of the file in bytes. Yes, maximum file size is limited to 4 GB...
 } TFilesListEntry;
 
 /** Represent a whole file system. */
 typedef struct __attribute__((packed))
 {
-	TFileSystemInformations File_System_Informations; //! Contain the file system parameters.
-	unsigned int Blocks_List[CONFIGURATION_FILE_SYSTEM_MAXIMUM_BLOCKS_LIST_ENTRIES]; //! All the possible blocks.
-	TFilesListEntry Files_List[CONFIGURATION_FILE_SYSTEM_MAXIMUM_FILES_LIST_ENTRIES]; //! All the possible files.
+	TFileSystemInformations File_System_Informations; //!< Contain the file system parameters.
+	unsigned int Blocks_List[CONFIGURATION_FILE_SYSTEM_MAXIMUM_BLOCKS_LIST_ENTRIES]; //!< All the possible blocks.
+	unsigned char Padding_1[FILE_SYSTEM_SECTOR_SIZE_BYTES]; //!< Provide one more sector to allow the blocks list to "overflow". Indeed, if the CONFIGURATION_FILE_SYSTEM_MAXIMUM_BLOCKS_LIST_ENTRIES value is not a multiple of FILE_SYSTEM_SECTOR_SIZE_BYTES, one more sector will be required to store the data.
+	TFilesListEntry Files_List[CONFIGURATION_FILE_SYSTEM_MAXIMUM_FILES_LIST_ENTRIES]; //!< All the possible files.
+	unsigned char Padding_2[FILE_SYSTEM_SECTOR_SIZE_BYTES]; //!< Provide one more sector for the same reason than the previous padding.
 } TFileSystem;
 
 //-------------------------------------------------------------------------------------------------
