@@ -45,6 +45,8 @@
 	#define STRING_SHELL_COPY_FILE_SOURCE_FILE_NOT_FOUND "Erreur : le fichier source est introuvable.\n"
 	#define STRING_SHELL_COPY_FILE_DESTINATION_FILE_EXISTING_YET "Erreur : le fichier de destination existe d\202j\205.\n"
 	#define STRING_SHELL_COPY_FILE_NOT_ENOUGH_ROOM "Erreur : il n'y a pas assez de place sur le syst\212me de fichiers.\n"
+	#define STRING_SHELL_COPY_SOURCE_FILE_READ_ERROR "Erreur lors de la lecture du fichier source.\n"
+	#define STRING_SHELL_COPY_DESTINATION_FILE_WRITE_ERROR "Erreur lors de l'\202criture dans le fichier destination.\n"
 	#define STRING_SHELL_COPY_FILE_STARTING_COPY "Copie en cours...\n"
 	#define STRING_SHELL_COPY_FILE_SUCCESS "Copie r\202ussie.\n"
 	
@@ -90,7 +92,7 @@
 	#define STRING_SHELL_FILE_SIZE_SHOW_SIZE_2 " octets.\n"
 
 	// Shell version command
-	#define STRING_SHELL_VERSION "Version du syst\212me : 2.4.0 (" __DATE__ ", " __TIME__ ")\n" \
+	#define STRING_SHELL_VERSION "Version du syst\212me : 2.4.1 (" __DATE__ ", " __TIME__ ")\n" \
 		"Copyright (C) Adrien Ricciardi\n\n" \
 		"Configuration :\n" \
 		STRING_BUILD_CONFIGURATION_VARIABLES

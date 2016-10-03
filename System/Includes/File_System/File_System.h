@@ -12,10 +12,9 @@
 //-------------------------------------------------------------------------------------------------
 /** Hard disk physical sector size in bytes. */
 #define FILE_SYSTEM_SECTOR_SIZE_BYTES 512
-/** Tell that a block located in the Blocks List is free. */
-#define FILE_SYSTEM_BLOCKS_LIST_BLOCK_FREE 0xFFFFFFFF // This allows only 2^32 - 2 blocks in the Blocks List (taking into account the EOF code too)
+
 /** Tell that the current block is the last of the file. */
-#define FILE_SYSTEM_BLOCKS_LIST_BLOCK_EOF 0xFFFFFFFE
+#define FILE_SYSTEM_BLOCKS_LIST_BLOCK_EOF 0xFFFFFFFF // This allows only 2^32 - 1 blocks in the Blocks List
 /** Tell that the Blocks List has no more free block. */
 #define FILE_SYSTEM_BLOCKS_LIST_FULL_CODE 0xFFFFFFFF
 

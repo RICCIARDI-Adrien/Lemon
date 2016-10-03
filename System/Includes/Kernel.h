@@ -28,6 +28,7 @@
  * @version 2.3.2 : 02/07/2016, added a header containing a magic number at the beginning of the executable files.
  * @version 2.3.3 : 19/08/2016, hard disk LBA mode must be configured manually (to give user more possibilities). Build configuration variables are gathered in the main makefile.
  * @version 2.4.0 : 21/09/2016, added networking support.
+ * @version 2.4.1 : 03/10/2016, improved file system by using a list of free blocks.
  */
 #ifndef H_KERNEL_H
 #define H_KERNEL_H

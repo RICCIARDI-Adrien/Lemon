@@ -14,10 +14,6 @@ Système
 
 - gérer proprement la MTU réseau dans le driver => dropper les paquets supérieurs à 1500
 
-- supprimer FILE_SYSTEM_BLOCKS_LIST_BLOCK_FREE car inutile si liste de blocs vides
-
-- réécrire la commande copy du shell avec fileopen et compagnie
-
 - un fichier vide ouvert en écriture consomme un bloc
 
 Doc
