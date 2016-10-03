@@ -67,7 +67,7 @@ void ShellCommandCopyFile(char *String_File_Name_Source, char *String_File_Name_
 		Next_Block_To_Read = Pointer_Files_List_Entry_Source->Start_Block;
 		
 		// Set new file starting block
-		Next_Block_To_Write = FileSystemGetFirstFreeBlock();
+		Next_Block_To_Write = FileSystemAllocateBlock();
 		Pointer_Files_List_Entry_Destination->Start_Block = Next_Block_To_Write;
 
 		// Compute the number of blocks to copy
@@ -82,7 +82,7 @@ void ShellCommandCopyFile(char *String_File_Name_Source, char *String_File_Name_
 
 			// Reserve the next destination block and update the Blocks List
 			Current_Block_To_Write = Next_Block_To_Write;
-			Next_Block_To_Write = FileSystemGetFirstFreeBlock();
+			Next_Block_To_Write = FileSystemAllocateBlock();
 			File_System.Blocks_List[Current_Block_To_Write] = Next_Block_To_Write;
 
 			Blocks_Count--;

@@ -91,7 +91,7 @@ int FileRename(char *String_Current_File_Name, char *String_New_File_Name)
 int FileDelete(char *String_File_Name)
 {
 	TFilesListEntry *Pointer_Files_List_Entry;
-	unsigned int Block, Next_Block;
+	unsigned int First_Block, Last_Block, Next_Block;
 	int i;
 	
 	// Check if file name is valid
@@ -111,19 +111,26 @@ int FileDelete(char *String_File_Name)
 		}
 	}
 	
-	// Free Blocks List blocks
-	Block = Pointer_Files_List_Entry->Start_Block;
-	while (Block != FILE_SYSTEM_BLOCKS_LIST_BLOCK_EOF)
+	// Free allocated blocks by appending the file blocks list to the free blocks list beginning (the free blocks list head will become the file first block)
+	First_Block = Pointer_Files_List_Entry->Start_Block;
+	// Find the file last block
+	Last_Block = First_Block;
+	Next_Block = First_Block;
+	while (Next_Block != FILE_SYSTEM_BLOCKS_LIST_BLOCK_EOF)
 	{
 		// Get next block
-		Next_Block = File_System.Blocks_List[Block];
-		// Erase current block
-		File_System.Blocks_List[Block] = FILE_SYSTEM_BLOCKS_LIST_BLOCK_FREE;
+		Next_Block = File_System.Blocks_List[Last_Block];
+		if (Next_Block == FILE_SYSTEM_BLOCKS_LIST_BLOCK_EOF) break; // Keep the block that contains FILE_SYSTEM_BLOCKS_LIST_BLOCK_EOF value
+		
 		// Go to next block
-		Block = Next_Block;
+		Last_Block = Next_Block;
 	}
+	// The file blocks list end will point to the free blocks list head
+	File_System.Blocks_List[Last_Block] = File_System.File_System_Informations.Free_Blocks_List_Head;
+	// The free blocks list head will point to the file blocks list beginning
+	File_System.File_System_Informations.Free_Blocks_List_Head = First_Block;
 	
-	// Free the file entry after having freed the allocated blocks, so if the system is powered off during the blocks freeing step the file system won't be corrupted : the Files List entry is still existing
+	// Free the file entry
 	Pointer_Files_List_Entry->String_Name[0] = 0;
 	
 	FileSystemSave();

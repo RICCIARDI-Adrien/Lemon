@@ -120,12 +120,17 @@ void FileSystemSave(void)
 
 unsigned int FileSystemGetFreeBlocksCount(void)
 {
-	unsigned int i, Free_Blocks_Count = 0;
+	unsigned int Next_Block, Free_Blocks_Count = 0;
 	
-	for (i = 0; i < File_System.File_System_Informations.Total_Blocks_Count; i++)
+	// Go through the free blocks list
+	Next_Block = File_System.File_System_Informations.Free_Blocks_List_Head;
+	while (Next_Block != FILE_SYSTEM_BLOCKS_LIST_BLOCK_EOF)
 	{
-		if (File_System.Blocks_List[i] == FILE_SYSTEM_BLOCKS_LIST_BLOCK_FREE) Free_Blocks_Count++;
+		// Go to next block
+		Next_Block = File_System.Blocks_List[Next_Block];
+		Free_Blocks_Count++;
 	}
+	
 	return Free_Blocks_Count;
 }
 
@@ -138,18 +143,6 @@ unsigned int FileSystemGetFreeFilesListEntriesCount(void)
 		if (File_System.Files_List[i].String_Name[0] == 0) File_List_Entries_Count++;
 	}
 	return File_List_Entries_Count;
-}
-
-unsigned int FileSystemGetFirstFreeBlock(void)
-{
-	unsigned int i;
-	
-	for (i = 0; i < File_System.File_System_Informations.Total_Blocks_Count; i++)
-	{
-		if (File_System.Blocks_List[i] == FILE_SYSTEM_BLOCKS_LIST_BLOCK_FREE) return i;
-	}
-	// No more room in the Blocks List
-	return FILE_SYSTEM_BLOCKS_LIST_FULL_CODE;
 }
 
 unsigned int FileSystemReadBlocks(unsigned int Start_Block, unsigned int Blocks_Count, unsigned char *Pointer_Buffer)
@@ -201,8 +194,7 @@ unsigned int FileSystemWriteBlocks(unsigned int Start_Block, unsigned int Blocks
 		else
 		{
 			// Find next block
-			File_System.Blocks_List[Block] = 12; // Set a value to the previously written block in order to avoid getting this block when calling FileSystemGetFirstFreeBlock()
-			Next_Block = FileSystemGetFirstFreeBlock();
+			Next_Block = FileSystemAllocateBlock();
 			// Update Blocks List with next block
 			File_System.Blocks_List[Block] = Next_Block;
 			Block = Next_Block;
@@ -247,8 +239,17 @@ unsigned int FileSystemAllocateBlock(void)
 	unsigned int New_Block;
 	
 	// Try to get a free block
-	New_Block = FileSystemGetFirstFreeBlock();
-	if (New_Block != FILE_SYSTEM_BLOCKS_LIST_FULL_CODE) File_System.Blocks_List[New_Block] = FILE_SYSTEM_BLOCKS_LIST_BLOCK_EOF; // "Reserve" the block on success
+	New_Block = File_System.File_System_Informations.Free_Blocks_List_Head;
+	
+	// Is there enough room in the Blocks List ?
+	if (New_Block == FILE_SYSTEM_BLOCKS_LIST_BLOCK_EOF) return FILE_SYSTEM_BLOCKS_LIST_FULL_CODE;
+	
+	// Remove the block from the free blocks list
+	File_System.File_System_Informations.Free_Blocks_List_Head = File_System.Blocks_List[New_Block]; // Set the free blocks list head to the next free block
+	
+	// Tell is the last block of the list
+	File_System.Blocks_List[New_Block] = FILE_SYSTEM_BLOCKS_LIST_BLOCK_EOF;
+	
 	return New_Block;
 }
 
@@ -280,8 +281,10 @@ unsigned int FileSystemAllocateBlock(void)
 		File_System.File_System_Informations.Total_Blocks_Count = Blocks_Count;
 		File_System.File_System_Informations.Total_Files_Count = Files_Count;
 		
-		// Fill the Blocks List area with free block value
-		for (i = 0; i < Blocks_Count; i++) File_System.Blocks_List[i] = FILE_SYSTEM_BLOCKS_LIST_BLOCK_FREE;
+		// Create the free blocks list
+		File_System.File_System_Informations.Free_Blocks_List_Head = 0; // Set the first block as the list head
+		for (i = 0; i < Blocks_Count - 1; i++) File_System.Blocks_List[i] = i + 1; // Make each block point to the next one
+		File_System.Blocks_List[Blocks_Count - 1] = FILE_SYSTEM_BLOCKS_LIST_BLOCK_EOF; // End the list
 		// Set Files List area to 0 to indicate it's free
 		memset(File_System.Files_List, 0, Files_Count * sizeof(TFilesListEntry));
 		

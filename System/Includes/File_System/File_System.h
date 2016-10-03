@@ -28,6 +28,7 @@ typedef struct __attribute__((packed))
 	unsigned int Magic_Number; //!< Magic number to be sure that a file system is present on the device.
 	unsigned int Total_Blocks_Count; //!< Total number of blocks in the Blocks List.
 	unsigned int Total_Files_Count; //!< Total number of files in the Files List (ie maximum number of files allowed).
+	unsigned int Free_Blocks_List_Head; //!< The list of empty blocks starts here.
 } TFileSystemInformations;
 
 /** The Files List is an array of this structure. */
@@ -76,12 +77,6 @@ unsigned int FileSystemGetFreeBlocksCount(void);
  * @return The free Files List entries count.
  */
 unsigned int FileSystemGetFreeFilesListEntriesCount(void);
-
-/** Get the first free block found. 
- * @return The block index value if a free block was found,
- * @return FILE_SYSTEM_BLOCKS_LIST_FULL_CODE if the Blocks List is full.
- */
-unsigned int FileSystemGetFirstFreeBlock(void);
 
 /** Read logically chained blocks from the hard disk.
  * @param Start_Block The block to start reading from.
