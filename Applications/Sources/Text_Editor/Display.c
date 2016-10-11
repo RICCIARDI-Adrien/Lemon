@@ -7,20 +7,10 @@
 #include "Display.h"
 
 //-------------------------------------------------------------------------------------------------
-// Private types
-//-------------------------------------------------------------------------------------------------
-/** A character representation in the VGA mode 3 video memory. */
-typedef struct __attribute__((packed))
-{
-	char ASCII_Code; //! The character ASCII code.
-	unsigned char Color; //! The character color.
-} TDisplayCharacter;
-
-//-------------------------------------------------------------------------------------------------
 // Private variables
 //-------------------------------------------------------------------------------------------------
 /** The buffer that will be sent verbatim to the VGA video memory. */
-static TDisplayCharacter Display_Video_Memory[CONFIGURATION_DISPLAY_ROWS_COUNT * CONFIGURATION_DISPLAY_COLUMNS_COUNT];
+static TScreenBufferCharacter Display_Video_Memory[CONFIGURATION_DISPLAY_ROWS_COUNT * CONFIGURATION_DISPLAY_COLUMNS_COUNT];
 
 /** The cursor row location. */
 static unsigned int Display_Cursor_Row = 0;
@@ -35,15 +25,8 @@ static unsigned char Display_Color = SCREEN_MAKE_COLOR(CONFIGURATION_TEXT_FOREGR
 //-------------------------------------------------------------------------------------------------
 void DisplayClear(void)
 {
-	unsigned int i;
-	TDisplayCharacter Empty_Character =
-	{
-		' ',
-		SCREEN_MAKE_COLOR(CONFIGURATION_TEXT_FOREGROUND_COLOR, CONFIGURATION_TEXT_BACKGROUND_COLOR)
-	};
-	
-	// Write space character everywhere
-	for (i = 0; i < sizeof(Display_Video_Memory) / sizeof(TDisplayCharacter); i++) Display_Video_Memory[i] = Empty_Character;
+	// Clear the screen
+	ScreenClearBuffer(Display_Video_Memory, SCREEN_MAKE_COLOR(CONFIGURATION_TEXT_FOREGROUND_COLOR, CONFIGURATION_TEXT_BACKGROUND_COLOR));
 	
 	// Put the cursor to the upper left corner
 	Display_Cursor_Row = 0;
@@ -52,7 +35,7 @@ void DisplayClear(void)
 
 void DisplayWriteCharacter(char Character)
 {
-	TDisplayCharacter Display_Character;
+	TScreenBufferCharacter Display_Character;
 	
 	switch (Character)
 	{

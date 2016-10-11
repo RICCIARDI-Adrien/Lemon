@@ -417,7 +417,7 @@ int main(int argc, char *argv[])
 			// Add the character to the buffer
 			default:
 				// Append the character
-				if (BufferAppendCharacter(CursorGetBufferCharacterIndex(), (char) Character) != 0) break; // Nothing to do if the characters could not be added (TODO : error message if the buffer is full)
+				if (BufferAppendCharacter(CursorGetBufferCharacterIndex(), (char) Character) != 0) break; // Nothing to do if the character could not be added (TODO : error message if the buffer is full)
 				
 				// Update the cursor location and the display
 				CursorMoveToRight();
