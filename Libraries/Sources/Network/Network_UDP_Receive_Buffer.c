@@ -22,10 +22,11 @@ int NetworkUDPReceiveBuffer(TNetworkSocket *Pointer_Socket, int Is_Call_Blocking
 	} while ((Is_Call_Blocking) && (Pointer_UDP_Header->Destination_Port != Pointer_Socket->Source_Port)); // In blocking mode only, wait for a matching destination port
 	
 	// In non-blocking mode, make sure that the destination port is the good one
-	if ((!Is_Call_Blocking) && (Pointer_UDP_Header->Destination_Port != Pointer_Socket->Source_Port)) return 2;
+	if ((!Is_Call_Blocking) && (Pointer_UDP_Header->Destination_Port != Pointer_Socket->Source_Port)) return 3;
 	
 	// Adjust buffer size to UDP data only
 	Data_Size = NETWORK_SWAP_WORD(Pointer_UDP_Header->Length) - sizeof(TNetworkUDPHeader);
+	if (Data_Size > NETWORK_MAXIMUM_PACKET_SIZE - sizeof(TNetworkEthernetHeader) - sizeof(TNetworkIPv4Header) - sizeof(TNetworkUDPHeader)) return 2;
 	
 	// Extract the packet content
 	MemoryCopyArea(Packet_Buffer + sizeof(TNetworkEthernetHeader) + sizeof(TNetworkIPv4Header) + sizeof(TNetworkUDPHeader), Pointer_Buffer, Data_Size);

@@ -244,6 +244,32 @@ static inline unsigned short NetworkBaseIPComputeChecksum(TNetworkIPv4Header *Po
 	return (unsigned short) Checksum;
 }
 
+/** Check if the received packet matches all the needed requirements.
+ * @param Pointer_Socket The socket containing application requirements.
+ * @param Pointer_Packet_Buffer The raw packet buffer (starting with the ethernet header).
+ * @return 0 if the packet does not fulfill all requirements,
+ * @return 1 if the packet is valid.
+ */
+static int NetworkBaseIPIsReceivedPacketValid(TNetworkSocket *Pointer_Socket, void *Pointer_Packet_Buffer)
+{
+	TNetworkEthernetHeader *Pointer_Ethernet_Header = (TNetworkEthernetHeader *) Pointer_Packet_Buffer;
+	TNetworkIPv4Header *Pointer_IP_Header = (TNetworkIPv4Header *) (Pointer_Packet_Buffer + sizeof(TNetworkEthernetHeader));
+	
+	// Is the content an IP packet ?
+	if (Pointer_Ethernet_Header->Protocol_Type != NETWORK_BASE_ETHERNET_PROTOCOL_TYPE_IP) return 0;
+	
+	// Discard fragmented IP packets (fragmentation is not handled by the network stack)
+	if (NETWORK_SWAP_WORD(Pointer_IP_Header->Flags_And_Fragment_Offset) & NETWORK_IPV4_HEADER_FLAG_MORE_FRAGMENT) return 0;
+	
+	// Is the destination IP the system one ?
+	if (Pointer_IP_Header->Destination_IP_Address != Network_Base_System_IP_Address.Address) return 0;
+	
+	// Is it the protocol the socket is listening for ?
+	if (Pointer_IP_Header->Protocol != Pointer_Socket->IP_Protocol) return 0;
+	
+	return 1;
+}
+
 //-------------------------------------------------------------------------------------------------
 // Public functions
 //-------------------------------------------------------------------------------------------------
@@ -333,13 +359,9 @@ int NetworkBaseIPReceivePacket(TNetworkSocket *Pointer_Socket, int Is_Call_Block
 				
 				// Is it an ARP request for this ethernet controller ?
 				if (Pointer_Ethernet_Header->Protocol_Type == NETWORK_BASE_ETHERNET_PROTOCOL_TYPE_ARP) NetworkBaseARPSendReply(Pointer_Packet_Buffer); // Answer the request
-			} while (Pointer_Ethernet_Header->Protocol_Type != NETWORK_BASE_ETHERNET_PROTOCOL_TYPE_IP);
+			} while (!NetworkBaseIPIsReceivedPacketValid(Pointer_Socket, Pointer_Packet_Buffer));
 			
-			// Is the destination IP the system one ?
-			if (Pointer_IP_Header->Destination_IP_Address != Network_Base_System_IP_Address.Address) continue;
-			
-			// Is it the protocol the socket is listening for ?
-			if (Pointer_IP_Header->Protocol == Pointer_Socket->IP_Protocol) return 0;
+			return 0;
 		}
 	}
 	else
@@ -355,15 +377,8 @@ int NetworkBaseIPReceivePacket(TNetworkSocket *Pointer_Socket, int Is_Call_Block
 			NetworkBaseARPSendReply(Pointer_Packet_Buffer); // Answer the request
 			return 2;
 		}
-		// Is the content an IP packet ?
-		if (Pointer_Ethernet_Header->Protocol_Type != NETWORK_BASE_ETHERNET_PROTOCOL_TYPE_IP) return 2;
 		
-		// Drop the packet if the destination IP is not the system one
-		if (Pointer_IP_Header->Destination_IP_Address != Network_Base_System_IP_Address.Address) return 2;
-		
-		// Drop the packet if it is not the required protocol
-		if (Pointer_IP_Header->Protocol != Pointer_Socket->IP_Protocol) return 2;
-		
+		if (!NetworkBaseIPIsReceivedPacketValid(Pointer_Socket, Pointer_Packet_Buffer)) return 2;
 		return 0;
 	}
 }

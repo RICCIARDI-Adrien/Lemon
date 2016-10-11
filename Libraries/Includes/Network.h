@@ -9,7 +9,7 @@
 // Constants and macros
 //-------------------------------------------------------------------------------------------------
 /** A packet buffer maximum length in bytes (this is the interface Maximum Transfer Unit (MTU)). */
-#define NETWORK_MAXIMUM_PACKET_SIZE 1500
+#define NETWORK_MAXIMUM_PACKET_SIZE 1522 // Default ethernet controller value
 
 /** The length in bytes of a MAC address. */
 #define NETWORK_MAC_ADDRESS_SIZE 6
@@ -57,6 +57,9 @@
 	.Address = NETWORK_INITIALIZE_IP_ADDRESS(IP_Address_Byte_1, IP_Address_Byte_2, IP_Address_Byte_3, IP_Address_Byte_4)
 #endif
 
+/** The IPv4 "More Fragment" (MF) flag, tuned for the Flags_And_Fragment_Offset field of the IPv4 header (the field must be converted to little endian before testing the flag). */
+#define NETWORK_IPV4_HEADER_FLAG_MORE_FRAGMENT (1 << 13)
+
 //-------------------------------------------------------------------------------------------------
 // Types
 //-------------------------------------------------------------------------------------------------
@@ -99,7 +102,7 @@ typedef struct __attribute__((packed))
 	unsigned char Differentiated_Services_Code_Point_And_Explicit_Congestion_Notification; //!< Not needed by this network stack.
 	unsigned short Total_Length; //!< The IPv4 header length plus the data length (in bytes).
 	unsigned short Identification; //!< Not needed by this network stack.
-	unsigned short Flags_And_Fragment_Offset; //!< Not needed by this network stack.
+	unsigned short Flags_And_Fragment_Offset; //!< Do not use bit fields as some versions of gcc generate bad code.
 	unsigned char Time_To_Live; //!< How many equipment the packet can cross.
 	unsigned char Protocol; //!< What is embedded in the IP data.
 	unsigned short Header_Checksum; //!< The whole header checksum.
@@ -160,7 +163,8 @@ int NetworkUDPSendBuffer(TNetworkSocket *Pointer_Socket, unsigned int Buffer_Siz
  * @param Pointer_Buffer On output, contain the received data.
  * @return 0 if a packet has been received,
  * @return 1 if an error happened,
- * @return 2 in non-blocking mode only to tell that no packet was received.
+ * @return 2 if the received packet was too big and was discarded,
+ * @return 3 in non-blocking mode only to tell that no packet was received.
  */
 int NetworkUDPReceiveBuffer(TNetworkSocket *Pointer_Socket, int Is_Call_Blocking, unsigned int *Pointer_Buffer_Size, void *Pointer_Buffer);
 
