@@ -33,6 +33,8 @@
 	#define STRING_KERNEL_ERROR_UNKNOWN_SYSTEM_CALL "Erreur : le programme a demand\202 un appel syst\212me inconnu.\nAppuyez sur Entr\202e pour continuer.\n"
 	#define STRING_KERNEL_ERROR_HARD_DISK_NOT_LBA_COMPATIBLE "Erreur : le disque dur n'est pas compatible avec l'adressage LBA.\n"
 	#define STRING_KERNEL_ERROR_SATA_HARD_DISK_NOT_FOUND "Erreur : le disque dur SATA est introuvable.\n"
+	#define STRING_KERNEL_ERROR_ETHERNET_CONTROLLER_NOT_FOUND "Erreur : aucun contr\223leur ethernet n'a \202t\202 d\202tect\202.\n"
+	#define STRING_KERNEL_ERROR_ETHERNET_CONTROLLER_BAD_DRIVER "Erreur : le contr\223leur ethernet n'est pas compatible avec le pilote.\n"
 	
 	// SATA hard disk driver
 	#define STRING_DRIVER_HARD_DISK_SATA_ERROR_INPUT_OUTPUT "Erreur : impossible d'acc\202der au disque dur SATA.\nAppuyez sur Entr\202e pour continuer.\n"

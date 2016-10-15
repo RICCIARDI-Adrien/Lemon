@@ -109,19 +109,28 @@ void __attribute__((section(".init"))) KernelEntryPoint(void)
 	}
 	
 	#if (!CONFIGURATION_BUILD_INSTALLER) && CONFIGURATION_IS_ETHERNET_CONTROLLER_ENABLED
-		switch (EthernetInitialize())
+		Result = EthernetInitialize();
+		if (Result != 0)
 		{
-			case 1:
-				ScreenWriteString("ERR 1\n"); // TODO
-				KeyboardReadCharacter();
-				break;
-			case 2:
-				ScreenWriteString("ERR 2\n"); // TODO
-				KeyboardReadCharacter();
-				break;
-				
-			default:
-				break;
+			ScreenSetColor(SCREEN_COLOR_RED);
+			
+			switch (Result)
+			{
+				case 1:
+					ScreenWriteString(STRING_KERNEL_ERROR_ETHERNET_CONTROLLER_NOT_FOUND);
+					break;
+					
+				case 2:
+					ScreenWriteString(STRING_KERNEL_ERROR_ETHERNET_CONTROLLER_BAD_DRIVER);
+					break;
+					
+				default:
+					break;
+			}
+			
+			// Wait for Enter key to reboot
+			KernelWaitForEnterKey();
+			KeyboardRebootSystem();
 		}
 	#endif
 	
