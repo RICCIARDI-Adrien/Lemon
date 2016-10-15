@@ -44,7 +44,8 @@ endif
 
 # Default gcc flags
 # Option -fno-asynchronous-unwind-tables avoid generating the .eh_frame section, which is heavy and useless here
-CCFLAGS = -nostdlib -fno-builtin -nostartfiles -finline-functions-called-once -fno-asynchronous-unwind-tables -masm=intel -m32 -Werror -march=$(GLOBAL_PROCESSOR_TYPE) -mtune=$(GLOBAL_PROCESSOR_TYPE) $(LANGUAGE_DEFINE)
+# Option -fno-pic is needed since gcc 6.2 to avoid gcc generate Position Independant Code like a classic ELF file (this won't work as Lemon uses static binaries)
+CCFLAGS = -fno-pic -nostdlib -fno-builtin -nostartfiles -finline-functions-called-once -fno-asynchronous-unwind-tables -masm=intel -m32 -Werror -march=$(GLOBAL_PROCESSOR_TYPE) -mtune=$(GLOBAL_PROCESSOR_TYPE) $(LANGUAGE_DEFINE)
 export CCFLAGS
 
 #--------------------------------------------------------------------------------------------------
