@@ -3,6 +3,41 @@
 SDK_PATH = ../Lemon_SDK
 
 #--------------------------------------------------------------------------------------------------
+# Custom PC configurations
+#--------------------------------------------------------------------------------------------------
+ifeq ($(COMPUTER),Core_I7)
+	GLOBAL_PROCESSOR_TYPE = nehalem
+	SYSTEM_HARD_DISK_LOGICAL_BLOCK_ADDRESSING_MODE = 48
+	SYSTEM_HARD_DISK_DRIVER = sata
+	SYSTEM_ETHERNET_CONTROLLER_DRIVER = none
+	SYSTEM_RAM_SIZE = 1024
+endif
+
+ifeq ($(COMPUTER),Pentium_3)
+	GLOBAL_PROCESSOR_TYPE = pentium3
+	SYSTEM_HARD_DISK_LOGICAL_BLOCK_ADDRESSING_MODE = 28
+	SYSTEM_HARD_DISK_DRIVER = ide
+	SYSTEM_ETHERNET_CONTROLLER_DRIVER = none
+	SYSTEM_RAM_SIZE = 256
+endif
+
+ifeq ($(COMPUTER),Pentium_4)
+	GLOBAL_PROCESSOR_TYPE = pentium4
+	SYSTEM_HARD_DISK_LOGICAL_BLOCK_ADDRESSING_MODE = 48
+	SYSTEM_HARD_DISK_DRIVER = ide
+	SYSTEM_ETHERNET_CONTROLLER_DRIVER = 82540em
+	SYSTEM_RAM_SIZE = 512
+endif
+
+ifeq ($(COMPUTER),Pentium_MMX)
+	GLOBAL_PROCESSOR_TYPE = pentium
+	SYSTEM_HARD_DISK_LOGICAL_BLOCK_ADDRESSING_MODE = 28
+	SYSTEM_HARD_DISK_DRIVER = ide
+	SYSTEM_ETHERNET_CONTROLLER_DRIVER = none
+	SYSTEM_RAM_SIZE = 8
+endif
+
+#--------------------------------------------------------------------------------------------------
 # Set default configuration variables value if variables are not defined
 #--------------------------------------------------------------------------------------------------
 # Default tools
@@ -107,6 +142,12 @@ help:
 	@echo "    + 2 (minimum value)"
 	@echo "    + 16 (default value)"
 	@echo "    + 4096 (maximum value)"
+	@echo
+	@echo "Use COMPUTER=xxx to specify a custom PC configuration. Available configurations are :"
+	@echo "- Core_I7"
+	@echo "- Pentium_3"
+	@echo "- Pentium_4"
+	@echo "- Pentium_MMX"
 	@echo
 
 sdk:
