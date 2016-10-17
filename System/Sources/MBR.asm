@@ -92,12 +92,10 @@ Entry_Point:
 	jmp DWORD .Flush_Processor_Cache
 .Flush_Processor_Cache:
 
-	; Initialize segment selectors
+	; Initialize segment selectors to point to the kernel data segment
 	mov ax, 16 ; Offset of data segment descriptor in GDT
 	mov ds, ax
-	mov es, ax
-	;mov fs, ax CRASH
-	;mov gs, ax CRASH
+	mov es, ax ; Initialize extra segment register too in case an Intel string instruction would be used
 	mov ss, ax
 	
 	; Far jump to the kernel entry point.

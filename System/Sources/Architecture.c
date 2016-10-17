@@ -389,6 +389,8 @@ void ArchitectureSwitchToUserSpace(void)
 		"mov ax, %4\n" // Initialize Data Segment descriptor with ring 3 Requested Privilege Level
 		"mov ds, ax\n"
 		"mov es, ax\n" // Needed by Intel string instructions
+		"mov fs, ax\n"
+		"mov gs, ax\n"
 		"iret" // Go to user space (automatically re-enable interrupts)
 		: // No output parameters
 		: "i" ((ARCHITECTURE_MEMORY_PROTECTION_SEGMENT_INDEX_USER_DATA << 3) | 3), "i" (CONFIGURATION_USER_SPACE_SIZE), "i" ((ARCHITECTURE_MEMORY_PROTECTION_SEGMENT_INDEX_USER_CODE << 3) | 3), "i" (CONFIGURATION_USER_SPACE_PROGRAM_ENTRY_POINT), "i" ((ARCHITECTURE_MEMORY_PROTECTION_SEGMENT_INDEX_USER_DATA << 3) | 3)
