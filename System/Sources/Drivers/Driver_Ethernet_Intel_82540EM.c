@@ -189,8 +189,20 @@ int EthernetInitialize(void)
 	// Is it an Intel controller ?
 	if (Configuration_Space_Header.Vendor_ID != PCI_VENDOR_ID_INTEL) return 2;
 	
+	DEBUG_SECTION_START
+		DEBUG_DISPLAY_CURRENT_FUNCTION_NAME();
+		ScreenWriteString("Ethernet controller found.\nVendor ID : 0x");
+		DebugWriteHexadecimalInteger(Configuration_Space_Header.Vendor_ID);
+		ScreenWriteString(", device ID : 0x");
+		DebugWriteHexadecimalInteger(Configuration_Space_Header.Device_ID);
+		ScreenWriteString(", BAR[0] : 0x");
+		DebugWriteHexadecimalInteger(PCI_GET_BASE_ADDRESS(Configuration_Space_Header.Base_Address_Registers[0]));
+		ScreenWriteCharacter('\n');
+		KeyboardReadCharacter();
+	DEBUG_SECTION_END
+	
 	// Give access to registers
-	Pointer_Ethernet_Controller_Registers = (TEthernetControllerRegisters *) Configuration_Space_Header.Base_Address_Registers[0];
+	Pointer_Ethernet_Controller_Registers = (TEthernetControllerRegisters *) PCI_GET_BASE_ADDRESS(Configuration_Space_Header.Base_Address_Registers[0]);
 	
 	//===============================================
 	// General configuration section of the datasheet
