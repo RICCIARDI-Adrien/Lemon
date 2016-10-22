@@ -6,10 +6,12 @@
 #define H_DRIVER_PCI_H
 
 //-------------------------------------------------------------------------------------------------
-// Constants
+// Constants and macros
 //-------------------------------------------------------------------------------------------------
 /** Intel vendor ID. */
 #define PCI_VENDOR_ID_INTEL 0x8086
+/** Realtek vendor ID. */
+#define PCI_VENDOR_ID_REALTEK 0x10EC
 
 /** Mass storage class base code. */
 #define PCI_CLASS_CODE_BASE_MASS_STORAGE 0x01
@@ -20,6 +22,12 @@
 #define PCI_CLASS_CODE_SUB_CLASS_ETHERNET 0x00
 /** SATA controller sub-class code. */
 #define PCI_CLASS_CODE_SUB_CLASS_SATA 0x06
+
+/** Extract from a Base Address Register the physical address part.
+ * @param Base_Address_Register_Value The base address register value read from the PCI configuration space.
+ * @return The base address.
+ */
+#define PCI_GET_BASE_ADDRESS(Base_Address_Register_Value) (Base_Address_Register_Value & 0xFFFFFFF0) // A PCI base address register value is 16-byte aligned, the 4 lower bits hold some attributes about the address type and capabilities
 
 //-------------------------------------------------------------------------------------------------
 // Types

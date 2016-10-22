@@ -16,6 +16,10 @@ ifeq ($(SYSTEM_ETHERNET_CONTROLLER_DRIVER),82540em)
 	CCFLAGS += -DCONFIGURATION_IS_ETHERNET_CONTROLLER_ENABLED=1
 	OBJECTS_DRIVERS += $(PATH_OBJECTS)/Driver_Ethernet_Intel_82540EM.o
 	DEPENDENCIES_INCLUDE_PCI = 1
+else ifeq ($(SYSTEM_ETHERNET_CONTROLLER_DRIVER),rtl8111)
+	CCFLAGS += -DCONFIGURATION_IS_ETHERNET_CONTROLLER_ENABLED=1
+	OBJECTS_DRIVERS += $(PATH_OBJECTS)/Driver_Ethernet_Realtek_8111.o
+	DEPENDENCIES_INCLUDE_PCI = 1
 else
 	CCFLAGS += -DCONFIGURATION_IS_ETHERNET_CONTROLLER_ENABLED=0
 endif
@@ -36,6 +40,9 @@ all: clean $(PATH_OBJECTS)/MBR.bin $(OBJECTS)
 #------------------------------------------------------------------------------------------------------------------------------
 $(PATH_OBJECTS)/Driver_Ethernet_Intel_82540EM.o: $(PATH_SOURCES)/Drivers/Driver_Ethernet_Intel_82540EM.c
 	$(GLOBAL_TOOL_COMPILER) $(CCFLAGS) -c $(PATH_SOURCES)/Drivers/Driver_Ethernet_Intel_82540EM.c -o $(PATH_OBJECTS)/Driver_Ethernet_Intel_82540EM.o
+
+$(PATH_OBJECTS)/Driver_Ethernet_Realtek_8111.o: $(PATH_SOURCES)/Drivers/Driver_Ethernet_Realtek_8111.c
+	$(GLOBAL_TOOL_COMPILER) $(CCFLAGS) -c $(PATH_SOURCES)/Drivers/Driver_Ethernet_Realtek_8111.c -o $(PATH_OBJECTS)/Driver_Ethernet_Realtek_8111.o
 
 #------------------------------------------------------------------------------------------------------------------------------
 # Shell
