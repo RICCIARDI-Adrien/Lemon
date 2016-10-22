@@ -257,13 +257,13 @@ int HardDiskInitialize(void)
 		ScreenWriteString(", device ID : 0x");
 		DebugWriteHexadecimalInteger(Device_Configuration_Space_Header.Device_ID);
 		ScreenWriteString(", BAR[5] : 0x");
-		DebugWriteHexadecimalInteger(Device_Configuration_Space_Header.Base_Address_Registers[5]);
+		DebugWriteHexadecimalInteger(PCI_GET_BASE_ADDRESS(Device_Configuration_Space_Header.Base_Address_Registers[5]));
 		ScreenWriteCharacter('\n');
 		KeyboardReadCharacter();
 	DEBUG_SECTION_END
 	
 	// Allow access to the generic registers
-	Pointer_Generic_Host_Control_Registers = (THardDiskSATAGenericHostControlRegisters *) Device_Configuration_Space_Header.Base_Address_Registers[5];
+	Pointer_Generic_Host_Control_Registers = (THardDiskSATAGenericHostControlRegisters *) PCI_GET_BASE_ADDRESS(Device_Configuration_Space_Header.Base_Address_Registers[5]);
 	Pointer_Generic_Host_Control_Registers->Global_HBA_Control |= 1 << 31; // Enable use of AHCI communication mechanism only
 	
 	DEBUG_SECTION_START
