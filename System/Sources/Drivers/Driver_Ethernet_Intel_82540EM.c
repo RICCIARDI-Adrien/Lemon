@@ -340,7 +340,7 @@ void EthernetReceivePacket(unsigned int *Pointer_Buffer_Size, void *Pointer_Buff
 	
 	// Send packet to userspace
 	*Pointer_Buffer_Size = Ethernet_Controller_Receive_Descriptor.Length; // Get packet size
-	memcpy(Pointer_Buffer, Ethernet_Controller_Reception_Buffer, Ethernet_Controller_Receive_Descriptor.Length); // Copy the packet content to userspace
+	memcpy(Pointer_Buffer, Ethernet_Controller_Reception_Buffer, *Pointer_Buffer_Size); // Copy the packet content to userspace
 	
 	// Re-enable packet reception
 	Ethernet_Controller_Receive_Descriptor.Status = 0; // Reset status bits as suggested in datasheet
