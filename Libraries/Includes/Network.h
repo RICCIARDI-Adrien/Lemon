@@ -18,13 +18,13 @@
  * @param Double_Word The value to swap.
  * @return The swapped value.
  */
-#define NETWORK_SWAP_DOUBLE_WORD(Double_Word) ((Double_Word >> 24) | ((Double_Word >> 8) & 0x0000FF00) | ((Double_Word << 8) & 0x00FF0000) | ((Double_Word << 24) & 0xFF000000))
+#define NETWORK_SWAP_DOUBLE_WORD(Double_Word) (((Double_Word) >> 24) | (((Double_Word) >> 8) & 0x0000FF00) | (((Double_Word) << 8) & 0x00FF0000) | (((Double_Word) << 24) & 0xFF000000))
 
 /** Swap a 16-bit value from one endianness mode to the other.
  * @param Word The value to swap.
  * @return The swapped value.
  */
-#define NETWORK_SWAP_WORD(Word) ((Word >> 8) | ((Word << 8) & 0xFF00))
+#define NETWORK_SWAP_WORD(Word) (((Word) >> 8) | (((Word) << 8) & 0xFF00))
 
 /** Build a big endian IP address from the 4 decimal values (like 192.168.1.1).
  * @param Byte_1 The first address byte.
@@ -42,7 +42,7 @@
  * @param IP_Address The IP address in big endian mode.
  * @return The corresponding subnet mask in big endian mode too.
  */
-#define NETWORK_GET_SUBNET_MASK_FROM_IP_ADDRESS(IP_Address) ((255 << 24) | (((IP_Address & 0x00000001) ? 255 : 0) << 16) | (((IP_Address & 0x00000002) ? 255 : 0) << 8))
+#define NETWORK_GET_SUBNET_MASK_FROM_IP_ADDRESS(IP_Address) NETWORK_SWAP_DOUBLE_WORD((unsigned int) ((255 << 24) | (((IP_Address & 0x00000080) ? 255 : 0) << 16) | (((IP_Address & 0x00000040) ? 255 : 0) << 8))) // The unsigned int cast must forced or the result will be casted to a signed int, giving bad signed shifts when calling the swapping macro
 
 #if 0
 /** Initialize a TNetworkSocket with the provided IP address. The subnet mask is automatically determined from the IP address.
@@ -138,6 +138,14 @@ int NetworkInitialize(void);
  * @return 1 if the MAC address corresponding to the destination address could not be retrieved.
  */
 int NetworkInitializeSocket(TNetworkIPAddress *Pointer_Destination_IP_Address, unsigned short Destination_Port, TNetworkIPProtocol Used_Protocol, TNetworkSocket *Pointer_Socket);
+
+/** Fill a TNetworkIPAddress structure from an IPv4 dotted address string (network mask is automatically determined).
+ * @param String_IP_Address A string representing the IP address using the same format than NetworkIPConvertFromString().
+ * @param Pointer_IP_Address On output, contain the filled IP address.
+ * @return 0 if the IP address structure was successfully filled,
+ * @return The same errors than NetworkIPConvertFromString() in case of error.
+ */
+int NetworkInitializeIPAddress(char *String_IP_Address, TNetworkIPAddress *Pointer_IP_Address);
 
 /** Convert an IPv4 dotted address string to a big endian double word.
  * @param String_IP_Address The IP address (like "192.168.1.3").
