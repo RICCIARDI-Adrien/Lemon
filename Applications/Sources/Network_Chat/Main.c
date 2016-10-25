@@ -85,13 +85,12 @@ int main(int argc, char *argv[])
 	
 	// Convert parameters
 	// IP address
-	if (NetworkIPConvertFromString(argv[1], &Destination_IP_Address.Address) != 0)
+	if (NetworkInitializeIPAddress(argv[1], &Destination_IP_Address) != 0)
 	{
 		ScreenSetFontColor(SCREEN_COLOR_RED);
 		ScreenWriteString(STRING_ERROR_INVALID_IP_ADDRESS);
 		return 1;
 	}
-	Destination_IP_Address.Mask = NETWORK_GET_SUBNET_MASK_FROM_IP_ADDRESS(Destination_IP_Address.Address);
 	// Destination port
 	Destination_Port = StringConvertStringToUnsignedInteger(argv[2]);
 	
