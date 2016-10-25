@@ -44,6 +44,20 @@
 	#define STRING_COMMAND_MORE_FILE_NOT_FOUND_1 "Erreur : le fichier '"
 	#define STRING_COMMAND_MORE_FILE_NOT_FOUND_2 "' est introuvable.\n"
 	#define STRING_COMMAND_MORE_ERROR_READING_FROM_FILE "Erreur : impossible de lire le fichier.\n"
+	
+	// "tftp" command
+	#define STRING_COMMAND_TFTP_USAGE "Envoie ou re\207oit des fichiers sur le net via le protocole TFTP.\n" \
+		"Param\212tres : IP_Serveur Port_Serveur Commande Nom_Fichier\n" \
+		" - IP_Serveur : l'adresse IP du serveur TFTP\n" \
+		" - Port_Serveur : le port du serveur TFTP\n" \
+		" - Commande : 'get' pour recevoir un fichier, 'put' pour envoyer un fichier\n" \
+		" - Nom_Fichier : si la commande est 'get', nom du fichier \205 r\202cup\202rer sur le\n" \
+		"   serveur ; si la commande est 'set', nom du fichier local \205 envoyer\n"
+	#define STRING_COMMAND_TFTP_INVALID_IP_ADDRESS "Erreur : l'adresse IP est invalide.\n"
+	#define STRING_COMMAND_TFTP_INVALID_COMMAND "Erreur : la commande n'est pas reconnue.\n"
+	#define STRING_COMMAND_TFTP_NETWORK_INITIALIZATION_FAILED "Erreur : impossible d'initialiser le r\202seau.\n"
+	#define STRING_COMMAND_TFTP_NETWORK_SOCKET_INITIALIZATION_FAILED "Erreur : impossible de contacter le serveur.\n"
+	#define STRING_COMMAND_TFTP_NETWORK_TRANSMISSION_FAILED "Erreur de transmission sur le r\202seau.\n"
 #endif
 
 #endif

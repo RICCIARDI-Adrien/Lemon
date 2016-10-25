@@ -1,7 +1,6 @@
 /** @file Command_Ls.c
  * A more complete "list" command, like "ls -lh | more".
  * @author Adrien RICCIARDI
- * @version 1.0 : 21/04/2015
  */
 #include <System.h>
 #include "Commands.h"

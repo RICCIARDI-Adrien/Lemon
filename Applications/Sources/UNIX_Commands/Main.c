@@ -35,6 +35,10 @@ static TCommand Commands[] =
 		"more",
 		CommandMainMore
 	},
+	{
+		"tftp",
+		CommandMainTFTP
+	},
 	// The NULL command tells that the list is terminated
 	{
 		NULL,

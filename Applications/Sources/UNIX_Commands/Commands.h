@@ -1,7 +1,6 @@
 /** @file Commands.h
  * List all the supported commands.
  * @author Adrien RICCIARDI
- * @version 1.0 : 18/03/2015
  */
 #ifndef H_COMMANDS_H
 #define H_COMMANDS_H
@@ -32,5 +31,13 @@ int CommandMainLs(int argc, char *argv[]);
  * @return a negative value if an error happened.
  */
 int CommandMainMore(int argc, char *argv[]);
+
+/** The "tftp" command.
+ * @param argc Parameters count.
+ * @param argv Parameters value.
+ * @return 0 in case of success,
+ * @return a negative value if an error happened.
+ */
+int CommandMainTFTP(int argc, char *argv[]);
 
 #endif

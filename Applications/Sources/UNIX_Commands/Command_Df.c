@@ -1,7 +1,6 @@
 /** @file Command_Df.c
  * A UNIX-like disk free command.
  * @author Adrien RICCIARDI
- * @version 1.0 : 20/03/2015
  */
 #include <System.h>
 #include "Commands.h"
