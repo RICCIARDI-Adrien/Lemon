@@ -7,80 +7,6 @@
 #include "Strings.h"
 
 //-------------------------------------------------------------------------------------------------
-// Private constants
-//-------------------------------------------------------------------------------------------------
-/** A transfer block size in bytes. */
-#define TFTP_BLOCK_SIZE 512
-
-/** A file name maximum length (in characters). */
-#define TFTP_FILE_NAME_MAXIMUM_SIZE 256
-
-//-------------------------------------------------------------------------------------------------
-// Private types
-//-------------------------------------------------------------------------------------------------
-/** All TFTP opcodes (called packet types in the RFC). */
-typedef enum
-{
-	TFTP_OPCODE_READ_REQUEST = 1,
-	TFTP_OPCODE_WRITE_REQUEST,
-	TFTP_OPCODE_DATA,
-	TFTP_OPCODE_ACKNOWLEDGMENT,
-	TFTP_OPCODE_ERROR
-} TTFTPOpcode;
-
-/** All known error codes. */
-typedef enum
-{
-	TFTP_ERROR_CODE_NOT_DEFINED,
-	TFTP_ERROR_CODE_FILE_NOT_FOUND,
-	TFTP_ERROR_CODE_ACCESS_VIOLATION,
-	TFTP_ERROR_CODE_DISK_FULL,
-	TFTP_ERROR_CODE_ILLEGAL_TFTP_OPERATION,
-	TFTP_ERROR_CODE_UNKNOWN_TRANSFER_ID,
-	TFTP_ERROR_CODE_FILE_ALREADY_EXISTS,
-	TFTP_ERROR_CODE_NO_SUCH_USER
-} TTFTPErrorCode;
-
-/** RRQ and WRQ specific header part. */
-typedef struct __attribute__((packed))
-{
-	char String_File_Name_And_Mode[TFTP_BLOCK_SIZE]; //!< An ASCIIZ string for the file name followed by an ASCIIZ string for the transfer mode.
-} TTFTPPacketRequest;
-
-/** DATA packet specific header part. */
-typedef struct __attribute__((packed))
-{
-	unsigned short Block_Number; //!< The block number.
-	unsigned char Buffer[TFTP_BLOCK_SIZE]; //!< Store the transmitted/received data.
-} TTFTPPacketData;
-
-/** ACK packet specific header part. */
-typedef struct __attribute__((packed))
-{
-	unsigned short Block_Number; //!< The block number.
-} TTFTPPacketAcknowledgment;
-
-/** ERROR packet specific header part. */
-typedef struct __attribute__((packed))
-{
-	unsigned short Error_Code; //!< Use an error code from TTFTPErrorCode.
-	char String_Error_Message[TFTP_BLOCK_SIZE]; //!< A human readable error string.
-} TTFTPPacketError;
-
-/** The TFTP protocol header for all existing packets. */
-typedef struct __attribute__((packed))
-{
-	unsigned short Opcode; //!< Use an opcode from TTFTPOpcode.
-	union
-	{
-		TTFTPPacketRequest Request; //!< RRQ and WRQ packets specific fields.
-		TTFTPPacketData Data; //!< DATA packet specific fields.
-		TTFTPPacketAcknowledgment Acknowledgment; //!< ACK packet specific fields.
-		TTFTPPacketError Error; //!< ERROR packet specific fields.
-	};
-} TTFTPPacket;
-
-//-------------------------------------------------------------------------------------------------
 // Private variables
 //-------------------------------------------------------------------------------------------------
 /** The socket used to communicate with the server. */
@@ -89,21 +15,33 @@ static TNetworkSocket Socket_Server;
 //-------------------------------------------------------------------------------------------------
 // Private functions
 //-------------------------------------------------------------------------------------------------
-/** TODO */
+/** Get a file from the remote server.
+ * @param String_File_Name The remove file name.
+ * @return 0 if the file was successfully retrieved,
+ * @return 1 if an error occurred.
+ */
 int TFTPExecuteCommandGet(char *String_File_Name)
 {
-	TTFTPPacket Packet;
-	unsigned int File_Name_Length, Transfer_Mode_Length;
+	TNetworkTFTPPacket Packet;
+	unsigned int File_Name_Length, Transfer_Mode_Length, File_ID, Data_Size;
 	char *String_Transfer_Mode = "octet";
+	int Return_Value = 1;
 	
 	// Prepare the read request
-	Packet.Opcode = NETWORK_SWAP_WORD(TFTP_OPCODE_READ_REQUEST);
+	Packet.Opcode = NETWORK_SWAP_WORD(NETWORK_TFTP_OPCODE_READ_REQUEST);
 	// Append the requested file name
-	StringCopyUpToNumber(String_File_Name, Packet.Request.String_File_Name_And_Mode, TFTP_FILE_NAME_MAXIMUM_SIZE);
+	StringCopyUpToNumber(String_File_Name, Packet.Request.String_File_Name_And_Mode, FILE_NAME_LENGTH);
 	File_Name_Length = StringGetSize(Packet.Request.String_File_Name_And_Mode);
 	// Append the transfer mode
 	StringCopy(String_Transfer_Mode, &Packet.Request.String_File_Name_And_Mode[File_Name_Length + 1]); // Append the string right after the file name string terminating zero
 	Transfer_Mode_Length = StringGetSize(String_Transfer_Mode);
+	
+	// Open the file to be ready to write it's content
+	if (FileOpen(String_File_Name, FILE_OPENING_MODE_WRITE, &File_ID) != 0)
+	{
+		ScreenWriteString(STRING_COMMAND_TFTP_CANT_OPEN_FILE);
+		return 1; // Do not go through Exit label path or a file with the same name than the one that would be opened could be deleted
+	}
 	
 	// Send the read request
 	if (NetworkUDPSendBuffer(&Socket_Server, sizeof(Packet.Opcode) + File_Name_Length + 1 + Transfer_Mode_Length + 1, &Packet) != 0) // +2 bytes for both strings terminating zeroes
@@ -112,7 +50,71 @@ int TFTPExecuteCommandGet(char *String_File_Name)
 		return -1;
 	}
 	
-	return 0;
+	ScreenWriteString(STRING_COMMAND_TFTP_STARTING_DOWNLOAD);
+	
+	// Receive the file
+	while (1)
+	{
+		// Get a packet
+		if (NetworkTFTPReceivePacket(&Socket_Server, 1000, &Data_Size, &Packet) != 0) // Data_Size contains for now the raw TFTP packet size
+		{
+			ScreenWriteString(STRING_COMMAND_TFTP_NETWORK_RECEPTION_FAILED);
+			goto Exit;
+		}
+		Packet.Opcode = NETWORK_SWAP_WORD(Packet.Opcode);
+		
+		// Did an error occurred ?
+		if (Packet.Opcode == NETWORK_TFTP_OPCODE_ERROR)
+		{
+			ScreenWriteString(STRING_COMMAND_TFTP_NETWORK_SERVER_ERROR_1);
+			ScreenWriteString(Packet.Error.String_Error_Message);
+			ScreenWriteString(STRING_COMMAND_TFTP_NETWORK_SERVER_ERROR_2);
+			goto Exit;
+		}
+		
+		// Is it a data packet ?
+		if (Packet.Opcode != NETWORK_TFTP_OPCODE_DATA)
+		{
+			ScreenWriteString(STRING_COMMAND_TFTP_NETWORK_BAD_PACKET_RECEIVED);
+			goto Exit;
+		}
+		
+		// TODO check sequence number BEWARE BIG ENDIAN
+		
+		// Adjust size to fit only the data size
+		Data_Size -= sizeof(Packet.Opcode) + sizeof(Packet.Data.Block_Number);
+		
+		// Store data in the file
+		if (FileWrite(File_ID, Packet.Data.Buffer, Data_Size) != 0)
+		{
+			ScreenWriteString(STRING_COMMAND_TFTP_CANT_WRITE_TO_FILE);
+			goto Exit;
+		}
+		
+		// Send an Acknowledgment packet
+		Packet.Opcode = NETWORK_SWAP_WORD(NETWORK_TFTP_OPCODE_ACKNOWLEDGMENT); // No need to set the block number as it is at the same place than the one received (and it must have the same value)
+		if (NetworkUDPSendBuffer(&Socket_Server, sizeof(Packet.Opcode) + sizeof(Packet.Data.Block_Number), &Packet) != 0)
+		{
+			ScreenWriteString(STRING_COMMAND_TFTP_NETWORK_TRANSMISSION_FAILED);
+			goto Exit;
+		}
+		
+		// Exit if the data size is different from a block size
+		if (Data_Size != NETWORK_TFTP_BLOCK_SIZE) break;
+	}
+	
+	// Display a success message
+	ScreenSetFontColor(SCREEN_COLOR_GREEN);
+	ScreenWriteString(STRING_COMMAND_TFTP_DOWNLOAD_SUCCESSFUL_1);
+	ScreenWriteUnsignedInteger(NETWORK_SWAP_WORD(Packet.Data.Block_Number));
+	ScreenWriteString(STRING_COMMAND_TFTP_DOWNLOAD_SUCCESSFUL_2);
+	ScreenSetFontColor(SCREEN_COLOR_BLUE);
+	Return_Value = 0;
+	
+Exit:
+	FileClose(File_ID);
+	if (Return_Value != 0) FileDelete(String_File_Name); // Remove the partial file
+	return Return_Value;
 }
 
 //-------------------------------------------------------------------------------------------------
@@ -151,6 +153,11 @@ int CommandMainTFTP(int argc, char __attribute__((unused)) *argv[])
 	}
 	// File name
 	String_File_Name = argv[4];
+	if (StringGetSize(String_File_Name) > FILE_NAME_LENGTH)
+	{
+		ScreenWriteString(STRING_COMMAND_TFTP_FILE_NAME_TOO_LONG);
+		return -1;
+	}
 	
 	// Try to connect to the server
 	if (NetworkInitialize() != 0)

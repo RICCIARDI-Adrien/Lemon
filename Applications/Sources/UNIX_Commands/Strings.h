@@ -55,9 +55,19 @@
 		"   serveur ; si la commande est 'set', nom du fichier local \205 envoyer\n"
 	#define STRING_COMMAND_TFTP_INVALID_IP_ADDRESS "Erreur : l'adresse IP est invalide.\n"
 	#define STRING_COMMAND_TFTP_INVALID_COMMAND "Erreur : la commande n'est pas reconnue.\n"
+	#define STRING_COMMAND_TFTP_FILE_NAME_TOO_LONG "Erreur : le nom du fichier est trop long.\n"
 	#define STRING_COMMAND_TFTP_NETWORK_INITIALIZATION_FAILED "Erreur : impossible d'initialiser le r\202seau.\n"
 	#define STRING_COMMAND_TFTP_NETWORK_SOCKET_INITIALIZATION_FAILED "Erreur : impossible de contacter le serveur.\n"
-	#define STRING_COMMAND_TFTP_NETWORK_TRANSMISSION_FAILED "Erreur de transmission sur le r\202seau.\n"
+	#define STRING_COMMAND_TFTP_CANT_OPEN_FILE "Erreur lors de l'ouverture du fichier local.\n"
+	#define STRING_COMMAND_TFTP_NETWORK_RECEPTION_FAILED "Erreur lors de la r\202ception d'un paquet.\n"
+	#define STRING_COMMAND_TFTP_NETWORK_TRANSMISSION_FAILED "Erreur lors de la transmission d'un paquet.\n"
+	#define STRING_COMMAND_TFTP_NETWORK_SERVER_ERROR_1 "Erreur : le serveur a renvoy\202 l'erreur : "
+	#define STRING_COMMAND_TFTP_NETWORK_SERVER_ERROR_2 ".\n"
+	#define STRING_COMMAND_TFTP_NETWORK_BAD_PACKET_RECEIVED "Erreur : un paquet erron\202 a \202t\202 re\207u.\n"
+	#define STRING_COMMAND_TFTP_CANT_WRITE_TO_FILE "Erreur lors de l'\202criture dans le fichier.\n"
+	#define STRING_COMMAND_TFTP_STARTING_DOWNLOAD "T\202l\202chargement en cours...\n"
+	#define STRING_COMMAND_TFTP_DOWNLOAD_SUCCESSFUL_1 "T\202l\202chargement de "
+	#define STRING_COMMAND_TFTP_DOWNLOAD_SUCCESSFUL_2 " bloc(s) r\202ussi.\n"
 #endif
 
 #endif
