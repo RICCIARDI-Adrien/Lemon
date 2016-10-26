@@ -60,6 +60,9 @@
 /** The IPv4 "More Fragment" (MF) flag, tuned for the Flags_And_Fragment_Offset field of the IPv4 header (the field must be converted to little endian before testing the flag). */
 #define NETWORK_IPV4_HEADER_FLAG_MORE_FRAGMENT (1 << 13)
 
+/** A TFTP transfer block size in bytes. */
+#define NETWORK_TFTP_BLOCK_SIZE 512
+
 //-------------------------------------------------------------------------------------------------
 // Types
 //-------------------------------------------------------------------------------------------------
@@ -119,6 +122,68 @@ typedef struct __attribute__((packed))
 	unsigned short Checksum; //!< Optional checksum.
 } TNetworkUDPHeader;
 
+/** All TFTP opcodes (called packet types in the RFC). */
+typedef enum
+{
+	NETWORK_TFTP_OPCODE_READ_REQUEST = 1,
+	NETWORK_TFTP_OPCODE_WRITE_REQUEST,
+	NETWORK_TFTP_OPCODE_DATA,
+	NETWORK_TFTP_OPCODE_ACKNOWLEDGMENT,
+	NETWORK_TFTP_OPCODE_ERROR
+} TNetworkTFTPOpcode;
+
+/** All known TFTP error codes. */
+typedef enum
+{
+	NETWORK_TFTP_ERROR_CODE_NOT_DEFINED,
+	NETWORK_TFTP_ERROR_CODE_FILE_NOT_FOUND,
+	NETWORK_TFTP_ERROR_CODE_ACCESS_VIOLATION,
+	NETWORK_TFTP_ERROR_CODE_DISK_FULL,
+	NETWORK_TFTP_ERROR_CODE_ILLEGAL_TFTP_OPERATION,
+	NETWORK_TFTP_ERROR_CODE_UNKNOWN_TRANSFER_ID,
+	NETWORK_TFTP_ERROR_CODE_FILE_ALREADY_EXISTS,
+	NETWORK_TFTP_ERROR_CODE_NO_SUCH_USER
+} TNetworkTFTPErrorCode;
+
+/** TFTP RRQ and WRQ specific header part. */
+typedef struct __attribute__((packed))
+{
+	char String_File_Name_And_Mode[NETWORK_TFTP_BLOCK_SIZE]; //!< An ASCIIZ string for the file name followed by an ASCIIZ string for the transfer mode.
+} TNetworkTFTPPacketRequest;
+
+/** TFTP DATA packet specific header part. */
+typedef struct __attribute__((packed))
+{
+	unsigned short Block_Number; //!< The block number.
+	unsigned char Buffer[NETWORK_TFTP_BLOCK_SIZE]; //!< Store the transmitted/received data.
+} TNetworkTFTPPacketData;
+
+/** TFTP ACK packet specific header part. */
+typedef struct __attribute__((packed))
+{
+	unsigned short Block_Number; //!< The block number.
+} TNetworkTFTPPacketAcknowledgment;
+
+/** TFTP ERROR packet specific header part. */
+typedef struct __attribute__((packed))
+{
+	unsigned short Error_Code; //!< Use an error code from TNetworkTFTPErrorCode.
+	char String_Error_Message[NETWORK_TFTP_BLOCK_SIZE]; //!< A human readable error string.
+} TNetworkTFTPPacketError;
+
+/** The TFTP protocol header for all existing packets. */
+typedef struct __attribute__((packed))
+{
+	unsigned short Opcode; //!< Use an opcode from TNetworkTFTPOpcode.
+	union
+	{
+		TNetworkTFTPPacketRequest Request; //!< RRQ and WRQ packets specific fields.
+		TNetworkTFTPPacketData Data; //!< DATA packet specific fields.
+		TNetworkTFTPPacketAcknowledgment Acknowledgment; //!< ACK packet specific fields.
+		TNetworkTFTPPacketError Error; //!< ERROR packet specific fields.
+	};
+} TNetworkTFTPPacket;
+
 //-------------------------------------------------------------------------------------------------
 // Functions
 //-------------------------------------------------------------------------------------------------
@@ -175,5 +240,16 @@ int NetworkUDPSendBuffer(TNetworkSocket *Pointer_Socket, unsigned int Buffer_Siz
  * @return 3 in non-blocking mode only to tell that no packet was received.
  */
 int NetworkUDPReceiveBuffer(TNetworkSocket *Pointer_Socket, int Is_Call_Blocking, unsigned int *Pointer_Buffer_Size, void *Pointer_Buffer);
+
+/** Wait a specified time for a TFTP packet to be received. Automatically handle the server source port change.
+ * @param Pointer_Socket The socket talking with the server. The initial destination port must be 69 (or the server one), it will be modified automatically when the first packet from the server is received (the previous port value is not restored).
+ * @param Timeout_Milliseconds How many time to wait (in milliseconds) before reporting that no packet was available.
+ * @param Pointer_Packet_Size On output, contain the TFTP packet size in bytes (including the TFTP header).
+ * @param Pointer_Packet On output, contain the full TFTP packet.
+ * @return 0 if a packet was successfully received,
+ * @return 1 if an error occurred,
+ * @return 2 if no packet was received in the allowed time.
+ */
+int NetworkTFTPReceivePacket(TNetworkSocket *Pointer_Socket, unsigned int Timeout_Milliseconds, unsigned int *Pointer_Packet_Size, TNetworkTFTPPacket *Pointer_Packet);
 
 #endif

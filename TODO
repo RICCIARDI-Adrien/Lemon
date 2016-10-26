@@ -45,6 +45,9 @@ modif bibliothèques pour gérer nouveaux codes touches
 
 - la récupération d'un paquet droppe le paquet si ce n'est pas le bon => il faudrait connaître toutes les sockets déclarées et passer le buffer à la bonne socket plutôt que de le dropper
 
+- mettre macros conversion nombre en chaîne dans System.h
+  + mettre à jour application Benchmark avec les nouvelles macros
+
 Applications
 ------------
 
