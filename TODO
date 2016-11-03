@@ -56,6 +56,8 @@ Applications
 
 - utiliser api buffer pour affichage éditeur de texte
 
+- tftp : mettre GET, PUT ou GENERIC dans chaînes
+
 Installer
 ---------
 
