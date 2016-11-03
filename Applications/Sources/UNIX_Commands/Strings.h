@@ -68,6 +68,9 @@
 	#define STRING_COMMAND_TFTP_STARTING_DOWNLOAD "T\202l\202chargement en cours...\n"
 	#define STRING_COMMAND_TFTP_DOWNLOAD_SUCCESSFUL_1 "T\202l\202chargement de "
 	#define STRING_COMMAND_TFTP_DOWNLOAD_SUCCESSFUL_2 " bloc(s) r\202ussi.\n"
+	#define STRING_COMMAND_TFTP_BAD_BLOCK_NUMBER_1 "Erreur : le bloc "
+	#define STRING_COMMAND_TFTP_BAD_BLOCK_NUMBER_2 " a \202t\202 re\207u alors que le bloc "
+	#define STRING_COMMAND_TFTP_BAD_BLOCK_NUMBER_3 " \202t\202 attendu.\n"
 #endif
 
 #endif

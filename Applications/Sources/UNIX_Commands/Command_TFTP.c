@@ -26,6 +26,7 @@ int TFTPExecuteCommandGet(char *String_File_Name)
 	unsigned int File_Name_Length, Transfer_Mode_Length, File_ID, Data_Size;
 	char *String_Transfer_Mode = "octet";
 	int Return_Value = 1;
+	unsigned short Received_Block_Number, Expected_Block_Number = 1;
 	
 	// Prepare the read request
 	Packet.Opcode = NETWORK_SWAP_WORD(NETWORK_TFTP_OPCODE_READ_REQUEST);
@@ -79,7 +80,18 @@ int TFTPExecuteCommandGet(char *String_File_Name)
 			goto Exit;
 		}
 		
-		// TODO check sequence number BEWARE BIG ENDIAN
+		// Make sure the received block is the expected one
+		Received_Block_Number = NETWORK_SWAP_WORD(Packet.Data.Block_Number);
+		if (Received_Block_Number != Expected_Block_Number)
+		{
+			ScreenWriteString(STRING_COMMAND_TFTP_BAD_BLOCK_NUMBER_1);
+			ScreenWriteUnsignedInteger(Received_Block_Number);
+			ScreenWriteString(STRING_COMMAND_TFTP_BAD_BLOCK_NUMBER_2);
+			ScreenWriteUnsignedInteger(Expected_Block_Number);
+			ScreenWriteString(STRING_COMMAND_TFTP_BAD_BLOCK_NUMBER_3);
+			goto Exit;
+		}
+		Expected_Block_Number++;
 		
 		// Adjust size to fit only the data size
 		Data_Size -= sizeof(Packet.Opcode) + sizeof(Packet.Data.Block_Number);
