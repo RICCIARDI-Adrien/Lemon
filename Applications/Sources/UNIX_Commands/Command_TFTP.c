@@ -12,6 +12,9 @@
 /** The data transfer mode for read and write requests. */
 #define STRING_TFTP_TRANSFER_MODE "octet"
 
+/** How many time to wait for a packet to be received (in milliseconds). */
+#define TFTP_PACKET_RECEPTION_TIMEOUT 1000
+
 //-------------------------------------------------------------------------------------------------
 // Private variables
 //-------------------------------------------------------------------------------------------------
@@ -62,7 +65,7 @@ int TFTPExecuteCommandGet(char *String_File_Name)
 	do
 	{
 		// Get a packet
-		if (NetworkTFTPReceivePacket(&Socket_Server, 1000, &Data_Size, &Packet) != 0) // Data_Size contains for now the raw TFTP packet size
+		if (NetworkTFTPReceivePacket(&Socket_Server, TFTP_PACKET_RECEPTION_TIMEOUT, &Data_Size, &Packet) != 0) // Data_Size contains for now the raw TFTP packet size
 		{
 			ScreenWriteString(STRING_COMMAND_TFTP_GENERIC_NETWORK_RECEPTION_FAILED);
 			goto Exit;
@@ -171,7 +174,7 @@ int TFTPExecuteCommandPut(char *String_File_Name)
 	do
 	{
 		// Get a packet
-		if (NetworkTFTPReceivePacket(&Socket_Server, 1000, &Size, &Packet) != 0)
+		if (NetworkTFTPReceivePacket(&Socket_Server, TFTP_PACKET_RECEPTION_TIMEOUT, &Size, &Packet) != 0)
 		{
 			ScreenWriteString(STRING_COMMAND_TFTP_GENERIC_NETWORK_RECEPTION_FAILED);
 			goto Exit;
