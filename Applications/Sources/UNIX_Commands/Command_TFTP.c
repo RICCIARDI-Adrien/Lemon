@@ -52,11 +52,11 @@ int TFTPExecuteCommandGet(char *String_File_Name)
 	// Send the read request
 	if (NetworkUDPSendBuffer(&Socket_Server, sizeof(Packet.Opcode) + File_Name_Length + 1 + Transfer_Mode_Length + 1, &Packet) != 0) // +2 bytes for both strings terminating zeroes
 	{
-		ScreenWriteString(STRING_COMMAND_TFTP_NETWORK_TRANSMISSION_FAILED);
+		ScreenWriteString(STRING_COMMAND_TFTP_GENERIC_NETWORK_TRANSMISSION_FAILED);
 		goto Exit;
 	}
 	
-	ScreenWriteString(STRING_COMMAND_TFTP_STARTING_DOWNLOAD);
+	ScreenWriteString(STRING_COMMAND_TFTP_GET_STARTING_DOWNLOAD);
 	
 	// Receive the file
 	do
@@ -64,7 +64,7 @@ int TFTPExecuteCommandGet(char *String_File_Name)
 		// Get a packet
 		if (NetworkTFTPReceivePacket(&Socket_Server, 1000, &Data_Size, &Packet) != 0) // Data_Size contains for now the raw TFTP packet size
 		{
-			ScreenWriteString(STRING_COMMAND_TFTP_NETWORK_RECEPTION_FAILED);
+			ScreenWriteString(STRING_COMMAND_TFTP_GENERIC_NETWORK_RECEPTION_FAILED);
 			goto Exit;
 		}
 		Packet.Opcode = NETWORK_SWAP_WORD(Packet.Opcode);
@@ -72,16 +72,16 @@ int TFTPExecuteCommandGet(char *String_File_Name)
 		// Did an error occurred ?
 		if (Packet.Opcode == NETWORK_TFTP_OPCODE_ERROR)
 		{
-			ScreenWriteString(STRING_COMMAND_TFTP_NETWORK_SERVER_ERROR_1);
+			ScreenWriteString(STRING_COMMAND_TFTP_GENERIC_SERVER_ERROR_1);
 			ScreenWriteString(Packet.Error.String_Error_Message);
-			ScreenWriteString(STRING_COMMAND_TFTP_NETWORK_SERVER_ERROR_2);
+			ScreenWriteString(STRING_COMMAND_TFTP_GENERIC_SERVER_ERROR_2);
 			goto Exit;
 		}
 		
 		// Is it a data packet ?
 		if (Packet.Opcode != NETWORK_TFTP_OPCODE_DATA)
 		{
-			ScreenWriteString(STRING_COMMAND_TFTP_NETWORK_BAD_PACKET_RECEIVED);
+			ScreenWriteString(STRING_COMMAND_TFTP_GENERIC_BAD_NETWORK_PACKET_RECEIVED);
 			goto Exit;
 		}
 		
@@ -104,7 +104,7 @@ int TFTPExecuteCommandGet(char *String_File_Name)
 		// Store data in the file
 		if (FileWrite(File_ID, Packet.Data.Buffer, Data_Size) != 0)
 		{
-			ScreenWriteString(STRING_COMMAND_TFTP_CANT_WRITE_TO_FILE);
+			ScreenWriteString(STRING_COMMAND_TFTP_GET_CANT_WRITE_TO_FILE);
 			goto Exit;
 		}
 		
@@ -112,16 +112,16 @@ int TFTPExecuteCommandGet(char *String_File_Name)
 		Packet.Opcode = NETWORK_SWAP_WORD(NETWORK_TFTP_OPCODE_ACKNOWLEDGMENT); // No need to set the block number as it is at the same place than the one received (and it must have the same value)
 		if (NetworkUDPSendBuffer(&Socket_Server, sizeof(Packet.Opcode) + sizeof(Packet.Data.Block_Number), &Packet) != 0)
 		{
-			ScreenWriteString(STRING_COMMAND_TFTP_NETWORK_TRANSMISSION_FAILED);
+			ScreenWriteString(STRING_COMMAND_TFTP_GENERIC_NETWORK_TRANSMISSION_FAILED);
 			goto Exit;
 		}
 	} while (Data_Size == NETWORK_TFTP_BLOCK_SIZE); // Exit if the data size is different from a block size
 	
 	// Display a success message
 	ScreenSetFontColor(SCREEN_COLOR_GREEN);
-	ScreenWriteString(STRING_COMMAND_TFTP_DOWNLOAD_SUCCESSFUL_1);
+	ScreenWriteString(STRING_COMMAND_TFTP_GET_DOWNLOAD_SUCCESSFUL_1);
 	ScreenWriteUnsignedInteger(NETWORK_SWAP_WORD(Packet.Data.Block_Number));
-	ScreenWriteString(STRING_COMMAND_TFTP_DOWNLOAD_SUCCESSFUL_2);
+	ScreenWriteString(STRING_COMMAND_TFTP_GET_DOWNLOAD_SUCCESSFUL_2);
 	ScreenSetFontColor(SCREEN_COLOR_BLUE);
 	Return_Value = 0;
 	
@@ -161,11 +161,11 @@ int TFTPExecuteCommandPut(char *String_File_Name)
 	// Send the write request
 	if (NetworkUDPSendBuffer(&Socket_Server, sizeof(Packet.Opcode) + File_Name_Length + 1 + Transfer_Mode_Length + 1, &Packet) != 0) // +2 bytes for both strings terminating zeroes
 	{
-		ScreenWriteString(STRING_COMMAND_TFTP_NETWORK_TRANSMISSION_FAILED);
+		ScreenWriteString(STRING_COMMAND_TFTP_GENERIC_NETWORK_TRANSMISSION_FAILED);
 		goto Exit;
 	}
 	
-	ScreenWriteString(STRING_COMMAND_TFTP_STARTING_UPLOAD);
+	ScreenWriteString(STRING_COMMAND_TFTP_PUT_STARTING_UPLOAD);
 	
 	// Receive the file
 	do
@@ -173,7 +173,7 @@ int TFTPExecuteCommandPut(char *String_File_Name)
 		// Get a packet
 		if (NetworkTFTPReceivePacket(&Socket_Server, 1000, &Size, &Packet) != 0)
 		{
-			ScreenWriteString(STRING_COMMAND_TFTP_NETWORK_RECEPTION_FAILED);
+			ScreenWriteString(STRING_COMMAND_TFTP_GENERIC_NETWORK_RECEPTION_FAILED);
 			goto Exit;
 		}
 		Packet.Opcode = NETWORK_SWAP_WORD(Packet.Opcode);
@@ -181,16 +181,16 @@ int TFTPExecuteCommandPut(char *String_File_Name)
 		// Did an error occurred ?
 		if (Packet.Opcode == NETWORK_TFTP_OPCODE_ERROR)
 		{
-			ScreenWriteString(STRING_COMMAND_TFTP_NETWORK_SERVER_ERROR_1);
+			ScreenWriteString(STRING_COMMAND_TFTP_GENERIC_SERVER_ERROR_1);
 			ScreenWriteString(Packet.Error.String_Error_Message);
-			ScreenWriteString(STRING_COMMAND_TFTP_NETWORK_SERVER_ERROR_2);
+			ScreenWriteString(STRING_COMMAND_TFTP_GENERIC_SERVER_ERROR_2);
 			goto Exit;
 		}
 		
 		// Is it an ACK packet ?
 		if (Packet.Opcode != NETWORK_TFTP_OPCODE_ACKNOWLEDGMENT)
 		{
-			ScreenWriteString(STRING_COMMAND_TFTP_NETWORK_BAD_PACKET_RECEIVED);
+			ScreenWriteString(STRING_COMMAND_TFTP_GENERIC_BAD_NETWORK_PACKET_RECEIVED);
 			goto Exit;
 		}
 		
@@ -221,7 +221,7 @@ int TFTPExecuteCommandPut(char *String_File_Name)
 		// Send the packet (even if the read data was 0 byte, which will tell the server that the transfer is terminated)
 		if (NetworkUDPSendBuffer(&Socket_Server, sizeof(Packet.Opcode) + sizeof(Packet.Data.Block_Number) + Read_Bytes_Count, &Packet) != 0)
 		{
-			ScreenWriteString(STRING_COMMAND_TFTP_NETWORK_TRANSMISSION_FAILED);
+			ScreenWriteString(STRING_COMMAND_TFTP_GENERIC_NETWORK_TRANSMISSION_FAILED);
 			goto Exit;
 		}
 	} while (Read_Bytes_Count == NETWORK_TFTP_BLOCK_SIZE); // Exit when the whole file has been sent
