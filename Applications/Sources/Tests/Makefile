@@ -6,9 +6,15 @@ all: $(OBJECTS)
 	$(GLOBAL_TOOL_LINKER) $(OBJECTS_PATH)/$(PROGRAM_NAME)/Test_Display_ASCII_Characters.o $(LDFLAGS) -o $(BINARIES_PATH)/Test_Display_ASCII_Characters.bin
 	$(GLOBAL_TOOL_LINKER) $(OBJECTS_PATH)/$(PROGRAM_NAME)/Test_Protection_Check.o $(LDFLAGS) -o $(BINARIES_PATH)/Test_Protection_Check.bin
 	$(GLOBAL_TOOL_LINKER) $(OBJECTS_TESTS) $(LDFLAGS) -o $(BINARIES_PATH)/Tests.bin
+	$(TOOL_ADD_EXECUTABLE_HEADER) $(BINARIES_PATH)/Test_Display_ASCII_Characters.bin $(BINARIES_PATH)/Test_Display_ASCII_Characters.lemon
+	$(TOOL_ADD_EXECUTABLE_HEADER) $(BINARIES_PATH)/Test_Protection_Check.bin $(BINARIES_PATH)/Test_Protection_Check.lemon
+	$(TOOL_ADD_EXECUTABLE_HEADER) $(BINARIES_PATH)/Tests.bin $(BINARIES_PATH)/Tests.lemon
 
 clean:
 	rm -rf $(OBJECTS_PATH)/$(PROGRAM_NAME) $(BINARIES_PATH)/Test_Display_ASCII_Characters.* $(BINARIES_PATH)/Test_Protection_Check.* $(BINARIES_PATH)/Tests.*
+
+download:
+	@$(TOOL_SERIAL_PORT_SERVER) $(SERIAL_PORT_SERVER_FLAGS) $(BINARIES_PATH)/$(PROGRAM_NAME).lemon tests
 
 $(OBJECTS_PATH)/$(PROGRAM_NAME)/crc32.o: crc32.c crc32.h
 	$(GLOBAL_TOOL_COMPILER) $(CCFLAGS) -c crc32.c -o $(OBJECTS_PATH)/$(PROGRAM_NAME)/crc32.o

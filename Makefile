@@ -155,6 +155,10 @@ applications:
 	@$(call DisplayTitle,Compiling applications)
 	@cd Applications && $(MAKE)
 
+# Access to a specific application rules (compile, clean and download)
+application/%:
+	cd Applications && $(MAKE) $*
+
 installer:
 	@$(call DisplayTitle,Creating installation image)
 	@cd Installer && $(MAKE)
