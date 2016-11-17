@@ -102,7 +102,7 @@ int CursorMoveToLeft(void)
 int CursorMoveToRight(void)
 {
 	unsigned int Line_Length;
-	int Return_Value = 0;
+	int Return_Value = 0, Is_Last_Line;
 	
 	// Cache the current line length and presence
 	if (BufferGetLineLength(Cursor_Buffer_Row, &Line_Length) != 0) return Return_Value; // Nothing to do if the current line does not exist (i.e. the buffer is empty)
@@ -110,7 +110,8 @@ int CursorMoveToRight(void)
 	if ((Cursor_Display_Column < Line_Length) && (Cursor_Display_Column < CONFIGURATION_DISPLAY_COLUMNS_COUNT - 1)) Cursor_Display_Column++; // The cursor will remain on this line and on the display
 	else // The cursor will go out of display rightmost bound or the current line bound, so the text must be scrolled one line downer
 	{
-		if (BufferGetLineLength(Cursor_Buffer_Row + 1, &Line_Length) == 0)
+		Is_Last_Line = BufferGetLineLength(Cursor_Buffer_Row + 1, &Line_Length);
+		if (!Is_Last_Line|| (Is_Last_Line && (CursorGetBufferCharacterIndex() == Buffer_Characters_Count - 1))) // Little hack to allow a single '\n' to be displayed even if it is the last character in the buffer
 		{
 			// The downer line exists, so put the cursor at the beginning of the line
 			if (Cursor_Display_Row < CONFIGURATION_DISPLAY_ROWS_COUNT - 1) Cursor_Display_Row++; // Do not cross the display lower bound
