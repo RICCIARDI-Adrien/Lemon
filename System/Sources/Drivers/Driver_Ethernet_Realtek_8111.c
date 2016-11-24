@@ -32,10 +32,10 @@
 /** This bit is set when the link is in full-duplex mode, the bit is cleared when the link is in half-duplex mode. */
 #define ETHERNET_CONTROLLER_PHY_STATUS_REGISTER_LINK_FULL_DUPLEX_STATUS_BIT 0
 
-/** Set to 1 to start transmitting data. The bit is automatically cleared when data has been transmitted. */
-#define ETHERNET_CONTROLLER_TRANSMIT_DESCRIPTOR_OWNERSHIP_BIT 31
+/** Set to 1 to start transmitting or receiving data. The bit is automatically cleared when data has been transmitted or received. */
+#define ETHERNET_CONTROLLER_DESCRIPTOR_OWNERSHIP_BIT 31
 /** Set to 1 to tell that this is the last descriptor in the descriptors ring. */
-#define ETHERNET_CONTROLLER_TRANSMIT_DESCRIPTOR_END_OF_DESCRIPTOR_RING_BIT 30
+#define ETHERNET_CONTROLLER_DESCRIPTOR_END_OF_DESCRIPTOR_RING_BIT 30
 /** Tell that the descriptor contains the packet beginning. */
 #define ETHERNET_CONTROLLER_TRANSMIT_DESCRIPTOR_FIRST_SEGMENT_DESCRIPTOR_BIT 29
 /** Tell that the descriptor contains the packet end. */
@@ -101,23 +101,14 @@ typedef struct __attribute__((packed))
 	unsigned char Maximum_Transmit_Packet_Size; //!< Only bits 5..0 are used. The value is in 128-byte units.
 } TEthernetControllerRegisters;
 
-/** A receive descriptor. */
+/** A receive / normal transmit descriptor. */
 typedef struct __attribute__((packed))
 {
 	unsigned int Flags_And_Buffer_Size; //!< Flags are located on bits 31..14, buffer size (in bytes) is located on bits 13..0. PCI access is 32-bit only.
 	unsigned int VLAN_Settings; //!< Not used here.
 	void *Pointer_Buffer_Address_Low; //!< The buffer address.
 	void *Pointer_Buffer_Address_High; //!< Set to 0 when using 32-bit PCI mode.
-} TEthernetControllerReceiveDescriptor;
-
-/** A normal transmit descriptor (Large-Send Task Offload transmit descriptors are not needed by this network stack). */
-typedef struct __attribute__((packed))
-{
-	unsigned int Flags_And_Buffer_Size; //!< Flags are located on bits 31..16, buffer size (in bytes) is located on bits 15..0. It is not possible to split them into two fields because PCI accesses must be 32-bit wide.
-	unsigned int VLAN_Settings; //!< VLAN hardware offloading, not used here.
-	void *Pointer_Buffer_Address_Low; //!< The buffer address.
-	void *Pointer_Buffer_Address_High; //!< Set to 0 when using 32-bit PCI mode.
-} TEthernetControllerTransmitDescriptor;
+} TEthernetControllerDescriptor;
 
 //-------------------------------------------------------------------------------------------------
 // Private variables
@@ -126,9 +117,9 @@ typedef struct __attribute__((packed))
 static TEthernetControllerRegisters *Pointer_Ethernet_Controller_Registers;
 
 /** The receive buffer descriptors list (currently limited to only one descriptor). */
-static volatile TEthernetControllerReceiveDescriptor __attribute__((aligned(256))) Ethernet_Controller_Receive_Descriptor; // Must be 256-byte aligned
+static volatile TEthernetControllerDescriptor __attribute__((aligned(256))) Ethernet_Controller_Receive_Descriptor; // Must be 256-byte aligned
 /** The transmit buffer descriptors list (currently limited to only one descriptor). */
-static volatile TEthernetControllerTransmitDescriptor __attribute__((aligned(256))) Ethernet_Controller_Transmit_Descriptor; // Must be 256-byte aligned
+static volatile TEthernetControllerDescriptor __attribute__((aligned(256))) Ethernet_Controller_Transmit_Descriptor; // Must be 256-byte aligned
 
 /** The buffer dedicated to packets reception. */
 static unsigned char Ethernet_Controller_Reception_Buffer[CONFIGURATION_ETHERNET_BUFFER_SIZE];
@@ -275,7 +266,7 @@ void EthernetSendPacket(unsigned int Buffer_Size, void *Pointer_Buffer)
 	memcpy(Ethernet_Controller_Transmission_Buffer, Pointer_Buffer, Buffer_Size);
 	
 	// Configure the transmission descriptor
-	Ethernet_Controller_Transmit_Descriptor.Flags_And_Buffer_Size = (1 << ETHERNET_CONTROLLER_TRANSMIT_DESCRIPTOR_OWNERSHIP_BIT) | (1 << ETHERNET_CONTROLLER_TRANSMIT_DESCRIPTOR_END_OF_DESCRIPTOR_RING_BIT) | (1 << ETHERNET_CONTROLLER_TRANSMIT_DESCRIPTOR_FIRST_SEGMENT_DESCRIPTOR_BIT) | (1 << ETHERNET_CONTROLLER_TRANSMIT_DESCRIPTOR_LAST_SEGMENT_DESCRIPTOR_BIT) | Buffer_Size; // Give the buffer ownership to the network controller, tell this descriptor is last one of the descriptors ring so the controller will restart from the ring beginning next time, tell that the packet is fully contained in this buffer
+	Ethernet_Controller_Transmit_Descriptor.Flags_And_Buffer_Size = (1 << ETHERNET_CONTROLLER_DESCRIPTOR_OWNERSHIP_BIT) | (1 << ETHERNET_CONTROLLER_DESCRIPTOR_END_OF_DESCRIPTOR_RING_BIT) | (1 << ETHERNET_CONTROLLER_TRANSMIT_DESCRIPTOR_FIRST_SEGMENT_DESCRIPTOR_BIT) | (1 << ETHERNET_CONTROLLER_TRANSMIT_DESCRIPTOR_LAST_SEGMENT_DESCRIPTOR_BIT) | Buffer_Size; // Give the buffer ownership to the network controller, tell this descriptor is last one of the descriptors ring so the controller will restart from the ring beginning next time, tell that the packet is fully contained in this buffer
 
 	// Send the packet
 	Pointer_Ethernet_Controller_Registers->Transmit_Priority_Polling |= 1 << ETHERNET_CONTROLLER_TRANSMIT_PRIORITY_POLLING_REGISTER_NORMAL_PRIORITY_QUEUE_POLLING_BIT;
