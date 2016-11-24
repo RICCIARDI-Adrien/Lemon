@@ -10,6 +10,8 @@
 //-------------------------------------------------------------------------------------------------
 // Private constants
 //-------------------------------------------------------------------------------------------------
+/** Reset the whole controller when set to 1 (this bit is self-cleared when the reset is finished). */
+#define ETHERNET_CONTROLLER_COMMAND_REGISTER_RESET_BIT 4
 /** Enable reception when set to 1. */
 #define ETHERNET_CONTROLLER_COMMAND_REGISTER_RECEIVER_ENABLE_BIT 3
 /** Enable transmission when set to 1. */
@@ -17,6 +19,11 @@
 
 /** Tell that there are some normal priority packets ready to be transmitted. */
 #define ETHERNET_CONTROLLER_TRANSMIT_PRIORITY_POLLING_REGISTER_NORMAL_PRIORITY_QUEUE_POLLING_BIT 6
+
+/** The packet transmission failed due to too much collisions. */
+#define ETHERNET_CONTROLLER_INTERRUPT_STATUS_REGISTER_TRANSMIT_ERROR_BIT 3
+/** The packet was successfully sent. */
+#define ETHERNET_CONTROLLER_INTERRUPT_STATUS_REGISTER_TRANSMIT_OK_BIT 2
 
 /** Allow broadcast packets to be received. */
 #define ETHERNET_CONTROLLER_RECEIVE_CONFIGURATION_REGISTER_ACCEPT_BROADCAST_PACKETS_BIT 3
@@ -73,26 +80,31 @@ typedef struct __attribute__((packed))
 	// Offset 0x44
 	unsigned int Receive_Configuration;
 	
-	unsigned char Reserved_5[0x60 - 0x48];
+	unsigned char Reserved_5[0x50 - 0x48];
+	
+	// Offset 0x50
+	unsigned char EEPROM_Command;
+	
+	unsigned char Reserved_6[0x60 - 0x51];
 	
 	// Offset 0x60
 	unsigned int PHY_Access;
 	
-	unsigned char Reserved_6[0x6C - 0x64];
+	unsigned char Reserved_7[0x6C - 0x64];
 	
 	// Offset 0x6C
 	unsigned char PHY_Status; //!< Reflect link status (speed, duplex mode, state...).
 	
-	unsigned char Reserved_7[0xDA - 0x6D];
+	unsigned char Reserved_8[0xDA - 0x6D];
 	
 	// Offset 0xDA
 	unsigned short Receive_Packet_Maximum_Size;
 	
-	unsigned char Reserved_8[0xE0 - 0xDC];
+	unsigned char Reserved_9[0xE0 - 0xDC];
 	
 	// Offset 0xE0
 	unsigned char C_Plus_Command;
-	unsigned char Reserved_9[3];
+	unsigned char Reserved_10[3];
 	// Offset 0xE4
 	volatile void *Pointer_Receive_Descriptor_Start_Address_High;
 	// Offset 0xE8
@@ -158,9 +170,16 @@ int EthernetInitialize(void)
 	Pointer_Ethernet_Controller_Registers = (TEthernetControllerRegisters *) PCI_GET_BASE_ADDRESS(Configuration_Space_Header.Base_Address_Registers[2]);
 	
 	// Disable some offloading features (this register should be the first configuration step according to datasheet)
-	Pointer_Ethernet_Controller_Registers->C_Plus_Command = 0;
+	Pointer_Ethernet_Controller_Registers->C_Plus_Command = 1 << 3; // Magic bit making the driver work
 	// Disable reception and transmission until the controller is fully configured (this register should be the second configuration step according to datasheet)
 	Pointer_Ethernet_Controller_Registers->Command = 0;
+	
+	// Unlock the command registers
+	Pointer_Ethernet_Controller_Registers->EEPROM_Command = 0xC0;
+	
+	// Reset the controller (reset works only when the registers are unlocked)
+	Pointer_Ethernet_Controller_Registers->Command = 1 << ETHERNET_CONTROLLER_COMMAND_REGISTER_RESET_BIT;
+	while (Pointer_Ethernet_Controller_Registers->Command & (1 << ETHERNET_CONTROLLER_COMMAND_REGISTER_RESET_BIT)); // Wait for the reset to terminate
 	
 	//===============================================
 	// Reception configuration
@@ -207,6 +226,9 @@ int EthernetInitialize(void)
 	
 	// Enable reception at the initialization end to avoid receiving a packet while the controller is half initialized
 	Pointer_Ethernet_Controller_Registers->Command |= 1 << ETHERNET_CONTROLLER_COMMAND_REGISTER_RECEIVER_ENABLE_BIT;
+	
+	// Lock the command registers to make the network controller work in normal mode
+	Pointer_Ethernet_Controller_Registers->EEPROM_Command = 0;
 	
 	DEBUG_SECTION_START
 	DEBUG_DISPLAY_CURRENT_FUNCTION_NAME();
@@ -272,7 +294,8 @@ void EthernetSendPacket(unsigned int Buffer_Size, void *Pointer_Buffer)
 	Pointer_Ethernet_Controller_Registers->Transmit_Priority_Polling |= 1 << ETHERNET_CONTROLLER_TRANSMIT_PRIORITY_POLLING_REGISTER_NORMAL_PRIORITY_QUEUE_POLLING_BIT;
 	
 	// Wait for the packet to be transmitted
-	while (Pointer_Ethernet_Controller_Registers->Transmit_Priority_Polling & (1 << ETHERNET_CONTROLLER_TRANSMIT_PRIORITY_POLLING_REGISTER_NORMAL_PRIORITY_QUEUE_POLLING_BIT)); // The bit is automatically cleared when all normal priority packets were transmitted (and there is always only one packet in this driver)
+	while (!(Pointer_Ethernet_Controller_Registers->Interrupt_Status & (1 << ETHERNET_CONTROLLER_INTERRUPT_STATUS_REGISTER_TRANSMIT_OK_BIT)) && !(Pointer_Ethernet_Controller_Registers->Interrupt_Status & (1 << ETHERNET_CONTROLLER_INTERRUPT_STATUS_REGISTER_TRANSMIT_ERROR_BIT)));
+	Pointer_Ethernet_Controller_Registers->Interrupt_Status |= (1 << ETHERNET_CONTROLLER_INTERRUPT_STATUS_REGISTER_TRANSMIT_OK_BIT) | (1 << ETHERNET_CONTROLLER_INTERRUPT_STATUS_REGISTER_TRANSMIT_ERROR_BIT);
 }
 
 int EthernetIsPacketReceived(void)
