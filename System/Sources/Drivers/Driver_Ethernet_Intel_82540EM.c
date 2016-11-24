@@ -1,4 +1,4 @@
-/** @file Driver_Ethernet_Controller_Intel_82540EM.c
+/** @file Driver_Ethernet_Intel_82540EM.c
  * Intel 82540EM Gigabit ethernet controller (also known as Intel PRO/1000) driver.
  * @author Adrien RICCIARDI
  */

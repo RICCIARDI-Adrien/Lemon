@@ -266,6 +266,7 @@ static void SystemCallFileClose(void)
 //====================================================================================================================
 // Jump table
 //====================================================================================================================
+/** All available system calls. */
 TSystemCallHandler System_Calls_Handlers[] =
 {
 	KernelStartShell, // SYSTEM_CALL_SYSTEM_EXIT_PROGRAM

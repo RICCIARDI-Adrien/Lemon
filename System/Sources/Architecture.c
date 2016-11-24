@@ -28,11 +28,17 @@
 #define ARCHITECTURE_MEMORY_PROTECTION_SEGMENT_TYPE_TASK_STATE_SEGMENT 0xE9
 
 // Segment indexes in GDT
+/** The kernel code segment index. */
 #define ARCHITECTURE_MEMORY_PROTECTION_SEGMENT_INDEX_KERNEL_CODE 1
+/** The kernel data segment index. */
 #define ARCHITECTURE_MEMORY_PROTECTION_SEGMENT_INDEX_KERNEL_DATA 2
+/** The kernel stack segment index. */
 #define ARCHITECTURE_MEMORY_PROTECTION_SEGMENT_INDEX_KERNEL_STACK 3
+/** The user space code segment index. */
 #define ARCHITECTURE_MEMORY_PROTECTION_SEGMENT_INDEX_USER_CODE 4
+/** The user space data segment index. */
 #define ARCHITECTURE_MEMORY_PROTECTION_SEGMENT_INDEX_USER_DATA 5
+/** The task state segment index (used to switch from user space to kernel space and vice versa). */
 #define ARCHITECTURE_MEMORY_PROTECTION_SEGMENT_INDEX_TASK_STATE_SEGMENT 6
 
 /** Save all user registers onto kernel stack and switch to kernel data segment. */
@@ -91,14 +97,17 @@ typedef struct __attribute__((packed))
 /** The GDTR content. */
 typedef struct __attribute__((packed))
 {
-	unsigned short Table_Size;
-	TArchitectureSegmentDescriptor *Pointer_Table;
+	unsigned short Table_Size; //!< The Global Descriptor Table size in bytes minus one (as requested by Intel datasheet).
+	TArchitectureSegmentDescriptor *Pointer_Table; //!< The Global Descriptor Table base address.
 } TArchitectureGlobalDescriptorTableRegister;
 
 /** An IDT segment descriptor. */
 typedef struct __attribute__((packed))
 {
-	unsigned short Handler_Address_Low, Segment_Selector, Flags, Handler_Address_High;
+	unsigned short Handler_Address_Low; //!< Low 16 bits of the handling function address.
+	unsigned short Segment_Selector; //!< The index of the code segment that will be used to handle the interrupt. The index value must be shifted by 3 to the left.
+	unsigned short Flags; //!< Interrupt configuration (mainly execution level).
+	unsigned short Handler_Address_High; //!< High 16 bits of the handling function address.
 } TArchitectureInterruptDescriptor;
 
 /** The IDTR content. */
@@ -143,12 +152,12 @@ typedef struct __attribute__((packed))
 // Private variables
 //-------------------------------------------------------------------------------------------------
 /** The GDT. */
-static volatile TArchitectureSegmentDescriptor Architecture_Global_Descriptor_Table[256] __attribute__((aligned(8))); // Should give better performances by aligning on cache boundary
+static volatile TArchitectureSegmentDescriptor __attribute__((aligned(8))) Architecture_Global_Descriptor_Table[256]; // Should give better performances by aligning on cache boundary
 /** The GDTR content. */
 static volatile TArchitectureGlobalDescriptorTableRegister Architecture_Global_Descriptor_Table_Register;
 
 /** The IDT. */
-static volatile TArchitectureInterruptDescriptor Architecture_Interrupt_Descriptor_Table[256] __attribute__((aligned(8))); // Should give better performances by aligning on cache boundary
+static volatile TArchitectureInterruptDescriptor __attribute__((aligned(8))) Architecture_Interrupt_Descriptor_Table[256]; // Should give better performances by aligning on cache boundary
 /** The IDTR content. */
 static volatile TArchitectureInterruptDescriptorTableRegister Architecture_Interrupt_Descriptor_Table_Register;
 
@@ -160,12 +169,21 @@ static volatile TArchitectureTaskStateSegment Architecture_Kernel_Task_State_Seg
 //-------------------------------------------------------------------------------------------------
 // The following prototypes are mandatory because the corresponding assembly labels can't be seen by the C compiler
 // Moreover, this functions can't be static as they must be linked with the assembly code
+/** Called when an user space application tries to execute a division instruction with a null divisor. */
 void ArchitectureInterruptLauncherDivisionErrorException(void);
+/** Called when an user space application tries to execute a privileged instruction or to access to a forbidden memory area. */
 void ArchitectureInterruptLauncherGeneralProtectionFaultException(void);
+/** Called when the kernel stack overflows or underflows. */
 void ArchitectureInterruptLauncherStackException(void);
+/** Called when the timer triggers an interrupt. */
 void ArchitectureInterruptLauncherTimer(void);
+/** Called when the keyboard trigger an interrupt. */
 void ArchitectureInterruptLauncherKeyboard(void);
+/** Called when an user space application performs a system call. */
 void ArchitectureInterruptLauncherSystemCalls(void);
+/** Notify the interrupts controller that the interrupt has been handled.
+ * @warning Use this function only for an interrupt coming from an hardware device.
+ */
 void ArchitectureInterruptExit(void);
 
 //-------------------------------------------------------------------------------------------------

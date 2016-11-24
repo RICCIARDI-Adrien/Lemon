@@ -6,4 +6,5 @@
 *.lemon
 *.o
 *.out
+Documentation/Documentation_System/html
 Installer/Sources/Shell/Embedded_Files_Data.h

@@ -26,9 +26,9 @@
 /** Describe the command line format given to the program. */
 typedef struct __attribute__((packed))
 {
-	int Arguments_Count; //! Contain argc value.
-	char *Pointer_Arguments[SHELL_MAXIMUM_ARGUMENTS_COUNT]; //! The *argv[] representation.
-	char Arguments_Value[CONFIGURATION_USER_SPACE_PROGRAM_ENTRY_POINT - ARGUMENTS_VALUE_OFFSET]; //! Hold arguments values. Fill the remaining bytes of the 256-byte area before program beginning.
+	int Arguments_Count; //!< Contain argc value.
+	char *Pointer_Arguments[SHELL_MAXIMUM_ARGUMENTS_COUNT]; //!< The *argv[] representation.
+	char Arguments_Value[CONFIGURATION_USER_SPACE_PROGRAM_ENTRY_POINT - ARGUMENTS_VALUE_OFFSET]; //!< Hold arguments values. Fill the remaining bytes of the 256-byte area before program beginning.
 } TCommandLineArguments;
 
 //-------------------------------------------------------------------------------------------------

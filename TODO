@@ -52,9 +52,9 @@ Applications
 ------------
 
 - hexdump ?
-- optimiser système de build
+- grep ?
 
-- utiliser api buffer pour affichage éditeur de texte
+- utiliser api buffer pour affichage éditeur de texte (partiellement effectué)
 
 Installer
 ---------

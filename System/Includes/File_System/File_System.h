@@ -80,6 +80,7 @@ unsigned int FileSystemGetFreeFilesListEntriesCount(void);
 /** Read logically chained blocks from the hard disk.
  * @param Start_Block The block to start reading from.
  * @param Blocks_Count How many blocks to read.
+ * @param Pointer_Buffer On output, contain the read blocks content.
  * @return The next block to read (it can be FILE_SYSTEM_BLOCKS_LIST_BLOCK_EOF if the end of the file is reached).
  */
 unsigned int FileSystemReadBlocks(unsigned int Start_Block, unsigned int Blocks_Count, unsigned char *Pointer_Buffer);
@@ -87,6 +88,7 @@ unsigned int FileSystemReadBlocks(unsigned int Start_Block, unsigned int Blocks_
 /** Write the buffer content to logical blocks.
  * @param Start_Block The block to start writing to.
  * @param Blocks_Count How many blocks to write.
+ * @param Pointer_Buffer The data to write.
  * @return The last block written.
  * @warning This function does not check if the Blocks List is full or not, you must be sure that there are enough free blocks to write the data before calling this function.
  * @note This function automatically adds the EOF code to the last Blocks List written block.

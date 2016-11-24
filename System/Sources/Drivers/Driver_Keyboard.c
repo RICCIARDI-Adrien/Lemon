@@ -10,10 +10,15 @@
 //-------------------------------------------------------------------------------------------------
 // Private constants and macros
 //-------------------------------------------------------------------------------------------------
+/** The input/output port used to send data. */
 #define KEYBOARD_PORT_DATA 0x60
+/** The input/output port used to send commands. */
 #define KEYBOARD_PORT_COMMANDS 0x64
+/** The caps lock led corresponding bit. */
 #define KEYBOARD_LED_CAPS_LOCK 0x04
+/** The caps num led corresponding bit. */
 #define KEYBOARD_LED_NUM_LOCK 0x02
+/** The caps scroll led corresponding bit. */
 #define KEYBOARD_LED_SCROLL_LOCK 0x01
 
 /** Wait until the keyboard controller becomes ready. */

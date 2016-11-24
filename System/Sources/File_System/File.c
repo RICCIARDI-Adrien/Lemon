@@ -12,17 +12,18 @@
 //-------------------------------------------------------------------------------------------------
 // Private types
 //-------------------------------------------------------------------------------------------------
-typedef struct __attribute__((packed))
+/** Hold the current state of an opened file. */
+typedef struct
 {
-	TFilesListEntry *Pointer_Files_List_Entry; //! Pointer on the corresponding Files List entry.
-	unsigned int File_Descriptor_Index; //! The index into the file descriptors table.
-	unsigned int Current_Block_Index; //! Hold the current ready to process block.
-	unsigned int Offset_File; //! Offset into the file (needed to know how many bytes were processed yet).
-	unsigned int Offset_Buffer; //! Offset into the buffer (must be kept across calls).
-	char Opening_Mode; //! Tell if the file was open in read ('r') or write ('w') mode.
-	char Is_Entry_Free; //! Indicate if the entry can be used to identify a new open file or not.
-	char Is_Write_Possible; //! For a file opened in write mode, indicate if it is possible to write data or if there is no more space on the file system.
-	unsigned char Buffer[CONFIGURATION_FILE_SYSTEM_BLOCK_SIZE_BYTES];
+	TFilesListEntry *Pointer_Files_List_Entry; //!< Pointer on the corresponding Files List entry.
+	unsigned int File_Descriptor_Index; //!< The index into the file descriptors table.
+	unsigned int Current_Block_Index; //!< Hold the current ready to process block.
+	unsigned int Offset_File; //!< Offset into the file (needed to know how many bytes were processed yet).
+	unsigned int Offset_Buffer; //!< Offset into the buffer (must be kept across calls).
+	char Opening_Mode; //!< Tell if the file was open in read ('r') or write ('w') mode.
+	int Is_Entry_Free; //!< Indicate if the entry can be used to identify a new open file or not.
+	int Is_Write_Possible; //!< For a file opened in write mode, indicate if it is possible to write data or if there is no more space on the file system.
+	unsigned char Buffer[CONFIGURATION_FILE_SYSTEM_BLOCK_SIZE_BYTES]; //!< A cache used to store partial read or written data until their size reaches a block size.
 } TFileDescriptor;
 
 //-------------------------------------------------------------------------------------------------

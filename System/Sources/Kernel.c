@@ -35,8 +35,11 @@
 //-------------------------------------------------------------------------------------------------
 // Public variables
 //-------------------------------------------------------------------------------------------------
-/** These symbols come from the linker script. Their address must be used, not their value. */
-extern unsigned int *_bss_start, *_bss_end;
+// These symbols come from the linker script. Their address must be used, not their value
+/** The BSS (variables that value will default to zero) section start (4-byte aligned). */
+extern unsigned int *_bss_start;
+/** The BSS section end (4-byte aligned). */
+extern unsigned int *_bss_end;
 
 //-------------------------------------------------------------------------------------------------
 // Private functions
