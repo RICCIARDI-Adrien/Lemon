@@ -2,7 +2,6 @@
  * @see Network_Base.h for description.
  * @author Adrien RICCIARDI
  */
-#include <Network.h>
 #include <Network_Base.h>
 #include <System.h>
 
@@ -57,6 +56,16 @@ typedef struct
 	unsigned char MAC_Address[NETWORK_MAC_ADDRESS_SIZE]; //!< The MAC address corresponding to the IP address.
 	int Is_Entry_Free; //!< Tell if this record contains valid data or not.
 } TNetworkBaseARPTableEntry;
+
+/** The TCP pseudo header used to compute the TCP header checksum. */
+typedef struct __attribute__((packed))
+{
+	unsigned int Source_Address; //!< The packet IP source address.
+	unsigned int Destination_Address; //!< The packet IP destination address.
+	unsigned char Zero; //!< This field is always zero.
+	unsigned char Protocol; //!< This field is always set to the TCP protocol value.
+	unsigned short TCP_Header_And_Payload_Length; //!< Normal TCP header plus TCP payload size in bytes.
+} TNetworkBaseTCPPseudoHeader;
 
 //-------------------------------------------------------------------------------------------------
 // Public variables
@@ -216,23 +225,32 @@ static void NetworkBaseARPSendReply(void *Pointer_Packet_Buffer)
 	NetworkBaseEthernetSendPacket(sizeof(TNetworkEthernetHeader) + sizeof(TNetworkBaseARPPayload), Pointer_Packet_Buffer);
 }
 
-/** Compute the IPv4 header checksum.
- * @param Pointer_IP_Header The IP header to compute checksum for.
- * @return The checksum value (the result is directly in big endian if the header content is in big endian yet).
+/** Compute one's complement checksum.
+ * @param Pointer_Data The data to compute checksum on.
+ * @param Bytes_Count The data size in bytes.
+ * @return The checksum value (the result is directly in big endian if the data content is in big endian yet).
  */
-static inline unsigned short NetworkBaseIPComputeChecksum(TNetworkIPv4Header *Pointer_IP_Header)
+static inline unsigned short NetworkBaseComputeChecksum(void *Pointer_Data, unsigned int Bytes_Count)
 {
-	unsigned int Checksum = 0, i;
-	unsigned short *Pointer_Header_Words = (unsigned short *) Pointer_IP_Header;
+	unsigned int Checksum = 0, i, Words_Count;
+	unsigned short *Pointer_Header_Words = (unsigned short *) Pointer_Data;
+	unsigned char *Pointer_Header_Bytes;
 	
-	// Set the checksum field to zero as told by the RFC
-	Pointer_IP_Header->Header_Checksum = 0;
+	// Get the amount of 16-bit complete words
+	Words_Count = Bytes_Count >> 1;
 	
-	// Compute the header sum
-	for (i = 0; i < sizeof(TNetworkIPv4Header) / sizeof(unsigned short); i++)
+	// Compute the checksum on
+	for (i = 0; i < Words_Count; i++)
 	{
 		Checksum += *Pointer_Header_Words;
 		Pointer_Header_Words++;
+	}
+	
+	// Add the remaining byte if the amount of data is odd
+	if (Bytes_Count & 0x01)
+	{
+		Pointer_Header_Bytes = (unsigned char *) Pointer_Header_Words;
+		Checksum += *Pointer_Header_Bytes;
 	}
 	
 	// Add carry
@@ -413,10 +431,25 @@ int NetworkBaseIPSendPacket(TNetworkSocket *Pointer_Socket, unsigned int Payload
 	Pointer_IP_Header->Destination_IP_Address = Pointer_Socket->Destination_IP_Address; // Who will receive this packet
 	
 	// Compute the IP header checksum
-	Pointer_IP_Header->Header_Checksum = NetworkBaseIPComputeChecksum(Pointer_IP_Header); // No need to swap result to big endian because input data were swapped yet, giving a good result
+	Pointer_IP_Header->Header_Checksum = 0; // Set the checksum field to zero as told by the RFC
+	Pointer_IP_Header->Header_Checksum = NetworkBaseComputeChecksum(Pointer_IP_Header, sizeof(TNetworkIPv4Header)); // No need to swap result to big endian because input data were swapped yet, giving a good result
 	
 	// Transmit the packet
 	NetworkBaseEthernetSendPacket(Total_Packet_Size, Pointer_Packet_Buffer);
 	
 	return 0;
+}
+
+unsigned short NetworkBaseTCPComputeChecksum(TNetworkSocket *Pointer_Socket, void *Pointer_Data, unsigned int Bytes_Count)
+{
+	TNetworkBaseTCPPseudoHeader *Pointer_TCP_Pseudo_Header = (TNetworkBaseTCPPseudoHeader *) (Pointer_Data - sizeof(TNetworkBaseTCPPseudoHeader));
+	
+	// Fill the pseudo header
+	Pointer_TCP_Pseudo_Header->Source_Address = Network_Base_System_IP_Address.Address;
+	Pointer_TCP_Pseudo_Header->Destination_Address = Pointer_Socket->Destination_IP_Address;
+	Pointer_TCP_Pseudo_Header->Zero = 0;
+	Pointer_TCP_Pseudo_Header->Protocol = NETWORK_IP_PROTOCOL_TCP;
+	Pointer_TCP_Pseudo_Header->TCP_Header_And_Payload_Length = NETWORK_SWAP_WORD(Bytes_Count);
+	
+	return NetworkBaseComputeChecksum(Pointer_TCP_Pseudo_Header, sizeof(TNetworkBaseTCPPseudoHeader) + Bytes_Count);
 }

@@ -24,6 +24,16 @@ int NetworkBaseInitialize(TNetworkIPAddress *Pointer_System_IP_Address, TNetwork
 /** TODO */
 int NetworkBaseGetMACAddressFromARPTable(TNetworkIPAddress *Pointer_IP_Address, unsigned char *Pointer_MAC_Address);
 
+/** Perform the one's complement checksum on the provided TCP header and payload.
+ * @param Pointer_Socket The TCP socket used to transmit the packet.
+ * @param Pointer_Data The TCP header followed by the TCP payload.
+ * @param Bytes_Count The TCP header size plus the TCP payload size in bytes.
+ * @return The checksum to put in the corresponding TCP header field.
+ * @note The TCP checksum field must be set to zero prior to call this function.
+ * @warning The TCP pseudo header needed to compute the checksum will be appended just before the Pointer_Data address.
+ */
+unsigned short NetworkBaseTCPComputeChecksum(TNetworkSocket *Pointer_Socket, void *Pointer_Data, unsigned int Bytes_Count);
+
 /** Retrieve a packet from the network controller.
  * @param Pointer_Socket The socket containing all useful connection parameters.
  * @param Is_Call_Blocking Set to 1 to wait infinitely for a packet to be received, set to 0 to return instantly, telling if a packet was retrieved or not.

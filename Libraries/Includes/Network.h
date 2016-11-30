@@ -63,6 +63,14 @@
 /** A TFTP transfer block size in bytes. */
 #define NETWORK_TFTP_BLOCK_SIZE 512
 
+/** The TCP header size in 32-bit units shifted the right way to fit in the Header_Size_And_Flags field of the header. */
+#define NETWORK_TCP_HEADER_SIZE ((sizeof(TNetworkTCPHeader) / 4) << 12)
+
+/** The SYN flag bit in the TCP headers flags field. */
+#define NETWORK_TCP_FLAG_SYN_BIT 1
+/** The ACK flag bit in the TCP headers flags field. */
+#define NETWORK_TCP_FLAG_ACK_BIT 4
+
 //-------------------------------------------------------------------------------------------------
 // Types
 //-------------------------------------------------------------------------------------------------
@@ -84,10 +92,13 @@ typedef enum
 typedef struct
 {
 	unsigned char Destination_MAC_Address[NETWORK_MAC_ADDRESS_SIZE]; //!< Cache the MAC address corresponding to the IP machine to reach on the LAN when transmitting (target machine or gateway).
-	unsigned int Destination_IP_Address; //!< The IP address of the target machine (when transmitting), used also to check the source of a received packet.
-	unsigned short Source_Port; //!< When transmitting, indicate the layer 4 port from where data were transmitted. When receiving, allow to match the received packet destination port with it to be sure that the packet is destined to this socket.
-	unsigned short Destination_Port; //!< Indicate the target machine port on transmission.
+	unsigned int Destination_IP_Address; //!< The IP address of the target machine (when transmitting), used also to check the source of a received packet (stored in big endian).
+	unsigned short Source_Port; //!< When transmitting, indicate the layer 4 port from where data were transmitted. When receiving, allow to match the received packet destination port with it to be sure that the packet is destined to this socket (stored in big endian).
+	unsigned short Destination_Port; //!< Indicate the target machine port on transmission (stored in big endian).
 	TNetworkIPProtocol IP_Protocol; //<! The type of the data embedded in the IP packet.
+	unsigned int TCP_Sequence_Number; //<! The TCP sequence number (stored in little endian).
+	unsigned int TCP_Acknowledgement_Number; //<! The TCP acknowledgement number (stored in little endian).
+	int Is_TCP_Connection_Established; //<! Tell if the socket is successfully connected to a server or not.
 } TNetworkSocket;
 
 /** An ethernet header. No VLAN field is allowed. */
@@ -184,6 +195,19 @@ typedef struct __attribute__((packed))
 	};
 } TNetworkTFTPPacket;
 
+/** A TCP header. */
+typedef struct __attribute__((packed))
+{
+	unsigned short Source_Port; //!< The sender's port.
+	unsigned short Destination_Port; //!< The receiver's port.
+	unsigned int Sequence_Number; //!< TODO
+	unsigned int Acknowledgment_Number; //!< TODO
+	unsigned short Header_Size_And_Flags; //!< The header size in 32-bit unit (use NETWORK_TCP_HEADER_SIZE as no TCP option is used) ORed with NETWORK_TCP_FLAG_xxx flags.
+	unsigned short Window_Size; //<! How many bytes the transmitter can send before waiting for the receiver to acknowledge.
+	unsigned short Checksum; //!< Data and header checksum.
+	unsigned short Urgent_Pointer; //!< Used only if the URG flag is set, point to urgent data first byte.
+} TNetworkTCPHeader;
+
 //-------------------------------------------------------------------------------------------------
 // Functions
 //-------------------------------------------------------------------------------------------------
@@ -251,5 +275,14 @@ int NetworkUDPReceiveBuffer(TNetworkSocket *Pointer_Socket, int Is_Call_Blocking
  * @return 2 if no packet was received in the allowed time.
  */
 int NetworkTFTPReceivePacket(TNetworkSocket *Pointer_Socket, unsigned int Timeout_Milliseconds, unsigned int *Pointer_Packet_Size, TNetworkTFTPPacket *Pointer_Packet);
+
+/** Connect to a listening TCP server.
+ * @param Pointer_Socket A socket initialized with NetworkInitializeSocket().
+ * @return 0 if the connection was successfully established,
+ * @return 1 if a transmission error occurred,
+ * @return 2 if the TCP server did not reply.
+ * @note On output, the TCP-specific fields of the provided socket are initialized.
+ */
+int NetworkTCPConnectToServer(TNetworkSocket *Pointer_Socket);
 
 #endif
