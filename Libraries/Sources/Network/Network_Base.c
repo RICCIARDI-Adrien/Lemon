@@ -401,19 +401,15 @@ int NetworkBaseIPReceivePacket(TNetworkSocket *Pointer_Socket, int Is_Call_Block
 	}
 }
 
-int NetworkBaseIPSendPacket(TNetworkSocket *Pointer_Socket, unsigned int Payload_Size, unsigned char *Pointer_Packet_Buffer)
+int NetworkBaseIPSendPacket(TNetworkSocket *Pointer_Socket, unsigned int Payload_Size, void *Pointer_Packet_Buffer)
 {
-	TNetworkEthernetHeader *Pointer_Ethernet_Header;
-	TNetworkIPv4Header *Pointer_IP_Header;
+	TNetworkEthernetHeader *Pointer_Ethernet_Header = (TNetworkEthernetHeader *) Pointer_Packet_Buffer;
+	TNetworkIPv4Header *Pointer_IP_Header = (TNetworkIPv4Header *) (Pointer_Packet_Buffer + sizeof(TNetworkEthernetHeader));
 	unsigned int Total_Packet_Size;
 	
 	// Discard the packet if it is too big
 	Total_Packet_Size = sizeof(TNetworkEthernetHeader) + sizeof(TNetworkIPv4Header) + Payload_Size;
 	if (Total_Packet_Size > NETWORK_MAXIMUM_PACKET_SIZE) return 1;
-	
-	// Make the headers point at the right place
-	Pointer_Ethernet_Header = (TNetworkEthernetHeader *) Pointer_Packet_Buffer;
-	Pointer_IP_Header = (TNetworkIPv4Header *) &Pointer_Packet_Buffer[sizeof(TNetworkEthernetHeader)];
 	
 	// Fill the ethernet header
 	MemoryCopyArea(Pointer_Socket->Destination_MAC_Address, Pointer_Ethernet_Header->Destination_MAC_Address, NETWORK_MAC_ADDRESS_SIZE); // Set the destination MAC address

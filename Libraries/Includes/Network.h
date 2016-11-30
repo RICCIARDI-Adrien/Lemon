@@ -35,27 +35,11 @@
  */
 #define NETWORK_INITIALIZE_IP_ADDRESS(Byte_1, Byte_2, Byte_3, Byte_4) (((unsigned char) Byte_4 << 24) | ((unsigned char) Byte_3 << 16) | ((unsigned char) Byte_2 << 8) | (unsigned char) Byte_1)
 
-/** TODO */
-#define NETWORK_INITIALIZE_SUBNET_MASK(Byte_1, Byte_2, Byte_3, Byte_4) NETWORK_SWAP_DOUBLE_WORD((255 << 24) | (((Byte_1 & (1 << 7)) ? 255 : 0) << 16) | (((Byte_1 & (1 << 6)) ? 255 : 0) << 8))
-
 /** Find the subnet mask according to the IP address class.
  * @param IP_Address The IP address in big endian mode.
  * @return The corresponding subnet mask in big endian mode too.
  */
 #define NETWORK_GET_SUBNET_MASK_FROM_IP_ADDRESS(IP_Address) NETWORK_SWAP_DOUBLE_WORD((unsigned int) ((255 << 24) | (((IP_Address & 0x00000080) ? 255 : 0) << 16) | (((IP_Address & 0x00000040) ? 255 : 0) << 8))) // The unsigned int cast must forced or the result will be casted to a signed int, giving bad signed shifts when calling the swapping macro
-
-#if 0
-/** Initialize a TNetworkSocket with the provided IP address. The subnet mask is automatically determined from the IP address.
- * @param IP_Address_Byte_1 The first address byte.
- * @param IP_Address_Byte_2 The second address byte.
- * @param IP_Address_Byte_3 The third address byte.
- * @param IP_Address_Byte_4 The fourth address byte.
- * @return An initializer for a socket structure.
- */
-#define NETWORK_INITIALIZE_SOCKET(IP_Address_Byte_1, IP_Address_Byte_2, IP_Address_Byte_3, IP_Address_Byte_4) \
-{ \
-	.Address = NETWORK_INITIALIZE_IP_ADDRESS(IP_Address_Byte_1, IP_Address_Byte_2, IP_Address_Byte_3, IP_Address_Byte_4)
-#endif
 
 /** The IPv4 "More Fragment" (MF) flag, tuned for the Flags_And_Fragment_Offset field of the IPv4 header (the field must be converted to little endian before testing the flag). */
 #define NETWORK_IPV4_HEADER_FLAG_MORE_FRAGMENT (1 << 13)

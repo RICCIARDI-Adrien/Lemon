@@ -18,10 +18,19 @@ TNetworkIPAddress Network_Base_Gateway_IP_Address;
 //-------------------------------------------------------------------------------------------------
 // Functions
 //-------------------------------------------------------------------------------------------------
-/** TODO */
+/** Initialize the low-level part of the network stack (clear the ARP table, flush the network controller buffers...).
+ * @param Pointer_System_IP_Address The IP address attributed to the system.
+ * @param Pointer_Gateway_IP_Address The IP address used to communicate with a non-local network.
+ * @return 0 if the operation was successful.
+ */
 int NetworkBaseInitialize(TNetworkIPAddress *Pointer_System_IP_Address, TNetworkIPAddress *Pointer_Gateway_IP_Address);
 
-/** TODO */
+/** Retrieve the MAC address corresponding to the specified IP address. Perform an ARP request if the MAC address is not present in the internal cache.
+ * @param Pointer_IP_Address The IP address to find the corresponding MAC address.
+ * @param Pointer_MAC_Address On output, contain the retrieved MAC address.
+ * @return 0 if the MAC address was successfully retrieved,
+ * @return 1 if an error occurred (the recipient did not answer).
+ */
 int NetworkBaseGetMACAddressFromARPTable(TNetworkIPAddress *Pointer_IP_Address, unsigned char *Pointer_MAC_Address);
 
 /** Perform the one's complement checksum on the provided TCP header and payload.
@@ -53,6 +62,6 @@ int NetworkBaseIPReceivePacket(TNetworkSocket *Pointer_Socket, int Is_Call_Block
  * @return 1 if the packet was not sent because it's size was too big.
  * @warning The packet buffer layer 4 header must let enough room to put an ethernet header and an IPv4 header before it. The layer 4 header must start at sizeof(TNetworkEthernetHeader) + sizeof(TNetworkIPv4Header) bytes offset.
  */
-int NetworkBaseIPSendPacket(TNetworkSocket *Pointer_Socket, unsigned int Payload_Size, unsigned char *Pointer_Packet_Buffer); // TODO void
+int NetworkBaseIPSendPacket(TNetworkSocket *Pointer_Socket, unsigned int Payload_Size, void *Pointer_Packet_Buffer);
 
 #endif
