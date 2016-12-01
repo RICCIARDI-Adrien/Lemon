@@ -100,17 +100,17 @@ void FileClose(unsigned int File_ID);
  */
 int FileDelete(char *String_File_Name);
 
-// TODO
 /** Rename an existing file.
- * @param Current_File_Name The current file name.
- * @param New_File_Name The new name used to rename the file.
+ * @param String_Current_File_Name The current file name.
+ * @param String_New_File_Name The new name used to rename the file.
  * @return ERROR_CODE_NO_ERROR if the file was correctly renamed,
- * @return ERROR_CODE_BAD_FILENAME if Current_File_Name or New_File_Name is an empty string,
+ * @return ERROR_CODE_BAD_FILENAME if String_Current_File_Name or String_New_File_Name is an empty string,
  * @return ERROR_CODE_FILE_NOT_FOUND if the file was not found,
  * @return ERROR_CODE_FILE_ALREADY_EXISTS if the new name is attributed to an existing file.
  */
-//int FileRename(char *Current_File_Name, char *New_File_Name); // TODO à refaire
+int FileRename(char *String_Current_File_Name, char *String_New_File_Name);
 
+// TODO ?
 // FileCopy (avec calcul espace restant disque avant copie)
 
 

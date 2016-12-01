@@ -419,3 +419,91 @@ Exit:
 	FileDelete("_test_");
 	return Return_Value;
 }
+
+int TestsFileRename(void)
+{
+	int Result, Return_Value = 1;
+	unsigned int File_ID;
+	
+	// Create two empty files
+	// First file
+	Result = FileOpen("_test1_", 'w', &File_ID);
+	if (Result != ERROR_CODE_NO_ERROR)
+	{
+		DisplayMessageErrorAndCode("while creating the first file", Result);
+		goto Exit;
+	}
+	FileClose(File_ID);
+	// Second file
+	Result = FileOpen("_test2_", 'w', &File_ID);
+	if (Result != ERROR_CODE_NO_ERROR)
+	{
+		DisplayMessageErrorAndCode("while creating the second file", Result);
+		goto Exit;
+	}
+	FileClose(File_ID);
+	
+	// Provide two bad file names
+	Result = FileRename("", "");
+	if (Result != ERROR_CODE_BAD_FILE_NAME)
+	{
+		DisplayMessageErrorAndCode(": FileRename(\"\", \"\") did not fail with the expected error", Result);
+		goto Exit;
+	}
+	
+	// Provide a bad file name as first argument
+	Result = FileRename("", "_test1_");
+	if (Result != ERROR_CODE_BAD_FILE_NAME)
+	{
+		DisplayMessageErrorAndCode(": FileRename(\"\", \"_test1_\") did not fail with the expected error", Result);
+		goto Exit;
+	}
+	
+	// Provide a bad file name as second argument
+	Result = FileRename("_test1_", "");
+	if (Result != ERROR_CODE_BAD_FILE_NAME)
+	{
+		DisplayMessageErrorAndCode(": FileRename(\"_test1_\", \"\") did not fail with the expected error", Result);
+		goto Exit;
+	}
+	
+	// Provide an existing file as the new file name
+	Result = FileRename("_test1_", "_test2_");
+	if (Result != ERROR_CODE_FILE_ALREADY_EXISTS)
+	{
+		DisplayMessageErrorAndCode(": FileRename(\"_test1_\", \"_test2_\") while _test2_ file exists did not fail with the expected error", Result);
+		goto Exit;
+	}
+	
+	// Provide a non-existing file as the file to rename
+	Result = FileRename("_test28_", "_test3_");
+	if (Result != ERROR_CODE_FILE_NOT_FOUND)
+	{
+		DisplayMessageErrorAndCode(": FileRename(\"_test28_\", \"_test2_\") while _test28_ file do not exists did not fail with the expected error", Result);
+		goto Exit;
+	}
+	
+	// Do a real rename
+	Result = FileRename("_test1_", "_test3_");
+	if (Result != ERROR_CODE_NO_ERROR)
+	{
+		DisplayMessageErrorAndCode("while doing a normal rename operation", Result);
+		goto Exit;
+	}
+	// Make sure the file was successfully renamed
+	Result = FileOpen("_test3_", 'r', &File_ID);
+	if (Result != ERROR_CODE_NO_ERROR)
+	{
+		DisplayMessageErrorAndCode("while trying to open the renamed file", Result);
+		goto Exit;
+	}
+	FileClose(File_ID);
+	
+	Return_Value = 0;
+	
+Exit:
+	FileDelete("_test1_");
+	FileDelete("_test2_");
+	FileDelete("_test3_");
+	return Return_Value;
+}

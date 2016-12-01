@@ -72,7 +72,7 @@ int FileRename(char *String_Current_File_Name, char *String_New_File_Name)
 	TFilesListEntry *Pointer_Files_List_Entry;
 	
 	// Check if file names are valid
-	if (String_New_File_Name[0] == 0) return ERROR_CODE_BAD_FILE_NAME;
+	if ((String_Current_File_Name[0] == 0) || (String_New_File_Name[0] == 0)) return ERROR_CODE_BAD_FILE_NAME;
 	
 	// Check if the new name is not assigned yet
 	Pointer_Files_List_Entry = FileSystemReadFilesListEntry(String_New_File_Name);

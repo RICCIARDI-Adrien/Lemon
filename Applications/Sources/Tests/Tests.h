@@ -67,6 +67,12 @@ int TestsFileFillBlocksList(void);
  */
 int TestsFileCloseDeletedOpenedFile(void);
 
+/** Check the rename function robustness against bad parameters and if renaming a file works.
+ * @return 0 if test was successful,
+ * @return 1 if the test failed.
+ */
+int TestsFileRename(void);
+
 // Memory API
 /** Copy a small amount of data.
  * @return 0 if test was successful,

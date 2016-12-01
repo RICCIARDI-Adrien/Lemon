@@ -41,6 +41,10 @@ static TTest Tests[] =
 		"Blocks List complete fill",
 		TestsFileFillBlocksList
 	},
+	{
+		"File renaming",
+		TestsFileRename
+	},
 	// Memory API tests
 	{
 		"MemoryCopyArea() with a small area size",
