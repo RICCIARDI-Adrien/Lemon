@@ -4,6 +4,7 @@
 PATH_SOURCES = Sources
 PATH_OBJECTS = Objects
 PATH_INCLUDES = Includes
+PATH_TOOLS = ../Installer/Tools
 
 CCFLAGS += -DCONFIGURATION_BUILD_INSTALLER=0 -DSTRING_BUILD_CONFIGURATION_VARIABLES=$(STRING_BUILD_CONFIGURATION_VARIABLES)
 LDFLAGS = -T Linker_Script.ld
@@ -30,10 +31,20 @@ include Makefile_Core.mk
 OBJECTS_SHELL = $(PATH_OBJECTS)/Shell.o $(PATH_OBJECTS)/Shell_Command_Copy_File.o $(PATH_OBJECTS)/Shell_Command_Delete_File.o $(PATH_OBJECTS)/Shell_Command_Download.o $(PATH_OBJECTS)/Shell_Command_File_Size.o $(PATH_OBJECTS)/Shell_Command_List.o $(PATH_OBJECTS)/Shell_Command_Rename_File.o
 OBJECTS = $(OBJECTS_CORE) $(OBJECTS_DRIVERS) $(OBJECTS_FILE_SYSTEM) $(OBJECTS_SHELL)
 
-all: clean $(PATH_OBJECTS)/MBR.bin $(OBJECTS)
+all: clean $(PATH_OBJECTS)/MBR.bin
+ifeq ($(SYSTEM_HARD_DISK_DRIVER),ram)
+    all: convert_files
+endif
+all: $(OBJECTS)
+all:
 	$(GLOBAL_TOOL_LINKER) $(LDFLAGS) $(OBJECTS) -o $(PATH_OBJECTS)/Kernel.bin
 	######## Build successful ########
 	@ls -l $(PATH_OBJECTS)/Kernel.bin | awk '{print "Kernel size : " $$5 + 512 " bytes"}'
+
+#ifeq ($(SYSTEM_
+convert_files: $(BINARIES_TO_HEADER_CONVERTER)
+	######## Embed applications data into image ########
+	@$(BINARIES_TO_HEADER_CONVERTER) Binaries_To_Header_Converter_List.txt $(PATH_INCLUDES)/Embedded_Files_Data.h
 	
 #------------------------------------------------------------------------------------------------------------------------------
 # System-specific drivers (not needed by the Installer)

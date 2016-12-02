@@ -16,6 +16,8 @@ Système
 
 - un fichier vide ouvert en écriture consomme un bloc
 
+- unifier codes erreurs FileSystemLoad
+
 Doc
 ---
 Rajouter dans doc la liste des programmes nécessaires pour compiler l'OS

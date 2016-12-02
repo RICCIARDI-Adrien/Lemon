@@ -60,7 +60,8 @@ endef
 #--------------------------------------------------------------------------------------------------
 # Rules
 #--------------------------------------------------------------------------------------------------
-all: clean system libraries applications installer
+# Applications must be built before system to allow them to be embedded in a RAM disk
+all: clean libraries applications system installer
 
 clean:
 	@cd Installer && $(MAKE) clean
@@ -99,6 +100,7 @@ help:
 	@echo "    + 48 (mandatory for hard disk size > 128GB)"
 	@echo "- SYSTEM_HARD_DISK_DRIVER : the hard disk driver to use"
 	@echo "    + ide (default value)"
+	@echo "    + ram"
 	@echo "    + sata"
 	@echo "- SYSTEM_ETHERNET_CONTROLLER_DRIVER : the driver to use for the network controller"
 	@echo "    + none (default value, disabling ethernet controller)"

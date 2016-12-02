@@ -33,6 +33,8 @@
 	#define STRING_KERNEL_ERROR_UNKNOWN_SYSTEM_CALL "Erreur : le programme a demand\202 un appel syst\212me inconnu.\nAppuyez sur Entr\202e pour continuer.\n"
 	#define STRING_KERNEL_ERROR_HARD_DISK_NOT_LBA_COMPATIBLE "Erreur : le disque dur n'est pas compatible avec l'adressage LBA.\n"
 	#define STRING_KERNEL_ERROR_SATA_HARD_DISK_NOT_FOUND "Erreur : le disque dur SATA est introuvable.\n"
+	#define STRING_KERNEL_ERROR_FAILED_TO_CREATE_RAM_DISK "Erreur : impossible de cr\202er le syst\212me de fichiers en RAM.\n"
+	#define STRING_KERNEL_ERROR_FAILED_TO_POPULATE_RAM_DISK "Erreur : impossible d'installer les fichiers dans le disque RAM.\n"
 	#define STRING_KERNEL_ERROR_ETHERNET_CONTROLLER_NOT_FOUND "Erreur : aucun contr\223leur ethernet n'a \202t\202 d\202tect\202.\n"
 	#define STRING_KERNEL_ERROR_ETHERNET_CONTROLLER_BAD_DRIVER "Erreur : le contr\223leur ethernet n'est pas compatible avec le pilote.\n"
 	
@@ -94,7 +96,7 @@
 	#define STRING_SHELL_FILE_SIZE_SHOW_SIZE_2 " octets.\n"
 
 	// Shell version command
-	#define STRING_SHELL_VERSION "Version du syst\212me : 2.4.1 (" __DATE__ ", " __TIME__ ")\n" \
+	#define STRING_SHELL_VERSION "Version du syst\212me : 2.5.0 (" __DATE__ ", " __TIME__ ")\n" \
 		"Copyright (C) Adrien Ricciardi\n\n" \
 		"Configuration :\n" \
 		STRING_BUILD_CONFIGURATION_VARIABLES

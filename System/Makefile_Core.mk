@@ -8,6 +8,8 @@ OBJECTS_CORE = $(PATH_OBJECTS)/Architecture.o $(PATH_OBJECTS)/Debug.o $(PATH_OBJ
 OBJECTS_DRIVERS += $(PATH_OBJECTS)/Driver_Keyboard.o $(PATH_OBJECTS)/Driver_PIC.o $(PATH_OBJECTS)/Driver_Screen.o $(PATH_OBJECTS)/Driver_Timer.o $(PATH_OBJECTS)/Driver_UART.o
 OBJECTS_FILE_SYSTEM = $(PATH_OBJECTS)/File.o $(PATH_OBJECTS)/File_System.o
 
+BINARIES_TO_HEADER_CONVERTER = $(PATH_TOOLS)/Binaries_To_Header_Converter.out
+
 #------------------------------------------------------------------------------------------------------------------------------
 # User configuration
 #------------------------------------------------------------------------------------------------------------------------------
@@ -21,8 +23,13 @@ endif
 ifeq ($(SYSTEM_HARD_DISK_DRIVER),sata)
 	OBJECTS_DRIVERS += $(PATH_OBJECTS)/Driver_Hard_Disk_SATA.o
 	DEPENDENCIES_INCLUDE_PCI = 1
+	CCFLAGS += -DCONFIGURATION_BUILD_RAM_DISK=0
+else ifeq ($(SYSTEM_HARD_DISK_DRIVER),ram)
+	OBJECTS_DRIVERS += $(PATH_OBJECTS)/Driver_Hard_Disk_RAM_Disk.o
+	CCFLAGS += -DCONFIGURATION_BUILD_RAM_DISK=1
 else
 	OBJECTS_DRIVERS += $(PATH_OBJECTS)/Driver_Hard_Disk_IDE.o
+	CCFLAGS += -DCONFIGURATION_BUILD_RAM_DISK=0
 endif
 
 # Compile PCI driver if needed
@@ -43,6 +50,12 @@ check_configuration_variables:
 	@# Check SYSTEM_RAM_SIZE value
 	@if [ $(SYSTEM_RAM_SIZE) -lt 2 ]; then printf "\033[31mError : the SYSTEM_RAM_SIZE variable minimum value is 2.\033[0m\n"; false; fi
 	@if [ $(SYSTEM_RAM_SIZE) -gt 4096 ]; then printf "\033[31mError : the SYSTEM_RAM_SIZE variable maximum value is 4096.\033[0m\n"; false; fi
+
+#------------------------------------------------------------------------------------------------------------------------------
+# Converter tool program
+#------------------------------------------------------------------------------------------------------------------------------
+$(BINARIES_TO_HEADER_CONVERTER): $(PATH_TOOLS)/Binaries_To_Header_Converter.c
+	gcc -W -Wall $(PATH_TOOLS)/Binaries_To_Header_Converter.c -o $(BINARIES_TO_HEADER_CONVERTER)
 
 #------------------------------------------------------------------------------------------------------------------------------
 # System core
@@ -73,6 +86,9 @@ $(PATH_OBJECTS)/System_Calls.o: $(PATH_SOURCES)/System_Calls.c
 #------------------------------------------------------------------------------------------------------------------------------
 $(PATH_OBJECTS)/Driver_Hard_Disk_IDE.o: $(PATH_SOURCES)/Drivers/Driver_Hard_Disk_IDE.c
 	$(GLOBAL_TOOL_COMPILER) $(CCFLAGS) -c $(PATH_SOURCES)/Drivers/Driver_Hard_Disk_IDE.c -o $(PATH_OBJECTS)/Driver_Hard_Disk_IDE.o
+
+$(PATH_OBJECTS)/Driver_Hard_Disk_RAM_Disk.o: $(PATH_SOURCES)/Drivers/Driver_Hard_Disk_RAM_Disk.c
+	$(GLOBAL_TOOL_COMPILER) $(CCFLAGS) -c $(PATH_SOURCES)/Drivers/Driver_Hard_Disk_RAM_Disk.c -o $(PATH_OBJECTS)/Driver_Hard_Disk_RAM_Disk.o
 
 $(PATH_OBJECTS)/Driver_Hard_Disk_SATA.o: $(PATH_SOURCES)/Drivers/Driver_Hard_Disk_SATA.c
 	$(GLOBAL_TOOL_COMPILER) $(CCFLAGS) -c $(PATH_SOURCES)/Drivers/Driver_Hard_Disk_SATA.c -o $(PATH_OBJECTS)/Driver_Hard_Disk_SATA.o

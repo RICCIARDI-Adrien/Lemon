@@ -59,7 +59,8 @@ void __attribute__((section(".init"))) KernelEntryPoint(void)
 {
 	unsigned int *Pointer_Dword;
 	int Result;
-	#if !CONFIGURATION_BUILD_INSTALLER
+	char *String_Error_Message;
+	#if (!CONFIGURATION_BUILD_INSTALLER) && (!CONFIGURATION_BUILD_RAM_DISK)
 		unsigned int Partition_Starting_Sector;
 	#endif
 	
@@ -93,19 +94,33 @@ void __attribute__((section(".init"))) KernelEntryPoint(void)
 	Result = HardDiskInitialize();
 	if (Result != 0)
 	{
-		ScreenSetColor(SCREEN_COLOR_RED);
-		
 		switch (Result)
 		{
 			case 1:
-				ScreenWriteString(STRING_KERNEL_ERROR_HARD_DISK_NOT_LBA_COMPATIBLE);
+				String_Error_Message = STRING_KERNEL_ERROR_HARD_DISK_NOT_LBA_COMPATIBLE;
 				break;
 				
 			case 2:
-				ScreenWriteString(STRING_KERNEL_ERROR_SATA_HARD_DISK_NOT_FOUND);
+				String_Error_Message = STRING_KERNEL_ERROR_SATA_HARD_DISK_NOT_FOUND;
+				break;
+				
+			case 3:
+				String_Error_Message = STRING_KERNEL_ERROR_FAILED_TO_CREATE_RAM_DISK;
+				break;
+				
+			case 4:
+				String_Error_Message = STRING_KERNEL_ERROR_INVALID_FILE_SYSTEM;
+				break;
+				
+			case 5:
+				String_Error_Message = STRING_KERNEL_ERROR_FAILED_TO_POPULATE_RAM_DISK;
 				break;
 		}
-			
+		
+		// Display the error message
+		ScreenSetColor(SCREEN_COLOR_RED);
+		ScreenWriteString(String_Error_Message);
+		
 		// Wait for Enter key to reboot
 		KernelWaitForEnterKey();
 		KeyboardRebootSystem();
@@ -137,8 +152,8 @@ void __attribute__((section(".init"))) KernelEntryPoint(void)
 		}
 	#endif
 	
-	// Load file system (can't do that in the Installer program)
-	#if !CONFIGURATION_BUILD_INSTALLER
+	// Load file system (can't do that in the Installer program nor when a RAM disk is used because the RAM disk already loaded the file system)
+	#if (!CONFIGURATION_BUILD_INSTALLER) && (!CONFIGURATION_BUILD_RAM_DISK)
 		// Retrieve the partition starting sector from the partition table located in the MBR
 		Partition_Starting_Sector = *((unsigned int *) (CONFIGURATION_SYSTEM_MBR_LOAD_ADDRESS + 446 + 8)); // The partition table is located at offset 446, and the first partition starting LBA sector is located at offset 8 of the beginning of the partition table
 		

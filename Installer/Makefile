@@ -1,13 +1,12 @@
 # Installer makefile.
 # There is no need to take dependencies into account as the whole system must be entirely rebuilded every time.
 # Author : Adrien RICCIARDI
-BINARIES_TO_HEADER_CONVERTER = Tools/Binaries_To_Header_Converter.out
-
 PATH_SOURCES = ../System/Sources
 PATH_INCLUDES = ../System/Includes
 PATH_OBJECTS = Objects
 PATH_BINARIES = Binaries
 PATH_INSTALLER_SOURCES = Sources
+PATH_TOOLS = Tools
 
 CCFLAGS += -DCONFIGURATION_BUILD_INSTALLER=1
 LDFLAGS = -T ../System/Linker_Script.ld
@@ -19,9 +18,19 @@ include ../System/Makefile_Core.mk
 OBJECTS_SHELL = $(PATH_OBJECTS)/Shell.o $(PATH_OBJECTS)/Shell_Partition_Menu.o
 OBJECTS = $(OBJECTS_CORE) $(OBJECTS_DRIVERS) $(OBJECTS_FILE_SYSTEM) $(OBJECTS_SHELL)
 
-all: clean Tools/Binaries_To_Header_Converter.out convert_files $(PATH_OBJECTS)/MBR.bin $(OBJECTS)
+all: clean $(PATH_OBJECTS)/MBR.bin
+# Build the installer only if the system won't use a RAM disk
+ifneq ($(SYSTEM_HARD_DISK_DRIVER),ram)
+    all: convert_files $(OBJECTS)
+endif
+all:
+ifeq ($(SYSTEM_HARD_DISK_DRIVER),ram)
+	@# The regular kernel will be directly booted when using a RAM disk
+	cp ../System/Objects/Kernel.bin $(PATH_OBJECTS)
+else
 	######## Linking installer ########
 	$(GLOBAL_TOOL_LINKER) $(LDFLAGS) $(OBJECTS) -o $(PATH_OBJECTS)/Kernel.bin
+endif
 	######## Creating floppy image ########
 	@cat $(PATH_OBJECTS)/MBR.bin $(PATH_OBJECTS)/Kernel.bin > $(PATH_BINARIES)/Raw_Image.bin
 	@dd if=/dev/zero of=$(PATH_BINARIES)/Lemon_Installer_Floppy_Image.img bs=512 count=2880 status=noxfer
@@ -42,16 +51,10 @@ clean_installer_specific_files:
 	rm -f $(BINARIES_TO_HEADER_CONVERTER)
 	@# Clean generated images
 	rm -f $(PATH_BINARIES)/*
-
-#------------------------------------------------------------------------------------------------------------------------------
-# Converter tool program
-#------------------------------------------------------------------------------------------------------------------------------
-$(BINARIES_TO_HEADER_CONVERTER): Tools/Binaries_To_Header_Converter.c
-	gcc -W -Wall Tools/Binaries_To_Header_Converter.c -o $(BINARIES_TO_HEADER_CONVERTER)
-
-convert_files:
-	######## Embed applications data into installer image ########
-	@$(BINARIES_TO_HEADER_CONVERTER) Tools/Binaries_To_Header_Converter_List.txt $(PATH_INSTALLER_SOURCES)/Shell/Embedded_Files_Data.h
+	
+convert_files: $(BINARIES_TO_HEADER_CONVERTER)
+	######## Embed applications data into image ########
+	@$(BINARIES_TO_HEADER_CONVERTER) $(PATH_TOOLS)/Binaries_To_Header_Converter_List.txt $(PATH_INSTALLER_SOURCES)/Shell/Embedded_Files_Data.h
 
 #------------------------------------------------------------------------------------------------------------------------------
 # Shell

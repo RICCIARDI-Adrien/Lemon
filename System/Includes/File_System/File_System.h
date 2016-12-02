@@ -126,4 +126,23 @@ unsigned int FileSystemAllocateBlock(void);
  */
 int FileSystemCreate(unsigned int Blocks_Count, unsigned int Files_Count, unsigned int Starting_Sector);
 
+/** Compute a file system whole size (file system structures plus storage data) in sectors.
+ * @param Blocks_Count How many entries in the Blocks List.
+ * @param Files_Count How many entries in the Files List.
+ * @return The total file system size in sectors.
+ */
+static inline unsigned int FileSystemComputeSizeSectors(unsigned int Blocks_Count, unsigned int Files_Count)
+{
+	unsigned int Size;
+	
+	// Compute the size in bytes
+	Size = (Blocks_Count * sizeof(unsigned int)) + (Files_Count * sizeof(TFilesListEntry)) + (Blocks_Count * CONFIGURATION_FILE_SYSTEM_BLOCK_SIZE_BYTES) + (CONFIGURATION_FILE_SYSTEM_STARTING_SECTOR_OFFSET * FILE_SYSTEM_SECTOR_SIZE_BYTES); // Size of the file system + size of data area + (size of MBR + size of kernel)
+	// Add one more sector if the file system size is not a multiple of the sector size
+	if (Size % FILE_SYSTEM_SECTOR_SIZE_BYTES != 0) Size += FILE_SYSTEM_SECTOR_SIZE_BYTES;
+	// Convert size to sectors
+	Size /= FILE_SYSTEM_SECTOR_SIZE_BYTES;
+	
+	return Size;
+}
+
 #endif
