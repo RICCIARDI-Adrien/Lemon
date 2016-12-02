@@ -12,9 +12,9 @@ edit
 games
 ../Applications/Binaries/Help.lemon
 help
-Resources/Readme.txt
+../Applications/Resources/Readme.txt
 Readme.txt
-Resources/System.cfg
+../Applications/Resources/System.cfg
 System.cfg
 ../Applications/Binaries/Tests.lemon
 tests
