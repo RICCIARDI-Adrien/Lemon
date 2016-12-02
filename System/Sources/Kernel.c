@@ -130,21 +130,20 @@ void __attribute__((section(".init"))) KernelEntryPoint(void)
 		Result = EthernetInitialize();
 		if (Result != 0)
 		{
-			ScreenSetColor(SCREEN_COLOR_RED);
-			
 			switch (Result)
 			{
 				case 1:
-					ScreenWriteString(STRING_KERNEL_ERROR_ETHERNET_CONTROLLER_NOT_FOUND);
+					String_Error_Message = STRING_KERNEL_ERROR_ETHERNET_CONTROLLER_NOT_FOUND;
 					break;
 					
 				case 2:
-					ScreenWriteString(STRING_KERNEL_ERROR_ETHERNET_CONTROLLER_BAD_DRIVER);
-					break;
-					
-				default:
+					String_Error_Message = STRING_KERNEL_ERROR_ETHERNET_CONTROLLER_BAD_DRIVER;
 					break;
 			}
+			
+			// Display the error message
+			ScreenSetColor(SCREEN_COLOR_RED);
+			ScreenWriteString(String_Error_Message);
 			
 			// Wait for Enter key to reboot
 			KernelWaitForEnterKey();
