@@ -187,8 +187,8 @@ typedef struct __attribute__((packed))
 {
 	unsigned short Source_Port; //!< The sender's port.
 	unsigned short Destination_Port; //!< The receiver's port.
-	unsigned int Sequence_Number; //!< TODO
-	unsigned int Acknowledgment_Number; //!< TODO
+	unsigned int Sequence_Number; //!< On transmission, tell how many data have been received by the recipient since then. TODO
+	unsigned int Acknowledgment_Number; //!< On transmission, tell how many data have been successfully received from the recipient. TODO
 	unsigned short Header_Size_And_Flags; //!< The header size in 32-bit unit (use NETWORK_TCP_HEADER_SIZE as no TCP option is used) ORed with NETWORK_TCP_FLAG_xxx flags.
 	unsigned short Window_Size; //<! How many bytes the transmitter can send before waiting for the receiver to acknowledge.
 	unsigned short Checksum; //!< Data and header checksum.
@@ -272,7 +272,10 @@ int NetworkTFTPReceivePacket(TNetworkSocket *Pointer_Socket, unsigned int Timeou
  */
 int NetworkTCPConnectToServer(TNetworkSocket *Pointer_Socket);
 
-/** TODO 
+/** Send a data buffer to the connected recipient.
+ * @param Pointer_Socket The connected socket used to transmit data.
+ * @param Buffer_Size The buffer size in bytes.
+ * @param Pointer_Buffer The buffer content.
  * @return 0 if data were successfully sent and received by the recipient,
  * @return 1 if a transmission error occurred,
  * @return 2 if data were too big for the device transfer size (lower data size and retry),
@@ -281,9 +284,14 @@ int NetworkTCPConnectToServer(TNetworkSocket *Pointer_Socket);
  */
 int NetworkTCPSendBuffer(TNetworkSocket *Pointer_Socket, unsigned int Buffer_Size, void *Pointer_Buffer);
 
-// TODO
-int NetworkTCPDisconnectFromServer(TNetworkSocket *Pointer_Socket);
-
 // TODO réception : voir si FIN ou RST
+
+/** Disconnect from a previously connected recipient.
+ * @param Pointer_Socket The connected socket.
+ * @return 0 if the disconnection was successful,
+ * @return 1 if an error occurred,
+ * @return 2 if a time out occurred.
+ */
+int NetworkTCPDisconnectFromServer(TNetworkSocket *Pointer_Socket);
 
 #endif
