@@ -11,8 +11,8 @@ int NetworkTCPConnectToServer(TNetworkSocket *Pointer_Socket)
 {
 	unsigned char Packet_Buffer[NETWORK_MAXIMUM_PACKET_SIZE];
 	TNetworkTCPHeader *Pointer_TCP_Header = (TNetworkTCPHeader *) (Packet_Buffer + sizeof(TNetworkEthernetHeader) + sizeof(TNetworkIPv4Header));
-	unsigned int Timeout_Milliseconds = 5000, Data_Size, New_Sequence_Number, New_Acknowledgement_Number;
-	int Result, Is_Packet_Received = 0;
+	unsigned int Packet_Size, New_Sequence_Number, New_Acknowledgement_Number;
+	int Result;
 	
 	// Make sure the socket is considered not connected until it is really connected
 	Pointer_Socket->Is_TCP_Connection_Established = 0;
@@ -27,27 +27,8 @@ int NetworkTCPConnectToServer(TNetworkSocket *Pointer_Socket)
 	if (NetworkBaseIPSendPacket(Pointer_Socket, sizeof(TNetworkTCPHeader), Packet_Buffer) != 0) return 1;
 	
 	// Wait for the SYN-ACK packet sent by the server
-	Timeout_Milliseconds += SystemGetTimerValue();
-	while (SystemGetTimerValue() <= Timeout_Milliseconds)
-	{
-		// Check if a packet is available
-		Result = NetworkBaseIPReceivePacket(Pointer_Socket, 0, &Data_Size, Packet_Buffer);
-		if (Result == 1) return 1; // An error occurred
-		
-		// A packet was received
-		if (Result == 0)
-		{
-			// Make sure that the destination port is the good one
-			if (Pointer_TCP_Header->Destination_Port != Pointer_Socket->Source_Port) continue; // Wait for another packet
-			
-			// Make sure both SYN and ACK flags are set
-			if (!(Pointer_TCP_Header->Header_Size_And_Flags & NETWORK_SWAP_WORD(NETWORK_TCP_FLAG_SYN)) || !(Pointer_TCP_Header->Header_Size_And_Flags & NETWORK_SWAP_WORD(NETWORK_TCP_FLAG_ACK))) continue;
-			
-			Is_Packet_Received = 1;
-			break;
-		}
-	}
-	if (!Is_Packet_Received) return 2;
+	Result = NetworkBaseTCPReceivePacket(Pointer_Socket, NETWORK_TCP_FLAG_SYN | NETWORK_TCP_FLAG_ACK, &Packet_Size, Packet_Buffer);
+	if (Result != 0) return Result;
 	
 	// Send the ACK packet to the server
 	// Prepare packet

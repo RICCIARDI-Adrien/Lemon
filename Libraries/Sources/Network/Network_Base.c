@@ -461,3 +461,39 @@ void NetworkBaseTCPPrepareHeader(TNetworkSocket *Pointer_Socket, unsigned short 
 	
 	Pointer_TCP_Header->Checksum = 0; // The checksum field must be zero prior to compute the checksum
 }
+
+int NetworkBaseTCPReceivePacket(TNetworkSocket *Pointer_Socket, unsigned short Flags_To_Check, unsigned int *Pointer_Packet_Size, void *Pointer_Packet_Buffer)
+{
+	unsigned int Timeout_Milliseconds;
+	int Result;
+	TNetworkTCPHeader *Pointer_TCP_Header = (TNetworkTCPHeader *) (Pointer_Packet_Buffer + sizeof(TNetworkEthernetHeader) + sizeof(TNetworkIPv4Header));
+	
+	// Convert flags to big endian to fastly compare them with the received packet
+	Flags_To_Check = NETWORK_SWAP_WORD(Flags_To_Check);
+	
+	Timeout_Milliseconds = NETWORK_BASE_TCP_RECEPTION_TIMEOUT_MILLISECONDS + SystemGetTimerValue();
+	while (SystemGetTimerValue() <= Timeout_Milliseconds)
+	{
+		// Check if a packet is available
+		Result = NetworkBaseIPReceivePacket(Pointer_Socket, 0, Pointer_Packet_Size, Pointer_Packet_Buffer);
+		if (Result == 1) return 1; // An error occurred
+		
+		// A packet was received
+		if (Result == 0)
+		{
+			// Make sure that the destination port is the good one
+			if (Pointer_TCP_Header->Destination_Port != Pointer_Socket->Source_Port) continue; // Wait for another packet
+			
+			// Check for set flags if required to
+			if (Flags_To_Check != 0)
+			{
+				// Check if received packet's flags match with the expected ones
+				if (((Pointer_TCP_Header->Header_Size_And_Flags & NETWORK_SWAP_WORD(0x01FF)) & Flags_To_Check) != Flags_To_Check) continue;
+			}
+			
+			return 0;
+		}
+	}
+	
+	return 2;
+}

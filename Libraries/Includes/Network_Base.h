@@ -8,6 +8,12 @@
 #include <Network.h>
 
 //-------------------------------------------------------------------------------------------------
+// Constants
+//-------------------------------------------------------------------------------------------------
+/** How many time to wait before considering a packet reception failed (in milliseconds). */
+#define NETWORK_BASE_TCP_RECEPTION_TIMEOUT_MILLISECONDS 5000
+
+//-------------------------------------------------------------------------------------------------
 // Variables
 //-------------------------------------------------------------------------------------------------
 /** The system IP address. */
@@ -71,5 +77,16 @@ void NetworkBaseTCPPrepareHeader(TNetworkSocket *Pointer_Socket, unsigned short 
  * @warning The TCP pseudo header needed to compute the checksum will be appended just before the Pointer_Data address.
  */
 unsigned short NetworkBaseTCPComputeChecksum(TNetworkSocket *Pointer_Socket, void *Pointer_Data, unsigned int Bytes_Count);
+
+/** Wait NETWORK_BASE_TCP_RECEPTION_TIMEOUT_MILLISECONDS milliseconds for a TCP packet to be received.
+ * @param Pointer_Socket The socket used to transmit and receive data (the socket is not required to be connected).
+ * @param Flags_To_Check If different from 0, the received TCP packet header flags must fit exactly the provided flags. If equal to 0, all flags configuration are accepted.
+ * @param Pointer_Packet_Size On output, contain received packet full size in bytes (including lower layers).
+ * @param Pointer_Packet_Buffer On output, contain the packet data (with lower layers too).
+ * @return 0 if a packet was successfully received,
+ * @return 1 if a reception error occurred,
+ * @return 2 if the reception timed out.
+ */
+int NetworkBaseTCPReceivePacket(TNetworkSocket *Pointer_Socket, unsigned short Flags_To_Check, unsigned int *Pointer_Packet_Size, void *Pointer_Packet_Buffer);
 
 #endif

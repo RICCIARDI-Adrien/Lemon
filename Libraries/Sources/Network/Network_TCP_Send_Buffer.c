@@ -11,8 +11,8 @@ int NetworkTCPSendBuffer(TNetworkSocket *Pointer_Socket, unsigned int Buffer_Siz
 {
 	unsigned char Packet_Buffer[NETWORK_MAXIMUM_PACKET_SIZE];
 	TNetworkTCPHeader *Pointer_TCP_Header = (TNetworkTCPHeader *) (Packet_Buffer + sizeof(TNetworkEthernetHeader) + sizeof(TNetworkIPv4Header));
-	unsigned int TCP_Packet_Size, Timeout_Milliseconds = 2000;
-	int Result, Is_Packet_Received = 0;
+	unsigned int TCP_Packet_Size;
+	int Result;
 	
 	// Make sure the buffer content can be sent in a single packet
 	if (Buffer_Size > NETWORK_MAXIMUM_PACKET_SIZE - sizeof(TNetworkEthernetHeader) - sizeof(TNetworkIPv4Header) - sizeof(TNetworkTCPHeader)) return 2;
@@ -34,27 +34,8 @@ int NetworkTCPSendBuffer(TNetworkSocket *Pointer_Socket, unsigned int Buffer_Siz
 	if (NetworkBaseIPSendPacket(Pointer_Socket, TCP_Packet_Size, Packet_Buffer) != 0) return 1;
 	
 	// Wait for the acknowledge
-	Timeout_Milliseconds += SystemGetTimerValue();
-	while (SystemGetTimerValue() <= Timeout_Milliseconds)
-	{
-		// Check if a packet is available
-		Result = NetworkBaseIPReceivePacket(Pointer_Socket, 0, &TCP_Packet_Size, Packet_Buffer);
-		if (Result == 1) return 1; // An error occurred
-		
-		// A packet was received
-		if (Result == 0)
-		{
-			// Make sure that the destination port is the good one
-			if (Pointer_TCP_Header->Destination_Port != Pointer_Socket->Source_Port) continue; // Wait for another packet
-			
-			// Make sure ACK flags is set
-			if (!(Pointer_TCP_Header->Header_Size_And_Flags & NETWORK_SWAP_WORD(NETWORK_TCP_FLAG_ACK))) continue;
-			
-			Is_Packet_Received = 1;
-			break;
-		}
-	}
-	if (!Is_Packet_Received) return 4;
+	Result = NetworkBaseTCPReceivePacket(Pointer_Socket, NETWORK_TCP_FLAG_ACK, &TCP_Packet_Size, Packet_Buffer);
+	if (Result != 0) return Result;
 	
 	// Update sequence number with the received acknowledgement number
 	Pointer_Socket->TCP_Sequence_Number = NETWORK_SWAP_DOUBLE_WORD(Pointer_TCP_Header->Acknowledgment_Number);
