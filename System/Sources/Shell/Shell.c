@@ -105,8 +105,8 @@ static inline void ShellReadCommandLine(char *Pointer_Buffer)
 				Pointer_Buffer[Characters_Count] = 0;
 				// Go to next line
 				ScreenWriteCharacter('\n');
-				// Copy this line into the last command buffer
-				strcpy(String_Last_Command, Pointer_Buffer);
+				// Copy this line into the last command buffer (only if it was not an empty line)
+				if (Characters_Count > 0) strcpy(String_Last_Command, Pointer_Buffer);
 				return;
 			
 			// Normal keys

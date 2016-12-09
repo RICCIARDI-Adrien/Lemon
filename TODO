@@ -18,8 +18,6 @@ Système
 
 - unifier codes erreurs FileSystemLoad
 
-- shell : si appui sur entrée pas d'écrasement de la dernière commande tapée
-
 Doc
 ---
 Rajouter dans doc la liste des programmes nécessaires pour compiler l'OS
