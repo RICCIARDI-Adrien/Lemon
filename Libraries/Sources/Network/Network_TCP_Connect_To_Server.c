@@ -1,5 +1,4 @@
 /** @file Network_TCP_Connect_To_Server.c
- * @see Network.h for description.
  * @author Adrien RICCIARDI
  */
 #include <Network_Base.h>
@@ -20,15 +19,10 @@ int NetworkTCPConnectToServer(TNetworkSocket *Pointer_Socket)
 	
 	// Initiate the three-way handshake with the server
 	// Prepare a SYN packet
-	Pointer_TCP_Header->Source_Port = Pointer_Socket->Source_Port;
-	Pointer_TCP_Header->Destination_Port = Pointer_Socket->Destination_Port;
-	Pointer_TCP_Header->Sequence_Number = 0;
+	NetworkBaseTCPPrepareHeader(Pointer_Socket, NETWORK_TCP_FLAG_SYN, Pointer_TCP_Header);
+	Pointer_TCP_Header->Sequence_Number = RandomGenerateNumber(); // This value must always vary between two connections or the server will mark the connection as "TCP port reused" and nothing will work
 	Pointer_TCP_Header->Acknowledgment_Number = 0;
-	Pointer_TCP_Header->Header_Size_And_Flags = NETWORK_SWAP_WORD(NETWORK_TCP_HEADER_SIZE | (1 << NETWORK_TCP_FLAG_SYN_BIT));
-	Pointer_TCP_Header->Window_Size = NETWORK_SWAP_WORD(NETWORK_MAXIMUM_PACKET_SIZE - sizeof(TNetworkEthernetHeader) - sizeof(TNetworkIPv4Header) - sizeof(TNetworkTCPHeader));
-	Pointer_TCP_Header->Urgent_Pointer = 0;
 	// Compute checksum
-	Pointer_TCP_Header->Checksum = 0; // The checksum field must be zero prior to compute the checksum
 	Pointer_TCP_Header->Checksum = NetworkBaseTCPComputeChecksum(Pointer_Socket, Pointer_TCP_Header, sizeof(TNetworkTCPHeader));
 	if (NetworkBaseIPSendPacket(Pointer_Socket, sizeof(TNetworkTCPHeader), Packet_Buffer) != 0) return 1;
 	
@@ -47,7 +41,7 @@ int NetworkTCPConnectToServer(TNetworkSocket *Pointer_Socket)
 			if (Pointer_TCP_Header->Destination_Port != Pointer_Socket->Source_Port) continue; // Wait for another packet
 			
 			// Make sure both SYN and ACK flags are set
-			if (!(Pointer_TCP_Header->Header_Size_And_Flags & NETWORK_SWAP_WORD(1 << NETWORK_TCP_FLAG_SYN_BIT)) || !(Pointer_TCP_Header->Header_Size_And_Flags & NETWORK_SWAP_WORD(1 << NETWORK_TCP_FLAG_ACK_BIT))) continue;
+			if (!(Pointer_TCP_Header->Header_Size_And_Flags & NETWORK_SWAP_WORD(NETWORK_TCP_FLAG_SYN)) || !(Pointer_TCP_Header->Header_Size_And_Flags & NETWORK_SWAP_WORD(NETWORK_TCP_FLAG_ACK))) continue;
 			
 			Is_Packet_Received = 1;
 			break;
@@ -57,17 +51,12 @@ int NetworkTCPConnectToServer(TNetworkSocket *Pointer_Socket)
 	
 	// Send the ACK packet to the server
 	// Prepare packet
-	Pointer_TCP_Header->Source_Port = Pointer_Socket->Source_Port;
-	Pointer_TCP_Header->Destination_Port = Pointer_Socket->Destination_Port;
-	New_Sequence_Number = NETWORK_SWAP_DOUBLE_WORD(Pointer_TCP_Header->Acknowledgment_Number) + 1;
+	NetworkBaseTCPPrepareHeader(Pointer_Socket, NETWORK_TCP_FLAG_ACK, Pointer_TCP_Header);
+	New_Sequence_Number = NETWORK_SWAP_DOUBLE_WORD(Pointer_TCP_Header->Acknowledgment_Number);
 	New_Acknowledgement_Number = NETWORK_SWAP_DOUBLE_WORD(Pointer_TCP_Header->Sequence_Number) + 1;
 	Pointer_TCP_Header->Sequence_Number = NETWORK_SWAP_DOUBLE_WORD(New_Sequence_Number);
 	Pointer_TCP_Header->Acknowledgment_Number = NETWORK_SWAP_DOUBLE_WORD(New_Acknowledgement_Number);
-	Pointer_TCP_Header->Header_Size_And_Flags = NETWORK_SWAP_WORD(NETWORK_TCP_HEADER_SIZE | (1 << NETWORK_TCP_FLAG_ACK_BIT));
-	Pointer_TCP_Header->Window_Size = NETWORK_SWAP_WORD(NETWORK_MAXIMUM_PACKET_SIZE - sizeof(TNetworkEthernetHeader) - sizeof(TNetworkIPv4Header) - sizeof(TNetworkTCPHeader));
-	Pointer_TCP_Header->Urgent_Pointer = 0;
 	// Compute checksum
-	Pointer_TCP_Header->Checksum = 0; // The checksum field must be zero prior to compute the checksum
 	Pointer_TCP_Header->Checksum = NetworkBaseTCPComputeChecksum(Pointer_Socket, Pointer_TCP_Header, sizeof(TNetworkTCPHeader));
 	if (NetworkBaseIPSendPacket(Pointer_Socket, sizeof(TNetworkTCPHeader), Packet_Buffer) != 0) return 1;
 	

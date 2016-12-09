@@ -18,6 +18,8 @@ Système
 
 - unifier codes erreurs FileSystemLoad
 
+- shell : si appui sur entrée pas d'écrasement de la dernière commande tapée
+
 Doc
 ---
 Rajouter dans doc la liste des programmes nécessaires pour compiler l'OS
@@ -49,6 +51,8 @@ modif bibliothèques pour gérer nouveaux codes touches
 
 - mettre macros conversion nombre en chaîne dans System.h
   + mettre à jour application Benchmark avec les nouvelles macros
+  
+unification des codes d'erreur réseau ?
 
 Applications
 ------------

@@ -449,3 +449,15 @@ unsigned short NetworkBaseTCPComputeChecksum(TNetworkSocket *Pointer_Socket, voi
 	
 	return NetworkBaseComputeChecksum(Pointer_TCP_Pseudo_Header, sizeof(TNetworkBaseTCPPseudoHeader) + Bytes_Count);
 }
+
+void NetworkBaseTCPPrepareHeader(TNetworkSocket *Pointer_Socket, unsigned short Flags, TNetworkTCPHeader *Pointer_TCP_Header)
+{
+	Pointer_TCP_Header->Source_Port = Pointer_Socket->Source_Port;
+	Pointer_TCP_Header->Destination_Port = Pointer_Socket->Destination_Port;
+	
+	Pointer_TCP_Header->Header_Size_And_Flags = NETWORK_SWAP_WORD(((sizeof(TNetworkTCPHeader) / 4) << 12) | Flags);
+	Pointer_TCP_Header->Window_Size = NETWORK_SWAP_WORD(NETWORK_MAXIMUM_PACKET_SIZE - sizeof(TNetworkEthernetHeader) - sizeof(TNetworkIPv4Header) - sizeof(TNetworkTCPHeader));
+	Pointer_TCP_Header->Urgent_Pointer = 0;
+	
+	Pointer_TCP_Header->Checksum = 0; // The checksum field must be zero prior to compute the checksum
+}

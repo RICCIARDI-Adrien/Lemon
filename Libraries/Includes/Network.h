@@ -47,13 +47,14 @@
 /** A TFTP transfer block size in bytes. */
 #define NETWORK_TFTP_BLOCK_SIZE 512
 
-/** The TCP header size in 32-bit units shifted the right way to fit in the Header_Size_And_Flags field of the header. */
-#define NETWORK_TCP_HEADER_SIZE ((sizeof(TNetworkTCPHeader) / 4) << 12)
-
+/** The FIN flag bit in the TCP headers flags field. */
+#define NETWORK_TCP_FLAG_FIN 0x01
 /** The SYN flag bit in the TCP headers flags field. */
-#define NETWORK_TCP_FLAG_SYN_BIT 1
+#define NETWORK_TCP_FLAG_SYN 0x02
+/** The PUSH flag bit in the TCP headers flags field. */
+#define NETWORK_TCP_FLAG_PUSH 0x08
 /** The ACK flag bit in the TCP headers flags field. */
-#define NETWORK_TCP_FLAG_ACK_BIT 4
+#define NETWORK_TCP_FLAG_ACK 0x10
 
 //-------------------------------------------------------------------------------------------------
 // Types
@@ -83,6 +84,8 @@ typedef struct
 	unsigned int TCP_Sequence_Number; //<! The TCP sequence number (stored in little endian).
 	unsigned int TCP_Acknowledgement_Number; //<! The TCP acknowledgement number (stored in little endian).
 	int Is_TCP_Connection_Established; //<! Tell if the socket is successfully connected to a server or not.
+	// TODO flag pour indiquer qu'il faut envoyer ACK avec SendBuffer
+	// TODO bit field pour les flags pour économiser de la place
 } TNetworkSocket;
 
 /** An ethernet header. No VLAN field is allowed. */
@@ -268,5 +271,19 @@ int NetworkTFTPReceivePacket(TNetworkSocket *Pointer_Socket, unsigned int Timeou
  * @note On output, the TCP-specific fields of the provided socket are initialized.
  */
 int NetworkTCPConnectToServer(TNetworkSocket *Pointer_Socket);
+
+/** TODO 
+ * @return 0 if data were successfully sent and received by the recipient,
+ * @return 1 if a transmission error occurred,
+ * @return 2 if data were too big for the device transfer size (lower data size and retry),
+ * @return 3 if the socket used to transmit data was not connected to the server,
+ * @return 4 if the recipient did not acknowledged the packet in time.
+ */
+int NetworkTCPSendBuffer(TNetworkSocket *Pointer_Socket, unsigned int Buffer_Size, void *Pointer_Buffer);
+
+// TODO
+int NetworkTCPDisconnectFromServer(TNetworkSocket *Pointer_Socket);
+
+// TODO réception : voir si FIN ou RST
 
 #endif
