@@ -10,7 +10,7 @@
 #include <File_System/File.h>
 #include <File_System/File_System.h>
 #include <Kernel.h> // Needed for kernel constants
-#include <Shell/Shell_Commands.h>
+#include <Shell.h>
 #include <Standard_Functions.h> // Needed by itoa()
 #include <Strings.h>
 

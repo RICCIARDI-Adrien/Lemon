@@ -1,13 +1,19 @@
-/** @file Shell_Commands.h
- * Commands compiled into the shell.
+/** @file Shell.h
+ * System shell core.
  * @author Adrien RICCIARDI
  */
-#ifndef H_SHELL_COMMANDS_H
-#define H_SHELL_COMMANDS_H
+#ifndef H_SHELL_H
+#define H_SHELL_H
 
 //-------------------------------------------------------------------------------------------------
-// Constants
+// Constants and macros
 //-------------------------------------------------------------------------------------------------
+/** Maximum length of the shell line in characters. */
+#define SHELL_MAXIMUM_LINE_LENGTH 77
+
+/** Maximum arguments count into the command line. */
+#define SHELL_MAXIMUM_ARGUMENTS_COUNT 20
+
 /** Clear the screen. */
 #define SHELL_COMMAND_CLEAR_SCREEN "clear"
 /** List existing files. */
@@ -28,6 +34,9 @@
 //-------------------------------------------------------------------------------------------------
 // Functions
 //-------------------------------------------------------------------------------------------------
+/** Shell entry point. */
+void Shell(void);
+
 /** List existing files. */
 void ShellCommandList(void);
 
@@ -46,9 +55,9 @@ void ShellCommandDeleteFile(char *String_File_Name);
 void ShellCommandRenameFile(char *String_Current_File_Name, char *String_New_File_Name);
 
 /** Get the size in bytes of an existing file. 
- * @param File_Name The name of the file.
+ * @param String_File_Name The name of the file.
  */
-void ShellCommandFileSize(char *File_Name);
+void ShellCommandFileSize(char *String_File_Name);
 
 /** Copy the content of an existing file into a new one.
  * @param String_File_Name_Source The name of the file to copy.

@@ -5,7 +5,7 @@
 #include <Drivers/Driver_Screen.h>
 #include <Error_Codes.h>
 #include <File_System/File.h>
-#include <Shell/Shell_Commands.h>
+#include <Shell.h>
 #include <Strings.h>
 
 //-------------------------------------------------------------------------------------------------

@@ -7,7 +7,7 @@
 #include <Error_Codes.h>
 #include <File_System/File.h>
 #include <File_System/File_System.h>
-#include <Shell/Shell_Commands.h>
+#include <Shell.h>
 #include <Standard_Functions.h> // To have the NULL definition
 #include <Strings.h>
 

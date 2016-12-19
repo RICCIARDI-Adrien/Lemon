@@ -9,8 +9,7 @@
 #include <File_System/File.h>
 #include <File_System/File_System.h>
 #include <Kernel.h>
-#include <Shell/Shell.h>
-#include <Shell/Shell_Commands.h>
+#include <Shell.h>
 #include <Standard_Functions.h>
 #include <Strings.h>
 

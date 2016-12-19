@@ -14,7 +14,7 @@
 #include <File_System/File_System.h>
 #include <Hardware_Functions.h>
 #include <Kernel.h>
-#include <Shell/Shell.h>
+#include <Shell.h>
 #include <Standard_Functions.h>
 #include <Strings.h>
 #include <System_Calls.h>
