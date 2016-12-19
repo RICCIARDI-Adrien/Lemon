@@ -7,4 +7,4 @@
 *.o
 *.out
 Documentation/Documentation_System/html
-Embedded_Files_Data.h
+Installer_Embedded_Files_Data.h

@@ -1,3 +1,7 @@
+Objects/System_MBR.bin
+MBR
+Objects/System_Kernel.bin
+Kernel
 ../Applications/Binaries/Benchmark.lemon
 benchmark
 ../Applications/Binaries/Network_Chat.lemon

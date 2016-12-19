@@ -64,7 +64,6 @@ endef
 all: clean libraries applications system installer
 
 clean:
-	@cd Installer && $(MAKE) clean
 	@cd Libraries && $(MAKE) clean
 	@cd Applications && $(MAKE) clean
 	@cd System && $(MAKE) clean
@@ -163,7 +162,7 @@ application/%:
 
 installer:
 	@$(call DisplayTitle,Creating installation image)
-	@cd Installer && $(MAKE)
+	@cd System && $(MAKE) CONFIGURATION_BUILD_INSTALLER=1
 
 libraries:
 	@$(call DisplayTitle,Compiling libraries)
@@ -171,4 +170,4 @@ libraries:
 
 system:
 	@$(call DisplayTitle,Compiling system)
-	@cd System && $(MAKE)
+	@cd System && $(MAKE) CONFIGURATION_BUILD_INSTALLER=0

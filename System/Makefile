@@ -1,18 +1,41 @@
 # System makefile.
 # There is no need to take dependencies into account as the whole system must be entirely rebuilded each time.
 # Author : Adrien RICCIARDI
+PATH_BINARIES = ..
 PATH_SOURCES = Sources
 PATH_OBJECTS = Objects
 PATH_INCLUDES = Includes
-PATH_TOOLS = ../Installer/Tools
+PATH_TOOLS = Tools
 
-CCFLAGS += -DCONFIGURATION_BUILD_INSTALLER=0 -DSTRING_BUILD_CONFIGURATION_VARIABLES=$(STRING_BUILD_CONFIGURATION_VARIABLES)
-LDFLAGS = -T Linker_Script.ld
-MBR_FLAGS = -DSECTORS_TO_LOAD_COUNT=64
+BINARIES_TO_HEADER_CONVERTER = $(PATH_TOOLS)/Binaries_To_Header_Converter.out
+
+CCFLAGS += -W -Wall -Wunused -I$(PATH_INCLUDES) -DCONFIGURATION_SYSTEM_TOTAL_RAM_SIZE_MEGA_BYTES=$(SYSTEM_RAM_SIZE) -DCONFIGURATION_HARD_DISK_LOGICAL_BLOCK_ADDRESSING_MODE=$(SYSTEM_HARD_DISK_LOGICAL_BLOCK_ADDRESSING_MODE) -DCONFIGURATION_BUILD_INSTALLER=$(CONFIGURATION_BUILD_INSTALLER) -DSTRING_BUILD_CONFIGURATION_VARIABLES=$(STRING_BUILD_CONFIGURATION_VARIABLES)
+LDFLAGS = --strip-all -nostdlib -nostartfile -T Linker_Script.ld
+ifeq ($(CONFIGURATION_BUILD_INSTALLER),1)
+	MBR_FLAGS = -DSECTORS_TO_LOAD_COUNT=512 -DCONFIGURATION_BUILD_INSTALLER=1
+else
+	MBR_FLAGS = -DSECTORS_TO_LOAD_COUNT=64
+endif
+
+OBJECTS_CORE = $(PATH_OBJECTS)/Architecture.o $(PATH_OBJECTS)/Debug.o $(PATH_OBJECTS)/Hardware_Functions.o $(PATH_OBJECTS)/Kernel.o $(PATH_OBJECTS)/Standard_Functions.o $(PATH_OBJECTS)/System_Calls.o
+OBJECTS_DRIVERS += $(PATH_OBJECTS)/Driver_Keyboard.o $(PATH_OBJECTS)/Driver_PIC.o $(PATH_OBJECTS)/Driver_Screen.o $(PATH_OBJECTS)/Driver_Timer.o $(PATH_OBJECTS)/Driver_UART.o
+OBJECTS_FILE_SYSTEM = $(PATH_OBJECTS)/File.o $(PATH_OBJECTS)/File_System.o
+ifeq ($(CONFIGURATION_BUILD_INSTALLER),1)
+	OBJECTS_SHELL = $(PATH_OBJECTS)/Shell_Installer.o $(PATH_OBJECTS)/Shell_Installer_Partition_Menu.o
+else
+	OBJECTS_SHELL = $(PATH_OBJECTS)/Shell.o $(PATH_OBJECTS)/Shell_Command_Copy_File.o $(PATH_OBJECTS)/Shell_Command_Delete_File.o $(PATH_OBJECTS)/Shell_Command_Download.o $(PATH_OBJECTS)/Shell_Command_File_Size.o $(PATH_OBJECTS)/Shell_Command_List.o $(PATH_OBJECTS)/Shell_Command_Rename_File.o
+endif
 
 #------------------------------------------------------------------------------------------------------------------------------
 # User configuration
 #------------------------------------------------------------------------------------------------------------------------------
+ifeq ($(SYSTEM_IS_DEBUG_ENABLED),1)
+	CCFLAGS += -DCONFIGURATION_IS_DEBUG_ENABLED=1
+else
+	CCFLAGS += -DCONFIGURATION_IS_DEBUG_ENABLED=0
+endif
+
+# Choose which ethernet controller driver to compile
 ifeq ($(SYSTEM_ETHERNET_CONTROLLER_DRIVER),82540em)
 	CCFLAGS += -DCONFIGURATION_IS_ETHERNET_CONTROLLER_ENABLED=1
 	OBJECTS_DRIVERS += $(PATH_OBJECTS)/Driver_Ethernet_Intel_82540EM.o
@@ -25,35 +48,160 @@ else
 	CCFLAGS += -DCONFIGURATION_IS_ETHERNET_CONTROLLER_ENABLED=0
 endif
 
-# The common makefile must be included after the paths and flags variables have been defined (because it uses them), and before the object variables are set (because it contains some of them)
-include Makefile_Core.mk
+# Choose which hard disk driver to compile
+ifeq ($(SYSTEM_HARD_DISK_DRIVER),sata)
+	OBJECTS_DRIVERS += $(PATH_OBJECTS)/Driver_Hard_Disk_SATA.o
+	DEPENDENCIES_INCLUDE_PCI = 1
+	CCFLAGS += -DCONFIGURATION_BUILD_RAM_DISK=0
+else ifeq ($(SYSTEM_HARD_DISK_DRIVER),ram)
+	OBJECTS_DRIVERS += $(PATH_OBJECTS)/Driver_Hard_Disk_RAM_Disk.o
+	CCFLAGS += -DCONFIGURATION_BUILD_RAM_DISK=1
+else
+	OBJECTS_DRIVERS += $(PATH_OBJECTS)/Driver_Hard_Disk_IDE.o
+	CCFLAGS += -DCONFIGURATION_BUILD_RAM_DISK=0
+endif
 
-OBJECTS_SHELL = $(PATH_OBJECTS)/Shell.o $(PATH_OBJECTS)/Shell_Command_Copy_File.o $(PATH_OBJECTS)/Shell_Command_Delete_File.o $(PATH_OBJECTS)/Shell_Command_Download.o $(PATH_OBJECTS)/Shell_Command_File_Size.o $(PATH_OBJECTS)/Shell_Command_List.o $(PATH_OBJECTS)/Shell_Command_Rename_File.o
+# Compile PCI driver if needed
+ifeq ($(DEPENDENCIES_INCLUDE_PCI),1)
+	OBJECTS_DRIVERS += $(PATH_OBJECTS)/Driver_PCI.o
+endif
+
 OBJECTS = $(OBJECTS_CORE) $(OBJECTS_DRIVERS) $(OBJECTS_FILE_SYSTEM) $(OBJECTS_SHELL)
 
 all: clean $(PATH_OBJECTS)/MBR.bin
-ifeq ($(SYSTEM_HARD_DISK_DRIVER),ram)
+# ifeq ($(SYSTEM_HARD_DISK_DRIVER),ram)
+#     all: convert_files
+# endif
+ifeq ($(CONFIGURATION_BUILD_INSTALLER),1)
     all: convert_files
 endif
 all: $(OBJECTS)
 all:
+# ifeq ($(SYSTEM_HARD_DISK_DRIVER),ram)
+# 	@# The regular kernel will be directly booted when using a RAM disk
+# 	cp ../System/Objects/Kernel.bin $(PATH_OBJECTS)
+# else
+# 	######## Linking installer ########
+# 	$(GLOBAL_TOOL_LINKER) $(LDFLAGS) $(OBJECTS) -o $(PATH_OBJECTS)/Kernel.bin
+# endif
+	######## Linking installer ########
 	$(GLOBAL_TOOL_LINKER) $(LDFLAGS) $(OBJECTS) -o $(PATH_OBJECTS)/Kernel.bin
+ifeq ($(CONFIGURATION_BUILD_INSTALLER),1)
+	######## Creating floppy image ########
+	cat $(PATH_OBJECTS)/MBR.bin $(PATH_OBJECTS)/Kernel.bin > $(PATH_OBJECTS)/Raw_Image.bin
+	dd if=/dev/zero of=$(PATH_BINARIES)/Lemon_Installer_Floppy_Image.img bs=512 count=2880 status=none
+	dd if=$(PATH_OBJECTS)/Raw_Image.bin of=$(PATH_BINARIES)/Lemon_Installer_Floppy_Image.img conv=notrunc status=none
+	@# Get rid of useless files
+	rm -f $(PATH_OBJECTS)/Raw_Image.bin
+	######## Creating CDROM image ########
+	mkdir -p $(PATH_OBJECTS)/ISO_Image_Content
+	cp $(PATH_BINARIES)/Lemon_Installer_Floppy_Image.img $(PATH_OBJECTS)/ISO_Image_Content
+	$(GLOBAL_TOOL_ISO_GENERATOR) -G $(PATH_BINARIES)/Lemon_Installer_Floppy_Image.img -r -b Lemon_Installer_Floppy_Image.img -c boot.catalog -o Lemon_Installer_CD_Image.iso $(PATH_OBJECTS)/ISO_Image_Content
+	mv Lemon_Installer_CD_Image.iso $(PATH_BINARIES)
+	######## Creating USB stick image ########
+	cp $(PATH_BINARIES)/Lemon_Installer_Floppy_Image.img $(PATH_BINARIES)/Lemon_Installer_USB_Stick_Image.img
+	######## Build successful ########
+	@ls -l $(PATH_OBJECTS)/Kernel.bin | awk '{print "Installer size : " $$5 + 512 " bytes"}'
+else
 	######## Build successful ########
 	@ls -l $(PATH_OBJECTS)/Kernel.bin | awk '{print "Kernel size : " $$5 + 512 " bytes"}'
+endif
 
-#ifeq ($(SYSTEM_
 convert_files: $(BINARIES_TO_HEADER_CONVERTER)
 	######## Embed applications data into image ########
-	@$(BINARIES_TO_HEADER_CONVERTER) Binaries_To_Header_Converter_List.txt $(PATH_INCLUDES)/Embedded_Files_Data.h
+	@$(BINARIES_TO_HEADER_CONVERTER) $(PATH_TOOLS)/Binaries_To_Header_Converter_List.txt $(PATH_INCLUDES)/Installer_Embedded_Files_Data.h
+	
+clean:
+	@# Clean the tools to allow the Lemon directory to be copied on another machine (possibly running another architecture), so the old and bad binary won't be used on the new architecture
+	rm -f $(BINARIES_TO_HEADER_CONVERTER)
+	rm -rf $(PATH_OBJECTS)/ISO_Image_Content
+ifeq ($(CONFIGURATION_BUILD_INSTALLER),1)
+	@# Delete only object files, keeping system .bin files which will be embedded into the installer image
+	rm -f $(PATH_OBJECTS)/*.o
+	@# Rename system MBR and kernel binaries to preserve them from installer compilation
+	@if (test -e $(PATH_OBJECTS)/MBR.bin); then mv $(PATH_OBJECTS)/MBR.bin $(PATH_OBJECTS)/System_MBR.bin; fi
+	@if (test -e $(PATH_OBJECTS)/Kernel.bin); then mv $(PATH_OBJECTS)/Kernel.bin $(PATH_OBJECTS)/System_Kernel.bin; fi
+	@# Clean generated images
+	rm -f $(PATH_BINARIES)/Lemon_Installer_CD_Image.iso $(PATH_BINARIES)/Lemon_Installer_Floppy_Image.img $(PATH_BINARIES)/Lemon_Installer_USB_Stick_Image.img
+else
+	@# When building the system, delete all previously generated build files
+	rm -f $(PATH_OBJECTS)/*
+endif
+
+#------------------------------------------------------------------------------------------------------------------------------
+# Converter tool program
+#------------------------------------------------------------------------------------------------------------------------------
+$(BINARIES_TO_HEADER_CONVERTER): $(PATH_TOOLS)/Binaries_To_Header_Converter.c
+	gcc -W -Wall $(PATH_TOOLS)/Binaries_To_Header_Converter.c -o $(BINARIES_TO_HEADER_CONVERTER)
 	
 #------------------------------------------------------------------------------------------------------------------------------
-# System-specific drivers (not needed by the Installer)
+# System core
+#------------------------------------------------------------------------------------------------------------------------------
+$(PATH_OBJECTS)/MBR.bin: $(PATH_SOURCES)/MBR.asm
+	$(GLOBAL_TOOL_ASSEMBLER) $(MBR_FLAGS) -f bin $(PATH_SOURCES)/MBR.asm -o $(PATH_OBJECTS)/MBR.bin
+
+$(PATH_OBJECTS)/Architecture.o: $(PATH_SOURCES)/Architecture.c
+	$(GLOBAL_TOOL_COMPILER) $(CCFLAGS) -c $(PATH_SOURCES)/Architecture.c -o $(PATH_OBJECTS)/Architecture.o
+
+$(PATH_OBJECTS)/Debug.o: $(PATH_SOURCES)/Debug.c
+	$(GLOBAL_TOOL_COMPILER) $(CCFLAGS) -c $(PATH_SOURCES)/Debug.c -o $(PATH_OBJECTS)/Debug.o
+
+$(PATH_OBJECTS)/Hardware_Functions.o: $(PATH_SOURCES)/Hardware_Functions.asm
+	$(GLOBAL_TOOL_ASSEMBLER) -f elf $(PATH_SOURCES)/Hardware_Functions.asm -o $(PATH_OBJECTS)/Hardware_Functions.o
+
+$(PATH_OBJECTS)/Kernel.o: $(PATH_SOURCES)/Kernel.c
+	$(GLOBAL_TOOL_COMPILER) $(CCFLAGS) -c $(PATH_SOURCES)/Kernel.c -o $(PATH_OBJECTS)/Kernel.o
+
+$(PATH_OBJECTS)/Standard_Functions.o: $(PATH_SOURCES)/Standard_Functions.c
+	$(GLOBAL_TOOL_COMPILER) $(CCFLAGS) -c $(PATH_SOURCES)/Standard_Functions.c -o $(PATH_OBJECTS)/Standard_Functions.o
+	
+$(PATH_OBJECTS)/System_Calls.o: $(PATH_SOURCES)/System_Calls.c
+	$(GLOBAL_TOOL_COMPILER) $(CCFLAGS) -c $(PATH_SOURCES)/System_Calls.c -o $(PATH_OBJECTS)/System_Calls.o
+
+#------------------------------------------------------------------------------------------------------------------------------
+# Drivers
 #------------------------------------------------------------------------------------------------------------------------------
 $(PATH_OBJECTS)/Driver_Ethernet_Intel_82540EM.o: $(PATH_SOURCES)/Drivers/Driver_Ethernet_Intel_82540EM.c
 	$(GLOBAL_TOOL_COMPILER) $(CCFLAGS) -c $(PATH_SOURCES)/Drivers/Driver_Ethernet_Intel_82540EM.c -o $(PATH_OBJECTS)/Driver_Ethernet_Intel_82540EM.o
 
 $(PATH_OBJECTS)/Driver_Ethernet_Realtek_8111.o: $(PATH_SOURCES)/Drivers/Driver_Ethernet_Realtek_8111.c
 	$(GLOBAL_TOOL_COMPILER) $(CCFLAGS) -c $(PATH_SOURCES)/Drivers/Driver_Ethernet_Realtek_8111.c -o $(PATH_OBJECTS)/Driver_Ethernet_Realtek_8111.o
+
+$(PATH_OBJECTS)/Driver_Hard_Disk_IDE.o: $(PATH_SOURCES)/Drivers/Driver_Hard_Disk_IDE.c
+	$(GLOBAL_TOOL_COMPILER) $(CCFLAGS) -c $(PATH_SOURCES)/Drivers/Driver_Hard_Disk_IDE.c -o $(PATH_OBJECTS)/Driver_Hard_Disk_IDE.o
+
+$(PATH_OBJECTS)/Driver_Hard_Disk_RAM_Disk.o: $(PATH_SOURCES)/Drivers/Driver_Hard_Disk_RAM_Disk.c
+	$(GLOBAL_TOOL_COMPILER) $(CCFLAGS) -c $(PATH_SOURCES)/Drivers/Driver_Hard_Disk_RAM_Disk.c -o $(PATH_OBJECTS)/Driver_Hard_Disk_RAM_Disk.o
+
+$(PATH_OBJECTS)/Driver_Hard_Disk_SATA.o: $(PATH_SOURCES)/Drivers/Driver_Hard_Disk_SATA.c
+	$(GLOBAL_TOOL_COMPILER) $(CCFLAGS) -c $(PATH_SOURCES)/Drivers/Driver_Hard_Disk_SATA.c -o $(PATH_OBJECTS)/Driver_Hard_Disk_SATA.o
+
+$(PATH_OBJECTS)/Driver_Keyboard.o: $(PATH_SOURCES)/Drivers/Driver_Keyboard.c
+	$(GLOBAL_TOOL_COMPILER) $(CCFLAGS) -c $(PATH_SOURCES)/Drivers/Driver_Keyboard.c -o $(PATH_OBJECTS)/Driver_Keyboard.o
+
+$(PATH_OBJECTS)/Driver_PCI.o: $(PATH_SOURCES)/Drivers/Driver_PCI.c
+	$(GLOBAL_TOOL_COMPILER) $(CCFLAGS) -c $(PATH_SOURCES)/Drivers/Driver_PCI.c -o $(PATH_OBJECTS)/Driver_PCI.o
+
+$(PATH_OBJECTS)/Driver_PIC.o: $(PATH_SOURCES)/Drivers/Driver_PIC.c
+	$(GLOBAL_TOOL_COMPILER) $(CCFLAGS) -c $(PATH_SOURCES)/Drivers/Driver_PIC.c -o $(PATH_OBJECTS)/Driver_PIC.o
+
+$(PATH_OBJECTS)/Driver_Screen.o: $(PATH_SOURCES)/Drivers/Driver_Screen.c
+	$(GLOBAL_TOOL_COMPILER) $(CCFLAGS) -c -O2 $(PATH_SOURCES)/Drivers/Driver_Screen.c -o $(PATH_OBJECTS)/Driver_Screen.o
+
+$(PATH_OBJECTS)/Driver_Timer.o: $(PATH_SOURCES)/Drivers/Driver_Timer.c
+	$(GLOBAL_TOOL_COMPILER) $(CCFLAGS) -c $(PATH_SOURCES)/Drivers/Driver_Timer.c -o $(PATH_OBJECTS)/Driver_Timer.o
+
+$(PATH_OBJECTS)/Driver_UART.o: $(PATH_SOURCES)/Drivers/Driver_UART.c
+	$(GLOBAL_TOOL_COMPILER) $(CCFLAGS) -c $(PATH_SOURCES)/Drivers/Driver_UART.c -o $(PATH_OBJECTS)/Driver_UART.o
+
+#------------------------------------------------------------------------------------------------------------------------------
+# File system
+#------------------------------------------------------------------------------------------------------------------------------
+$(PATH_OBJECTS)/File.o: $(PATH_SOURCES)/File_System/File.c
+	$(GLOBAL_TOOL_COMPILER) $(CCFLAGS) -c $(PATH_SOURCES)/File_System/File.c -o $(PATH_OBJECTS)/File.o
+
+$(PATH_OBJECTS)/File_System.o: $(PATH_SOURCES)/File_System/File_System.c
+	$(GLOBAL_TOOL_COMPILER) $(CCFLAGS) -c $(PATH_SOURCES)/File_System/File_System.c -o $(PATH_OBJECTS)/File_System.o
 
 #------------------------------------------------------------------------------------------------------------------------------
 # Shell
@@ -78,3 +226,9 @@ $(PATH_OBJECTS)/Shell_Command_List.o: $(PATH_SOURCES)/Shell/Shell_Command_List.c
 
 $(PATH_OBJECTS)/Shell_Command_Rename_File.o: $(PATH_SOURCES)/Shell/Shell_Command_Rename_File.c
 	$(GLOBAL_TOOL_COMPILER) $(CCFLAGS) -c $(PATH_SOURCES)/Shell/Shell_Command_Rename_File.c -o $(PATH_OBJECTS)/Shell_Command_Rename_File.o
+
+$(PATH_OBJECTS)/Shell_Installer.o: $(PATH_SOURCES)/Shell/Shell_Installer.c
+	$(GLOBAL_TOOL_COMPILER) $(CCFLAGS) -c $(PATH_SOURCES)/Shell/Shell_Installer.c -o $(PATH_OBJECTS)/Shell_Installer.o
+
+$(PATH_OBJECTS)/Shell_Installer_Partition_Menu.o: $(PATH_SOURCES)/Shell/Shell_Installer_Partition_Menu.c
+	$(GLOBAL_TOOL_COMPILER) $(CCFLAGS) -c $(PATH_SOURCES)/Shell/Shell_Installer_Partition_Menu.c -o $(PATH_OBJECTS)/Shell_Installer_Partition_Menu.o

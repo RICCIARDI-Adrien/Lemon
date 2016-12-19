@@ -8,10 +8,10 @@
 #include <Error_Codes.h>
 #include <File_System/File.h>
 #include <File_System/File_System.h>
+#include <Installer_Embedded_Files_Data.h>
+#include <Shell.h>
 #include <Standard_Functions.h> // To have atoi()
-#include "Embedded_Files_Data.h"
-#include "Shell.h"
-#include "Strings.h"
+#include <Strings.h>
 
 //-------------------------------------------------------------------------------------------------------------------------------
 // Private constants
@@ -26,7 +26,7 @@
 static void ShellReboot(void)
 {
 	ScreenSetColor(SCREEN_COLOR_BLUE);
-	ScreenWriteString(STRING_REBOOT);
+	ScreenWriteString(STRING_SHELL_INSTALLER_REBOOT);
 	KeyboardReadCharacter();
 	KeyboardRebootSystem();
 	while (1);
@@ -83,17 +83,17 @@ static void ShellInstallFiles(void)
 	for (i = 2; i < Embedded_Files_To_Install_Count; i++)
 	{
 		// Show file name and size
-		ScreenWriteString(STRING_FILE_NAME_1);
+		ScreenWriteString(STRING_SHELL_INSTALLER_FILE_NAME_1);
 		ScreenWriteString(Embedded_Files[i].String_Name);
-		ScreenWriteString(STRING_FILE_NAME_2);
+		ScreenWriteString(STRING_SHELL_INSTALLER_FILE_NAME_2);
 		ScreenWriteString(itoa(Embedded_Files[i].Size_Bytes));
-		ScreenWriteString(STRING_FILE_NAME_3);
+		ScreenWriteString(STRING_SHELL_INSTALLER_FILE_NAME_3);
 		
 		// Try to open the file
 		if (FileOpen(Embedded_Files[i].String_Name, 'w', &File_Descriptor) != ERROR_CODE_NO_ERROR)
 		{
 			ScreenSetColor(SCREEN_COLOR_RED);
-			ScreenWriteString(STRING_ERROR_CANT_OPEN_FILE);
+			ScreenWriteString(STRING_SHELL_INSTALLER_ERROR_CANT_OPEN_FILE);
 			ShellReboot();
 		}
 		
@@ -101,7 +101,7 @@ static void ShellInstallFiles(void)
 		if (FileWrite(File_Descriptor, Embedded_Files[i].Pointer_Data, Embedded_Files[i].Size_Bytes) != ERROR_CODE_NO_ERROR)
 		{
 			ScreenSetColor(SCREEN_COLOR_RED);
-			ScreenWriteString(STRING_ERROR_CANT_WRITE_FILE_CONTENT);
+			ScreenWriteString(STRING_SHELL_INSTALLER_ERROR_CANT_WRITE_FILE_CONTENT);
 			ShellReboot();
 		}
 		
@@ -122,15 +122,15 @@ static int ShellAskYesNoQuestion(char *String_Question)
 		ScreenWriteString(String_Question);
 		
 		KeyboardReadString(String_User_Answer, 1);
-		if (String_User_Answer[0] == STRING_CHARACTER_YES) return 1;
-		if (String_User_Answer[0] == STRING_CHARACTER_NO) return 0;
+		if (String_User_Answer[0] == STRING_SHELL_INSTALLER_CHARACTER_YES) return 1;
+		if (String_User_Answer[0] == STRING_SHELL_INSTALLER_CHARACTER_NO) return 0;
 	}
 }
 
 //-------------------------------------------------------------------------------------------------------------------------------
 // Public functions
 //-------------------------------------------------------------------------------------------------------------------------------
-void ShellDisplayTitle(char *String_Title)
+void ShellInstallerDisplayTitle(char *String_Title)
 {
 	// Display the title in a different color
 	ScreenSetColor(SHELL_SECTION_TITLE_COLOR);
@@ -149,24 +149,24 @@ void Shell(void)
 	// Show the title
 	ScreenSetColor(SCREEN_COLOR_LIGHT_BLUE);
 	ScreenClear();
-	ScreenWriteString(STRING_TITLE);
+	ScreenWriteString(STRING_SHELL_INSTALLER_TITLE);
 	
 	ScreenSetColor(SCREEN_COLOR_BLUE);
-	ScreenWriteString(STRING_WELCOME);
+	ScreenWriteString(STRING_SHELL_INSTALLER_WELCOME);
 	
 	// Ask the user on continuing the installation or not
-	ShellDisplayTitle(STRING_SECTION_WARNING_TITLE);
-	ScreenWriteString(STRING_SECTION_WARNING_MESSAGE);
-	if (!ShellAskYesNoQuestion(STRING_SECTION_WARNING_QUESTION))
+	ShellInstallerDisplayTitle(STRING_SHELL_INSTALLER_SECTION_WARNING_TITLE);
+	ScreenWriteString(STRING_SHELL_INSTALLER_SECTION_WARNING_MESSAGE);
+	if (!ShellAskYesNoQuestion(STRING_SHELL_INSTALLER_SECTION_WARNING_QUESTION))
 	{
-		ScreenWriteString(STRING_SECTION_WARNING_INSTALLATION_ABORTED);
+		ScreenWriteString(STRING_SHELL_INSTALLER_SECTION_WARNING_INSTALLATION_ABORTED);
 		ShellReboot();
 	}
 	
 	// Ask the user whether he wants to use the whole disk or not
-	ShellDisplayTitle(STRING_SECTION_HARD_DISK_TITLE);
-	ScreenWriteString(STRING_SECTION_HARD_DISK_MESSAGE);
-	if (ShellAskYesNoQuestion(STRING_SECTION_HARD_DISK_QUESTION))
+	ShellInstallerDisplayTitle(STRING_SHELL_INSTALLER_SECTION_HARD_DISK_TITLE);
+	ScreenWriteString(STRING_SHELL_INSTALLER_SECTION_HARD_DISK_MESSAGE);
+	if (ShellAskYesNoQuestion(STRING_SHELL_INSTALLER_SECTION_HARD_DISK_QUESTION))
 	{
 		// Fill the default partition table
 		memset(&Default_Lemon_Partition_Table, 0, sizeof(Default_Lemon_Partition_Table)); // Partitions 1 to 3 are not used, so force them to zero
@@ -176,28 +176,28 @@ void Shell(void)
 		Default_Lemon_Partition_Table.Sectors_Count = 64 * 1024 * 1024 / 512; // 64MB, TODO : compute this in a clean way
 		Pointer_Lemon_Partition_Table = &Default_Lemon_Partition_Table;
 	}
-	else Pointer_Lemon_Partition_Table = ShellPartitionMenu(); // Select the installation partition
+	else Pointer_Lemon_Partition_Table = ShellInstallerPartitionMenu(); // Select the installation partition
 	
 	// Compute the selected partition necessary offsets
 	Partition_Starting_Sector = Pointer_Lemon_Partition_Table[0].First_Sector_LBA;
 	File_System_Starting_Sector = Partition_Starting_Sector + CONFIGURATION_FILE_SYSTEM_STARTING_SECTOR_OFFSET;
 	
 	// Start the installation
-	ShellDisplayTitle(STRING_INSTALLATION_BEGINNING);
+	ShellInstallerDisplayTitle(STRING_SHELL_INSTALLER_INSTALLATION_BEGINNING);
 	
 	// Create file system
-	ScreenWriteString(STRING_CREATING_FILE_SYSTEM);
+	ScreenWriteString(STRING_SHELL_INSTALLER_CREATING_FILE_SYSTEM);
 	switch (FileSystemCreate(2048, 128, File_System_Starting_Sector))
 	{
 		case 1:
 			ScreenSetColor(SCREEN_COLOR_RED);
-			ScreenWriteString(STRING_ERROR_BAD_FILE_SYSTEM_PARAMETERS);
+			ScreenWriteString(STRING_SHELL_INSTALLER_ERROR_BAD_FILE_SYSTEM_PARAMETERS);
 			ShellReboot();
 		case 2:
 			ScreenSetColor(SCREEN_COLOR_RED);
-			ScreenWriteString(STRING_ERROR_FILE_SYSTEM_TOO_BIG_FOR_HARD_DISK_1);
+			ScreenWriteString(STRING_SHELL_INSTALLER_ERROR_FILE_SYSTEM_TOO_BIG_FOR_HARD_DISK_1);
 			ScreenWriteString(itoa(HardDiskGetDriveSizeSectors()));
-			ScreenWriteString(STRING_ERROR_FILE_SYSTEM_TOO_BIG_FOR_HARD_DISK_2);
+			ScreenWriteString(STRING_SHELL_INSTALLER_ERROR_FILE_SYSTEM_TOO_BIG_FOR_HARD_DISK_2);
 			ShellReboot();
 		default:
 			break;
@@ -211,12 +211,12 @@ void Shell(void)
 	ShellInstallKernel(&Embedded_Files[1], Partition_Starting_Sector + 1);
 	
 	// Install remaining files
-	ScreenWriteString(STRING_INSTALLING_FILES);
+	ScreenWriteString(STRING_SHELL_INSTALLER_INSTALLING_FILES);
 	ShellInstallFiles();
 	
 	// Installation has finished
 	ScreenSetColor(SCREEN_COLOR_GREEN);
-	ScreenWriteString(STRING_INSTALLATION_COMPLETED);
+	ScreenWriteString(STRING_SHELL_INSTALLER_INSTALLATION_COMPLETED);
 	
 	ShellReboot();
 }

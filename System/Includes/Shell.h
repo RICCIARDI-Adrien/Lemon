@@ -5,6 +5,8 @@
 #ifndef H_SHELL_H
 #define H_SHELL_H
 
+#include <File_System/File_System.h> // Needed for TFileSystemMasterBootLoaderPartitionTableEntry type
+
 //-------------------------------------------------------------------------------------------------
 // Constants and macros
 //-------------------------------------------------------------------------------------------------
@@ -64,5 +66,16 @@ void ShellCommandFileSize(char *String_File_Name);
  * @param String_File_Name_Destination The name of the file to be created.
  */
 void ShellCommandCopyFile(char *String_File_Name_Source, char *String_File_Name_Destination);
+
+// Installer specific functions
+/** Display a section title.
+ * @param String_Title The title to display.
+ */
+void ShellInstallerDisplayTitle(char *String_Title);
+
+/** Allow the user to choose one of the available partitions.
+ * @return A pointer on the corresponding partition table to write to the Lemon MBR.
+ */
+TFileSystemMasterBootLoaderPartitionTableEntry *ShellInstallerPartitionMenu(void);
 
 #endif

@@ -96,7 +96,7 @@
 	#define STRING_SHELL_FILE_SIZE_SHOW_SIZE_2 " octets.\n"
 
 	// Shell version command
-	#define STRING_SHELL_VERSION "Version du syst\212me : 2.5.0 (" __DATE__ ", " __TIME__ ")\n" \
+	#define STRING_SHELL_VERSION "Version du syst\212me : 2.5.1 (" __DATE__ ", " __TIME__ ")\n" \
 		"Copyright (C) Adrien Ricciardi\n\n" \
 		"Configuration :\n" \
 		STRING_BUILD_CONFIGURATION_VARIABLES
@@ -107,6 +107,49 @@
 	#define STRING_SHELL_ERROR_FILE_NOT_EXECUTABLE "Ce fichier n'est pas un programme !\n"
 	#define STRING_SHELL_ERROR_CANT_LOAD_PROGRAM "Impossible de charger le programme en m\202moire.\n"
 	#define STRING_SHELL_ERROR_FILE_TO_LOAD_LARGER_THAN_RAM "Le syst\212me ne dispose pas d'assez de m\202moire pour lancer ce programme.\n"
+	
+	// Installer shell strings
+	#define STRING_SHELL_INSTALLER_TITLE "                    ### Lemon - Assistant d'installation ###\n\n"
+	#define STRING_SHELL_INSTALLER_WELCOME "Bienvenue dans l'assistant d'installation du syst\212me.\n"
+	
+	#define STRING_SHELL_INSTALLER_SECTION_WARNING_TITLE "\nAvertissement\n"
+	#define STRING_SHELL_INSTALLER_SECTION_WARNING_MESSAGE "ATTENTION : l'installation peut d\202truire le contenu actuel du disque dur !\n"
+	#define STRING_SHELL_INSTALLER_SECTION_WARNING_QUESTION "Continuer ? [o/n] : "
+	#define STRING_SHELL_INSTALLER_SECTION_WARNING_INSTALLATION_ABORTED "Installation annul\202e.\n"
+	
+	#define STRING_SHELL_INSTALLER_SECTION_HARD_DISK_TITLE "\nPartitionnement du disque dur\n"
+	#define STRING_SHELL_INSTALLER_SECTION_HARD_DISK_MESSAGE "Taper 'o' pour utiliser tout l'espace du disque dur (attention : le disque sera compl\212tement effac\202) ou taper 'n' pour choisir une partition existante.\n"
+	#define STRING_SHELL_INSTALLER_SECTION_HARD_DISK_QUESTION "Utiliser tout l'espace du disque dur ? [o/n] : "
+	
+	#define STRING_SHELL_INSTALLER_REBOOT "\nRetirez le m\202dia d'installation et appuyez sur une touche pour red\202marrer.\n"
+	#define STRING_SHELL_INSTALLER_INSTALLATION_BEGINNING "\nD\202but de l'installation\n"
+	#define STRING_SHELL_INSTALLER_CREATING_FILE_SYSTEM "Cr\202ation du syst\212me de fichiers...\n"
+	#define STRING_SHELL_INSTALLER_INSTALLING_FILES "Installation des fichiers...\n"
+	#define STRING_SHELL_INSTALLER_FILE_NAME_1 "Installation de '"
+	#define STRING_SHELL_INSTALLER_FILE_NAME_2 "' ("
+	#define STRING_SHELL_INSTALLER_FILE_NAME_3 " octets)...\n"
+	#define STRING_SHELL_INSTALLER_INSTALLATION_COMPLETED "Installation termin\202e.\n"
+	
+	// Partition selection menu
+	#define STRING_SHELL_INSTALLER_PARTITION_MENU_SHOW_PARTITION_TABLE_1 "\nChoisissez une partition sur laquelle installer le syst\212me\n"
+	#define STRING_SHELL_INSTALLER_PARTITION_MENU_SHOW_PARTITION_TABLE_2 "Table des partitions :\n"
+	#define STRING_SHELL_INSTALLER_PARTITION_MENU_PARTITIONS_DETAILS_1 "Partition "
+	#define STRING_SHELL_INSTALLER_PARTITION_MENU_PARTITIONS_DETAILS_2 " : type : "
+	#define STRING_SHELL_INSTALLER_PARTITION_MENU_PARTITIONS_DETAILS_3 ", secteur LBA de d\202part : "
+	#define STRING_SHELL_INSTALLER_PARTITION_MENU_PARTITIONS_DETAILS_4 "\n              taille en octets : "
+	#define STRING_SHELL_INSTALLER_PARTITION_MENU_PARTITIONS_DETAILS_EMPTY_PARTITION " (vide)"
+	#define STRING_SHELL_INSTALLER_PARTITION_MENU_CHOOSE_PARTITION_NUMBER "Num\202ro de la partition (1-4) : "
+	
+	// Errors
+	#define STRING_SHELL_INSTALLER_ERROR_BAD_FILE_SYSTEM_PARAMETERS "Erreur : les param\212tres du syst\212me de fichiers sont invalides.\n"
+	#define STRING_SHELL_INSTALLER_ERROR_FILE_SYSTEM_TOO_BIG_FOR_HARD_DISK_1 "Erreur : le disque dur est trop petit pour stocker le syst\212me de fichiers.\nTaille du disque : "
+	#define STRING_SHELL_INSTALLER_ERROR_FILE_SYSTEM_TOO_BIG_FOR_HARD_DISK_2 " secteurs.\n"
+	#define STRING_SHELL_INSTALLER_ERROR_CANT_OPEN_FILE "Erreur : impossible d'ouvrir le fichier en \202criture.\n"
+	#define STRING_SHELL_INSTALLER_ERROR_CANT_WRITE_FILE_CONTENT "Erreur : impossible d'\202crire le contenu du fichier.\n"
+	
+	// Question answer characters
+	#define STRING_SHELL_INSTALLER_CHARACTER_YES 'o' // TODO use for download command
+	#define STRING_SHELL_INSTALLER_CHARACTER_NO 'n'
 #endif
 
 #endif
