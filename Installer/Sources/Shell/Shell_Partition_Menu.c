@@ -8,29 +8,28 @@
 #include <File_System/File_System.h>
 #include <Standard_Functions.h>
 #include "Shell.h"
-#include "Shell_Partition_Menu.h"
 #include "Strings.h"
 
 //-------------------------------------------------------------------------------------------------------------------------------
 // Public functions
 //-------------------------------------------------------------------------------------------------------------------------------
-TShellPartitionMenuPartitionTableEntry *ShellPartitionMenu(void)
+TFileSystemMasterBootLoaderPartitionTableEntry *ShellPartitionMenu(void)
 {
 	int i, Partition_Number;
 	unsigned char MBR_Sector_Buffer[FILE_SYSTEM_SECTOR_SIZE_BYTES];
-	TShellPartitionMenuPartitionTableEntry Partition_Table[SHELL_PARTITION_MENU_PARTITION_TABLE_ENTRIES_COUNT];
+	TFileSystemMasterBootLoaderPartitionTableEntry Partition_Table[FILE_SYSTEM_MASTER_BOOT_LOADER_PARTITION_TABLE_ENTRIES_COUNT];
 	char String_User_Answer[2];
-	static TShellPartitionMenuPartitionTableEntry Lemon_Partition_Table[SHELL_PARTITION_MENU_PARTITION_TABLE_ENTRIES_COUNT];
+	static TFileSystemMasterBootLoaderPartitionTableEntry Lemon_Partition_Table[FILE_SYSTEM_MASTER_BOOT_LOADER_PARTITION_TABLE_ENTRIES_COUNT];
 	
 	ShellDisplayTitle(STRING_PARTITION_MENU_SHOW_PARTITION_TABLE_1);
 	ScreenWriteString(STRING_PARTITION_MENU_SHOW_PARTITION_TABLE_2);
 	
 	// Load the partition table from the MBR
 	HardDiskReadSector(0, MBR_Sector_Buffer);
-	memcpy(Partition_Table, MBR_Sector_Buffer + SHELL_PARTITION_MENU_PARTITION_TABLE_OFFSET, sizeof(Partition_Table));
+	memcpy(Partition_Table, MBR_Sector_Buffer + FILE_SYSTEM_MASTER_BOOT_LOADER_PARTITION_TABLE_OFFSET, sizeof(Partition_Table));
 	
 	// Display it
-	for (i = 0; i < SHELL_PARTITION_MENU_PARTITION_TABLE_ENTRIES_COUNT; i++)
+	for (i = 0; i < FILE_SYSTEM_MASTER_BOOT_LOADER_PARTITION_TABLE_ENTRIES_COUNT; i++)
 	{
 		// Partition number
 		ScreenWriteString(STRING_PARTITION_MENU_PARTITIONS_DETAILS_1);
@@ -57,11 +56,11 @@ TShellPartitionMenuPartitionTableEntry *ShellPartitionMenu(void)
 	Partition_Number = String_User_Answer[0] - '0' - 1; // Convert the number to an index in the partition table (-1 is because partitions start from 1)
 
 	// Fill the first Lemon MBR partition table with the selected entry
-	memcpy(&Lemon_Partition_Table[0], &Partition_Table[Partition_Number], sizeof(TShellPartitionMenuPartitionTableEntry));
+	memcpy(&Lemon_Partition_Table[0], &Partition_Table[Partition_Number], sizeof(TFileSystemMasterBootLoaderPartitionTableEntry));
 	// Set the Lemon partition type
-	Lemon_Partition_Table[0].Type = SHELL_PARTITION_MENU_LEMON_PARTITION_TYPE;
+	Lemon_Partition_Table[0].Type = FILE_SYSTEM_MASTER_BOOT_LOADER_PARTITION_TABLE_PARTITION_TYPE_LEMON;
 	// Clear all other entries
-	memset(&Lemon_Partition_Table[1], 0, sizeof(TShellPartitionMenuPartitionTableEntry) * (SHELL_PARTITION_MENU_PARTITION_TABLE_ENTRIES_COUNT - 1));
+	memset(&Lemon_Partition_Table[1], 0, sizeof(TFileSystemMasterBootLoaderPartitionTableEntry) * (FILE_SYSTEM_MASTER_BOOT_LOADER_PARTITION_TABLE_ENTRIES_COUNT - 1));
 	
 	return Lemon_Partition_Table;
 }

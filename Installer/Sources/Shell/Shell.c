@@ -11,7 +11,6 @@
 #include <Standard_Functions.h> // To have atoi()
 #include "Embedded_Files_Data.h"
 #include "Shell.h"
-#include "Shell_Partition_Menu.h"
 #include "Strings.h"
 
 //-------------------------------------------------------------------------------------------------------------------------------
@@ -36,7 +35,7 @@ static void ShellReboot(void)
 /** Copy the MBR code and the partition table at the partition starting sector.
  * @param Pointer_Lemon_Partition_Table The partition table to put on the Lemon MBR.
  */
-static void ShellInstallMBR(TShellPartitionMenuPartitionTableEntry *Pointer_Lemon_Partition_Table)
+static void ShellInstallMBR(TFileSystemMasterBootLoaderPartitionTableEntry *Pointer_Lemon_Partition_Table)
 {
 	unsigned char Sector_Temp[FILE_SYSTEM_SECTOR_SIZE_BYTES];
 	
@@ -44,7 +43,7 @@ static void ShellInstallMBR(TShellPartitionMenuPartitionTableEntry *Pointer_Lemo
 	memcpy(Sector_Temp, Embedded_Files[0].Pointer_Data, FILE_SYSTEM_SECTOR_SIZE_BYTES);
 	
 	// Merge the partition table
-	memcpy(&Sector_Temp[SHELL_PARTITION_MENU_PARTITION_TABLE_OFFSET], Pointer_Lemon_Partition_Table, SHELL_PARTITION_MENU_PARTITION_TABLE_SIZE);
+	memcpy(&Sector_Temp[FILE_SYSTEM_MASTER_BOOT_LOADER_PARTITION_TABLE_OFFSET], Pointer_Lemon_Partition_Table, FILE_SYSTEM_MASTER_BOOT_LOADER_PARTITION_TABLE_SIZE);
 	
 	// Write to disk
 	HardDiskWriteSector(Pointer_Lemon_Partition_Table[0].First_Sector_LBA, Sector_Temp);
@@ -144,7 +143,7 @@ void ShellDisplayTitle(char *String_Title)
 /** The installer specific code. */
 void Shell(void)
 {
-	TShellPartitionMenuPartitionTableEntry *Pointer_Lemon_Partition_Table, Default_Lemon_Partition_Table;
+	TFileSystemMasterBootLoaderPartitionTableEntry *Pointer_Lemon_Partition_Table, Default_Lemon_Partition_Table;
 	unsigned int Partition_Starting_Sector, File_System_Starting_Sector;
 	
 	// Show the title
@@ -172,7 +171,7 @@ void Shell(void)
 		// Fill the default partition table
 		memset(&Default_Lemon_Partition_Table, 0, sizeof(Default_Lemon_Partition_Table)); // Partitions 1 to 3 are not used, so force them to zero
 		Default_Lemon_Partition_Table.Status = 0x80; // Tell that the partition is bootable
-		Default_Lemon_Partition_Table.Type = SHELL_PARTITION_MENU_LEMON_PARTITION_TYPE;
+		Default_Lemon_Partition_Table.Type = FILE_SYSTEM_MASTER_BOOT_LOADER_PARTITION_TABLE_PARTITION_TYPE_LEMON;
 		Default_Lemon_Partition_Table.First_Sector_LBA = 0; // Start from the disk beginning
 		Default_Lemon_Partition_Table.Sectors_Count = 64 * 1024 * 1024 / 512; // 64MB, TODO : compute this in a clean way
 		Pointer_Lemon_Partition_Table = &Default_Lemon_Partition_Table;

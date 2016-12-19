@@ -13,6 +13,16 @@
 /** Hard disk physical sector size in bytes. */
 #define FILE_SYSTEM_SECTOR_SIZE_BYTES 512
 
+/** The MBR partition table contains 4 entries. */
+#define FILE_SYSTEM_MASTER_BOOT_LOADER_PARTITION_TABLE_ENTRIES_COUNT 4
+/** Where to locate the partition table in the MBR sector. */
+#define FILE_SYSTEM_MASTER_BOOT_LOADER_PARTITION_TABLE_OFFSET 446
+/** The partition table total size in bytes. */
+#define FILE_SYSTEM_MASTER_BOOT_LOADER_PARTITION_TABLE_SIZE (FILE_SYSTEM_MASTER_BOOT_LOADER_PARTITION_TABLE_ENTRIES_COUNT * sizeof(TFileSystemMasterBootLoaderPartitionTableEntry))
+
+/** The Lemon partition type. */
+#define FILE_SYSTEM_MASTER_BOOT_LOADER_PARTITION_TABLE_PARTITION_TYPE_LEMON 0x60 // Same as system interrupt calls
+
 /** Tell that the current block is the last of the file. */
 #define FILE_SYSTEM_BLOCKS_LIST_BLOCK_EOF 0xFFFFFFFF // This allows only 2^32 - 1 blocks in the Blocks List
 /** Tell that the Blocks List has no more free block. */
@@ -47,6 +57,21 @@ typedef struct __attribute__((packed))
 	TFilesListEntry Files_List[CONFIGURATION_FILE_SYSTEM_MAXIMUM_FILES_LIST_ENTRIES]; //!< All the possible files.
 	unsigned char Padding_2[FILE_SYSTEM_SECTOR_SIZE_BYTES]; //!< Provide one more sector for the same reason than the previous padding.
 } TFileSystem;
+
+/** A MBR partition table entry. */
+typedef struct __attribute__((packed))
+{
+	unsigned char Status; //!< Bit 7 tells if the partition is active (i.e. bootable) or not.
+	unsigned char First_Sector_Head; //!< CHS head of the partition first sector.
+	unsigned char First_Sector_Sector_And_Cylinder_MSB; //!< CHS sector and cylinder bits 9..8 of the partition first sector.
+	unsigned char First_Sector_Cylinder; //!< CHS cylinder bits 7..0 of the partition first sector.
+	unsigned char Type; //!< The partition type.
+	unsigned char Last_Sector_Head; //!< CHS head of the partition last sector.
+	unsigned char Last_Sector_Sector_And_Cylinder_MSB; //!< CHS sector and cylinder bits 9..8 of the partition last sector.
+	unsigned char Last_Sector_Cylinder; //!< CHS cylinder bits 7..0 of the partition last sector.
+	unsigned int First_Sector_LBA; //!< The partition first sector in LBA addressing.
+	unsigned int Sectors_Count; //!< How many sectors in the partition.
+} TFileSystemMasterBootLoaderPartitionTableEntry;
 
 //-------------------------------------------------------------------------------------------------
 // Public variables
