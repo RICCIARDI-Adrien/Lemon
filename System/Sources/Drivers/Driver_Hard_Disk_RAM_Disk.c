@@ -5,10 +5,10 @@
 #include <Configuration.h>
 #include <Debug.h>
 #include <Drivers/Driver_Hard_Disk.h>
-#include <Embedded_Files_Data.h>
 #include <Error_Codes.h>
 #include <File_System/File.h>
 #include <File_System/File_System.h>
+#include <Installer_Embedded_Files_Data.h>
 #include <Standard_Functions.h>
 
 //-------------------------------------------------------------------------------------------------
@@ -41,7 +41,8 @@ static int HardDiskRAMDiskInstallFiles(void)
 	// Compute the total number of embedded files
 	Embedded_Files_To_Install_Count = sizeof(Embedded_Files) / sizeof(TEmbeddedFile);
 	
-	for (i = 0; i < Embedded_Files_To_Install_Count; i++)
+	// Bypass MBR and kernel files
+	for (i = 2; i < Embedded_Files_To_Install_Count; i++)
 	{
 		// Try to open the file
 		if (FileOpen(Embedded_Files[i].String_Name, 'w', &File_Descriptor) != ERROR_CODE_NO_ERROR) return 1;

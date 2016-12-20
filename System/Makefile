@@ -20,11 +20,8 @@ endif
 OBJECTS_CORE = $(PATH_OBJECTS)/Architecture.o $(PATH_OBJECTS)/Debug.o $(PATH_OBJECTS)/Hardware_Functions.o $(PATH_OBJECTS)/Kernel.o $(PATH_OBJECTS)/Standard_Functions.o $(PATH_OBJECTS)/System_Calls.o
 OBJECTS_DRIVERS += $(PATH_OBJECTS)/Driver_Keyboard.o $(PATH_OBJECTS)/Driver_PIC.o $(PATH_OBJECTS)/Driver_Screen.o $(PATH_OBJECTS)/Driver_Timer.o $(PATH_OBJECTS)/Driver_UART.o
 OBJECTS_FILE_SYSTEM = $(PATH_OBJECTS)/File.o $(PATH_OBJECTS)/File_System.o
-ifeq ($(CONFIGURATION_BUILD_INSTALLER),1)
-	OBJECTS_SHELL = $(PATH_OBJECTS)/Shell_Installer.o $(PATH_OBJECTS)/Shell_Installer_Partition_Menu.o
-else
-	OBJECTS_SHELL = $(PATH_OBJECTS)/Shell.o $(PATH_OBJECTS)/Shell_Command_Copy_File.o $(PATH_OBJECTS)/Shell_Command_Delete_File.o $(PATH_OBJECTS)/Shell_Command_Download.o $(PATH_OBJECTS)/Shell_Command_File_Size.o $(PATH_OBJECTS)/Shell_Command_List.o $(PATH_OBJECTS)/Shell_Command_Rename_File.o
-endif
+OBJECTS_SHELL_INSTALLER = $(PATH_OBJECTS)/Shell_Installer.o $(PATH_OBJECTS)/Shell_Installer_Partition_Menu.o
+OBJECTS_SHELL_SYSTEM = $(PATH_OBJECTS)/Shell.o $(PATH_OBJECTS)/Shell_Command_Copy_File.o $(PATH_OBJECTS)/Shell_Command_Delete_File.o $(PATH_OBJECTS)/Shell_Command_Download.o $(PATH_OBJECTS)/Shell_Command_File_Size.o $(PATH_OBJECTS)/Shell_Command_List.o $(PATH_OBJECTS)/Shell_Command_Rename_File.o
 
 #------------------------------------------------------------------------------------------------------------------------------
 # User configuration
@@ -66,27 +63,43 @@ ifeq ($(DEPENDENCIES_INCLUDE_PCI),1)
 	OBJECTS_DRIVERS += $(PATH_OBJECTS)/Driver_PCI.o
 endif
 
+#------------------------------------------------------------------------------------------------------------------------------
+# Select files to build
+#------------------------------------------------------------------------------------------------------------------------------
+ifeq ($(CONFIGURATION_BUILD_INSTALLER),1)
+    # Select the system shell instead of the installer one as it is a RAM disk build
+    ifeq ($(SYSTEM_HARD_DISK_DRIVER),ram)
+	OBJECTS_SHELL = $(OBJECTS_SHELL_SYSTEM)
+    # This is a regular system build, use the installer shell
+    else
+	OBJECTS_SHELL = $(OBJECTS_SHELL_INSTALLER)
+    endif
+else
+    # Do not compile anything when building the system with RAM disk support, the installer will compile the needed stuff (only the MBR will be compiled, but this is fast)
+    ifeq ($(SYSTEM_HARD_DISK_DRIVER),ram)
+	OBJECTS_CORE =
+	OBJECTS_DRIVERS =
+	OBJECTS_FILE_SYSTEM =
+	OBJECTS_SHELL =
+    # This is a regular system build (with a physical hard drive driver), select the system shell
+    else
+	OBJECTS_SHELL = $(OBJECTS_SHELL_SYSTEM)
+    endif
+endif
 OBJECTS = $(OBJECTS_CORE) $(OBJECTS_DRIVERS) $(OBJECTS_FILE_SYSTEM) $(OBJECTS_SHELL)
 
+#------------------------------------------------------------------------------------------------------------------------------
+# Build rules
+#------------------------------------------------------------------------------------------------------------------------------
 all: clean $(PATH_OBJECTS)/MBR.bin
-# ifeq ($(SYSTEM_HARD_DISK_DRIVER),ram)
-#     all: convert_files
-# endif
 ifeq ($(CONFIGURATION_BUILD_INSTALLER),1)
     all: convert_files
 endif
 all: $(OBJECTS)
 all:
-# ifeq ($(SYSTEM_HARD_DISK_DRIVER),ram)
-# 	@# The regular kernel will be directly booted when using a RAM disk
-# 	cp ../System/Objects/Kernel.bin $(PATH_OBJECTS)
-# else
-# 	######## Linking installer ########
-# 	$(GLOBAL_TOOL_LINKER) $(LDFLAGS) $(OBJECTS) -o $(PATH_OBJECTS)/Kernel.bin
-# endif
-	######## Linking installer ########
-	$(GLOBAL_TOOL_LINKER) $(LDFLAGS) $(OBJECTS) -o $(PATH_OBJECTS)/Kernel.bin
 ifeq ($(CONFIGURATION_BUILD_INSTALLER),1)
+	######## Linking image ########
+	$(GLOBAL_TOOL_LINKER) $(LDFLAGS) $(OBJECTS) -o $(PATH_OBJECTS)/Kernel.bin
 	######## Creating floppy image ########
 	cat $(PATH_OBJECTS)/MBR.bin $(PATH_OBJECTS)/Kernel.bin > $(PATH_OBJECTS)/Raw_Image.bin
 	dd if=/dev/zero of=$(PATH_BINARIES)/Lemon_Installer_Floppy_Image.img bs=512 count=2880 status=none
@@ -103,11 +116,20 @@ ifeq ($(CONFIGURATION_BUILD_INSTALLER),1)
 	######## Build successful ########
 	@ls -l $(PATH_OBJECTS)/Kernel.bin | awk '{print "Installer size : " $$5 + 512 " bytes"}'
 else
+    ifneq ($(SYSTEM_HARD_DISK_DRIVER),ram)
+	######## Linking kernel ########
+	$(GLOBAL_TOOL_LINKER) $(LDFLAGS) $(OBJECTS) -o $(PATH_OBJECTS)/Kernel.bin
 	######## Build successful ########
 	@ls -l $(PATH_OBJECTS)/Kernel.bin | awk '{print "Kernel size : " $$5 + 512 " bytes"}'
+    endif
 endif
 
 convert_files: $(BINARIES_TO_HEADER_CONVERTER)
+	@# Create fake MBR and kernel binaries for the RAM disk installer build to embed them on the image (this allows to always use the same Binaries_To_Header_Converter_List.txt file)
+ifeq ($(SYSTEM_HARD_DISK_DRIVER),ram)
+	@touch $(PATH_OBJECTS)/System_MBR.bin
+	@touch $(PATH_OBJECTS)/System_Kernel.bin
+endif
 	######## Embed applications data into image ########
 	@$(BINARIES_TO_HEADER_CONVERTER) $(PATH_TOOLS)/Binaries_To_Header_Converter_List.txt $(PATH_INCLUDES)/Installer_Embedded_Files_Data.h
 	
