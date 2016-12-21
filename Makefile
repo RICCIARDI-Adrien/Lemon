@@ -64,6 +64,7 @@ endef
 all: clean libraries applications system installer
 
 clean:
+	@cd System && $(MAKE) CONFIGURATION_BUILD_INSTALLER=1 clean
 	@cd Libraries && $(MAKE) clean
 	@cd Applications && $(MAKE) clean
 	@cd System && $(MAKE) clean
