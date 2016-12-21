@@ -284,7 +284,7 @@ void KeyboardInterruptHandler(void)
 	return;*/
 	
 	// F12 : go back instantly to the kernel console
-	#if !CONFIGURATION_BUILD_INSTALLER
+	#if (!CONFIGURATION_BUILD_INSTALLER) || CONFIGURATION_BUILD_RAM_DISK // RAM disk is built as an installer, so allow F12 in this case
 		if (Scan_Code == 0x58)
 		{
 			// Send the End of Interrupt code to the PIC
