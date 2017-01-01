@@ -120,7 +120,132 @@ typedef struct __attribute__((packed))
 	unsigned int Transmit_Descriptor_Tail;
 	unsigned int Transmit_Descriptor_Tail_High;
 	
-	unsigned char Reserved_9[0x5200 - 0x3820];
+	unsigned char Reserved_9[0x4000 - 0x3820];
+	
+	// Statistic registers
+	// Offset 0x4000
+	unsigned int CRC_Error_Count;
+	// Offset 0x4004
+	unsigned int Alignment_Error_Count;
+	// Offset 0x4008
+	unsigned int Symbol_Error_Count;
+	// Offset 0x400C
+	unsigned int RX_Error_Count;
+	// Offset 0x4010
+	unsigned int Missed_Packets_Count;
+	// Offset 0x4014
+	unsigned int Single_Collision_Count;
+	// Offset 0x4018
+	unsigned int Excessive_Collisions_Count;
+	// Offset 0x401C
+	unsigned int Multiple_Collision_Count;
+	// Offset 0x4020
+	unsigned int Late_Collisions_Count;
+	unsigned int Reserved_10;
+	// Offset 0x4028
+	unsigned int Collision_Count;
+	unsigned int Reserved_11;
+	// Offset 0x4030
+	unsigned int Defer_Count;
+	// Offset 0x4034
+	unsigned int Transmit_With_No_CRS;
+	// Offset 0x4038
+	unsigned int Sequence_Error_Count;
+	// Offset 0x403C
+	unsigned int Carrier_Extension_Error_Count;
+	// Offset 0x4040
+	unsigned int Receive_Length_Error_Count;
+	unsigned int Reserved_12;
+	// Offset 0x4048
+	unsigned int XON_Received_Count;
+	// Offset 0x404C
+	unsigned int XON_Transmitted_Count;
+	// Offset 0x4050
+	unsigned int XOFF_Received_Count;
+	// Offset 0x4054
+	unsigned int XOFF_Transmitted_Count;
+	// Offset 0x4058
+	unsigned int FC_Received_Unsupported_Count;
+	// Offset 0x405C
+	unsigned int Packets_Received_64_Bytes_Count;
+	// Offset 0x4060
+	unsigned int Packets_Received_127_Bytes_Count;
+	// Offset 0x4064
+	unsigned int Packets_Received_255_Bytes_Count;
+	// Offset 0x4068
+	unsigned int Packets_Received_511_Bytes_Count;
+	// Offset 0x406C
+	unsigned int Packets_Received_1023_Bytes_Count;
+	// Offset 0x4070
+	unsigned int Packets_Received_Max_Bytes_Count;
+	// Offset 0x4074
+	unsigned int Good_Packets_Received_Count;
+	// Offset 0x4078
+	unsigned int Broadcast_Packets_Received_Count;
+	// Offset 0x407C
+	unsigned int Multicast_Packets_Received_Count;
+	// Offset 0x4080
+	unsigned int Good_Packets_Transmitted_Count;
+	unsigned int Reserved_13;
+	// Offset 0x4088
+	unsigned int Good_Octets_Received_Count_Low;
+	// Offset 0x408C
+	unsigned int Good_Octets_Received_Count_High;
+	// Offset 0x4090
+	unsigned int Good_Octets_Transmitted_Count_Low;
+	// Offset 0x4094
+	unsigned int Good_Octets_Transmitted_Count_High;
+	unsigned int Reserved_14[2];
+	// Offset 0x40A0
+	unsigned int Receive_No_Buffers_Count;
+	// Offset 0x40A4
+	unsigned int Receive_Undersize_Count;
+	// Offset 0x40A8
+	unsigned int Receive_Fragment_Count;
+	// Offset 0x40AC
+	unsigned int Receive_Oversize_Count;
+	// Offset 0x40B0
+	unsigned int Receive_Jabber_Count;
+	// Offset 0x40B4
+	unsigned int Management_Packets_Received_Count;
+	// Offset 0x40B8
+	unsigned int Management_Packets_Dropped_Count;
+	// Offset 0x40BC
+	unsigned int Management_Packets_Transmitted_Count;
+	// Offset 0x40C0
+	unsigned int Total_Octets_Received_Low;
+	// Offset 0x40C4
+	unsigned int Total_Octets_Received_High;
+	// Offset 0x40C8
+	unsigned int Total_Octets_Transmitted_Low;
+	// Offset 0x40CC
+	unsigned int Total_Octets_Transmitted_High;
+	// Offset 0x40D0
+	unsigned int Total_Packets_Received;
+	// Offset 0x40D4
+	unsigned int Total_Packets_Transmitted;
+	// Offset 0x40D8
+	unsigned int Packets_Transmitted_64_Bytes_Count;
+	// Offset 0x40DC
+	unsigned int Packets_Transmitted_127_Bytes_Count;
+	// Offset 0x40E0
+	unsigned int Packets_Transmitted_255_Bytes_Count;
+	// Offset 0x40E4
+	unsigned int Packets_Transmitted_511_Bytes_Count;
+	// Offset 0x40E8
+	unsigned int Packets_Transmitted_1023_Bytes_Count;
+	// Offset 0x40EC
+	unsigned int Packets_Transmitted_Max_Bytes_Count;
+	// Offset 0x40F0
+	unsigned int Multicast_Packets_Transmitted_Count;
+	// Offset 0x40F4
+	unsigned int Broadcast_Packets_Transmitted_Count;
+	// Offset 0x40F8
+	unsigned int TCP_Segmentation_Context_Transmitted_Count;
+	// Offset 0x40FC
+	unsigned int TCP_Segmentation_Context_Transmit_Fail_Count;
+	
+	unsigned char Reserved_15[0x5200 - 0x4100];
 	
 	// Offset 0x5200
 	unsigned int Multicast_Table_Array_Entries[128];
@@ -363,7 +488,7 @@ void EthernetSendPacket(unsigned int Buffer_Size, void *Pointer_Buffer)
 	Ethernet_Controller_Transmit_Descriptor.Command_And_Checksum_Offset = (1 << ETHERNET_CONTROLLER_TRANSMIT_DESCRIPTOR_COMMAND_REGISTER_END_OF_PACKET_BIT) | (1 << ETHERNET_CONTROLLER_TRANSMIT_DESCRIPTOR_COMMAND_REGISTER_REPORT_STATUS_BIT); // Tell that the packet is fully contained in the descriptor so it can be sent; make the "descriptor done" status bit be set when the packet has been transmitted
 	
 	// Send the packet
-	Pointer_Ethernet_Controller_Registers->Transmit_Descriptor_Head = 0; // Reset transmision buffer descriptors queue
+	Pointer_Ethernet_Controller_Registers->Transmit_Descriptor_Head = 0; // Reset transmission buffer descriptors queue
 	Pointer_Ethernet_Controller_Registers->Transmit_Descriptor_Tail = 1;
 	
 	// Wait for the packet to be transmitted
