@@ -142,7 +142,7 @@ sdk:
 
 # Copy the installation image to the floppy disk
 floppy:
-	@if [ ! -e Installer/Binaries/Lemon_Installer_Floppy_Image.img ]; then printf "\033[31mThe installer floppy image has not been generated. Run 'make' before calling 'make floppy'.\033[0m\n"; false; fi
+	@if [ ! -e Lemon_Installer_Floppy_Image.img ]; then printf "\033[31mThe installer floppy image has not been generated. Run 'make' before calling 'make floppy'.\033[0m\n"; false; fi
 	@if [ $(shell id -u) != "0" ]; then printf "\033[31mYou must be root to execute this command.\033[0m\n"; false; fi
 	@printf "Writing data to floppy...\n"
 	@dd if=Installer/Binaries/Lemon_Installer_Floppy_Image.img of=/dev/fd0
@@ -152,6 +152,13 @@ floppy:
 	@# The diff command will return 1 if the images are different, making the rule fail
 	@diff Installer/Binaries/Lemon_Installer_Floppy_Image.img /tmp/Lemon_Floppy_Image.img
 	@printf "\033[32mFloppy image OK.\033[0m\n"
+
+# Burn the installation ISO to a CD
+cd:
+	@if [ ! -e Lemon_Installer_CD_Image.iso ]; then printf "\033[31mThe installer ISO image has not been generated. Run 'make' before calling 'make cd'.\033[0m\n"; false; fi
+	@if [ $(shell id -u) != "0" ]; then printf "\033[31mYou must be root to execute this command.\033[0m\n"; false; fi
+	@-umount /media/ar/CDROM
+	@wodim dev=/dev/sr0 blank=fast Lemon_Installer_CD_Image.iso gracetime=2
 
 applications:
 	@$(call DisplayTitle,Compiling applications)
