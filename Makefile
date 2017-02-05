@@ -88,6 +88,7 @@ all: clean libraries applications
 
 clean:
 	@cd System && $(MAKE) CONFIGURATION_BUILD_INSTALLER=1 clean
+	@cd Newlib && $(MAKE) clean
 	@cd Libraries && $(MAKE) clean
 	@cd Applications && $(MAKE) clean
 	@cd System && $(MAKE) clean
@@ -151,6 +152,15 @@ application/%:
 libraries:
 	@$(call DisplayTitle,Compiling libraries)
 	@cd Libraries && $(MAKE) -j $(HOST_PROCESSORS_COUNT)
+	
+newlib:
+	@$(call DisplayTitle,Compiling newlib)
+	@cd Newlib && $(MAKE)
+
+# Used only while developing syscalls, remove after
+newlib_system_calls:
+	@$(call DisplayTitle,Compiling newlib syscalls)
+	@cd Newlib && $(MAKE) lemon_newlib_system_calls
 
 # Create hard disk image if not present
 QEMU_Hard_Disk.img:
@@ -162,3 +172,7 @@ qemu: QEMU_Hard_Disk.img
 
 qemu-install: QEMU_OPTIONS += -cdrom Lemon_Installer_CD_Image.iso -boot order=d
 qemu-install: qemu
+
+system:
+	@$(call DisplayTitle,Compiling system)
+	@cd System && $(MAKE) CONFIGURATION_BUILD_INSTALLER=0
