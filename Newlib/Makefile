@@ -10,13 +10,15 @@ configure:
 	# --with-newlib --disable-shared parameters allow to build a fully static library
 	# Install everything to objects directory as paths fine tuning via configure script seems to be not working
 	# Set -fno-pic to avoid generating Position Independent Code, used only for dynamic libraries (here only static libraries are needed)
+	# Undefined standard __linux__ macro as it was set on the build system and enabled unwanted __LARGE64_FILES support
 	cd $(PATH_OBJECTS) && \
 	export AR_FOR_TARGET=ar && \
 	export CC_FOR_TARGET=gcc && \
 	export GCC_FOR_TARGET=gcc && \
 	export LD_FOR_TARGET=ld && \
 	export RANLIB_FOR_TARGET=ranlib && \
-	export CFLAGS_FOR_TARGET="-m32 -O2 -fno-pic" && \
+	export READELF_FOR_TARGET=readelf && \
+	export CFLAGS_FOR_TARGET="-m32 -O2 -fno-pic -U__linux__" && \
 	../newlib-cygwin/configure --target=$(BUILD_TARGET) --with-newlib --disable-shared --disable-newlib-multithread --disable-multilib --prefix=$(PATH_OBJECTS)
 
 compile:
