@@ -9,13 +9,14 @@ all: configure compile install
 configure:
 	# --with-newlib --disable-shared parameters allow to build a fully static library
 	# Install everything to objects directory as paths fine tuning via configure script seems to be not working
+	# Set -fno-pic to avoid generating Position Independent Code, used only for dynamic libraries (here only static libraries are needed)
 	cd $(PATH_OBJECTS) && \
 	export AR_FOR_TARGET=ar && \
 	export CC_FOR_TARGET=gcc && \
 	export GCC_FOR_TARGET=gcc && \
 	export LD_FOR_TARGET=ld && \
 	export RANLIB_FOR_TARGET=ranlib && \
-	export CFLAGS_FOR_TARGET="-m32 -O2" && \
+	export CFLAGS_FOR_TARGET="-m32 -O2 -fno-pic" && \
 	../newlib-cygwin/configure --target=$(BUILD_TARGET) --with-newlib --disable-shared --disable-newlib-multithread --disable-multilib --prefix=$(PATH_OBJECTS)
 
 compile:
