@@ -2,6 +2,7 @@
 # Author : Adrien RICCIARDI
 BINARIES_PATH = $(realpath Binaries)
 LIBRARIES_PATH = $(realpath ../Libraries)
+NEWLIB_PATH = $(realpath ../Newlib)
 OBJECTS_PATH = $(realpath Objects)
 SOURCES_PATH = $(realpath Sources)
 SYSTEM_PATH = $(realpath ../System)
@@ -14,8 +15,8 @@ GCC_LIBRARY_PATH_AND_FILE_NAME = $(shell $(GLOBAL_TOOL_COMPILER) -m32 -print-lib
 # Remove the library file name to keep only the path
 GCC_LIBRARY_PATH = $(subst /libgcc.a,,$(GCC_LIBRARY_PATH_AND_FILE_NAME))
 
-CCFLAGS += -I$(LIBRARIES_PATH)/Includes -I$(SYSTEM_PATH)/Includes
-LDFLAGS = -T $(TOOLS_PATH)/Linker_Script.ld --strip-all -s -L$(LIBRARIES_PATH)/Binaries -l:Libraries.a -L$(GCC_LIBRARY_PATH) -l:libgcc.a
+CCFLAGS += -I$(LIBRARIES_PATH)/Includes -I$(NEWLIB_PATH)/Includes -I$(SYSTEM_PATH)/Includes -U__linux__
+LDFLAGS = -T $(TOOLS_PATH)/Linker_Script.ld --strip-all -s -L$(LIBRARIES_PATH)/Binaries -l:Libraries.a -L$(NEWLIB_PATH)/Binaries -lc -l:Lemon_System_Calls.a -lnosys -L$(GCC_LIBRARY_PATH) -l:libgcc.a
 
 # Find all available applications (-mindepth 1 allows to remove the '.' entry)
 FOUND_APPLICATION_DIRECTORIES_1 = $(shell cd $(SOURCES_PATH) && find . -mindepth 1 -maxdepth 1 -type d)
