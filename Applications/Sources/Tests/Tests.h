@@ -99,6 +99,12 @@ int TestsMemorySetSmallAreaValue(void);
 int TestsMemorySetBigAreaValue(void);
 
 // Newlib C library
+/** Test "open" syscall.
+ * @return 0 if test was successful,
+ * @return 1 if the test failed.
+ */
+int TestsNewlibSystemCallOpen(void);
+
 /** Test "write" syscall.
  * @return 0 if test was successful,
  * @return 1 if the test failed.

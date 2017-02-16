@@ -64,6 +64,10 @@ static TTest Tests[] =
 	},
 	// Newlib tests
 	{
+		"Newlib open system call",
+		TestsNewlibSystemCallOpen
+	},
+	{
 		"Newlib write system call",
 		TestsNewlibSystemCallWrite
 	},
