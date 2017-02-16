@@ -39,7 +39,18 @@ int write(int File_Descriptor, const void *Pointer_Buffer, size_t Bytes_Count)
 	}
 	
 	// Greater file descriptors correspond to files
-	
-	// TODO
-	return 0;
+	File_Descriptor -= 3; // Lemon file descriptors start from 0, so bypass stdin, stdout and stderr
+	switch (SystemCall(SYSTEM_CALL_FILE_WRITE, File_Descriptor, Bytes_Count, (void *) Pointer_Buffer, NULL))
+	{
+		case ERROR_CODE_NO_ERROR:
+			return Bytes_Count;
+			
+		case ERROR_CODE_BLOCKS_LIST_FULL:
+			errno = ENOSPC;
+			return -1;
+		
+		default:
+			errno = EBADF;
+			return -1;
+	}
 }

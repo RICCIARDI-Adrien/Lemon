@@ -83,13 +83,16 @@ int TestsNewlibSystemCallOpen(void)
 	
 Exit:
 	FileDelete("_test_");
-	FileDelete("_notexisting"); // Closing this file while opened in write mode created it
+	FileDelete("_notexisting"); // Closing this file after being opened in write mode has created it
 	return Return_Value;
 }
 
-// Warning : 'open' syscall must have been tested prior to test write
 int TestsNewlibSystemCallWrite(void)
 {
+	unsigned int File_Descriptor, Read_Bytes_Count;
+	int Return_Value = 1;
+	char String_Written_Data[] = "This is a test.", String_Read_Data[sizeof(String_Written_Data)];
+	
 	// Try to write to stdin
 	if (write(0, "bla", 3) != -1)
 	{
@@ -113,5 +116,50 @@ int TestsNewlibSystemCallWrite(void)
 		return 1;
 	}
 	
-	return 0;
+	// Try to write to a regular file
+	if (FileOpen("_test_", FILE_OPENING_MODE_WRITE, &File_Descriptor) != ERROR_CODE_NO_ERROR)
+	{
+		DisplayMessageError("failed to open the file in write mode.");
+		return 1;
+	}
+	// Write some data to the file
+	if (write(File_Descriptor + 3, String_Written_Data, sizeof(String_Written_Data)) != sizeof(String_Written_Data)) // Bypass strin, stdout and stderr
+	{
+		DisplayMessageError("failed to write to the file.\n");
+		goto Exit;
+	}
+	FileClose(File_Descriptor);
+	
+	// Were data successfully written ?
+	if (FileOpen("_test_", FILE_OPENING_MODE_READ, &File_Descriptor) != ERROR_CODE_NO_ERROR)
+	{
+		DisplayMessageError("failed to open the file in read mode.");
+		return 1;
+	}
+	// Read the written data
+	if (FileRead(File_Descriptor, String_Read_Data, sizeof(String_Read_Data), &Read_Bytes_Count) != ERROR_CODE_NO_ERROR)
+	{
+		DisplayMessageError("failed to read data.");
+		goto Exit;
+	}
+	if (Read_Bytes_Count != sizeof(String_Read_Data))
+	{
+		DisplayMessageError("not all data were read.");
+		goto Exit;
+	}
+	FileClose(File_Descriptor);
+	
+	// Make sure data were successfully written
+	if (!StringCompare(String_Written_Data, String_Read_Data))
+	{
+		DisplayMessageError("written and read data are different.");
+		goto Exit;
+	}
+	
+	Return_Value = 0;
+	
+Exit:
+	FileClose(File_Descriptor);
+	FileDelete("_test_");
+	return Return_Value;
 }
