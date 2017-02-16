@@ -98,6 +98,13 @@ int TestsMemorySetSmallAreaValue(void);
  */
 int TestsMemorySetBigAreaValue(void);
 
+// Newlib C library
+/** Test "write" syscall.
+ * @return 0 if test was successful,
+ * @return 1 if the test failed.
+ */
+int TestsNewlibSystemCallWrite(void);
+
 // String API
 /** Test the StringCompare() function.
  * @return 0 if all tests were successful,

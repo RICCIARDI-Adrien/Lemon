@@ -62,6 +62,11 @@ static TTest Tests[] =
 		"MemorySetAreaValue() with a big area size",
 		TestsMemorySetBigAreaValue
 	},
+	// Newlib tests
+	{
+		"Newlib write system call",
+		TestsNewlibSystemCallWrite
+	},
 	// String API tests
 	{
 		"StringCompare()",
