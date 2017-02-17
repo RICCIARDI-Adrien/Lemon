@@ -13,14 +13,14 @@
 /** Internal representation of a command. */
 typedef struct
 {
-	char *String_Command_Name; //! The command name, like "ls" or "df".
-	int (*CommandMain)(int argc, char *argv[]); //! The main() function for each command.
+	char *String_Command_Name; //!< The command name, like "ls" or "df".
+	int (*CommandMain)(int argc, char *argv[]); //!< The main() function for each command.
 } TCommand;
 
 //-------------------------------------------------------------------------------------------------
 // Private variables
 //-------------------------------------------------------------------------------------------------
-/** All the available commands. */
+/** All the available commands in alphabetical order. */
 static TCommand Commands[] =
 {
 	{
@@ -38,6 +38,10 @@ static TCommand Commands[] =
 	{
 		"tftp",
 		CommandMainTFTP
+	},
+	{
+		"uptime",
+		CommandMainUptime
 	},
 	// The NULL command tells that the list is terminated
 	{

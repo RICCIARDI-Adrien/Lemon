@@ -40,4 +40,12 @@ int CommandMainMore(int argc, char *argv[]);
  */
 int CommandMainTFTP(int argc, char *argv[]);
 
+/** The "uptime" command.
+ * @param argc Parameters count.
+ * @param argv Parameters value.
+ * @return 0 in case of success,
+ * @return a negative value if an error happened.
+ */
+int CommandMainUptime(int argc, char *argv[]);
+
 #endif

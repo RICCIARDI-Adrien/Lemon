@@ -23,13 +23,15 @@
 	#define STRING_UNKNOWN_COMMAND "Commande inconnue.\n"
 	
 	// "df" command
-	#define STRING_COMMAND_DF_USAGE "Affiche l'espace libre restant sur le disque dur.\nCette commande n'a pas de param\212tre.\n"
+	#define STRING_COMMAND_DF_USAGE "Affiche l'espace libre restant sur le disque dur.\n" \
+		"Cette commande n'a pas de param\212tre.\n"
 	#define STRING_COMMAND_DF_FILES_COUNT "Nombre de fichiers : "
 	#define STRING_COMMAND_DF_REMAINING_STORAGE_1 "Espace de stockage utilis\202 : "
 	#define STRING_COMMAND_DF_REMAINING_STORAGE_2 " octets"
 	
 	// "ls" command
-	#define STRING_COMMAND_LS_USAGE "Liste dans l'ordre alphab\202tique tous les fichiers pr\202sents sur le disque dur.\nCette commande n'a pas de param\212tre.\n"
+	#define STRING_COMMAND_LS_USAGE "Liste dans l'ordre alphab\202tique tous les fichiers pr\202sents sur le disque dur.\n" \
+		"Cette commande n'a pas de param\212tre.\n"
 	#define STRING_COMMAND_LS_NOT_ENOUGH_SPACE_TO_STORE_FILES "Erreur : le programme n'a pas assez de m\202moire pour afficher tous les fichiers.\n"
 	#define STRING_COMMAND_LS_DISPLAYED_UNIT " octets\n"
 	#define STRING_COMMAND_LS_WAIT_FOR_USER_INPUT "Appuyez sur une touche pour continuer."
@@ -73,7 +75,7 @@
 	#define STRING_COMMAND_TFTP_GET_BAD_BLOCK_NUMBER_1 "Erreur : le bloc "
 	#define STRING_COMMAND_TFTP_GET_BAD_BLOCK_NUMBER_2 " a \202t\202 re\207u alors que le bloc "
 	#define STRING_COMMAND_TFTP_GET_BAD_BLOCK_NUMBER_3 " \202t\202 attendu.\n"
-	// "put" command specific 
+	// "put" command specific messages
 	#define STRING_COMMAND_TFTP_PUT_CANT_OPEN_FILE "Erreur : le fichier \205 envoyer est introuvable.\n"
 	#define STRING_COMMAND_TFTP_PUT_STARTING_UPLOAD "Transmission en cours...\n"
 	#define STRING_COMMAND_TFTP_PUT_BAD_BLOCK_NUMBER_1 "Erreur : le bloc "
@@ -82,6 +84,15 @@
 	#define STRING_COMMAND_TFTP_PUT_CANT_READ_FROM_FILE "Erreur lors de la lecture du fichier local.\n"
 	#define STRING_COMMAND_TFTP_PUT_UPLOAD_SUCCESSFUL_1 "Envoi de "
 	#define STRING_COMMAND_TFTP_PUT_UPLOAD_SUCCESSFUL_2 " bloc(s) r\202ussi.\n"
+	
+	// "uptime" command
+	#define STRING_COMMAND_UPTIME_USAGE "Indique le temps depuis lequel le syst\212me est d\202marr\202.\n" \
+		"Cette commande n'a pas de param\212tre.\n"
+	#define STRING_COMMAND_UPTIME_BOOTED_TIME_1 "Syst\212me d\202marr\202 depuis "
+	#define STRING_COMMAND_UPTIME_BOOTED_TIME_2 " jour(s), "
+	#define STRING_COMMAND_UPTIME_BOOTED_TIME_3 " heure(s), "
+	#define STRING_COMMAND_UPTIME_BOOTED_TIME_4 " minute(s), "
+	#define STRING_COMMAND_UPTIME_BOOTED_TIME_5 " seconde(s).\n"
 #endif
 
 #endif
