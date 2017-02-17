@@ -10,8 +10,13 @@ TOOLS_PATH = $(realpath Tools)
 TOOL_SERIAL_PORT_SERVER = $(TOOLS_PATH)/Serial_Port_Server.out
 TOOL_ADD_EXECUTABLE_HEADER = $(TOOLS_PATH)/Add_Executable_Header.sh
 
+# The libgcc library provides support functions for native C operations that are not supported by the hardware (such as long long arithmetic on x86). Provide this feature only to applications for now (system does not need it, nor Libraries)
+GCC_LIBRARY_PATH_AND_FILE_NAME = $(shell gcc -m32 -print-libgcc-file-name)
+# Remove the library file name to keep only the path
+GCC_LIBRARY_PATH = $(subst /libgcc.a,,$(GCC_LIBRARY_PATH_AND_FILE_NAME))
+
 CCFLAGS += -W -Wall -Wunused -I$(LIBRARIES_PATH)/Includes -I$(SYSTEM_PATH)/Includes
-LDFLAGS = -T $(TOOLS_PATH)/Linker_Script.ld --strip-all -s -L$(LIBRARIES_PATH)/Binaries -l:Libraries.a
+LDFLAGS = -T $(TOOLS_PATH)/Linker_Script.ld --strip-all -s -L$(LIBRARIES_PATH)/Binaries -l:Libraries.a -L$(GCC_LIBRARY_PATH) -l:libgcc.a
 SERIAL_PORT_SERVER_FLAGS = /tmp/Lemon_Serial_Port_Pipe
 
 # Find all available applications (-mindepth 1 allows to remove the '.' entry)
