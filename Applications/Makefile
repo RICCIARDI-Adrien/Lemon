@@ -11,7 +11,7 @@ TOOL_SERIAL_PORT_SERVER = $(TOOLS_PATH)/Serial_Port_Server.out
 TOOL_ADD_EXECUTABLE_HEADER = $(TOOLS_PATH)/Add_Executable_Header.sh
 
 # The libgcc library provides support functions for native C operations that are not supported by the hardware (such as long long arithmetic on x86). Provide this feature only to applications for now (system does not need it, nor Libraries)
-GCC_LIBRARY_PATH_AND_FILE_NAME = $(shell gcc -m32 -print-libgcc-file-name)
+GCC_LIBRARY_PATH_AND_FILE_NAME = $(shell $(GLOBAL_TOOL_COMPILER) -m32 -print-libgcc-file-name)
 # Remove the library file name to keep only the path
 GCC_LIBRARY_PATH = $(subst /libgcc.a,,$(GCC_LIBRARY_PATH_AND_FILE_NAME))
 
