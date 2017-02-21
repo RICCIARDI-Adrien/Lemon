@@ -139,6 +139,11 @@ static unsigned char Ethernet_Controller_Reception_Buffer[CONFIGURATION_ETHERNET
 static unsigned char Ethernet_Controller_Transmission_Buffer[CONFIGURATION_ETHERNET_BUFFER_SIZE];
 
 //-------------------------------------------------------------------------------------------------
+// Public variables
+//-------------------------------------------------------------------------------------------------
+unsigned char Ethernet_Controller_MAC_Address[ETHERNET_CONTROLLER_MAC_ADDRESS_SIZE];
+
+//-------------------------------------------------------------------------------------------------
 // Public functions
 //-------------------------------------------------------------------------------------------------
 int EthernetInitialize(void)

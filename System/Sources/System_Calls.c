@@ -95,7 +95,11 @@ static void SystemCallSystemGetParameter(void)
 			break;
 			
 		case SYSTEM_CALL_SYSTEM_PARAMETER_ID_ETHERNET_CONTROLLER_MAC_ADDRESS:
-			memcpy(Pointer_Result, Ethernet_Controller_MAC_Address, ETHERNET_CONTROLLER_MAC_ADDRESS_SIZE);
+			#if CONFIGURATION_IS_ETHERNET_CONTROLLER_ENABLED
+				memcpy(Pointer_Result, Ethernet_Controller_MAC_Address, ETHERNET_CONTROLLER_MAC_ADDRESS_SIZE);
+			#else
+				memset(Pointer_Result, 0, ETHERNET_CONTROLLER_MAC_ADDRESS_SIZE);
+			#endif
 			break;
 			
 		// Unknown parameter

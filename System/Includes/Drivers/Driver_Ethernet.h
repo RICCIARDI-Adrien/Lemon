@@ -15,7 +15,7 @@
 // Variables
 //-------------------------------------------------------------------------------------------------
 /** Hold the controller MAC address once the controller is initialized. */
-unsigned char Ethernet_Controller_MAC_Address[ETHERNET_CONTROLLER_MAC_ADDRESS_SIZE];
+extern unsigned char Ethernet_Controller_MAC_Address[ETHERNET_CONTROLLER_MAC_ADDRESS_SIZE];
 
 //-------------------------------------------------------------------------------------------------
 // Functions
