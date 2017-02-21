@@ -1,4 +1,4 @@
-/** @file Shell_Partition_Menu.c
+/** @file Shell_Installer_Partition_Menu.c
  * @see Shell_Partition_Menu.h for description.
  * @author Adrien RICCIARDI
  */

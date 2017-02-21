@@ -87,11 +87,13 @@
 /** A GDT segment descriptor. */
 typedef struct __attribute__((packed))
 {
-	unsigned short Limit_Low, Base_Address_Low;
-	unsigned char Base_Address_Middle, Flags;
-	unsigned char Limit_High: 4;
-	unsigned char Other: 4;
-	unsigned char Base_Address_High;
+	unsigned short Limit_Low; //!< Segment size, bits 15..0 (value is multiplied by 4096 because granularity flag is set).
+	unsigned short Base_Address_Low; //!< Segment base address, bits 15..0.
+	unsigned char Base_Address_Middle; //!< Segment base address bits 23..16.
+	unsigned char Flags; //!< Segment flags (segment type, descriptor type, descriptor privilege level and segment-present flag).
+	unsigned char Limit_High: 4; //!< Segment size, bits 19..16.
+	unsigned char Other: 4; //!< Some more flags (like granularity flag).
+	unsigned char Base_Address_High; //!< Segment base address bits 31..24.
 } TArchitectureSegmentDescriptor;
 
 /** The GDTR content. */
@@ -113,39 +115,51 @@ typedef struct __attribute__((packed))
 /** The IDTR content. */
 typedef struct __attribute__((packed))
 {
-	unsigned short Table_Size;
-	TArchitectureInterruptDescriptor *Pointer_Table;
+	unsigned short Table_Size; //!< The Interrupt Descriptor Table size in bytes minus one (as requested by Intel datasheet).
+	TArchitectureInterruptDescriptor *Pointer_Table; //!< The Interrupt Descriptor Table base address.
 } TArchitectureInterruptDescriptorTableRegister;
 
 /** A TSS descriptor. */
 typedef struct __attribute__((packed))
 {
-	unsigned short Previous_Task, Reserved_0;
-	unsigned int ESP0;
-	unsigned short SS0, Reserved_1;
-	unsigned int ESP1;
-	unsigned short SS1, Reserved_2;
-	unsigned int ESP2;
-	unsigned short SS2, Reserved_3;
-	unsigned int CR3;
-	unsigned int EIP;
-	unsigned int EFLAGS;
-	unsigned int EAX;
-	unsigned int ECX;
-	unsigned int EDX;
-	unsigned int EBX;
-	unsigned int ESP;
-	unsigned int EBP;
-	unsigned int ESI;
-	unsigned int EDI;
-	unsigned short ES, Reserved_5;
-	unsigned short CS, Reserved_6;
-	unsigned short SS, Reserved_7;
-	unsigned short DS, Reserved_8;
-	unsigned short FS, Reserved_9;
-	unsigned short GS, Reserved_10;
-	unsigned short LDT_Segment_Selector, Reserved_11;
-	unsigned short Debug_Flag, IO_Map_Base_Address;
+	unsigned short Previous_Task; //!< Previous task TSS's segment descriptor index (not used here as there is only a single task).
+	unsigned short Reserved_0; //!< Padding.
+	unsigned int ESP0; //!< Task ESP register value for privilege level 0 prior task switching.
+	unsigned short SS0; //!< Task SS register value for privilege level 0 prior task switching.
+	unsigned short Reserved_1; //!< Padding.
+	unsigned int ESP1; //!< Task ESP register value for privilege level 1 prior task switching.
+	unsigned short SS1; //!< Task SS register value for privilege level 1 prior task switching.
+	unsigned short Reserved_2; //!< Padding.
+	unsigned int ESP2; //!< Task ESP register value for privilege level 2 prior task switching.
+	unsigned short SS2; //!< Task SS register value for privilege level 1 prior task switching.
+	unsigned short Reserved_3; //!< Padding.
+	unsigned int CR3; //!< Base physical address of the task page directory (not used here as paging is not needed).
+	unsigned int EIP; //!< The instruction the task was executing prior task switching.
+	unsigned int EFLAGS; //!< CPU state prior task switching.
+	unsigned int EAX; //!< EAX register value prior task switching.
+	unsigned int ECX; //!< ECX register value prior task switching.
+	unsigned int EDX; //!< EDX register value prior task switching.
+	unsigned int EBX; //!< EBX register value prior task switching.
+	unsigned int ESP; //!< ESP register value prior task switching.
+	unsigned int EBP; //!< EBP register value prior task switching.
+	unsigned int ESI; //!< ESI register value prior task switching.
+	unsigned int EDI; //!< EDI register value prior task switching.
+	unsigned short ES; //!< ES register value prior task switching.
+	unsigned short Reserved_5; //!< Padding.
+	unsigned short CS; //!< CS register value prior task switching.
+	unsigned short Reserved_6; //!< Padding.
+	unsigned short SS; //!< SS register value prior task switching.
+	unsigned short Reserved_7; //!< Padding.
+	unsigned short DS; //!< DS register value prior task switching.
+	unsigned short Reserved_8; //!< Padding.
+	unsigned short FS; //!< FS register value prior task switching.
+	unsigned short Reserved_9; //!< Padding.
+	unsigned short GS; //!< GS register value prior task switching.
+	unsigned short Reserved_10; //!< Padding.
+	unsigned short LDT_Segment_Selector; //!< Task LDT segment selector index (not used here as the GDT is more than enough for the few segments needed by the system).
+	unsigned short Reserved_11; //!< Padding.
+	unsigned short Debug_Flag; //!< Hold the debug trap flag.
+	unsigned short IO_Map_Base_Address; //!< Offset from the TSS base address where to locate the I/O bitmask (not used here as user space IOPL flag value forbids any I/O access).
 } TArchitectureTaskStateSegment;
 
 //-------------------------------------------------------------------------------------------------

@@ -16,6 +16,8 @@
 // Functions
 //-------------------------------------------------------------------------------------------------
 /** Compare String_1 to String_2.
+ * @param String_1 The first string to compare.
+ * @param String_2 The second string to compare.
  * @return 0 if the strings are equal,
  * @return -1 if String_1 < String_2,
  * @return 1 if String_1 > String_2.
@@ -23,6 +25,9 @@
 int strcmp(char *String_1, char *String_2);
 
 /** Compare Byte_Count bytes of String_1 to String_2.
+ * @param String_1 The first string to compare.
+ * @param String_2 The second string to compare.
+ * @param Byte_Count Maximum amount of bytes to compare.
  * @return 0 if the strings are equal,
  * @return -1 if String_1 < String_2,
  * @return 1 if String_1 > String_2.
