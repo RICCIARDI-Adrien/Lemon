@@ -11,6 +11,8 @@
 #define BENCHMARK_PROCESSOR_ITERATIONS_COUNT 10000000
 /** How many time to create the file. */
 #define BENCHMARK_FILE_SYSTEM_ITERATIONS_COUNT 10000
+/** How many system calls to execute. */
+#define BENCHMARK_SYSTEM_CALL_ITERATIONS_COUNT 100000000
 
 /** Convert the macro identifier to a C string. */
 #define BENCHMARK_CONVERT_MACRO_NAME_TO_STRING(X) #X
@@ -39,6 +41,7 @@ typedef struct
 //-------------------------------------------------------------------------------------------------
 static void BenchmarkProcessor(unsigned int *Pointer_Start_Time, unsigned int *Pointer_End_Time);
 static void BenchmarkFileSystem(unsigned int *Pointer_Start_Time, unsigned int *Pointer_End_Time);
+static void BenchmarkSystemCall(unsigned int *Pointer_Start_Time, unsigned int *Pointer_End_Time);
 
 //-------------------------------------------------------------------------------------------------
 // Private variables
@@ -55,6 +58,11 @@ static TBenchmarkTest Benchmark_Tests[] =
 		"file system speed",
 		"Open, write to and close a file " BENCHMARK_CONVERT_MACRO_VALUE_TO_STRING(BENCHMARK_FILE_SYSTEM_ITERATIONS_COUNT) " times",
 		BenchmarkFileSystem
+	},
+	{
+		"system call interface speed",
+		"Execute a simple system call " BENCHMARK_CONVERT_MACRO_VALUE_TO_STRING(BENCHMARK_SYSTEM_CALL_ITERATIONS_COUNT) " times",
+		BenchmarkSystemCall
 	}
 };
 
@@ -122,6 +130,18 @@ Exit_Error:
 	ScreenWriteString(".\n");
 	FileClose(File_ID);
 	FileDelete("_test_");
+}
+
+static void BenchmarkSystemCall(unsigned int *Pointer_Start_Time, unsigned int *Pointer_End_Time)
+{
+	unsigned int i;
+	
+	// Keep benchmark starting time to compute the elapsed time at benchmark end
+	*Pointer_Start_Time = SystemGetTimerValue();
+	
+	for (i = 0; i < BENCHMARK_SYSTEM_CALL_ITERATIONS_COUNT; i++) SystemCall(SYSTEM_CALL_SCREEN_GET_COLOR, 0, 0, NULL, NULL);
+	
+	*Pointer_End_Time = SystemGetTimerValue();
 }
 
 //-------------------------------------------------------------------------------------------------
