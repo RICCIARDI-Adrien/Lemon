@@ -15,7 +15,7 @@ all: $(OBJECTS)
 	$(TOOL_ADD_EXECUTABLE_HEADER) $(BINARIES_PATH)/Tests.bin $(BINARIES_PATH)/Tests.lemon
 
 clean:
-	rm -rf $(OBJECTS_PATH)/$(PROGRAM_NAME) $(BINARIES_PATH)/Test_Display_ASCII_Characters.* $(BINARIES_PATH)/Test_Protection_Check.* $(BINARIES_PATH)/Test_Network_UDP_Transmission.* $(BINARIES_PATH)/Tests.*
+	rm -rf $(OBJECTS_PATH)/$(PROGRAM_NAME) $(BINARIES_PATH)/Test_Display_ASCII_Characters.* $(BINARIES_PATH)/Test_Protection_Check.* $(BINARIES_PATH)/Test_Network_UDP_Transmission.* $(BINARIES_PATH)/Test_Network_Ethernet_Reception.* $(BINARIES_PATH)/Tests.*
 
 download:
 	@$(TOOL_SERIAL_PORT_SERVER) $(SERIAL_PORT_SERVER_FLAGS) $(BINARIES_PATH)/$(PROGRAM_NAME).lemon tests

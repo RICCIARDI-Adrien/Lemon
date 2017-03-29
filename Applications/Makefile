@@ -48,7 +48,7 @@ all: $(patsubst %,%/compile,$(APPLICATIONS))
 # Append the /clean target to all discovered applications
 clean: $(patsubst %,%/clean,$(APPLICATIONS))
 	# Delete also the tools
-	rm -rf $(SERIAL_PORT_SERVER)
+	rm -f $(TOOL_SERIAL_PORT_SERVER)
 
 %/compile:
 	@# Display the name of the application being compiled

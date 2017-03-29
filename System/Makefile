@@ -148,6 +148,8 @@ ifeq ($(CONFIGURATION_BUILD_INSTALLER),1)
 else
 	@# When building the system, delete all previously generated build files
 	rm -f $(PATH_OBJECTS)/*
+	@# Remove the automatically generated installer files
+	rm -f $(PATH_INCLUDES)/Installer_Embedded_Files_Data.h
 endif
 
 #------------------------------------------------------------------------------------------------------------------------------
