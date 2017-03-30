@@ -20,15 +20,6 @@ Système
 
 Doc
 ---
-Rajouter dans doc la liste des programmes nécessaires pour compiler l'OS
-- genisoimage (aka mkisofs)
-- hexdump (sera utilisé peut-être par l'installateur)*
-- dd (installé de base sur la plupart des systèmes)
-- ar (//)
-- gcc / ld
-- nasm
-- ...
-- qfsm pour édition machines d'état documentation
 
 Unifier tous les fichiers différents dans "Description du système"
 
@@ -59,8 +50,3 @@ Applications
 - grep ?
 
 - utiliser api buffer pour affichage éditeur de texte (partiellement effectué)
-
-Installer
----------
-
-- mettre .h dans Includes (difficile à cause des -I nécessaires pour inclure les .h du système)
