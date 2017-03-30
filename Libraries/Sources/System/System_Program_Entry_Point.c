@@ -41,7 +41,7 @@ int main(int argc, char *argv[]);
 // Public functions
 //-------------------------------------------------------------------------------------------------
 /** Program entry point. */
-void __attribute__((section(".init"))) _start(void)
+void __attribute__((section(".init"))) __attribute__((optimize(0))) _start(void) // Do not optimize this function or the call to main() will be discarded
 {
 	int Return_Value;
 	TCommandLineArguments *Pointer_Command_Line_Arguments = (TCommandLineArguments *) 0; // Located at the beginning of the user space
