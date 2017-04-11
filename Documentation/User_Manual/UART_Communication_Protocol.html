@@ -1,0 +1,91 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+	   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+	<head>
+		<title>UART communication protocol</title>
+		<meta http-equiv="content-type" content="text/html;charset=utf-8" />
+	</head>
+
+	<body>
+		<h1 align="center">UART communication protocol</h1>
+		
+		<h2>About</h2>
+		<p>
+			System provides two commands, <i>download</i> and <i>upload</i>, that allow to transfer files to and from the system using the serial port.<br />
+			Both commands connect through the UART to a server running on another PC (the Lemon system is the client).<br />
+			This page describes how the commands communicate with the remote server.
+		</p>
+		
+		<h2>Protocol</h2>
+		<h3>Download command protocol</h3>
+		<ol>
+			<li>Client connects to the server.</li>
+			<li>Client sends the <i>download</i> command, followed by the file name.</li>
+			<li>Server replies <i>acknowledge</i> or <i>abort</i> if the requested file is not found.</li>
+			<li>Server sends the file size.</li>
+			<li>Clients replies <i>acknowledge</i> or <i>abort</i> (if there is not enough free space to store the file on the client disk).</li>
+			<li>Server sends the whole file.</li>
+		</ol>
+		
+		<h3>Upload command protocol</h3>
+		<ol>
+			<li>Client connects to the server.</li>
+			<li>Client sends the <i>upload</i> command, followed by the file name.</li>
+			<li>Server replies <i>acknowledge</i> or <i>abort</i>.</li>
+			<li>Client sends the file size.</li>
+			<li>Server replies <i>acknowledge</i> or <i>abort</i> (if there is not enough free space to store the file on the server disk).</li>
+			<li>Client sends the whole file.</li>
+		</ol>
+		
+		<h3>Connection establishment</h3>
+		<p>
+			Client sends repeatedly the <b>PROTOCOL_COMMAND_CONNECT</b> byte until it receives the <b>PROTOCOL_COMMAND_ACKNOWLEDGE</b> byte from the server.<br />
+			Server waits infinitely for the <b>PROTOCOL_COMMAND_CONNECT</b> byte. When it receives this byte, it sends the <b>PROTOCOL_COMMAND_ACKNOWLEDGE</b> byte to the client.<br />
+			On the server side, there is no need to discard superfluous <b>PROTOCOL_COMMAND_CONNECT</b> bytes received from the client because the next protocol expected byte is always different from <b>PROTOCOL_COMMAND_CONNECT</b> value.
+		</p>
+		
+		<h3>File transfer</h3>
+		<p>
+			File data are sent 512 bytes at a time, then the sender waits for a <b>PROTOCOL_COMMAND_ACKNOWLEDGE</b> sent from the receiver. Last block of data may be less than 512 bytes.
+		</p>
+		
+		<h2>Technical details</h2>
+		<h3>Commands definition</h3>
+		<table border="1">
+			<tr>
+				<th>Command</th>
+				<th>ASCII value</th>
+			</tr>
+			<tr>
+				<td>PROTOCOL_COMMAND_CONNECT</td>
+				<td>'C'</td>
+			</tr>
+			<tr>
+				<td>PROTOCOL_COMMAND_DOWNLOAD</td>
+				<td>'D'</td>
+			</tr>
+			<tr>
+				<td>PROTOCOL_COMMAND_UPLOAD</td>
+				<td>'U'</td>
+			</tr>
+			<tr>
+				<td>PROTOCOL_COMMAND_ACKNOWLEDGE</td>
+				<td>'A'</td>
+			</tr>
+			<tr>
+				<td>PROTOCOL_COMMAND_ABORT</td>
+				<td>'E' ('e' stands for error)</td>
+			</tr>
+		</table>
+		
+		<h3>Data format</h3>
+		<ul>
+			<li>File size is sent in little endian format and is 4-byte long (corresponding to C language <i>unsigned int</i> type).</li>
+			<li>File name is an ASCII string with up to 12 characters. If the string is shorter than 12 characters, the string must be terminated by a terminating zero. If the string length is equal to 12 characters, the terminating zero is omitted.</li>
+		</ul>
+		
+		<p>
+			<a href="../Manual.html">Return to main page</a>
+		</p>
+	</body>
+</html>
