@@ -48,7 +48,7 @@ typedef struct __attribute__((packed))
 	unsigned int Size_Bytes; //!< Size of the file in bytes. Yes, maximum file size is limited to 4 GB...
 } TFilesListEntry;
 
-/** Represent a whole file system. */
+/** Represent a whole file system when loaded to RAM. */
 typedef struct __attribute__((packed))
 {
 	TFileSystemInformations File_System_Informations; //!< Contain the file system parameters.
@@ -161,7 +161,7 @@ static inline unsigned int FileSystemComputeSizeSectors(unsigned int Blocks_Coun
 	unsigned int Size;
 	
 	// Compute the size in bytes
-	Size = (Blocks_Count * sizeof(unsigned int)) + (Files_Count * sizeof(TFilesListEntry)) + (Blocks_Count * CONFIGURATION_FILE_SYSTEM_BLOCK_SIZE_BYTES) + (CONFIGURATION_FILE_SYSTEM_STARTING_SECTOR_OFFSET * FILE_SYSTEM_SECTOR_SIZE_BYTES); // Size of the file system + size of data area + (size of MBR + size of kernel)
+	Size = sizeof(TFileSystemInformations) + (Blocks_Count * sizeof(unsigned int)) + (Files_Count * sizeof(TFilesListEntry)) + (Blocks_Count * CONFIGURATION_FILE_SYSTEM_BLOCK_SIZE_BYTES) + (CONFIGURATION_FILE_SYSTEM_STARTING_SECTOR_OFFSET * FILE_SYSTEM_SECTOR_SIZE_BYTES); // Size of the file system + size of data area + (size of MBR + size of kernel)
 	// Add one more sector if the file system size is not a multiple of the sector size
 	if (Size % FILE_SYSTEM_SECTOR_SIZE_BYTES != 0) Size += FILE_SYSTEM_SECTOR_SIZE_BYTES;
 	// Convert size to sectors
