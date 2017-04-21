@@ -73,11 +73,23 @@ void memset(void *Pointer_Buffer, unsigned char Value, unsigned int Bytes_Count)
 
 void memcpy(void *Pointer_Destination_Buffer, void *Pointer_Source_Buffer, unsigned int Bytes_Count)
 {
+	unsigned int *Pointer_Destination_Buffer_Double_Words, *Pointer_Source_Buffer_Double_Words;
 	unsigned char *Pointer_Destination_Buffer_Bytes, *Pointer_Source_Buffer_Bytes;
 	
-	Pointer_Destination_Buffer_Bytes = Pointer_Destination_Buffer;
-	Pointer_Source_Buffer_Bytes = Pointer_Source_Buffer;
+	// Copy 4 bytes at a time
+	Pointer_Destination_Buffer_Double_Words = Pointer_Destination_Buffer;
+	Pointer_Source_Buffer_Double_Words = Pointer_Source_Buffer;
+	while (Bytes_Count >= sizeof(unsigned int))
+	{
+		*Pointer_Destination_Buffer_Double_Words = *Pointer_Source_Buffer_Double_Words;
+		Pointer_Destination_Buffer_Double_Words++;
+		Pointer_Source_Buffer_Double_Words++;
+		Bytes_Count -= sizeof(unsigned int);
+	}
 	
+	// Copy remaining bytes
+	Pointer_Destination_Buffer_Bytes = (unsigned char *) Pointer_Destination_Buffer_Double_Words;
+	Pointer_Source_Buffer_Bytes = (unsigned char *) Pointer_Source_Buffer_Double_Words;
 	while (Bytes_Count > 0)
 	{
 		*Pointer_Destination_Buffer_Bytes = *Pointer_Source_Buffer_Bytes;
