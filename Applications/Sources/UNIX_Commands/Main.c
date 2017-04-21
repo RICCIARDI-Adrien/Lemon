@@ -1,7 +1,6 @@
 /** @file Main.c
  * This program gathers some useful standard UNIX/Linux commands.
  * @author Adrien RICCIARDI
- * @version 1.0 : 18/03/2015
  */
 #include <System.h>
 #include "Commands.h"
@@ -26,6 +25,10 @@ static TCommand Commands[] =
 	{
 		"df",
 		CommandMainDf
+	},
+	{
+		"diff",
+		CommandMainDiff
 	},
 	{
 		"ls",

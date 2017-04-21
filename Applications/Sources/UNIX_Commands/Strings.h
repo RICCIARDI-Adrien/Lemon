@@ -29,6 +29,18 @@
 	#define STRING_COMMAND_DF_REMAINING_STORAGE_1 "Espace de stockage utilis\202 : "
 	#define STRING_COMMAND_DF_REMAINING_STORAGE_2 " octets"
 	
+	// "diff" command
+	#define STRING_COMMAND_DIFF_USAGE "Compare deux fichiers et indique s'ils sont identiques ou diff\202rents.\n" \
+		"Param\212tres : Fichier_1 Fichier_2\n" \
+		"Fichier_1 et Fichier_2 sont les deux fichiers \205 comparer.\n"
+	#define STRING_COMMAND_DIFF_FILE_CANT_BE_OPENED_1 "Erreur : le fichier '"
+	#define STRING_COMMAND_DIFF_FILE_CANT_BE_OPENED_2 "' ne peut pas \210tre ouvert.\n"
+	#define STRING_COMMAND_DIFF_SAME_FILE_CANT_BE_REOPENED "Attention, le m\210me fichier ne peut pas \210tre ouvert deux fois.\n"
+	#define STRING_COMMAND_DIFF_FILE_READ_ERROR_1 "Erreur de lecture du fichier '"
+	#define STRING_COMMAND_DIFF_FILE_READ_ERROR_2 "'.\n"
+	#define STRING_COMMAND_DIFF_FILES_ARE_DIFFERENT "Les fichiers sont diff\202rents.\n"
+	#define STRING_COMMAND_DIFF_FILES_ARE_EQUAL "Les fichiers sont identiques.\n"
+	
 	// "ls" command
 	#define STRING_COMMAND_LS_USAGE "Liste dans l'ordre alphab\202tique tous les fichiers pr\202sents sur le disque dur.\n" \
 		"Cette commande n'a pas de param\212tre.\n"

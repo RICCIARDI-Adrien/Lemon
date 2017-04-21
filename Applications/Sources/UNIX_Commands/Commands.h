@@ -16,6 +16,14 @@
  */
 int CommandMainDf(int argc, char *argv[]);
 
+/** The "diff" command.
+ * @param argc Parameters count.
+ * @param argv Parameters value.
+ * @return 0 in case of success,
+ * @return a negative value if an error happened.
+ */
+int CommandMainDiff(int argc, char *argv[]);
+
 /** The "list" command.
  * @param argc Parameters count.
  * @param argv Parameters value.

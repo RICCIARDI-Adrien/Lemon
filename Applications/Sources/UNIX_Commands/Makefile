@@ -1,5 +1,5 @@
 PROGRAM_NAME = UNIX_Commands
-OBJECTS = $(OBJECTS_PATH)/$(PROGRAM_NAME)/Command_Df.o $(OBJECTS_PATH)/$(PROGRAM_NAME)/Command_Ls.o $(OBJECTS_PATH)/$(PROGRAM_NAME)/Command_More.o $(OBJECTS_PATH)/$(PROGRAM_NAME)/Command_TFTP.o $(OBJECTS_PATH)/$(PROGRAM_NAME)/Command_Uptime.o $(OBJECTS_PATH)/$(PROGRAM_NAME)/Main.o
+OBJECTS = $(OBJECTS_PATH)/$(PROGRAM_NAME)/Command_Df.o $(OBJECTS_PATH)/$(PROGRAM_NAME)/Command_Diff.o $(OBJECTS_PATH)/$(PROGRAM_NAME)/Command_Ls.o $(OBJECTS_PATH)/$(PROGRAM_NAME)/Command_More.o $(OBJECTS_PATH)/$(PROGRAM_NAME)/Command_TFTP.o $(OBJECTS_PATH)/$(PROGRAM_NAME)/Command_Uptime.o $(OBJECTS_PATH)/$(PROGRAM_NAME)/Main.o
 
 all: $(OBJECTS)
 	$(GLOBAL_TOOL_LINKER) $(OBJECTS) $(LDFLAGS) -o $(BINARIES_PATH)/$(PROGRAM_NAME).bin
@@ -13,6 +13,9 @@ download:
 
 $(OBJECTS_PATH)/$(PROGRAM_NAME)/Command_Df.o: Commands.h Command_Df.c Strings.h
 	$(GLOBAL_TOOL_COMPILER) $(CCFLAGS) -c Command_Df.c -o $(OBJECTS_PATH)/$(PROGRAM_NAME)/Command_Df.o
+
+$(OBJECTS_PATH)/$(PROGRAM_NAME)/Command_Diff.o: Commands.h Command_Diff.c Strings.h
+	$(GLOBAL_TOOL_COMPILER) $(CCFLAGS) -c Command_Diff.c -o $(OBJECTS_PATH)/$(PROGRAM_NAME)/Command_Diff.o
 
 $(OBJECTS_PATH)/$(PROGRAM_NAME)/Command_Ls.o: Commands.h Command_Ls.c Strings.h
 	$(GLOBAL_TOOL_COMPILER) $(CCFLAGS) -c Command_Ls.c -o $(OBJECTS_PATH)/$(PROGRAM_NAME)/Command_Ls.o
