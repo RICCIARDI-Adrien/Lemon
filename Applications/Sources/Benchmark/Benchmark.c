@@ -14,11 +14,6 @@
 /** How many system calls to execute. */
 #define BENCHMARK_SYSTEM_CALL_ITERATIONS_COUNT 100000000
 
-/** Convert the macro identifier to a C string. */
-#define BENCHMARK_CONVERT_MACRO_NAME_TO_STRING(X) #X
-/** Convert the macro value to a C string. The preprocessor needs two passes to do the conversion, so the BENCHMARK_CONVERT_MACRO_NAME_TO_STRING() is needed. */
-#define BENCHMARK_CONVERT_MACRO_VALUE_TO_STRING(X) BENCHMARK_CONVERT_MACRO_NAME_TO_STRING(X)
-
 //-------------------------------------------------------------------------------------------------
 // Private types
 //-------------------------------------------------------------------------------------------------
@@ -51,17 +46,17 @@ static TBenchmarkTest Benchmark_Tests[] =
 {
 	{
 		"processor speed",
-		"Compute Fibonacci suite " BENCHMARK_CONVERT_MACRO_VALUE_TO_STRING(BENCHMARK_PROCESSOR_ITERATIONS_COUNT) " times with 32768 bits integer precision",
+		"Compute Fibonacci suite " SYSTEM_CONVERT_MACRO_VALUE_TO_STRING(BENCHMARK_PROCESSOR_ITERATIONS_COUNT) " times with 32768 bits integer precision",
 		BenchmarkProcessor
 	},
 	{
 		"file system speed",
-		"Open, write to and close a file " BENCHMARK_CONVERT_MACRO_VALUE_TO_STRING(BENCHMARK_FILE_SYSTEM_ITERATIONS_COUNT) " times",
+		"Open, write to and close a file " SYSTEM_CONVERT_MACRO_VALUE_TO_STRING(BENCHMARK_FILE_SYSTEM_ITERATIONS_COUNT) " times",
 		BenchmarkFileSystem
 	},
 	{
 		"system call interface speed",
-		"Execute a simple system call " BENCHMARK_CONVERT_MACRO_VALUE_TO_STRING(BENCHMARK_SYSTEM_CALL_ITERATIONS_COUNT) " times",
+		"Execute a simple system call " SYSTEM_CONVERT_MACRO_VALUE_TO_STRING(BENCHMARK_SYSTEM_CALL_ITERATIONS_COUNT) " times",
 		BenchmarkSystemCall
 	}
 };

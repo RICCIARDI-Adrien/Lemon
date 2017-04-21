@@ -30,6 +30,11 @@
 /** Give the number of elements in an array. */
 #define SYSTEM_GET_ARRAY_ELEMENTS_COUNT(Array) (sizeof(Array) / sizeof(Array[0]))
 
+/** Convert the macro identifier to a C string. */
+#define SYSTEM_CONVERT_MACRO_NAME_TO_STRING(X) #X
+/** Convert the macro value to a C string. The preprocessor needs two passes to do the conversion, so the SYSTEM_CONVERT_MACRO_NAME_TO_STRING() is needed. */
+#define SYSTEM_CONVERT_MACRO_VALUE_TO_STRING(X) SYSTEM_CONVERT_MACRO_NAME_TO_STRING(X)
+
 /** The configuration file name. */
 #define SYSTEM_CONFIGURATION_FILE_NAME "System.cfg"
 /** The maximum length in characters of a value string. */
