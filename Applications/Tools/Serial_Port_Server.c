@@ -2,10 +2,6 @@
  * Tool to transfer files to the operating system. Transfer can be made via a VirtualBox pipe or a real RS-232 serial port (USB serial ports are also supported).
  * Compile using : gcc Serial_Port_Server.c -o Serial_Port_Server.out
  * @author Adrien RICCIARDI
- * @version 1.0 : 10/04/2011
- * @version 1.1 : 18/11/2012, done some basic optimizations.
- * @version 1.2 : 06/01/2013, changed request and start codes to help debugging and increased transfer speed.
- * @version 1.3 : 18/02/2015, added autodetection of the serial port file type (pipe or real device), added the ability to send automatically the file name.
  */
 #include <arpa/inet.h>
 #include <errno.h>
@@ -23,11 +19,19 @@
 //-------------------------------------------------------------------------------------------------
 // Private constants
 //-------------------------------------------------------------------------------------------------
-#define CODE_DOWNLOAD_REQUEST 'R'
-#define CODE_DOWNLOAD_START 'S'
-#define CODE_DOWNLOAD_CONTINUE 'C'
-#define CODE_DOWNLOAD_ABORT 'A'
+/** Value received when the client wants to download a file. */
+#define PROTOCOL_COMMAND_REQUEST_DOWNLOAD 'R'
+/** Value sent when the server starts sending the file. */
+#define PROTOCOL_COMMAND_START_DOWNLOAD 'S'
+/** Value received when the client wants the next data block. */
+#define PROTOCOL_COMMAND_CONTINUE_DOWNLOAD 'C'
+/** Value received when the clients interrupts the download. */
+#define PROTOCOL_COMMAND_ABORT_DOWNLOAD 'A'
 
+/** A block size in bytes (how many bytes are sent through the serial port before waiting for an acknowledge from the client). */
+#define PROTOCOL_BLOCK_SIZE 4096
+
+/** UART baud rate (using termios constants). */
 #define BAUD_RATE B115200
 
 /** The maximum length of a file name (this is the same value than the system has). */
@@ -54,18 +58,102 @@ static long GetFileSize(char *String_File_Name)
 	return Size;
 }
 
+/** Configure the serial port for reading and writing (automatically detect if it is a real UART or a Virtual Box socket).
+ * @param String_Serial_Port_File_Name The serial port to configure.
+ * @return -1 if an error happened,
+ * @return A positive value on success corresponding to the serial port file descriptor.
+ */
+static int ConfigureSerialPort(char *String_Serial_Port_File_Name)
+{
+	struct stat Status;
+	struct termios COM_Parameters;
+	struct sockaddr_un Socket_Parameters;
+	int File_Descriptor;
+	
+	// Retrieve informations about the serial port file
+	if (stat(String_Serial_Port_File_Name, &Status) != 0)
+	{
+		printf("Error : can't determinate the serial port file type (%s).\n", strerror(errno));
+		return -1;
+	}
+	
+	// Configure the appropriate communication device
+	if (S_ISCHR(Status.st_mode)) // This is a character device, so it is a real UART
+	{
+		// Initialize COM port
+		File_Descriptor = open(String_Serial_Port_File_Name, O_RDWR, S_IRWXU | S_IRWXG | S_IRWXO);
+		if (File_Descriptor == -1)
+		{
+			printf("Error : can't access to serial port (%s).\n", strerror(errno));
+			return -1;
+		}
+
+		COM_Parameters.c_iflag = IGNPAR;
+		COM_Parameters.c_oflag = 0;
+		COM_Parameters.c_cflag = CS8 | CREAD | CLOCAL;
+		COM_Parameters.c_lflag = 0;
+		
+		// Set baud rate
+		if (cfsetispeed(&COM_Parameters, BAUD_RATE) != 0)
+		{
+			printf("Error : can't set serial port input baud rate (%s).\n", strerror(errno));
+			close(File_Descriptor);
+			return -1;
+		}
+		if (cfsetospeed(&COM_Parameters, BAUD_RATE) != 0)
+		{
+			printf("Error : can't set serial port output baud rate (%s).\n", strerror(errno));
+			close(File_Descriptor);
+			return -1;
+		}
+		
+		// Apply new configuration
+		tcsetattr(File_Descriptor, TCSANOW, &COM_Parameters);
+		
+		printf("Serial port %s successfully initialized.\n", String_Serial_Port_File_Name);
+	}
+	else if (S_ISSOCK(Status.st_mode)) // Virtual Box socket (named "pipe" in the Virtual Box interface)
+	{
+		// Open socket
+		File_Descriptor = socket(PF_LOCAL, SOCK_STREAM, 0);
+		if (File_Descriptor < 0)
+		{
+			printf("Error : can't open Virtual Box pipe (%s).\n", strerror(errno));
+			return -1;
+		}
+
+		Socket_Parameters.sun_family = AF_LOCAL;
+		strncpy(Socket_Parameters.sun_path, String_Serial_Port_File_Name, sizeof(Socket_Parameters.sun_path));
+
+		// Try to connect to the socket
+		if (connect(File_Descriptor, (struct sockaddr *) &Socket_Parameters, sizeof(Socket_Parameters)) < 0)
+		{
+			printf("Error : can't connect to pipe (%s).\n", strerror(errno));
+			close(File_Descriptor);
+			return -1;
+		}
+		
+		printf("Successfully connected to pipe.\n");
+	}
+	else
+	{
+		printf("Error : the serial port file type is not supported.\n");
+		return -1;
+	}
+	
+	return File_Descriptor;
+}
+
 //-------------------------------------------------------------------------------------------------
 // Entry point
 //-------------------------------------------------------------------------------------------------
 int main(int argc, char *argv[])
 {
-	int COM_Descriptor, Is_Pipe, Return_Value = EXIT_FAILURE;
-	struct termios COM_Parameters;
+	int File_Descriptor_Serial_Port, File_Descriptor_File_To_Send, Return_Value = EXIT_FAILURE;
 	char Character, *String_File_Name, *String_Serial_Port_File_Name, *String_File_Name_On_System;
 	long File_Size_Bytes;
-	FILE *File;
-	struct sockaddr_un Socket_Parameters;
-	struct stat Status;
+	ssize_t Read_Bytes_Count;
+	static unsigned char Buffer[PROTOCOL_BLOCK_SIZE]; // Avoid storing it on the stack, even if the buffer is not really large
 	
 	// Check parameters
 	if (argc != 4)
@@ -77,116 +165,49 @@ int main(int argc, char *argv[])
 	String_File_Name = argv[2];
 	String_File_Name_On_System = argv[3];
 	
-	// Retrieve informations about the file
-	if (stat(String_Serial_Port_File_Name, &Status) != 0)
-	{
-		printf("Error : can't determinate the serial port file type (%s).\n", strerror(errno));
-		return EXIT_FAILURE;
-	}
-	// Find the serial port file type
-	if (S_ISCHR(Status.st_mode)) Is_Pipe = 0;
-	else if (S_ISSOCK(Status.st_mode)) Is_Pipe = 1;
-	else
-	{
-		printf("Error : the serial port file type is not supported.\n");
-		return EXIT_FAILURE;
-	}
-	
 	// Open the file to send
-	File = fopen(String_File_Name, "r");
-	if (File == NULL)
+	File_Descriptor_File_To_Send = open(String_File_Name, O_RDONLY);
+	if (File_Descriptor_File_To_Send == -1)
 	{
 		printf("Error : can't open file '%s' (%s).\n", String_File_Name, strerror(errno));
 		return EXIT_FAILURE;
 	}
 	
-	// Configure the appropriate communication device
-	// Real serial port
-	if (!Is_Pipe)
-	{
-		// Initialize COM port
-		COM_Descriptor = open(String_Serial_Port_File_Name, O_RDWR, S_IRWXU | S_IRWXG | S_IRWXO);
-		if (COM_Descriptor == -1)
-		{
-			printf("Error : can't access to serial port (%s).\n", strerror(errno));
-			goto Exit;
-		}
-
-		COM_Parameters.c_iflag = IGNPAR;
-		COM_Parameters.c_oflag = 0;
-		COM_Parameters.c_cflag = CS8 | CREAD | CLOCAL;
-		COM_Parameters.c_lflag = 0;
-		
-		if (cfsetispeed(&COM_Parameters, BAUD_RATE) != 0)
-		{
-			printf("Error : can't set serial port input baud rate (%s).\n", strerror(errno));
-			goto Exit;
-		}
-		if (cfsetospeed(&COM_Parameters, BAUD_RATE) != 0)
-		{
-			printf("Error : can't set serial port output baud rate (%s).\n", strerror(errno));
-			goto Exit;
-		}
-		
-		tcsetattr(COM_Descriptor, TCSANOW, &COM_Parameters);
-		
-		printf("Serial port %s successfully initialized.\n", String_Serial_Port_File_Name);
-	}
-	// VirtualBox pipe (which is a socket)
-	else
-	{
-		// Open socket
-		COM_Descriptor = socket(PF_LOCAL, SOCK_STREAM, 0);
-		if (COM_Descriptor < 0)
-		{
-			printf("Error : can't open VirtualBox's pipe (%s).\n", strerror(errno));
-			goto Exit;
-		}
-
-		Socket_Parameters.sun_family = AF_LOCAL;
-		strncpy(Socket_Parameters.sun_path, String_Serial_Port_File_Name, sizeof(Socket_Parameters.sun_path));
-
-		// Try to connect to virtual box
-		if (connect(COM_Descriptor, (struct sockaddr *) &Socket_Parameters, sizeof(Socket_Parameters)) < 0)
-		{
-			printf("Error : can't connect to pipe (%s).\n", strerror(errno));
-			goto Exit;
-		}
-		
-		printf("Successfully connected to pipe.\n");
-	}
+	// Configure the communication device
+	File_Descriptor_Serial_Port = ConfigureSerialPort(String_Serial_Port_File_Name);
+	if (File_Descriptor_Serial_Port == -1) goto Exit; // Error message is displayed by ConfigureSerialPort() yet, no need to print another one
 	
 	// Show file size
 	File_Size_Bytes = GetFileSize(String_File_Name);
-	printf("File size : %ld bytes .\n", File_Size_Bytes);
+	printf("File size : %ld bytes.\n", File_Size_Bytes);
 	
 	// Wait for client connection
 	printf("Waiting for client connection...\n");
 	do
 	{
-		read(COM_Descriptor, &Character, 1);
-	} while (Character != CODE_DOWNLOAD_REQUEST);
+		read(File_Descriptor_Serial_Port, &Character, 1);
+	} while (Character != PROTOCOL_COMMAND_REQUEST_DOWNLOAD);
 	
 	// Start transfer
-	Character = CODE_DOWNLOAD_START;
-	write(COM_Descriptor, &Character, 1);
-	printf("Connection established. Sending file size...\n");
+	Character = PROTOCOL_COMMAND_START_DOWNLOAD;
+	write(File_Descriptor_Serial_Port, &Character, 1);
+	printf("Connection established. Sending file information...\n");
 	
 	// Send file size (4 bytes) in big endian order
 	File_Size_Bytes = htonl(File_Size_Bytes); // This value is not used anymore after this transfer, so it can be safely modified
-	write(COM_Descriptor, &File_Size_Bytes, 4);
+	write(File_Descriptor_Serial_Port, &File_Size_Bytes, 4);
 	
 	// Send file name (up to FILE_NAME_LENGTH characters)
-	write(COM_Descriptor, String_File_Name_On_System, FILE_NAME_LENGTH);
+	write(File_Descriptor_Serial_Port, String_File_Name_On_System, FILE_NAME_LENGTH);
 	
 	// Wait for client's answer (for instance, he can abort the transfer if the file is too big)
 	do
 	{
-		read(COM_Descriptor, &Character, 1);
-	} while ((Character != CODE_DOWNLOAD_CONTINUE) && (Character != CODE_DOWNLOAD_ABORT));
+		read(File_Descriptor_Serial_Port, &Character, 1);
+	} while ((Character != PROTOCOL_COMMAND_CONTINUE_DOWNLOAD) && (Character != PROTOCOL_COMMAND_ABORT_DOWNLOAD));
 
 	// Stop transfer if it is the client's wish
-	if (Character == CODE_DOWNLOAD_ABORT)
+	if (Character == PROTOCOL_COMMAND_ABORT_DOWNLOAD)
 	{
 		printf("Client aborted transfer.\n");
 		goto Exit;
@@ -194,16 +215,37 @@ int main(int argc, char *argv[])
 	
 	// Send file data
 	printf("Client accepted transfer. Sending file...\n");
-	while (!feof(File))
+	while (1)
 	{
-		if (fread(&Character, 1, 1, File) == 1) write(COM_Descriptor, &Character, 1);
+		// Read a block of data from the file to send
+		Read_Bytes_Count = read(File_Descriptor_File_To_Send, Buffer, PROTOCOL_BLOCK_SIZE);
+		if (Read_Bytes_Count == -1)
+		{
+			printf("Error : failed to read from the file to send (%s).\n", strerror(errno));
+			goto Exit;
+		}
+		// End-of-file has been reached
+		if (Read_Bytes_Count == 0) break;
+		
+		// Send the data block
+		if (write(File_Descriptor_Serial_Port, Buffer, Read_Bytes_Count) != Read_Bytes_Count)
+		{
+			printf("Error : failed to send data block (%s).\n", strerror(errno));
+			goto Exit;
+		}
+		
+		// Wait for the client acknowledge
+		do
+		{
+			read(File_Descriptor_Serial_Port, &Character, 1);
+		} while (Character != PROTOCOL_COMMAND_CONTINUE_DOWNLOAD);
 	}
 	
 	printf("File successfully sent.\n");
 	Return_Value = EXIT_SUCCESS;
 	
 Exit:
-	fclose(File);
-	close(COM_Descriptor);
+	close(File_Descriptor_File_To_Send);
+	close(File_Descriptor_Serial_Port);
 	return Return_Value;
 }

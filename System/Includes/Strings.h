@@ -62,7 +62,7 @@
 
 	// Shell download command
 	#define STRING_SHELL_DOWNLOAD_WAITING_FOR_SERVER "Attente de la connexion au serveur...\nAppuyez sur Echap pour annuler.\n"
-	#define STRING_SHELL_DOWNLOAD_SHOW_FILE_INFORMATIONS_1 "\nT\202l\202chargement du fichier '"
+	#define STRING_SHELL_DOWNLOAD_SHOW_FILE_INFORMATIONS_1 "T\202l\202chargement du fichier '"
 	#define STRING_SHELL_DOWNLOAD_SHOW_FILE_INFORMATIONS_2 "' ("
 	#define STRING_SHELL_DOWNLOAD_SHOW_FILE_INFORMATIONS_3 " octets)...\n"
 	#define STRING_SHELL_DOWNLOAD_NO_MORE_FILE_LIST_ENTRY "Impossible de lancer le t\202l\202chargement : aucun emplacement libre sur le syst\212me de fichiers.\n"
@@ -70,11 +70,9 @@
 	#define STRING_SHELL_DOWNLOAD_FILE_SIZE_TOO_BIG "Abandon du t\202l\202chargement : la taille du fichier est trop importante pour le\nstocker en m\202moire.\n"
 	#define STRING_SHELL_DOWNLOAD_NO_MORE_BLOCK_LIST_ENTRY "Abandon du t\202l\202chargement : il n'y a pas assez de place sur le syst\212me de\nfichiers pour stocker le fichier.\n"
 	#define STRING_SHELL_DOWNLOAD_DOWNLOADING_COMPLETED "T\202l\202chargement termin\202.\n"
-	#define STRING_SHELL_DOWNLOAD_FINAL_QUESTION "\nQue souhaitez-vous faire ? (s)auvegarder, (a)nnuler : "
-	#define STRING_SHELL_DOWNLOAD_ASK_FILE_NAME "Nom du fichier : "
-	#define STRING_SHELL_DOWNLOAD_FILE_SAVE_COMPLETED "Sauvegarde r\202ussie.\n"
 	#define STRING_SHELL_DOWNLOAD_BAD_FILE_NAME "Erreur : nom de fichier incorrect.\n"
-	#define STRING_SHELL_DOWNLOAD_FILE_SAVE_FAILED "Erreur lors de l'\202criture du fichier.\n"
+	#define STRING_SHELL_DOWNLOAD_FILE_OPENING_FAILED "Erreur lors de l'ouverture du fichier de destination.\n"
+	#define STRING_SHELL_DOWNLOAD_FILE_WRITING_FAILED "Erreur lors de l'\202criture du fichier.\n"
 	
 	// Shell list command
 	#define STRING_SHELL_LIST_WAIT_FOR_USER_INPUT "Appuyez sur une touche pour continuer."
@@ -96,7 +94,7 @@
 	#define STRING_SHELL_FILE_SIZE_SHOW_SIZE_2 " octets.\n"
 
 	// Shell version command
-	#define STRING_SHELL_VERSION "Version du syst\212me : 2.5.1 (" __DATE__ ", " __TIME__ ")\n" \
+	#define STRING_SHELL_VERSION "Version du syst\212me : 2.5.2 (" __DATE__ ", " __TIME__ ")\n" \
 		"Copyright (C) Adrien Ricciardi\n\n" \
 		"Configuration :\n" \
 		STRING_BUILD_CONFIGURATION_VARIABLES
@@ -148,7 +146,7 @@
 	#define STRING_SHELL_INSTALLER_ERROR_CANT_WRITE_FILE_CONTENT "Erreur : impossible d'\202crire le contenu du fichier.\n"
 	
 	// Question answer characters
-	#define STRING_SHELL_INSTALLER_CHARACTER_YES 'o' // TODO use for download command
+	#define STRING_SHELL_INSTALLER_CHARACTER_YES 'o'
 	#define STRING_SHELL_INSTALLER_CHARACTER_NO 'n'
 #endif
 

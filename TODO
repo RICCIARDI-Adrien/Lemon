@@ -20,8 +20,6 @@ Système
 
 - gérer correctement la RAM dans laquelle se trouve le ramdisk
 
-- changer protocole de la commande download pour pouvoir télécharger un fichier plus gros que la RAM (utile vu le débit du port série ?)
-
 Doc
 ---
 

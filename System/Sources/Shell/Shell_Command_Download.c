@@ -9,7 +9,6 @@
 #include <Error_Codes.h>
 #include <File_System/File.h>
 #include <File_System/File_System.h>
-#include <Kernel.h> // Needed for kernel constants
 #include <Shell.h>
 #include <Standard_Functions.h> // Needed by itoa()
 #include <Strings.h>
@@ -18,22 +17,25 @@
 // Private constants
 //-------------------------------------------------------------------------------------------------
 /** Value to send to indicate that the shell is ready to download a file. */
-#define CODE_DOWNLOAD_REQUEST 'R'
+#define SHELL_COMMAND_DOWNLOAD_PROTOCOL_COMMAND_REQUEST_DOWNLOAD 'R'
 /** Value received when the server starts to send the file. */
-#define CODE_DOWNLOAD_START 'S'
+#define SHELL_COMMAND_DOWNLOAD_PROTOCOL_COMMAND_START_DOWNLOAD 'S'
 /** Value to send to continue the download. */
-#define CODE_DOWNLOAD_CONTINUE 'C'
+#define SHELL_COMMAND_DOWNLOAD_PROTOCOL_COMMAND_CONTINUE_DOWNLOAD 'C'
 /** Value to send to abort the download. */
-#define CODE_DOWNLOAD_ABORT 'A'
+#define SHELL_COMMAND_DOWNLOAD_PROTOCOL_COMMAND_ABORT_DOWNLOAD 'A'
+
+/** A block size in bytes (how many bytes are read from the UART then written on the disk). */
+#define SHELL_COMMAND_DOWNLOAD_PROTOCOL_BLOCK_SIZE 4096
 
 //-------------------------------------------------------------------------------------------------
 // Public functions
 //-------------------------------------------------------------------------------------------------
 void ShellCommandDownload(void)
 {
-	char String_File_Name[CONFIGURATION_FILE_NAME_LENGTH + 1], String_User_Answer[2];
-	unsigned int Download_Bytes_Count = 0, i, File_Descriptor;
-	unsigned char *Pointer_Downloaded_Data;
+	char String_File_Name[CONFIGURATION_FILE_NAME_LENGTH + 1];
+	unsigned int Total_Download_Bytes_Count = 0, Block_Download_Bytes_Count, i, File_Descriptor;
+	unsigned char Buffer[SHELL_COMMAND_DOWNLOAD_PROTOCOL_BLOCK_SIZE]; // Store it on the stack to avoid loosing DATA or BSS memory
 	
 	// Is there any remaining room in the Files List ? Do not start the download if the file system can't store the file
 	if (FileSystemGetFreeFilesListEntriesCount() == 0)
@@ -50,7 +52,7 @@ void ShellCommandDownload(void)
 	// Send special code to tell server that we are ready for download
 	while (1)
 	{
-		UARTWriteByte(CODE_DOWNLOAD_REQUEST);
+		UARTWriteByte(SHELL_COMMAND_DOWNLOAD_PROTOCOL_COMMAND_REQUEST_DOWNLOAD);
 		
 		// Did the user pressed escape key ?
 		if (KeyboardIsKeyAvailable())
@@ -61,15 +63,15 @@ void ShellCommandDownload(void)
 		// Did the server started the transmission ?
 		if (UARTIsDataReceived())
 		{
-			if (UARTReadByte() == CODE_DOWNLOAD_START) break;
+			if (UARTReadByte() == SHELL_COMMAND_DOWNLOAD_PROTOCOL_COMMAND_START_DOWNLOAD) break;
 		}
 	}
 	
 	// Get the size of the file to download (in bytes)
 	for (i = 0; i < 4; i++)
 	{
-		Download_Bytes_Count <<= 8;
-		Download_Bytes_Count |= UARTReadByte();
+		Total_Download_Bytes_Count <<= 8;
+		Total_Download_Bytes_Count |= UARTReadByte();
 	}
 	
 	// Get the file name (the number of sent characters is fixed)
@@ -80,85 +82,73 @@ void ShellCommandDownload(void)
 	ScreenWriteString(STRING_SHELL_DOWNLOAD_SHOW_FILE_INFORMATIONS_1);
 	ScreenWriteString(String_File_Name);
 	ScreenWriteString(STRING_SHELL_DOWNLOAD_SHOW_FILE_INFORMATIONS_2);
-	ScreenWriteString(itoa(Download_Bytes_Count));
+	ScreenWriteString(itoa(Total_Download_Bytes_Count));
 	ScreenWriteString(STRING_SHELL_DOWNLOAD_SHOW_FILE_INFORMATIONS_3);
 	
 	// Abort the download according to file size
 	ScreenSetColor(SCREEN_COLOR_RED);
 	// There is nothing to download
-	if (Download_Bytes_Count == 0)
+	if (Total_Download_Bytes_Count == 0)
 	{
 		ScreenWriteString(STRING_SHELL_DOWNLOAD_FILE_SIZE_NULL);
-		UARTWriteByte(CODE_DOWNLOAD_ABORT); // Stop transfer
+		UARTWriteByte(SHELL_COMMAND_DOWNLOAD_PROTOCOL_COMMAND_ABORT_DOWNLOAD); // Stop transfer
 		return;
 	}
 	// The file size is larger than the available RAM
-	if (Download_Bytes_Count > CONFIGURATION_USER_SPACE_SIZE)
+	if (Total_Download_Bytes_Count > CONFIGURATION_USER_SPACE_SIZE)
 	{
 		ScreenWriteString(STRING_SHELL_DOWNLOAD_FILE_SIZE_TOO_BIG);
-		UARTWriteByte(CODE_DOWNLOAD_ABORT); // Stop transfer
+		UARTWriteByte(SHELL_COMMAND_DOWNLOAD_PROTOCOL_COMMAND_ABORT_DOWNLOAD); // Stop transfer
 		return;
 	}
 	// There is not enough room to store the file on the file system
-	if (Download_Bytes_Count > FileSystemGetFreeBlocksCount() * CONFIGURATION_FILE_SYSTEM_BLOCK_SIZE_BYTES)
+	if (Total_Download_Bytes_Count > FileSystemGetFreeBlocksCount() * CONFIGURATION_FILE_SYSTEM_BLOCK_SIZE_BYTES)
 	{
 		ScreenWriteString(STRING_SHELL_DOWNLOAD_NO_MORE_BLOCK_LIST_ENTRY);
-		UARTWriteByte(CODE_DOWNLOAD_ABORT); // Stop transfer
+		UARTWriteByte(SHELL_COMMAND_DOWNLOAD_PROTOCOL_COMMAND_ABORT_DOWNLOAD); // Stop transfer
+		return;
+	}
+	
+	// Open the destination file
+	if (FileOpen(String_File_Name, 'w', &File_Descriptor) != ERROR_CODE_NO_ERROR)
+	{
+		ScreenSetColor(SCREEN_COLOR_RED);
+		ScreenWriteString(STRING_SHELL_DOWNLOAD_FILE_OPENING_FAILED);
 		return;
 	}
 	
 	// Accept the transfer
-	UARTWriteByte(CODE_DOWNLOAD_CONTINUE);
+	UARTWriteByte(SHELL_COMMAND_DOWNLOAD_PROTOCOL_COMMAND_CONTINUE_DOWNLOAD);
 	
-	// Copy bytes in the memory
-	Pointer_Downloaded_Data = (unsigned char *) CONFIGURATION_USER_SPACE_ADDRESS;
-	for (i = 0; i < Download_Bytes_Count; i++)
+	// Download the file and write it on the file system
+	while (Total_Download_Bytes_Count > 0)
 	{
-		*Pointer_Downloaded_Data = UARTReadByte();
-		Pointer_Downloaded_Data++;
+		// Compute the amount of bytes to download
+		if (Total_Download_Bytes_Count >= SHELL_COMMAND_DOWNLOAD_PROTOCOL_BLOCK_SIZE) Block_Download_Bytes_Count = SHELL_COMMAND_DOWNLOAD_PROTOCOL_BLOCK_SIZE;
+		else Block_Download_Bytes_Count = Total_Download_Bytes_Count;
+		
+		// Download a block of data
+		for (i = 0; i < Block_Download_Bytes_Count; i++) Buffer[i] = UARTReadByte();
+		
+		// Write it to the file
+		if (FileWrite(File_Descriptor, Buffer, Block_Download_Bytes_Count) != ERROR_CODE_NO_ERROR)
+		{
+			FileResetFileDescriptors(); // Do not close the file to avoid saving corrupted data
+			ScreenSetColor(SCREEN_COLOR_RED);
+			ScreenWriteString(STRING_SHELL_DOWNLOAD_FILE_WRITING_FAILED);
+			return;
+		}
+		
+		// Tell the server that it can send the next block of data
+		UARTWriteByte(SHELL_COMMAND_DOWNLOAD_PROTOCOL_COMMAND_CONTINUE_DOWNLOAD);
+		
+		Total_Download_Bytes_Count -= Block_Download_Bytes_Count;
 	}
-
+	
+	FileClose(File_Descriptor);
+	
 	// Show download completed message
 	ScreenSetColor(SCREEN_COLOR_GREEN);
 	ScreenWriteString(STRING_SHELL_DOWNLOAD_DOWNLOADING_COMPLETED);
 	ScreenSetColor(SCREEN_COLOR_BLUE);
-	
-	// Ask the user on what he wants to do with the file
-	do
-	{
-		ScreenWriteString(STRING_SHELL_DOWNLOAD_FINAL_QUESTION);
-		KeyboardReadString(String_User_Answer, 1);
-	} while ((String_User_Answer[0] != 's') && (String_User_Answer[0] != 'a')); // TODO use constants that are language dependent
-	
-	// Exit if the user does not want to save the file
-	if (String_User_Answer[0] != 's') return;
-	
-	// Save the file on the hard disk
-	switch (FileOpen(String_File_Name, 'w', &File_Descriptor))
-	{
-		case ERROR_CODE_NO_ERROR:
-			if (FileWrite(File_Descriptor, (void *) CONFIGURATION_USER_SPACE_ADDRESS, Download_Bytes_Count) == ERROR_CODE_NO_ERROR)
-			{
-				FileClose(File_Descriptor);
-				ScreenSetColor(SCREEN_COLOR_GREEN);
-				ScreenWriteString(STRING_SHELL_DOWNLOAD_FILE_SAVE_COMPLETED);
-			}
-			else
-			{
-				FileResetFileDescriptors(); // Do not close the file to avoid saving corrupted data
-				ScreenSetColor(SCREEN_COLOR_RED);
-				ScreenWriteString(STRING_SHELL_DOWNLOAD_FILE_SAVE_FAILED);
-			}
-			break;
-		
-		case ERROR_CODE_BAD_FILE_NAME:
-			ScreenSetColor(SCREEN_COLOR_RED);
-			ScreenWriteString(STRING_SHELL_DOWNLOAD_BAD_FILE_NAME);
-			break;
-		
-		default:
-			ScreenSetColor(SCREEN_COLOR_RED);
-			ScreenWriteString(STRING_SHELL_DOWNLOAD_FILE_SAVE_FAILED);
-			break;
-	}
 }

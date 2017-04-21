@@ -31,6 +31,7 @@
  * @version 2.4.1 : 03/10/2016, improved file system by using a list of free blocks.
  * @version 2.5.0 : 02/12/2016, added RAM disk support.
  * @version 2.5.1 : 19/12/2016, gathered Installer code into System code to avoid code and makefiles duplication.
+ * @version 2.5.2 : 21/04/2017, improved "download" command communication protocol to allow files of any size to be downloaded.
  */
 #ifndef H_KERNEL_H
 #define H_KERNEL_H
