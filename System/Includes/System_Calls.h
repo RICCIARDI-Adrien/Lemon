@@ -199,6 +199,15 @@ typedef enum
 	 */
 	SYSTEM_CALL_KEYBOARD_IS_KEY_AVAILABLE,
 
+	/** Get a bit field representing the state (pressed or released) of all modifier keys (like shift, control, ...).
+	 * @param ebx = don't care
+	 * @param ecx = don't care
+	 * @param edx = don't care
+	 * @param esi = don't care
+	 * @return The bit field.
+	 */
+	SYSTEM_CALL_KEYBOARD_READ_MODIFIER_KEYS_STATE,
+
 	/** Wait for an ethernet frame to be received.
 	 * @param ebx = don't care
 	 * @param ecx = don't care

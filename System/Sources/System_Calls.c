@@ -191,6 +191,11 @@ static void SystemCallKeyboardIsKeyAvailable(void)
 	Return_Value = KeyboardIsKeyAvailable();
 }
 
+static void SystemCallKeyboardReadModifierKeysState(void)
+{
+	Return_Value = Keyboard_Modifier_Keys_State;
+}
+
 //====================================================================================================================
 // Ethernet controller calls
 //====================================================================================================================
@@ -291,6 +296,7 @@ TSystemCallHandler System_Calls_Handlers[] =
 	SystemCallScreenDisplayBuffer, // SYSTEM_CALL_SCREEN_DISPLAY_BUFFER
 	SystemCallKeyboardReadCharacter, // SYSTEM_CALL_KEYBOARD_READ_CHARACTER
 	SystemCallKeyboardIsKeyAvailable, // SYSTEM_CALL_KEYBOARD_IS_KEY_AVAILABLE
+	SystemCallKeyboardReadModifierKeysState, // SYSTEM_CALL_KEYBOARD_READ_MODIFIER_KEYS_STATE
 	SystemCallEthernetReceivePacket, // SYSTEM_CALL_ETHERNET_RECEIVE_PACKET
 	SystemCallEthernetSendPacket, // SYSTEM_CALL_ETHERNET_SEND_PACKET
 	SystemCallEthernetIsPacketReceived, // SYSTEM_CALL_ETHERNET_IS_PACKET_RECEIVED

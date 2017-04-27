@@ -22,14 +22,18 @@
 #define KEYBOARD_LED_SCROLL_LOCK 0x01
 
 /** Wait until the keyboard controller becomes ready. */
-#define WAIT_KEYBOARD_READY() while (inb(KEYBOARD_PORT_COMMANDS) & 2)
+#define KEYBOARD_WAIT_UNTIL_READY() while (inb(KEYBOARD_PORT_COMMANDS) & 2)
 /** Send the End of Interrupt code to the Programmable Interrupt Controller. */
 #define KEYBOARD_ACKNOWLEDGE() outb(0x20, 32)
 
 //-------------------------------------------------------------------------------------------------
 // Private variables
 //-------------------------------------------------------------------------------------------------
-static unsigned char Keyboard_Led_State = KEYBOARD_LED_NUM_LOCK, Keyboard_ASCII_Code;
+/** Hold a bit field of all keyboard leds. */
+static unsigned char Keyboard_Led_State = KEYBOARD_LED_NUM_LOCK;
+/** Last received character. */
+static unsigned char Keyboard_ASCII_Code;
+/** Tell if Keyboard_ASCII_Code variable contains a valid character that has not been read yet or if no character is available. */
 static volatile int Keyboard_Is_Key_Available = 0;
 
 /** Uppercase keyboard layout, used when Shift or Caps. Lock. key is active. */
@@ -145,16 +149,21 @@ static unsigned char Keyboard_Extended_ASCII_Table[] =
 };
 
 //-------------------------------------------------------------------------------------------------
+// Public variables
+//-------------------------------------------------------------------------------------------------
+unsigned int Keyboard_Modifier_Keys_State = 0; // Consider all keys released on driver start
+
+//-------------------------------------------------------------------------------------------------
 // Private functions
 //-------------------------------------------------------------------------------------------------
 /** Light or turn off keyboard leds according to Keyboard_Led_State value. */
 static void KeyboardActivateLeds(void)
 {
 	// Send "set leds" command
-	WAIT_KEYBOARD_READY();
+	KEYBOARD_WAIT_UNTIL_READY();
 	outb(KEYBOARD_PORT_DATA, 0xED);
 	// Send a byte indicating which leds to light and/or turn off
-	WAIT_KEYBOARD_READY();
+	KEYBOARD_WAIT_UNTIL_READY();
 	outb(KEYBOARD_PORT_DATA, Keyboard_Led_State);
 }
 
@@ -164,9 +173,9 @@ static void KeyboardActivateLeds(void)
 void KeyboardInitialize(void)
 {
 	// Set the fastest repeat rate and the lowest response delay
-	WAIT_KEYBOARD_READY();
+	KEYBOARD_WAIT_UNTIL_READY();
 	outb(KEYBOARD_PORT_DATA, 0xF3);
-	WAIT_KEYBOARD_READY();
+	KEYBOARD_WAIT_UNTIL_READY();
 	outb(KEYBOARD_PORT_DATA, 0);
 	
 	// Set Num. Lock. led
@@ -235,7 +244,7 @@ void KeyboardRebootSystem(void)
 	*Pointer_Word = 0x1234;
 	
 	// Send the restart command
-	WAIT_KEYBOARD_READY();
+	KEYBOARD_WAIT_UNTIL_READY();
 	outb(KEYBOARD_PORT_COMMANDS, 0xFE);
 }
 
@@ -244,23 +253,23 @@ void KeyboardEnableA20Gate(void)
 	unsigned char State;
 	
 	// Disable the keyboard
-	WAIT_KEYBOARD_READY();
+	KEYBOARD_WAIT_UNTIL_READY();
 	outb(KEYBOARD_PORT_COMMANDS, 0xAD);
 
 	// Read the current keyboard state
-	WAIT_KEYBOARD_READY();
+	KEYBOARD_WAIT_UNTIL_READY();
 	outb(KEYBOARD_PORT_COMMANDS, 0xD0); // Send the "read output port" command
-	WAIT_KEYBOARD_READY();
+	KEYBOARD_WAIT_UNTIL_READY();
 	State = inb(KEYBOARD_PORT_DATA); // Read the state
 	
 	// Send back the keyboard state with the A20 line enabled
-	WAIT_KEYBOARD_READY();
+	KEYBOARD_WAIT_UNTIL_READY();
 	outb(KEYBOARD_PORT_COMMANDS, 0xD1); // Send the "write output port" command
-	WAIT_KEYBOARD_READY();
+	KEYBOARD_WAIT_UNTIL_READY();
 	outb(KEYBOARD_PORT_DATA, State |  0x02); // Enable the A20 line
 	
 	// Re-enable the keyboard
-	WAIT_KEYBOARD_READY();
+	KEYBOARD_WAIT_UNTIL_READY();
 	outb(KEYBOARD_PORT_COMMANDS, 0xAE);
 }
 
@@ -279,7 +288,7 @@ void KeyboardInterruptHandler(void)
 	
 	// Enable the following lines to see raw data from keyboard (debugging purpose only)
 	/*ScreenWriteString(itoa(Scan_Code));
-	ScreenWriteChar('\n');
+	ScreenWriteCharacter('\n');
 	KEYBOARD_ACKNOWLEDGE();
 	return;*/
 	
@@ -310,11 +319,23 @@ void KeyboardInterruptHandler(void)
 			// Alt Gr press
 			case 0x38:
 				Is_Alternate_Mode = 1;
+				Keyboard_Modifier_Keys_State |= KEYBOARD_MODIFIER_KEY_BIT_MASK_RIGHT_ALT;
 				break;
 				
 			// Alt Gr release
 			case 0x38 + 128:
 				Is_Alternate_Mode = 0;
+				Keyboard_Modifier_Keys_State &= ~KEYBOARD_MODIFIER_KEY_BIT_MASK_RIGHT_ALT;
+				break;
+				
+			// Right control press
+			case 0x1D:
+				Keyboard_Modifier_Keys_State |= KEYBOARD_MODIFIER_KEY_BIT_MASK_RIGHT_CONTROL;
+				break;
+				
+			// Right control release
+			case 0x1D + 128:
+				Keyboard_Modifier_Keys_State &= ~KEYBOARD_MODIFIER_KEY_BIT_MASK_RIGHT_CONTROL;
 				break;
 			
 			// Get corresponding alternate key or virtual code
@@ -335,42 +356,64 @@ void KeyboardInterruptHandler(void)
 	// Check special keys first
 	switch (Scan_Code)
 	{
-		// This section is for key pressing
- 		// Left shift : turn off Caps. Lock. led
+		// Stress key press 
+		case 0x1A:
+			Is_Stress_Mode = 1;
+			return;
+			
+		// Left control press
+		case 0x1D:
+			Keyboard_Modifier_Keys_State |= KEYBOARD_MODIFIER_KEY_BIT_MASK_LEFT_CONTROL;
+			break;
+			
+		// Left control release
+		case 0x1D + 128:
+			Keyboard_Modifier_Keys_State &= ~KEYBOARD_MODIFIER_KEY_BIT_MASK_LEFT_CONTROL;
+			break;
+			
+ 		// Left shift press : turn off Caps. Lock. led
 		case 0x2A:
 			Is_Uppercase_Mode = 1;
 			Keyboard_Led_State &= ~KEYBOARD_LED_CAPS_LOCK;
 			KeyboardActivateLeds();
+			Keyboard_Modifier_Keys_State |= KEYBOARD_MODIFIER_KEY_BIT_MASK_LEFT_SHIFT;
+			return;
+			
+		// Left shift release
+		case 0x2A + 128:
+			Is_Uppercase_Mode = 0;
+			Keyboard_Modifier_Keys_State &= ~KEYBOARD_MODIFIER_KEY_BIT_MASK_LEFT_SHIFT;
 			return;
 
-		// Right shift : turn off Caps. Lock. led
+		// Right shift press : turn off Caps. Lock. led
 		case 0x36:
 			Is_Uppercase_Mode = 1;
 			Keyboard_Led_State &= ~KEYBOARD_LED_CAPS_LOCK;
 			KeyboardActivateLeds();
+			Keyboard_Modifier_Keys_State |= KEYBOARD_MODIFIER_KEY_BIT_MASK_RIGHT_SHIFT;
+			return;
+			
+		// Right shift release
+		case 0x36 + 128:
+			Is_Uppercase_Mode = 0;
+			Keyboard_Modifier_Keys_State &= ~KEYBOARD_MODIFIER_KEY_BIT_MASK_RIGHT_SHIFT;
+			return;
+			
+		// Left alt press
+		case 0x38:
+			Keyboard_Modifier_Keys_State |= KEYBOARD_MODIFIER_KEY_BIT_MASK_LEFT_ALT;
+			return;
+			
+		// Left alt release
+		case 0x38 + 128:
+			Keyboard_Modifier_Keys_State &= ~KEYBOARD_MODIFIER_KEY_BIT_MASK_LEFT_ALT;
 			return;
 
-		// Caps lock : light corresponding led
+		// Caps lock press : light corresponding led
 		case 0x3A:
 			Is_Uppercase_Mode = 1;
 			Keyboard_Led_State |= KEYBOARD_LED_CAPS_LOCK;
 			KeyboardActivateLeds();
-			return;
-			
-		// Stress key
-		case 0x1A:
-			Is_Stress_Mode = 1;
-			return;
-					
-		// This section is for key releasing
-		// Left shift
-		case 0x2A + 128:
-			Is_Uppercase_Mode = 0;
-			return;
-			
-		// Right shift
-		case 0x36 + 128:
-			Is_Uppercase_Mode = 0;
 			return;
 	}
 	

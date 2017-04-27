@@ -66,6 +66,25 @@
 /** Keyboard F11 key. */
 #define KEYBOARD_KEY_CODE_F11 250
 
+/** Left shift modifier keys state bit mask. */
+#define KEYBOARD_MODIFIER_KEY_BIT_MASK_LEFT_SHIFT 1
+/** Left control modifier keys state bit mask. */
+#define KEYBOARD_MODIFIER_KEY_BIT_MASK_LEFT_CONTROL (1 << 1)
+/** Left alt modifier keys state bit mask. */
+#define KEYBOARD_MODIFIER_KEY_BIT_MASK_LEFT_ALT (1 << 2)
+/** Right shift modifier keys state bit mask. */
+#define KEYBOARD_MODIFIER_KEY_BIT_MASK_RIGHT_SHIFT (1 << 3)
+/** Right control modifier keys state bit mask. */
+#define KEYBOARD_MODIFIER_KEY_BIT_MASK_RIGHT_CONTROL (1 << 4)
+/** Right alt modifier keys state bit mask. */
+#define KEYBOARD_MODIFIER_KEY_BIT_MASK_RIGHT_ALT (1 << 5)
+
+//-------------------------------------------------------------------------------------------------
+// Variables
+//-------------------------------------------------------------------------------------------------
+/** Gather all modifier keys (shift, alt, ...) state in a bit field. */
+extern unsigned int Keyboard_Modifier_Keys_State;
+
 //-------------------------------------------------------------------------------------------------
 // Functions
 //-------------------------------------------------------------------------------------------------
