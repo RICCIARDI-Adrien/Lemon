@@ -88,20 +88,18 @@ void ScreenSetCursorPosition(unsigned int Row, unsigned int Column);
 /** Get the current text color.
  * @return The current color code.
  */
-#ifdef DOXYGEN
-	unsigned char ScreenGetColor(void);
-#else
-	#define ScreenGetColor() (Screen_Color)
-#endif
+static inline unsigned char ScreenGetColor(void)
+{
+	return Screen_Color;
+}
 
 /** Set the text color.
  * @param Color_Code The color code value represented by a SCREEN_COLOR_XXX macro.
  */
-#ifdef DOXYGEN
-	void ScreenSetColor(unsigned char Color_Code);
-#else
-	#define ScreenSetColor(Color_Code) (Screen_Color = Color_Code)
-#endif
+static inline void ScreenSetColor(unsigned char Color_Code)
+{
+	Screen_Color = Color_Code;
+}
 
 /** Display a buffer representing the raw video memory data on the screen.
  * @param Pointer_Buffer The userspace-provided buffer.
