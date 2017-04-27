@@ -82,6 +82,8 @@
 //-------------------------------------------------------------------------------------------------
 // Variables
 //-------------------------------------------------------------------------------------------------
+/** Tell if a valid character has not been read yet. */
+extern volatile int Keyboard_Is_Key_Available;
 /** Gather all modifier keys (shift, alt, ...) state in a bit field. */
 extern unsigned int Keyboard_Modifier_Keys_State;
 
@@ -106,7 +108,18 @@ void KeyboardReadString(char *String, unsigned int Maximum_Characters_Number);
 /** Tell if a key was pressed or not.
  * @return 1 if a key was pressed or 0 if no key was pressed.
  */
-int KeyboardIsKeyAvailable(void);
+static inline int KeyboardIsKeyAvailable(void)
+{
+	return Keyboard_Is_Key_Available;
+}
+
+/** Get the modifier keys bit mask.
+ * @return The modifier keys bit mask.
+ */
+static inline unsigned int KeyboardReadModifierKeysState(void)
+{
+	return Keyboard_Modifier_Keys_State;
+}
 
 /** Reboot the system by setting low the processor reset pin. */
 void KeyboardRebootSystem(void);

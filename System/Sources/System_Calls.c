@@ -193,7 +193,7 @@ static void SystemCallKeyboardIsKeyAvailable(void)
 
 static void SystemCallKeyboardReadModifierKeysState(void)
 {
-	Return_Value = Keyboard_Modifier_Keys_State;
+	Return_Value = KeyboardReadModifierKeysState();
 }
 
 //====================================================================================================================
