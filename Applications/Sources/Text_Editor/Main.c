@@ -274,7 +274,7 @@ int main(int argc, char *argv[])
 {
 	char *String_File_Name;
 	unsigned char Character; // Must be unsigned as virtual key codes use values greater than 127
-	unsigned int Temp;
+	unsigned int Temp, Modifier_Keys_State;
 	int Is_Text_Modified = 0;
 	
 	// Check parameters
@@ -306,6 +306,7 @@ int main(int argc, char *argv[])
 	while (1)
 	{
 		Character = KeyboardReadCharacter();
+		Modifier_Keys_State = KeyboardReadModifierKeysState();
 		
 		// Always erase the cursor trace because the display may not be cleared
 		MainCursorEraseTrace();
@@ -395,35 +396,47 @@ int main(int argc, char *argv[])
 				Is_Text_Modified = 1;
 				break;
 				
-			case KEYBOARD_KEY_CODE_F3:
-				MainCutCurrentLine();
-				Is_Text_Modified = 1;
-				break;
-				
-			case KEYBOARD_KEY_CODE_F4:
-				MainPasteCopyBuffer();
-				Is_Text_Modified = 1;
-				break;
-				
-			case KEYBOARD_KEY_CODE_F5:
-				if (MainSaveFile(String_File_Name) != 0) MainExitProgram();
-				Is_Text_Modified = 0;
-				break;
-				
 			case KEYBOARD_KEY_CODE_F6:
 				MainDisplayTextInformation();
 				break;
 				
-			// Add the character to the buffer
 			default:
-				// Append the character
-				if (BufferAppendCharacter(CursorGetBufferCharacterIndex(), (char) Character) != 0) break; // Nothing to do if the character could not be added (TODO : error message if the buffer is full)
-				
-				// Update the cursor location and the display
-				CursorMoveToRight();
-				BufferDisplayPage(CursorGetBufferRow() - CursorGetDisplayRow());
-				
-				Is_Text_Modified = 1;
+				// Handle Control+<key> shortcuts
+				if (Modifier_Keys_State & (KEYBOARD_MODIFIER_KEY_BIT_MASK_LEFT_CONTROL | KEYBOARD_MODIFIER_KEY_BIT_MASK_RIGHT_CONTROL))
+				{
+					switch (Character)
+					{
+						case 'S':
+						case 's':
+							if (MainSaveFile(String_File_Name) != 0) MainExitProgram();
+							Is_Text_Modified = 0;
+							break;
+							
+						case 'V':
+						case 'v':
+							MainPasteCopyBuffer();
+							Is_Text_Modified = 1;
+							break;
+							
+						case 'X':
+						case 'x':
+							MainCutCurrentLine();
+							Is_Text_Modified = 1;
+							break;
+					}
+				}
+				// Add the character to the buffer
+				else
+				{
+					// Append the character
+					if (BufferAppendCharacter(CursorGetBufferCharacterIndex(), (char) Character) != 0) break; // Nothing to do if the character could not be added (TODO : error message if the buffer is full)
+					
+					// Update the cursor location and the display
+					CursorMoveToRight();
+					BufferDisplayPage(CursorGetBufferRow() - CursorGetDisplayRow());
+					
+					Is_Text_Modified = 1;
+				}
 				break;
 		}
 		
