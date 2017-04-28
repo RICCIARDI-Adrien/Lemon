@@ -66,7 +66,7 @@
 		" - Port_Serveur : le port du serveur TFTP\n" \
 		" - Commande : 'get' pour recevoir un fichier, 'put' pour envoyer un fichier\n" \
 		" - Nom_Fichier : si la commande est 'get', nom du fichier \205 r\202cup\202rer sur le\n" \
-		"   serveur ; si la commande est 'set', nom du fichier local \205 envoyer\n"
+		"   serveur ; si la commande est 'put', nom du fichier local \205 envoyer\n"
 	#define STRING_COMMAND_TFTP_INVALID_IP_ADDRESS "Erreur : l'adresse IP est invalide.\n"
 	#define STRING_COMMAND_TFTP_INVALID_COMMAND "Erreur : la commande n'est pas reconnue.\n"
 	#define STRING_COMMAND_TFTP_FILE_NAME_TOO_LONG "Erreur : le nom du fichier est trop long.\n"
