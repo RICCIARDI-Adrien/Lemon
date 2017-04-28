@@ -253,6 +253,9 @@ void MainPasteCopyBuffer(void)
 	Character_Insertion_Index = CursorGetBufferCharacterIndex();
 	for (i = Main_Copy_Buffer_Length - 1; i != 0xFFFFFFFF; i--) BufferAppendCharacter(Character_Insertion_Index, Main_Copy_Buffer[i]); // Preserve the copy buffer size because it's content can be pasted several times
 	
+	// Put the cursor at the end of the pasted lines
+	for (i = 0; i < Main_Copy_Buffer_Length; i++) CursorMoveToRight(); // Update the cursor when all characters have been inserted, so the cursor can safely move
+	
 	// Refresh the display
 	BufferDisplayPage(CursorGetBufferRow() - CursorGetDisplayRow());
 	
