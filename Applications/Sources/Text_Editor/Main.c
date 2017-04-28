@@ -396,7 +396,7 @@ int main(int argc, char *argv[])
 				Is_Text_Modified = 1;
 				break;
 				
-			case KEYBOARD_KEY_CODE_F6:
+			case KEYBOARD_KEY_CODE_F1:
 				MainDisplayTextInformation();
 				break;
 				
@@ -428,6 +428,9 @@ int main(int argc, char *argv[])
 				// Add the character to the buffer
 				else
 				{
+					// Discard function keys
+					if ((Character >= KEYBOARD_KEY_CODE_F1) && (Character <= KEYBOARD_KEY_CODE_F11)) break;
+					
 					// Append the character
 					if (BufferAppendCharacter(CursorGetBufferCharacterIndex(), (char) Character) != 0) break; // Nothing to do if the character could not be added (TODO : error message if the buffer is full)
 					
