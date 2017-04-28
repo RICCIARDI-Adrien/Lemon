@@ -48,10 +48,10 @@
 		"    Echap : quitter le programme\n" \
 		"    Home : aller au d\202but de la ligne\n" \
 		"    End : aller \205 la fin de la ligne\n" \
-		"    F3 : couper une ou plusieurs lignes\n" \
-		"    F4 : coller le texte pr\202c\202demment coup\202\n" \
-		"    F5 : sauvegarder le document en cours d'\202dition\n" \
-		"    F6 : afficher les statistiques du document"
+		"    Ctrl+X : couper une ou plusieurs lignes\n" \
+		"    Ctrl+V : coller le texte pr\202c\202demment coup\202\n" \
+		"    Ctrl+S : sauvegarder le document en cours d'\202dition\n" \
+		"    F1 : afficher les statistiques du document"
 	#define STRING_COMMAND_FULL_DESCRIPTION_GAMES "Rassemble plusieurs jeux en mode texte.\n" \
 		"Les commandes de chaque jeu sont d\202taill\202es lors du lancement, sauf pour\n"\
 		"le Jeu de la Vie dont voici les commandes :\n" \
