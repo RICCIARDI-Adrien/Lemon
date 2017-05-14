@@ -40,6 +40,12 @@ unsigned int StringConvertStringToUnsignedInteger(char *String);
  */
 void StringConvertUnsignedIntegerToString(unsigned int Number, char *String_Destination);
 
+/** Convert a 32-bit value to an hexadecimal string (always padded to 8 characters).
+ * @param Integer The 32-bit value to convert (it can be also an unsigned integer).
+ * @param String_Hexadecimal_Output On output, contain the hexadecimal string. Make sure the string has enough room for 8 characters + terminating zero.
+ */
+void StringConvertIntegerToHexadecimal(int Integer, char *String_Hexadecimal_Output);
+
 /** Retrieve the characters count in a string.
  * @param String The string to get size.
  * @return The size of the string in characters (not including the terminating zero).
