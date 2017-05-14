@@ -129,6 +129,12 @@ int TestsStringConvertStringToUnsignedInteger(void);
  */
 int TestsStringConvertUnsignedIntegerToString(void);
 
+/** Test the StringConvertIntegerToHexadecimal() function.
+ * @return 0 if all tests were successful,
+ * @return 1 if a test failed.
+ */
+int TestsStringConvertIntegerToHexadecimal(void);
+
 /** Test the StringCopy() function.
  * @return 0 if all tests were successful,
  * @return 1 if a test failed.

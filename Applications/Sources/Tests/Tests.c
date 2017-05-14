@@ -84,6 +84,10 @@ static TTest Tests[] =
 		TestsStringConvertUnsignedIntegerToString
 	},
 	{
+		"StringConvertIntegerToHexadecimal()",
+		TestsStringConvertIntegerToHexadecimal
+	},
+	{
 		"StringCopy()",
 		TestsStringCopy
 	},

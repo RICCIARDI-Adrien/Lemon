@@ -124,6 +124,28 @@ int TestsStringConvertUnsignedIntegerToString(void)
 	return 0;
 }
 
+int TestsStringConvertIntegerToHexadecimal(void)
+{
+	char *String_Results[] = {"00000000", "00000001", "FFFFFFFF", "12345678", "DEADBEEF", "42AC8F9B", "00010B57"}, String_Result[9];
+	unsigned int i, Numbers[] = {0, 1, 0xFFFFFFFF, 0x12345678, 0xDEADBEEF, 0x42AC8F9B, 0x00010B57};
+	
+	for (i = 0; i < SYSTEM_GET_ARRAY_ELEMENTS_COUNT(Numbers); i++)
+	{
+		ScreenWriteString("Testing number ");
+		ScreenWriteString(String_Results[i]);
+		ScreenWriteString("...\n");
+		
+		StringConvertIntegerToHexadecimal((int) Numbers[i], String_Result);
+		if (!StringCompare(String_Result, String_Results[i]))
+		{
+			DisplayMessageError("failed to convert number to hexadecimal string.");
+			return 1;
+		}
+	}
+	
+	return 0;
+}
+
 int TestsStringCopy(void)
 {
 	int i;
