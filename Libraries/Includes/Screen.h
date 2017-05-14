@@ -104,6 +104,11 @@ void ScreenWriteInteger(int Integer);
  */
 void ScreenWriteUnsignedInteger(unsigned int Unsigned_Integer);
 
+/** Display the hexadecimal representation of a 32-bit value (always padded to 8 characters).
+ * @param Integer The 32-bit value to display (it can be also an unsigned integer).
+ */
+void ScreenWriteHexadecimalInteger(int Integer);
+
 // "Rendering" functions
 /** Display a buffer representing the raw video memory data on the screen.
  * @param Pointer_Buffer The buffer.
