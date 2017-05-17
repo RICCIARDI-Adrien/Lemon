@@ -250,39 +250,51 @@ int CommandMainTFTP(int argc, char __attribute__((unused)) *argv[])
 	TNetworkIPAddress IP_Address;
 	unsigned short Port;
 	int Is_Get_Command;
-	char *String_File_Name;
+	char *String_File_Name, String_Temp[32];
 	
 	// Check parameters
-	if (argc != 5)
+	if (argc != 3)
 	{
 		ScreenWriteString(STRING_COMMAND_TFTP_USAGE);
 		return -1;
 	}
 	
 	// Get parameters
-	// IP address
-	if (NetworkInitializeIPAddress(argv[1], &IP_Address) != 0)
-	{
-		ScreenWriteString(STRING_COMMAND_TFTP_INVALID_IP_ADDRESS);
-		return -1;
-	}
-	// Port
-	Port = StringConvertStringToUnsignedInteger(argv[2]);
 	// Command
-	if (StringCompare(argv[3], "get") == 1) Is_Get_Command = 1;
-	else if (StringCompare(argv[3], "put") == 1) Is_Get_Command = 0;
+	if (StringCompare(argv[1], "get") == 1) Is_Get_Command = 1;
+	else if (StringCompare(argv[1], "put") == 1) Is_Get_Command = 0;
 	else
 	{
 		ScreenWriteString(STRING_COMMAND_TFTP_INVALID_COMMAND);
 		return -1;
 	}
 	// File name
-	String_File_Name = argv[4];
+	String_File_Name = argv[2];
 	if (StringGetSize(String_File_Name) > FILE_NAME_LENGTH)
 	{
 		ScreenWriteString(STRING_COMMAND_TFTP_FILE_NAME_TOO_LONG);
 		return -1;
 	}
+	
+	// Retrieve server parameters from the configuration file
+	// IP address
+	if (SystemConfigurationReadValue("Network_TFTP_Server_IP_Address", String_Temp) != 0)
+	{
+		ScreenWriteString(STRING_COMMAND_TFTP_CAN_RETRIEVE_SERVER_IP_ADDRESS);
+		return -1;
+	}
+	if (NetworkInitializeIPAddress(String_Temp, &IP_Address) != 0) // TODO initialize subnet mask too
+	{
+		ScreenWriteString(STRING_COMMAND_TFTP_INVALID_IP_ADDRESS);
+		return -1;
+	}
+	// Port
+	if (SystemConfigurationReadValue("Network_TFTP_Server_Port", String_Temp) != 0)
+	{
+		ScreenWriteString(STRING_COMMAND_TFTP_CAN_RETRIEVE_SERVER_PORT);
+		return -1;
+	}
+	Port = StringConvertStringToUnsignedInteger(String_Temp);
 	
 	// Try to connect to the server
 	if (NetworkInitialize() != 0)

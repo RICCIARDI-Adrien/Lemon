@@ -49,5 +49,4 @@ Applications
 - grep ?
 
 - utiliser api buffer pour affichage éditeur de texte (partiellement effectué)
-
-- éditeur de texte mettre ctrl+s pour sauver, ctrl+x pour couper, ctrl+v pour coller et implémenter ctrl+c pour copier
+- éditeur de texte implémenter ctrl+c pour copier

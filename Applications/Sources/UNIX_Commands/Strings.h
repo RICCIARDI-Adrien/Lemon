@@ -61,12 +61,13 @@
 	
 	// "tftp" command
 	#define STRING_COMMAND_TFTP_USAGE "Envoie ou re\207oit des fichiers sur le net via le protocole TFTP.\n" \
-		"Param\212tres : IP_Serveur Port_Serveur Commande Nom_Fichier\n" \
-		" - IP_Serveur : l'adresse IP du serveur TFTP\n" \
-		" - Port_Serveur : le port du serveur TFTP\n" \
+		"Param\212tres : Commande Nom_Fichier\n" \
 		" - Commande : 'get' pour recevoir un fichier, 'put' pour envoyer un fichier\n" \
 		" - Nom_Fichier : si la commande est 'get', nom du fichier \205 r\202cup\202rer sur le\n" \
-		"   serveur ; si la commande est 'put', nom du fichier local \205 envoyer\n"
+		"   serveur ; si la commande est 'put', nom du fichier local \205 envoyer\n" \
+		"L'adresse IP et le port du serveur se trouvent dans le fichier de configuration du syst\212me.\n"
+	#define STRING_COMMAND_TFTP_CAN_RETRIEVE_SERVER_IP_ADDRESS "Erreur : impossible de trouver l'adresse IP du serveur dans le fichier de\nconfiguration.\n"
+	#define STRING_COMMAND_TFTP_CAN_RETRIEVE_SERVER_PORT "Erreur : impossible de trouver le port du serveur dans le fichier de\nconfiguration.\n"
 	#define STRING_COMMAND_TFTP_INVALID_IP_ADDRESS "Erreur : l'adresse IP est invalide.\n"
 	#define STRING_COMMAND_TFTP_INVALID_COMMAND "Erreur : la commande n'est pas reconnue.\n"
 	#define STRING_COMMAND_TFTP_FILE_NAME_TOO_LONG "Erreur : le nom du fichier est trop long.\n"
