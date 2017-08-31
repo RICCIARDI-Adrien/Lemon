@@ -40,6 +40,23 @@ export LDFLAGS
 export SERIAL_PORT_SERVER_FLAGS
 
 #------------------------------------------------------------------------------------------------------------------------------
+# Public functions
+#------------------------------------------------------------------------------------------------------------------------------
+# Link the provided object files to a Lemon executable file.
+# @param $(1) The list of the objects file to link, each file separated by a space.
+# @param $(2) The name to give to the Lemon executable (file extension will be added automatically, do not provide it).
+define ApplicationsLinkProgram
+	@# Must use $$(x) around function parameters because this function is called from a sub-makefile, so the '$' character must be kept when exporting the function
+	@# Generate the executable
+	$(GLOBAL_TOOL_LINKER) $$(1) $(LDFLAGS) -o $(BINARIES_PATH)/$$(2).bin
+	@# Append the Lemon executable header in front of the generated binary
+	@printf "\022\064\126\170" > $(BINARIES_PATH)/$$(2).lemon
+	@cat $(BINARIES_PATH)/$$(2).bin >> $(BINARIES_PATH)/$$(2).lemon
+	@rm $(BINARIES_PATH)/$$(2).bin
+endef
+export ApplicationsLinkProgram
+
+#------------------------------------------------------------------------------------------------------------------------------
 # Rules
 #------------------------------------------------------------------------------------------------------------------------------
 # Append the /compile target to all discovered applications
