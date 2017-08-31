@@ -42,6 +42,16 @@ export SERIAL_PORT_SERVER_FLAGS
 #------------------------------------------------------------------------------------------------------------------------------
 # Public functions
 #------------------------------------------------------------------------------------------------------------------------------
+# Compile the provided .c file into an object file.
+# @param $(1) The source file to compile.
+# @param $(2) The object file to generate.
+# @param $(3) Additional gcc flags to append to the command line.
+define ApplicationsCompileSourceFile
+	@# Must use $$(x) around function parameters because this function is called from a sub-makefile, so the '$' character must be kept when exporting the function
+	$(GLOBAL_TOOL_COMPILER) $(CCFLAGS) $$(3) -c $$(1) -o $$(2)
+endef
+export ApplicationsCompileSourceFile
+
 # Link the provided object files to a Lemon executable file.
 # @param $(1) The list of the objects file to link, each file separated by a space.
 # @param $(2) The name to give to the Lemon executable (file extension will be added automatically, do not provide it).
