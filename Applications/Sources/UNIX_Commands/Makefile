@@ -11,22 +11,22 @@ download:
 	@$(TOOL_SERIAL_PORT_SERVER) $(SERIAL_PORT_SERVER_FLAGS) $(BINARIES_PATH)/$(PROGRAM_NAME).lemon u
 
 $(OBJECTS_PATH)/$(PROGRAM_NAME)/Command_Df.o: Commands.h Command_Df.c Strings.h
-	$(GLOBAL_TOOL_COMPILER) $(CCFLAGS) -c Command_Df.c -o $(OBJECTS_PATH)/$(PROGRAM_NAME)/Command_Df.o
+	$(call ApplicationsCompileSourceFile,Command_Df.c,$(OBJECTS_PATH)/$(PROGRAM_NAME)/Command_Df.o)
 
 $(OBJECTS_PATH)/$(PROGRAM_NAME)/Command_Diff.o: Commands.h Command_Diff.c Strings.h
-	$(GLOBAL_TOOL_COMPILER) $(CCFLAGS) -c Command_Diff.c -o $(OBJECTS_PATH)/$(PROGRAM_NAME)/Command_Diff.o
+	$(call ApplicationsCompileSourceFile,Command_Diff.c,$(OBJECTS_PATH)/$(PROGRAM_NAME)/Command_Diff.o)
 
 $(OBJECTS_PATH)/$(PROGRAM_NAME)/Command_Ls.o: Commands.h Command_Ls.c Strings.h
-	$(GLOBAL_TOOL_COMPILER) $(CCFLAGS) -c Command_Ls.c -o $(OBJECTS_PATH)/$(PROGRAM_NAME)/Command_Ls.o
+	$(call ApplicationsCompileSourceFile,Command_Ls.c,$(OBJECTS_PATH)/$(PROGRAM_NAME)/Command_Ls.o)
 
 $(OBJECTS_PATH)/$(PROGRAM_NAME)/Command_More.o: Commands.h Command_More.c Strings.h
-	$(GLOBAL_TOOL_COMPILER) $(CCFLAGS) -c Command_More.c -o $(OBJECTS_PATH)/$(PROGRAM_NAME)/Command_More.o
+	$(call ApplicationsCompileSourceFile,Command_More.c,$(OBJECTS_PATH)/$(PROGRAM_NAME)/Command_More.o)
 
 $(OBJECTS_PATH)/$(PROGRAM_NAME)/Command_TFTP.o: Commands.h Command_TFTP.c Strings.h
-	$(GLOBAL_TOOL_COMPILER) $(CCFLAGS) -c Command_TFTP.c -o $(OBJECTS_PATH)/$(PROGRAM_NAME)/Command_TFTP.o
+	$(call ApplicationsCompileSourceFile,Command_TFTP.c,$(OBJECTS_PATH)/$(PROGRAM_NAME)/Command_TFTP.o)
 
 $(OBJECTS_PATH)/$(PROGRAM_NAME)/Command_Uptime.o: Commands.h Command_Uptime.c Strings.h
-	$(GLOBAL_TOOL_COMPILER) $(CCFLAGS) -c Command_Uptime.c -o $(OBJECTS_PATH)/$(PROGRAM_NAME)/Command_Uptime.o
+	$(call ApplicationsCompileSourceFile,Command_Uptime.c,$(OBJECTS_PATH)/$(PROGRAM_NAME)/Command_Uptime.o)
 
 $(OBJECTS_PATH)/$(PROGRAM_NAME)/Main.o: Commands.h Main.c Strings.h
-	$(GLOBAL_TOOL_COMPILER) $(CCFLAGS) -c Main.c -o $(OBJECTS_PATH)/$(PROGRAM_NAME)/Main.o
+	$(call ApplicationsCompileSourceFile,Main.c,$(OBJECTS_PATH)/$(PROGRAM_NAME)/Main.o)

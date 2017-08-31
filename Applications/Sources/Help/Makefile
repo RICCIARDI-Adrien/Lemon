@@ -11,4 +11,4 @@ download:
 	@$(TOOL_SERIAL_PORT_SERVER) $(SERIAL_PORT_SERVER_FLAGS) $(BINARIES_PATH)/$(PROGRAM_NAME).lemon help
 
 $(OBJECTS_PATH)/$(PROGRAM_NAME)/Help.o: Help.c Strings.h
-	$(GLOBAL_TOOL_COMPILER) $(CCFLAGS) -c Help.c -o $(OBJECTS_PATH)/$(PROGRAM_NAME)/Help.o
+	$(call ApplicationsCompileSourceFile,Help.c,$(OBJECTS_PATH)/$(PROGRAM_NAME)/Help.o)
