@@ -3,16 +3,11 @@ OBJECTS_TESTS = $(OBJECTS_PATH)/$(PROGRAM_NAME)/crc32.o $(OBJECTS_PATH)/$(PROGRA
 OBJECTS = $(OBJECTS_PATH)/$(PROGRAM_NAME)/Test_Display_ASCII_Characters.o $(OBJECTS_PATH)/$(PROGRAM_NAME)/Test_Protection_Check.o $(OBJECTS_PATH)/$(PROGRAM_NAME)/Test_Network_UDP_Transmission.o $(OBJECTS_PATH)/$(PROGRAM_NAME)/Test_Network_Ethernet_Reception.o $(OBJECTS_TESTS)
 
 all: $(OBJECTS)
-	$(GLOBAL_TOOL_LINKER) $(OBJECTS_PATH)/$(PROGRAM_NAME)/Test_Display_ASCII_Characters.o $(LDFLAGS) -o $(BINARIES_PATH)/Test_Display_ASCII_Characters.bin
-	$(GLOBAL_TOOL_LINKER) $(OBJECTS_PATH)/$(PROGRAM_NAME)/Test_Protection_Check.o $(LDFLAGS) -o $(BINARIES_PATH)/Test_Protection_Check.bin
-	$(GLOBAL_TOOL_LINKER) $(OBJECTS_PATH)/$(PROGRAM_NAME)/Test_Network_UDP_Transmission.o $(LDFLAGS) -o $(BINARIES_PATH)/Test_Network_UDP_Transmission.bin
-	$(GLOBAL_TOOL_LINKER) $(OBJECTS_PATH)/$(PROGRAM_NAME)/Test_Network_Ethernet_Reception.o $(LDFLAGS) -o $(BINARIES_PATH)/Test_Network_Ethernet_Reception.bin
-	$(GLOBAL_TOOL_LINKER) $(OBJECTS_TESTS) $(LDFLAGS) -o $(BINARIES_PATH)/Tests.bin
-	$(TOOL_ADD_EXECUTABLE_HEADER) $(BINARIES_PATH)/Test_Display_ASCII_Characters.bin $(BINARIES_PATH)/Test_Display_ASCII_Characters.lemon
-	$(TOOL_ADD_EXECUTABLE_HEADER) $(BINARIES_PATH)/Test_Protection_Check.bin $(BINARIES_PATH)/Test_Protection_Check.lemon
-	$(TOOL_ADD_EXECUTABLE_HEADER) $(BINARIES_PATH)/Test_Network_UDP_Transmission.bin $(BINARIES_PATH)/Test_Network_UDP_Transmission.lemon
-	$(TOOL_ADD_EXECUTABLE_HEADER) $(BINARIES_PATH)/Test_Network_Ethernet_Reception.bin $(BINARIES_PATH)/Test_Network_Ethernet_Reception.lemon
-	$(TOOL_ADD_EXECUTABLE_HEADER) $(BINARIES_PATH)/Tests.bin $(BINARIES_PATH)/Tests.lemon
+	$(call ApplicationsLinkProgram,$(OBJECTS_PATH)/$(PROGRAM_NAME)/Test_Display_ASCII_Characters.o,Test_Display_ASCII_Characters)
+	$(call ApplicationsLinkProgram,$(OBJECTS_PATH)/$(PROGRAM_NAME)/Test_Protection_Check.o,Test_Protection_Check)
+	$(call ApplicationsLinkProgram,$(OBJECTS_PATH)/$(PROGRAM_NAME)/Test_Network_UDP_Transmission.o,Test_Network_UDP_Transmission)
+	$(call ApplicationsLinkProgram,$(OBJECTS_PATH)/$(PROGRAM_NAME)/Test_Network_Ethernet_Reception.o,Test_Network_Ethernet_Reception)
+	$(call ApplicationsLinkProgram,$(OBJECTS_TESTS),$(PROGRAM_NAME))
 
 clean:
 	rm -rf $(OBJECTS_PATH)/$(PROGRAM_NAME) $(BINARIES_PATH)/Test_Display_ASCII_Characters.* $(BINARIES_PATH)/Test_Protection_Check.* $(BINARIES_PATH)/Test_Network_UDP_Transmission.* $(BINARIES_PATH)/Test_Network_Ethernet_Reception.* $(BINARIES_PATH)/Tests.*
