@@ -66,6 +66,14 @@ define ApplicationsLinkProgram
 endef
 export ApplicationsLinkProgram
 
+# Download a file on the Lemon system using the serial port server.
+# @param $(1) The file to send.
+# @param $(2) The name the file will have on the Lemon file system.
+define ApplicationsDownloadFile
+	$(TOOL_SERIAL_PORT_SERVER) $(SERIAL_PORT_SERVER_FLAGS) $$(1) $$(2)
+endef
+export ApplicationsDownloadFile
+
 #------------------------------------------------------------------------------------------------------------------------------
 # Rules
 #------------------------------------------------------------------------------------------------------------------------------
