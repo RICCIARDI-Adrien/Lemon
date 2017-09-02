@@ -8,7 +8,7 @@ clean:
 	rm -rf $(OBJECTS_PATH)/$(PROGRAM_NAME) $(BINARIES_PATH)/$(PROGRAM_NAME).*
 
 download:
-	@$(TOOL_SERIAL_PORT_SERVER) $(SERIAL_PORT_SERVER_FLAGS) $(BINARIES_PATH)/$(PROGRAM_NAME).lemon u
+	$(call ApplicationsDownloadFile,$(BINARIES_PATH)/$(PROGRAM_NAME).lemon u)
 
 $(OBJECTS_PATH)/$(PROGRAM_NAME)/Command_Df.o: Commands.h Command_Df.c Strings.h
 	$(call ApplicationsCompileSourceFile,Command_Df.c,$(OBJECTS_PATH)/$(PROGRAM_NAME)/Command_Df.o)

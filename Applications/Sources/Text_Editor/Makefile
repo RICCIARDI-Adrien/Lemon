@@ -8,7 +8,7 @@ clean:
 	rm -rf $(OBJECTS_PATH)/$(PROGRAM_NAME) $(BINARIES_PATH)/$(PROGRAM_NAME).*
 
 download:
-	@$(TOOL_SERIAL_PORT_SERVER) $(SERIAL_PORT_SERVER_FLAGS) $(BINARIES_PATH)/$(PROGRAM_NAME).lemon edit
+	$(call ApplicationsDownloadFile,$(BINARIES_PATH)/$(PROGRAM_NAME).lemon edit)
 
 $(OBJECTS_PATH)/$(PROGRAM_NAME)/Buffer.o: Buffer.c Buffer.h
 	$(call ApplicationsCompileSourceFile,Buffer.c,$(OBJECTS_PATH)/$(PROGRAM_NAME)/Buffer.o)

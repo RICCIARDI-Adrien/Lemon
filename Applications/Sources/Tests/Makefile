@@ -13,7 +13,7 @@ clean:
 	rm -rf $(OBJECTS_PATH)/$(PROGRAM_NAME) $(BINARIES_PATH)/Test_Display_ASCII_Characters.* $(BINARIES_PATH)/Test_Protection_Check.* $(BINARIES_PATH)/Test_Network_UDP_Transmission.* $(BINARIES_PATH)/Test_Network_Ethernet_Reception.* $(BINARIES_PATH)/Tests.*
 
 download:
-	@$(TOOL_SERIAL_PORT_SERVER) $(SERIAL_PORT_SERVER_FLAGS) $(BINARIES_PATH)/$(PROGRAM_NAME).lemon tests
+	$(call ApplicationsDownloadFile,$(BINARIES_PATH)/$(PROGRAM_NAME).lemon tests)
 
 $(OBJECTS_PATH)/$(PROGRAM_NAME)/crc32.o: crc32.c crc32.h
 	$(call ApplicationsCompileSourceFile,crc32.c,$(OBJECTS_PATH)/$(PROGRAM_NAME)/crc32.o)

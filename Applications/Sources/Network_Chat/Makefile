@@ -8,7 +8,7 @@ clean:
 	rm -rf $(OBJECTS_PATH)/$(PROGRAM_NAME) $(BINARIES_PATH)/$(PROGRAM_NAME).*
 
 download:
-	@$(TOOL_SERIAL_PORT_SERVER) $(SERIAL_PORT_SERVER_FLAGS) $(BINARIES_PATH)/$(PROGRAM_NAME).lemon chat
+	$(call ApplicationsDownloadFile,$(BINARIES_PATH)/$(PROGRAM_NAME).lemon chat)
 
 $(OBJECTS_PATH)/$(PROGRAM_NAME)/Interface.o: Interface.c Interface.h
 	$(call ApplicationsCompileSourceFile,Interface.c,$(OBJECTS_PATH)/$(PROGRAM_NAME)/Interface.o)
