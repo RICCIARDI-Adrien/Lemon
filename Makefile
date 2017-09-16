@@ -2,6 +2,9 @@
 # Author : Adrien RICCIARDI
 SDK_PATH = ../Lemon_SDK
 
+# Use configuration-defined variables if a configuration file is specified
+-include $(CONFIGURATION)
+
 #--------------------------------------------------------------------------------------------------
 # Set default configuration variables value if variables are not defined
 #--------------------------------------------------------------------------------------------------
