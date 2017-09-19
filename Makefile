@@ -2,8 +2,14 @@
 # Author : Adrien RICCIARDI
 SDK_PATH = ../Lemon_SDK
 
-# Use configuration-defined variables if a configuration file is specified
--include $(CONFIGURATION)
+# Make sure the configuration file is specified
+ifeq ($(CONFIGURATION),)
+error_missing_configuration_file:
+	$(error No configuration file specified. Use 'make CONFIGURATION=<path/to/configuration/file>' to build the system)
+endif
+
+# Initialize configuration variables from a build configuration file
+include $(CONFIGURATION)
 
 #--------------------------------------------------------------------------------------------------
 # Set default configuration variables value if variables are not defined
