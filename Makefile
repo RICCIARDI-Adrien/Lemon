@@ -71,7 +71,13 @@ endef
 # Rules
 #--------------------------------------------------------------------------------------------------
 # Applications must be built before system to allow them to be embedded in a RAM disk
-all: clean libraries applications system installer
+all: clean libraries applications
+	@# Build system
+	@$(call DisplayTitle,Compiling system)
+	@cd System && $(MAKE) CONFIGURATION_BUILD_INSTALLER=0
+	@# Build installation image
+	@$(call DisplayTitle,Creating installation image)
+	@cd System && $(MAKE) CONFIGURATION_BUILD_INSTALLER=1
 
 clean:
 	@cd System && $(MAKE) CONFIGURATION_BUILD_INSTALLER=1 clean
@@ -178,14 +184,6 @@ applications:
 application/%:
 	cd Applications && $(MAKE) $*
 
-installer:
-	@$(call DisplayTitle,Creating installation image)
-	@cd System && $(MAKE) CONFIGURATION_BUILD_INSTALLER=1
-
 libraries:
 	@$(call DisplayTitle,Compiling libraries)
 	@cd Libraries && $(MAKE)
-
-system:
-	@$(call DisplayTitle,Compiling system)
-	@cd System && $(MAKE) CONFIGURATION_BUILD_INSTALLER=0
