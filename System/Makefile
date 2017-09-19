@@ -125,14 +125,14 @@ else
 endif
 
 convert_files: $(BINARIES_TO_HEADER_CONVERTER)
+	######## Embed applications data into image ########
 	@# Create fake MBR and kernel binaries for the RAM disk installer build to embed them on the image (this allows to always use the same Binaries_To_Header_Converter_List.txt file)
 ifeq ($(SYSTEM_HARD_DISK_DRIVER),ram)
 	@touch $(PATH_OBJECTS)/System_MBR.bin
 	@touch $(PATH_OBJECTS)/System_Kernel.bin
 endif
-	######## Embed applications data into image ########
-	@$(BINARIES_TO_HEADER_CONVERTER) $(PATH_TOOLS)/Binaries_To_Header_Converter_List.txt $(PATH_INCLUDES)/Installer_Embedded_Files_Data.h
-	
+	Tools/Files_To_Header_Converter.sh $(SYSTEM_INSTALLER_FILES_LIST)
+
 clean:
 	@# Clean the tools to allow the Lemon directory to be copied on another machine (possibly running another architecture), so the old and bad binary won't be used on the new architecture
 	rm -f $(BINARIES_TO_HEADER_CONVERTER)
