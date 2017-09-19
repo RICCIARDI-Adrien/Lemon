@@ -1,14 +1,15 @@
+BINARY_NAME = u
 PROGRAM_NAME = UNIX_Commands
 OBJECTS = $(OBJECTS_PATH)/$(PROGRAM_NAME)/Command_Df.o $(OBJECTS_PATH)/$(PROGRAM_NAME)/Command_Diff.o $(OBJECTS_PATH)/$(PROGRAM_NAME)/Command_Ls.o $(OBJECTS_PATH)/$(PROGRAM_NAME)/Command_More.o $(OBJECTS_PATH)/$(PROGRAM_NAME)/Command_TFTP.o $(OBJECTS_PATH)/$(PROGRAM_NAME)/Command_Uptime.o $(OBJECTS_PATH)/$(PROGRAM_NAME)/Main.o
 
 all: $(OBJECTS)
-	$(call ApplicationsLinkProgram,$(OBJECTS),$(PROGRAM_NAME))
+	$(call ApplicationsLinkProgram,$(OBJECTS),$(BINARY_NAME))
 
 clean:
-	rm -rf $(OBJECTS_PATH)/$(PROGRAM_NAME) $(BINARIES_PATH)/$(PROGRAM_NAME).*
+	rm -rf $(OBJECTS_PATH)/$(PROGRAM_NAME) $(BINARIES_PATH)/$(BINARY_NAME)
 
 download:
-	$(call ApplicationsDownloadFile,$(BINARIES_PATH)/$(PROGRAM_NAME).lemon u)
+	$(call ApplicationsDownloadFile,$(BINARIES_PATH)/$(BINARY_NAME),$(BINARY_NAME))
 
 $(OBJECTS_PATH)/$(PROGRAM_NAME)/Command_Df.o: Commands.h Command_Df.c Strings.h
 	$(call ApplicationsCompileSourceFile,Command_Df.c,$(OBJECTS_PATH)/$(PROGRAM_NAME)/Command_Df.o)

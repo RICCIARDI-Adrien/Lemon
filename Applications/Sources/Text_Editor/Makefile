@@ -1,14 +1,15 @@
+BINARY_NAME = edit
 PROGRAM_NAME = Text_Editor
 OBJECTS = $(OBJECTS_PATH)/$(PROGRAM_NAME)/Buffer.o $(OBJECTS_PATH)/$(PROGRAM_NAME)/Cursor.o $(OBJECTS_PATH)/$(PROGRAM_NAME)/Display.o $(OBJECTS_PATH)/$(PROGRAM_NAME)/Main.o
 
 all: $(OBJECTS)
-	$(call ApplicationsLinkProgram,$(OBJECTS),$(PROGRAM_NAME))
+	$(call ApplicationsLinkProgram,$(OBJECTS),$(BINARY_NAME))
 
 clean:
-	rm -rf $(OBJECTS_PATH)/$(PROGRAM_NAME) $(BINARIES_PATH)/$(PROGRAM_NAME).*
+	rm -rf $(OBJECTS_PATH)/$(PROGRAM_NAME) $(BINARIES_PATH)/$(BINARY_NAME)
 
 download:
-	$(call ApplicationsDownloadFile,$(BINARIES_PATH)/$(PROGRAM_NAME).lemon edit)
+	$(call ApplicationsDownloadFile,$(BINARIES_PATH)/$(BINARY_NAME),$(BINARY_NAME))
 
 $(OBJECTS_PATH)/$(PROGRAM_NAME)/Buffer.o: Buffer.c Buffer.h
 	$(call ApplicationsCompileSourceFile,Buffer.c,$(OBJECTS_PATH)/$(PROGRAM_NAME)/Buffer.o)

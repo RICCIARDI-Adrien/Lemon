@@ -52,8 +52,8 @@ define ApplicationsLinkProgram
 	@# Generate the executable
 	$(GLOBAL_TOOL_LINKER) $$(1) $(LDFLAGS) -o $(BINARIES_PATH)/$$(2).bin
 	@# Append the Lemon executable header in front of the generated binary
-	@printf "\022\064\126\170" > $(BINARIES_PATH)/$$(2).lemon
-	@cat $(BINARIES_PATH)/$$(2).bin >> $(BINARIES_PATH)/$$(2).lemon
+	@printf "\022\064\126\170" > $(BINARIES_PATH)/$$(2)
+	@cat $(BINARIES_PATH)/$$(2).bin >> $(BINARIES_PATH)/$$(2)
 	@rm $(BINARIES_PATH)/$$(2).bin
 endef
 export ApplicationsLinkProgram

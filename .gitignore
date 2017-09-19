@@ -3,8 +3,8 @@
 *.d
 *.img
 *.iso
-*.lemon
 *.o
 *.out
+Applications/Binaries/*
 Documentation/Documentation_System/html
 Installer_Embedded_Files_Data.h

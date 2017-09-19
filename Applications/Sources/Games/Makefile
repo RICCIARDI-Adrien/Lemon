@@ -1,14 +1,15 @@
+BINARY_NAME = games
 PROGRAM_NAME = Games
 OBJECTS = $(OBJECTS_PATH)/$(PROGRAM_NAME)/Brain_Calculation.o $(OBJECTS_PATH)/$(PROGRAM_NAME)/Game_Of_Life.o $(OBJECTS_PATH)/$(PROGRAM_NAME)/Hangman.o $(OBJECTS_PATH)/$(PROGRAM_NAME)/Main.o $(OBJECTS_PATH)/$(PROGRAM_NAME)/No_Match_Dealer.o $(OBJECTS_PATH)/$(PROGRAM_NAME)/Numbers.o $(OBJECTS_PATH)/$(PROGRAM_NAME)/Rain.o $(OBJECTS_PATH)/$(PROGRAM_NAME)/Submarine.o
 
 all: $(OBJECTS)
-	$(call ApplicationsLinkProgram,$(OBJECTS),$(PROGRAM_NAME))
+	$(call ApplicationsLinkProgram,$(OBJECTS),$(BINARY_NAME))
 
 clean:
-	rm -rf $(OBJECTS_PATH)/$(PROGRAM_NAME) $(BINARIES_PATH)/$(PROGRAM_NAME).*
+	rm -rf $(OBJECTS_PATH)/$(PROGRAM_NAME) $(BINARIES_PATH)/$(BINARY_NAME)
 
 download:
-	$(call ApplicationsDownloadFile,$(BINARIES_PATH)/$(PROGRAM_NAME).lemon games)
+	$(call ApplicationsDownloadFile,$(BINARIES_PATH)/$(BINARY_NAME),$(BINARY_NAME))
 
 $(OBJECTS_PATH)/$(PROGRAM_NAME)/Brain_Calculation.o: Brain_Calculation.c Games.h Strings.h
 	$(call ApplicationsCompileSourceFile,Brain_Calculation.c,$(OBJECTS_PATH)/$(PROGRAM_NAME)/Brain_Calculation.o)

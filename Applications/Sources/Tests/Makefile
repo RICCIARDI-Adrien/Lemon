@@ -1,3 +1,4 @@
+BINARY_NAME = tests
 PROGRAM_NAME = Tests
 OBJECTS_TESTS = $(OBJECTS_PATH)/$(PROGRAM_NAME)/crc32.o $(OBJECTS_PATH)/$(PROGRAM_NAME)/Display_Message.o $(OBJECTS_PATH)/$(PROGRAM_NAME)/Tests.o $(OBJECTS_PATH)/$(PROGRAM_NAME)/Tests_File.o $(OBJECTS_PATH)/$(PROGRAM_NAME)/Tests_Memory.o $(OBJECTS_PATH)/$(PROGRAM_NAME)/Tests_String.o
 OBJECTS = $(OBJECTS_PATH)/$(PROGRAM_NAME)/Test_Display_ASCII_Characters.o $(OBJECTS_PATH)/$(PROGRAM_NAME)/Test_Protection_Check.o $(OBJECTS_PATH)/$(PROGRAM_NAME)/Test_Network_UDP_Transmission.o $(OBJECTS_PATH)/$(PROGRAM_NAME)/Test_Network_Ethernet_Reception.o $(OBJECTS_TESTS)
@@ -7,13 +8,13 @@ all: $(OBJECTS)
 	$(call ApplicationsLinkProgram,$(OBJECTS_PATH)/$(PROGRAM_NAME)/Test_Protection_Check.o,Test_Protection_Check)
 	$(call ApplicationsLinkProgram,$(OBJECTS_PATH)/$(PROGRAM_NAME)/Test_Network_UDP_Transmission.o,Test_Network_UDP_Transmission)
 	$(call ApplicationsLinkProgram,$(OBJECTS_PATH)/$(PROGRAM_NAME)/Test_Network_Ethernet_Reception.o,Test_Network_Ethernet_Reception)
-	$(call ApplicationsLinkProgram,$(OBJECTS_TESTS),$(PROGRAM_NAME))
+	$(call ApplicationsLinkProgram,$(OBJECTS_TESTS),$(BINARY_NAME))
 
 clean:
-	rm -rf $(OBJECTS_PATH)/$(PROGRAM_NAME) $(BINARIES_PATH)/Test_Display_ASCII_Characters.* $(BINARIES_PATH)/Test_Protection_Check.* $(BINARIES_PATH)/Test_Network_UDP_Transmission.* $(BINARIES_PATH)/Test_Network_Ethernet_Reception.* $(BINARIES_PATH)/Tests.*
+	rm -rf $(OBJECTS_PATH)/$(PROGRAM_NAME) $(BINARIES_PATH)/Test_Display_ASCII_Characters.* $(BINARIES_PATH)/Test_Protection_Check.* $(BINARIES_PATH)/Test_Network_UDP_Transmission.* $(BINARIES_PATH)/Test_Network_Ethernet_Reception.* $(BINARIES_PATH)/Tests.* $(BINARIES_PATH)/$(BINARY_NAME)
 
 download:
-	$(call ApplicationsDownloadFile,$(BINARIES_PATH)/$(PROGRAM_NAME).lemon tests)
+	$(call ApplicationsDownloadFile,$(BINARIES_PATH)/$(BINARY_NAME),$(BINARY_NAME))
 
 $(OBJECTS_PATH)/$(PROGRAM_NAME)/crc32.o: crc32.c crc32.h
 	$(call ApplicationsCompileSourceFile,crc32.c,$(OBJECTS_PATH)/$(PROGRAM_NAME)/crc32.o)
