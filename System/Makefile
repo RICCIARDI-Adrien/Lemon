@@ -7,8 +7,6 @@ PATH_OBJECTS = Objects
 PATH_INCLUDES = Includes
 PATH_TOOLS = Tools
 
-BINARIES_TO_HEADER_CONVERTER = $(PATH_TOOLS)/Binaries_To_Header_Converter.out
-
 CCFLAGS += -W -Wall -Wunused -I$(PATH_INCLUDES) -DCONFIGURATION_SYSTEM_TOTAL_RAM_SIZE_MEGA_BYTES=$(SYSTEM_RAM_SIZE) -DCONFIGURATION_HARD_DISK_LOGICAL_BLOCK_ADDRESSING_MODE=$(SYSTEM_HARD_DISK_LOGICAL_BLOCK_ADDRESSING_MODE) -DCONFIGURATION_BUILD_INSTALLER=$(CONFIGURATION_BUILD_INSTALLER) -DSTRING_BUILD_CONFIGURATION_VARIABLES=$(STRING_BUILD_CONFIGURATION_VARIABLES)
 LDFLAGS = --strip-all -nostdlib -nostartfile -T Linker_Script.ld
 ifeq ($(CONFIGURATION_BUILD_INSTALLER),1)
@@ -124,18 +122,16 @@ else
     endif
 endif
 
-convert_files: $(BINARIES_TO_HEADER_CONVERTER)
+convert_files:
 	######## Embed applications data into image ########
-	@# Create fake MBR and kernel binaries for the RAM disk installer build to embed them on the image (this allows to always use the same Binaries_To_Header_Converter_List.txt file)
+	@# Create fake MBR and kernel binaries for the RAM disk installer build to embed them on the image (this way installer code is left untouched)
 ifeq ($(SYSTEM_HARD_DISK_DRIVER),ram)
 	@touch $(PATH_OBJECTS)/System_MBR.bin
 	@touch $(PATH_OBJECTS)/System_Kernel.bin
 endif
-	Tools/Files_To_Header_Converter.sh $(SYSTEM_INSTALLER_FILES_LIST)
+	$(PATH_TOOLS)/Files_To_Header_Converter.sh $(SYSTEM_INSTALLER_FILES_LIST)
 
 clean:
-	@# Clean the tools to allow the Lemon directory to be copied on another machine (possibly running another architecture), so the old and bad binary won't be used on the new architecture
-	rm -f $(BINARIES_TO_HEADER_CONVERTER)
 	rm -rf $(PATH_OBJECTS)/ISO_Image_Content
 ifeq ($(CONFIGURATION_BUILD_INSTALLER),1)
 	@# Delete only object files, keeping system .bin files which will be embedded into the installer image
@@ -152,12 +148,6 @@ else
 	rm -f $(PATH_INCLUDES)/Installer_Embedded_Files_Data.h
 endif
 
-#------------------------------------------------------------------------------------------------------------------------------
-# Converter tool program
-#------------------------------------------------------------------------------------------------------------------------------
-$(BINARIES_TO_HEADER_CONVERTER): $(PATH_TOOLS)/Binaries_To_Header_Converter.c
-	gcc -W -Wall $(PATH_TOOLS)/Binaries_To_Header_Converter.c -o $(BINARIES_TO_HEADER_CONVERTER)
-	
 #------------------------------------------------------------------------------------------------------------------------------
 # System core
 #------------------------------------------------------------------------------------------------------------------------------
