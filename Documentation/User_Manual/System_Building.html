@@ -20,10 +20,114 @@
 			<li>make</li>
 			<li>nasm</li>
 		</ul>
-		
 		<p>
 			Documentation state machines are generated using <a href="http://qfsm.sourceforge.net/">qfsm</a>.
 		</p>
+		
+		<hr />
+		<h2 id="ID_Creating_Build_Configuration">3. Creating a build configuration</h2>
+		<p>
+			A build configuration is a simple file allowing to redefine some build settings. Each setting is made of a setting name followed by <b>=</b> and a setting value.<br />
+			Setting name must be one of the names described below, while setting value can be a string (surrounded or not by quotes) or a number.<br />
+			A line beginning by <b>#</b> is a comment.<br />
+			All build settings have a default value, as described below.
+		</p>
+		<p>
+			Here are all available build settings with a description of the possible values :
+		</p>
+		<p>
+			Global variables affect the whole system (the operating system and all applications).<br />
+			System variables affect only the operating system, not the applications.
+		</p>
+		<ul>
+			<li>
+				<b>GLOBAL_TOOL_ASSEMBLER :</b> which x86 assembler binary to use (useful to specify a cross-compilation toolchain binary)
+				<ul>
+					<li>nasm (default value)</li>
+				</ul>
+			</li>
+			<li>
+				<b>GLOBAL_TOOL_COMPILER :</b> which C compiler binary to use (useful to specify a cross-compilation toolchain binary)
+				<ul>
+					<li>gcc (default value)</li>
+				</ul>
+			</li>
+			<li>
+				<b>GLOBAL_TOOL_LINKER :</b> which object linker binary to use (useful to specify a cross-compilation toolchain binary)
+				<ul>
+					<li>ld (default value)</li>
+				</ul>
+			</li>
+			<li>
+				<b>GLOBAL_TOOL_ISO_GENERATOR :</b> which CDROM ISO image binary to use (useful to specify a cross-compilation toolchain binary)
+				<ul>
+					<li>genisoimage (default value)</li>
+				</ul>
+			</li>
+			<li>
+				<b>GLOBAL_SYSTEM_LANGUAGE :</b> system and applications language
+				<ul>
+					<li>english</li>
+					<li>french (default value)</li>
+					<li>italian</li>
+				</ul>
+			</li>
+			<li>
+				<b>GLOBAL_PROCESSOR_TYPE :</b> the target processor (see gcc's man page for x86 <i>-march</i> option for all available values)
+				<ul>
+					<li>i486</li>
+					<li>pentium (default value)</li>
+					<li>pentium4</li>
+					<li>core2</li>
+					<li>nehalem</li>
+					<li>haswell</li>
+				</ul>
+			</li>
+			<li>
+				<b>SYSTEM_IS_DEBUG_ENABLED :</b> display kernel debugging messages
+				<ul>
+					<li>0 (default value)</li>
+					<li>1</li>
+				</ul>
+			</li>
+			<li>
+				<b>SYSTEM_HARD_DISK_DRIVER :</b> the hard disk driver to use
+				<ul>
+					<li>ide (default value)</li>
+					<li>ram</li>
+					<li>sata</li>
+				</ul>
+			</li>
+			<li>
+				<b>SYSTEM_HARD_DISK_LOGICAL_BLOCK_ADDRESSING_MODE :</b> the hard disk driver LBA mode
+				<ul>
+					<li>28 (default value, used for hard disk size &lt; 128GB)</li>
+					<li>48 (mandatory for hard disk size &gt;= 128GB)</li>
+				</ul>
+			</li>
+			<li>
+				<b>SYSTEM_ETHERNET_CONTROLLER_DRIVER :</b> the driver to use for the network controller
+				<ul>
+					<li>none (default value, disabling ethernet controller)</li>
+					<li>82540em (Intel PRO/1000 Network Internet Controller, also works for 82541PI</li>
+					<li>rtl8111 (Realtek 8111, 8168, 8169)</li>
+				</ul>
+			</li>
+			<li>
+				<b>SYSTEM_RAM_SIZE :</b> how many RAM can be used by the whole system (in mega bytes), use an integer value from 2 to 4096
+				<ul>
+					<li>2 (minimum value)</li>
+					<li>16 (default value)</li>
+					<li>4096 (maximum value, values above 3GB may not work due to PCI devices mapping)</li>
+				</ul>
+			</li>
+			<li>
+				<b>SYSTEM_INSTALLER_FILES_LIST :</b> A space-separated list of files to automatically install during system installation. File paths start from Lemon directory. This list must be surrounded by quotes
+				<ul>
+					<li>"Applications/Binaries/edit Applications/Binaries/games Applications/Binaries/help Applications/Binaries/u" (default value)</li>
+				</ul>
+			</li>
+		</ul>
 		
 		<p>
 			<a href="../Manual.html">Return to main page</a>

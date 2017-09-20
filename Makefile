@@ -86,49 +86,6 @@ clean:
 	@cd Applications && $(MAKE) clean
 	@cd System && $(MAKE) clean
 
-help:
-	@$(call DisplayTitle,Configuration variables)
-	@echo "Global variables affect the whole system (the operating system and all applications)."
-	@echo "System variables affect only the operating system, not the applications."
-	@echo
-	@echo "- GLOBAL_TOOL_ASSEMBLER : which x86 assembler binary to use (useful to specify a cross-compilation toolchain binary)"
-	@echo "    + nasm (default value)"
-	@echo "- GLOBAL_TOOL_COMPILER : which C compiler binary to use (useful to specify a cross-compilation toolchain binary)"
-	@echo "    + gcc (default value)"
-	@echo "- GLOBAL_TOOL_LINKER : which object linker binary to use (useful to specify a cross-compilation toolchain binary)"
-	@echo "    + ld (default value)"
-	@echo "- GLOBAL_TOOL_ISO_GENERATOR : which CDROM ISO image binary to use (useful to specify a cross-compilation toolchain binary)"
-	@echo "    + genisoimage (default value)"
-	@echo "- GLOBAL_SYSTEM_LANGUAGE : system and applications language"
-	@echo "    + english"
-	@echo "    + french (default value)"
-	@echo "    + italian"
-	@echo "- GLOBAL_PROCESSOR_TYPE (see gcc's man page for x86 -march option for all available values) : the target processor"
-	@echo "    + i486"
-	@echo "    + pentium (default value)"
-	@echo "    + pentium4"
-	@echo "    + core2"
-	@echo "    + nehalem"
-	@echo "- SYSTEM_IS_DEBUG_ENABLED : display kernel debugging messages"
-	@echo "    + 0 (default value)"
-	@echo "    + 1"
-	@echo "- SYSTEM_HARD_DISK_LOGICAL_BLOCK_ADDRESSING_MODE : the hard disk driver LBA mode"
-	@echo "    + 28 (default value, used for hard disk size < 128GB)"
-	@echo "    + 48 (mandatory for hard disk size > 128GB)"
-	@echo "- SYSTEM_HARD_DISK_DRIVER : the hard disk driver to use"
-	@echo "    + ide (default value)"
-	@echo "    + ram"
-	@echo "    + sata"
-	@echo "- SYSTEM_ETHERNET_CONTROLLER_DRIVER : the driver to use for the network controller"
-	@echo "    + none (default value, disabling ethernet controller)"
-	@echo "    + 82540em (Intel PRO/1000 Network Internet Controller, also works for 82541PI)"
-	@echo "    + rtl8111 (Realtek 8111, 8168, 8169)"
-	@echo "- SYSTEM_RAM_SIZE : how many RAM can be used by the whole system (in mega bytes), use an integer value from 2 to 4096"
-	@echo "    + 2 (minimum value)"
-	@echo "    + 16 (default value)"
-	@echo "    + 4096 (maximum value)"
-	@echo
-
 sdk:
 	@printf "Preparing SDK directory...\n"
 	@rm -rf $(SDK_PATH)
