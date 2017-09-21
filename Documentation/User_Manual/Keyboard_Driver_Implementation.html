@@ -4,12 +4,13 @@
 	<head>
 		<title>Keyboard driver implementation</title>
 		<meta http-equiv="content-type" content="text/html;charset=utf-8" />
+		<link href="Style.css" type="text/css" rel="stylesheet" title="Style" />
 	</head>
 
 	<body>
 		<h1 align="center">Keyboard driver implementation</h1>
 		
-		<h2>1. IBM keyboard functioning</h2>
+		<h2>IBM keyboard functioning</h2>
 		<p>
 			The keyboard behavior is really simple, it tells if a key is pressed or released.<br />
 			Each keystroke owns an identifying 7-bit scan code. The state of the keystroke (pressed or released) is indicated by the value of the eighth bit of the byte sent by the keyboard.<br />
@@ -17,7 +18,7 @@
 			Using keyboards terminology, to press a key generates a "make code" and to release a key generates a "release code" or "break code".
 		</p>
 		
-		<h2>2. List of normal scan codes</h2>
+		<h2>List of normal scan codes</h2>
 		<p>
 			The following codes are directly read from the keyboard controller (the key mapping stands for an AZERTY keyboard).<br />
 			The scan code is given in decimal representation, otherwise 0x is added when using hexadecimal representation.
@@ -379,7 +380,7 @@
 			</tr>
 		</table>
 		
-		<h2>2. List of extended scan codes</h2>
+		<h2>List of extended scan codes</h2>
 		<p>
 			These scan codes are preceded by 0xE0.<br />
 			The scan code is given in decimal representation, otherwise 0x is added when using hexadecimal representation.
@@ -489,7 +490,7 @@
 			</tr>
 		</table>
 		
-		<h2>3. Specifications</h2>
+		<h2>Specifications</h2>
 		<ul>
 			<li>Despite keyboard drivers from other systems, this one provides only one byte identifying the pressed key. Non-ASCII keys have a virtual code out of the printable character codes range, but still stored on one byte.</li>
 			<li>When multiple "ASCII" keys are pressed, only the last pressed one is recorded (there is no pressed keys buffer).</li>

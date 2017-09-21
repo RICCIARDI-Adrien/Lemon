@@ -4,12 +4,13 @@
 	<head>
 		<title>Using the Software Development Kit</title>
 		<meta http-equiv="content-type" content="text/html;charset=utf-8" />
+		<link href="Style.css" type="text/css" rel="stylesheet" title="Style" />
 	</head>
 
 	<body>
 		<h1 align="center">Using the Software Development Kit</h1>
 		
-		<h2 id="ID_Introduction">1. Introduction</h2>
+		<h2 id="ID_Introduction">Introduction</h2>
 		<p>
 			Let's start with some generic rules about Lemon programs :
 		</p>
@@ -47,8 +48,7 @@
 			<li>Finally, the main <b>Makefile</b> handling all the programs.</li>
 		</ul>
 
-		<hr />
-		<h2 id="ID_Compiling_Program">2. Compiling a program</h2>
+		<h2 id="ID_Compiling_Program">Compiling a program</h2>
 		<p>
 			Lemon programs are developed and compiled on a development PC running Linux. Thus, programs are cross-compiled to generate <i>.lemon</i> Lemon executable files.<br />
 			This process is managed by a simple build system.
@@ -70,8 +70,7 @@
 			To compile all the Lemon programs, go to the <b>Applications</b> directory and type <b>make</b>.
 		</p>
 
-		<hr />
-		<h2 id="ID_Transferring_Program">3. Transferring a program</h2>
+		<h2 id="ID_Transferring_Program">Transferring a program</h2>
 		<p>
 			The following steps show how to transfer the <b>example</b> program to Lemon :
 		</p>
@@ -96,8 +95,7 @@
 			The <i>file_name_on_lemon</i> parameter is how the file will be named on the Lemon filesystem. Remember that UTF-8 is not supported by Lemon.
 		</p>
 		
-		<hr />
-		<h2 id="ID_Creating_Program">4. Creating a new program</h2>
+		<h2 id="ID_Creating_Program">Creating a new program</h2>
 		<p>
 			Here is the source code of the well-known Hello World program.<br />
 			You must first create the new application required directories.
@@ -133,8 +131,7 @@
 			It's now time to create the source code of the Hello World program. See the next paragraph for a fully documented example.
 		</p>
 
-		<hr />
-		<h2 id="ID_Source_Code_Exemple">5. Source code example</h2>
+		<h2 id="ID_Source_Code_Exemple">Source code example</h2>
 		<p>
 			The Lemon entry point is the classical <b>main()</b> function with exactly the same parameters than standard C.<br />
 			The only difference with C's main() is that the function return value is ignored by Lemon. You can return whatever value you want.

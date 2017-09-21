@@ -1,0 +1,19 @@
+body
+{
+	font-family: "Arial Black", Gadget, sans-serif;
+}
+
+h1
+{
+	text-align: center;
+	color: DarkBlue;
+	margin-bottom: 60px;
+}
+
+h2
+{
+	padding-left: 10px;
+	color: white;
+	margin-bottom: 40px;
+	background-color: black;
+}
