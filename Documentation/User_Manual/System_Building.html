@@ -24,7 +24,16 @@
 		<p>
 			Documentation state machines are generated using <a href="http://qfsm.sourceforge.net/">qfsm</a>.
 		</p>
-			
+		
+		<h2 id="ID_Building_System">Building the system</h2>
+		<p>
+			You have to choose a build configuration before starting building. All existing configuration files are stored in the <i>Lemon/Configurations</i> directory.<br />
+			Next chapter tells how to create a build configuration that fit your own hardware if you can't find a configuration you like in the ones provided.
+		</p>
+		<p>
+			When you have selected a configuration, simply type <code>make CONFIGURATION=/path/to/configuration/file.cfg</code> to build the whole system and generate installation images.
+		</p>
+		
 		<h2 id="ID_Creating_Build_Configuration">Creating a build configuration</h2>
 		<p>
 			A build configuration is a simple file allowing to redefine some build settings. Each setting is made of a setting name followed by <b>=</b> and a setting value.<br />
