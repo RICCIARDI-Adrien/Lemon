@@ -55,7 +55,8 @@ do
 	echo "};" >> $OUTPUT_FILE
 	echo "" >> $OUTPUT_FILE
 	
-	let "File_Index = File_Index + 1"
+	# Must use this incrementation form to allow building with Debian dash
+	File_Index=$((File_Index+1))
 done
 
 # Declare the Embedded_Files variable
@@ -78,7 +79,7 @@ do
 	echo -n "_Data), File_$File_Index" >> $OUTPUT_FILE
 	echo "_Data }," >> $OUTPUT_FILE
 	
-	let "File_Index = File_Index + 1"
+	File_Index=$((File_Index+1))
 done
 
 # Terminate the Embedded_Files variable
