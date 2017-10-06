@@ -211,7 +211,7 @@ int TFTPExecuteCommandPut(char *String_File_Name)
 		Sent_Block_Number++;
 		
 		// Read the next block from the file
-		if (FileRead(File_ID, Packet.Data.Buffer, NETWORK_TFTP_BLOCK_SIZE, &Read_Bytes_Count) != 0)
+		if (SystemFileRead(File_ID, Packet.Data.Buffer, NETWORK_TFTP_BLOCK_SIZE, &Read_Bytes_Count) != 0)
 		{
 			ScreenWriteString(STRING_COMMAND_TFTP_PUT_CANT_READ_FROM_FILE);
 			goto Exit;

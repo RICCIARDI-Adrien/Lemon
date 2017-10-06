@@ -59,11 +59,11 @@ int TestsFileFunctionsInputParameters(void)
 	}
 
 	// TODO
-	// Testing FileRead()
+	// Testing SystemFileRead()
 	// Open a file 
 	// Bad file ID
-	/*ScreenWriteString("Checking FileRead()...\n");
-	Result = FileRead(123456, );
+	/*ScreenWriteString("Checking SystemFileRead()...\n");
+	Result = SystemFileRead(123456, );
 	if (Result != ERROR_CODE_FILE_NOT_FOUND)
 	{
 		DisplayMessageErrorAndCode("when given an unexisting file", Result);

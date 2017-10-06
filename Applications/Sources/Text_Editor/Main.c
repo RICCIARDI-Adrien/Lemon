@@ -71,7 +71,7 @@ static int MainLoadFile(char *String_File_Name)
 	}
 	
 	// Load file content
-	if (FileRead(File_ID, Buffer, CONFIGURATION_BUFFER_MAXIMUM_SIZE, &Buffer_Characters_Count) != ERROR_CODE_NO_ERROR)
+	if (SystemFileRead(File_ID, Buffer, CONFIGURATION_BUFFER_MAXIMUM_SIZE, &Buffer_Characters_Count) != ERROR_CODE_NO_ERROR)
 	{
 		FileClose(File_ID);
 		MainDisplayMessage(STRING_MESSAGE_TITLE_ERROR, STRING_ERROR_CANT_LOAD_FILE, STRING_HIT_ENTER_TO_CONTINUE, SCREEN_COLOR_RED);

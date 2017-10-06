@@ -46,7 +46,7 @@ int CommandMainDiff(int argc, char *argv[])
 	while (1)
 	{
 		// Read a byte from the first file
-		if (FileRead(File_Descriptor_1, &Byte_1, 1, &Read_Bytes_Count) != ERROR_CODE_NO_ERROR)
+		if (SystemFileRead(File_Descriptor_1, &Byte_1, 1, &Read_Bytes_Count) != ERROR_CODE_NO_ERROR)
 		{
 			ScreenWriteString(STRING_COMMAND_DIFF_FILE_READ_ERROR_1);
 			ScreenWriteString(String_File_1_Name);
@@ -56,7 +56,7 @@ int CommandMainDiff(int argc, char *argv[])
 		if (Read_Bytes_Count == 0) Is_End_Of_First_File_Reached = 1;
 		
 		// Read a byte from the second file
-		if (FileRead(File_Descriptor_2, &Byte_2, 1, &Read_Bytes_Count) != ERROR_CODE_NO_ERROR)
+		if (SystemFileRead(File_Descriptor_2, &Byte_2, 1, &Read_Bytes_Count) != ERROR_CODE_NO_ERROR)
 		{
 			ScreenWriteString(STRING_COMMAND_DIFF_FILE_READ_ERROR_1);
 			ScreenWriteString(String_File_2_Name);

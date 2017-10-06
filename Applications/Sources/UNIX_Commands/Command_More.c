@@ -30,7 +30,7 @@ static int DisplayNextLine(void)
 	for (i = 0; i < SCREEN_COLUMNS_COUNT; i++)
 	{
 		// Try to read a character
-		if (FileRead(File_ID, &Character, 1, &Read_Bytes_Count) != ERROR_CODE_NO_ERROR)
+		if (SystemFileRead(File_ID, &Character, 1, &Read_Bytes_Count) != ERROR_CODE_NO_ERROR)
 		{
 			ScreenWriteString(STRING_COMMAND_MORE_ERROR_READING_FROM_FILE);
 			return -1;

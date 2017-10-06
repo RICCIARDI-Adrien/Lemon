@@ -74,7 +74,7 @@ int SystemFileOpen(char *String_File_Name, TSystemFileOpeningMode Opening_Mode, 
  * @return ERROR_CODE_FILE_NOT_OPENED if the file is not opened,
  * @return ERROR_CODE_BAD_OPENING_MODE if the file is not opened in read mode.
  */
-int FileRead(unsigned int File_ID, void *Pointer_Buffer, unsigned int Bytes_Count, unsigned int *Pointer_Bytes_Read);
+int SystemFileRead(unsigned int File_ID, void *Pointer_Buffer, unsigned int Bytes_Count, unsigned int *Pointer_Bytes_Read);
 
 /** Write data to an opened file.
  * @param File_ID The file identifier.

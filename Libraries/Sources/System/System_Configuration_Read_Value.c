@@ -27,7 +27,7 @@ int SystemConfigurationReadValue(char *String_Key, char *String_Value)
 		while (String_Key[i] != 0)
 		{
 			// Read a single character
-			if (FileRead(File_ID, &Character, 1, &Read_Bytes_Count) != 0) return 3;
+			if (SystemFileRead(File_ID, &Character, 1, &Read_Bytes_Count) != 0) return 3;
 			if (Read_Bytes_Count == 0) goto Exit; // The file terminated before the key was found
 			
 			// Match the key in the same time
@@ -36,7 +36,7 @@ int SystemConfigurationReadValue(char *String_Key, char *String_Value)
 				// Go to the next key (read the file up to find a new line character or to reach the file end)
 				do
 				{
-					if (FileRead(File_ID, &Character, 1, &Read_Bytes_Count) != 0) return 3;
+					if (SystemFileRead(File_ID, &Character, 1, &Read_Bytes_Count) != 0) return 3;
 					if (Read_Bytes_Count == 0) goto Exit; // The file terminated before the key was found
 				} while (Character != '\n');
 				
@@ -50,7 +50,7 @@ int SystemConfigurationReadValue(char *String_Key, char *String_Value)
 		// Is the next character a '=' ?
 		if (Is_Key_Found)
 		{
-			if (FileRead(File_ID, &Character, 1, &Read_Bytes_Count) != 0) return 3; // Read a single character
+			if (SystemFileRead(File_ID, &Character, 1, &Read_Bytes_Count) != 0) return 3; // Read a single character
 			if (Read_Bytes_Count == 0) goto Exit; // The file terminated before the key was found
 			if (Character != '=') Is_Key_Found = 0; // This is not the right key, it is a longer key that has the same beginning
 		}
@@ -60,7 +60,7 @@ int SystemConfigurationReadValue(char *String_Key, char *String_Value)
 	for (i = 0; i < SYSTEM_CONFIGURATION_FILE_MAXIMUM_VALUE_SIZE; i++)
 	{
 		// Read a single character
-		if (FileRead(File_ID, &Character, 1, &Read_Bytes_Count) != 0) return 3;
+		if (SystemFileRead(File_ID, &Character, 1, &Read_Bytes_Count) != 0) return 3;
 		if (Read_Bytes_Count == 0) break; // End of file is reached
 		
 		// Is the end of the value reached ?
