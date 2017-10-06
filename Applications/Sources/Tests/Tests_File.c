@@ -146,7 +146,7 @@ int TestsFileSystemCalls(void)
 	ScreenWriteString(")\n");
 
 	// Delete the file
-	Result = FileDelete("_test_");
+	Result = SystemFileDelete("_test_");
 	if (Result != ERROR_CODE_NO_ERROR)
 	{
 		DisplayMessageErrorAndCode("when deleting the file", Result);
@@ -200,7 +200,7 @@ int TestsFileMaximumOpenedFiles(void)
 		StringCopy("_test_", String_File_Name);
 		StringConcatenate(String_File_Name, String_Number);
 		
-		FileDelete(String_File_Name);
+		SystemFileDelete(String_File_Name);
 	}
 	
 	return 0;
@@ -253,7 +253,7 @@ int TestsFileReopenSameFile(void)
 Exit:
 	ScreenWriteString("Removing the file...\n");
 	SystemFileClose(File_ID);
-	FileDelete("_test_"); // This function can be called even if the file is not existing
+	SystemFileDelete("_test_"); // This function can be called even if the file is not existing
 	return Return_Value;
 }
 
@@ -307,7 +307,7 @@ int TestsFileFillFilesList(void)
 		StringCopy("_test_", String_File_Name);
 		StringConcatenate(String_File_Name, String_Number);
 		
-		FileDelete(String_File_Name);
+		SystemFileDelete(String_File_Name);
 	}
 	
 	return Return_Value;
@@ -367,7 +367,7 @@ int TestsFileFillBlocksList(void)
 Exit:
 	ScreenWriteString("Deleting the test file...\n");
 	SystemFileClose(File_ID);
-	FileDelete("_test_");
+	SystemFileDelete("_test_");
 	return Return_Value;
 }
 
@@ -402,7 +402,7 @@ int TestsFileCloseDeletedOpenedFile(void)
 	}
 	
 	// Delete the file (the file must be automatically closed)
-	FileDelete("_test_");
+	SystemFileDelete("_test_");
 	
 	// Try to open the file another time (this must succeed because the previous file has been closed)
 	Result = SystemFileOpen("_test_", 'w', &File_ID);
@@ -416,7 +416,7 @@ int TestsFileCloseDeletedOpenedFile(void)
 	
 Exit:
 	SystemFileClose(File_ID);
-	FileDelete("_test_");
+	SystemFileDelete("_test_");
 	return Return_Value;
 }
 
@@ -502,8 +502,8 @@ int TestsFileRename(void)
 	Return_Value = 0;
 	
 Exit:
-	FileDelete("_test1_");
-	FileDelete("_test2_");
-	FileDelete("_test3_");
+	SystemFileDelete("_test1_");
+	SystemFileDelete("_test2_");
+	SystemFileDelete("_test3_");
 	return Return_Value;
 }

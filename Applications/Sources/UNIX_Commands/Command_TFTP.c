@@ -130,7 +130,7 @@ int TFTPExecuteCommandGet(char *String_File_Name)
 	
 Exit:
 	SystemFileClose(File_ID);
-	if (Return_Value != 0) FileDelete(String_File_Name); // Remove the partial file
+	if (Return_Value != 0) SystemFileDelete(String_File_Name); // Remove the partial file
 	return Return_Value;
 }
 

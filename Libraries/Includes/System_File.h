@@ -98,7 +98,7 @@ void SystemFileClose(unsigned int File_ID);
  * @return ERROR_CODE_NO_ERROR if the file has been successfully deleted,
  * @return ERROR_CODE_FILE_NOT_FOUND if the file is not existing.
  */
-int FileDelete(char *String_File_Name);
+int SystemFileDelete(char *String_File_Name);
 
 /** Rename an existing file.
  * @param String_Current_File_Name The current file name.

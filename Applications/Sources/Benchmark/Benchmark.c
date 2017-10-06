@@ -116,7 +116,7 @@ static void BenchmarkFileSystem(unsigned int *Pointer_Start_Time, unsigned int *
 	}
 	
 	*Pointer_End_Time = SystemGetTimerValue();
-	FileDelete("_test_");
+	SystemFileDelete("_test_");
 	return;
 	
 Exit_Error:
@@ -124,7 +124,7 @@ Exit_Error:
 	ScreenWriteInteger(i);
 	ScreenWriteString(".\n");
 	SystemFileClose(File_ID);
-	FileDelete("_test_");
+	SystemFileDelete("_test_");
 }
 
 static void BenchmarkSystemCall(unsigned int *Pointer_Start_Time, unsigned int *Pointer_End_Time)
