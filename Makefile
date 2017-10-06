@@ -2,6 +2,9 @@
 # Author : Adrien RICCIARDI
 SDK_PATH = ../Lemon_SDK
 
+LEMON_PATH_CONFIGURATIONS = Configurations
+export LEMON_PATH_CONFIGURATIONS
+
 # Make sure the configuration file is specified
 ifeq ($(CONFIGURATION),)
 error_missing_configuration_file:

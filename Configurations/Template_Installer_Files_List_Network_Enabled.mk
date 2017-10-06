@@ -1,0 +1,1 @@
+SYSTEM_INSTALLER_FILES_LIST = "Applications/Binaries/benchmark Applications/Binaries/chat Applications/Binaries/edit Applications/Binaries/games Applications/Binaries/help Applications/Resources/Readme.txt Applications/Resources/System.cfg Applications/Binaries/tests Applications/Binaries/u"

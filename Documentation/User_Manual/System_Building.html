@@ -28,10 +28,11 @@
 		<h2 id="ID_Building_System">Building the system</h2>
 		<p>
 			You have to choose a build configuration before starting building. All existing configuration files are stored in the <i>Lemon/Configurations</i> directory.<br />
+			Files starting with <i>Template</i> must not be used as build configurations, they only gather some common parameters to avoid duplicating them several times.<br />
 			Next chapter tells how to create a build configuration that fit your own hardware if you can't find a configuration you like in the ones provided.
 		</p>
 		<p>
-			When you have selected a configuration, simply type <code>make CONFIGURATION=/path/to/configuration/file.cfg</code> to build the whole system and generate installation images.
+			When you have selected a configuration, simply type <code>make CONFIGURATION=/path/to/configuration/file.mk</code> to build the whole system and generate installation images.
 		</p>
 		
 		<h2 id="ID_Creating_Build_Configuration">Creating a build configuration</h2>
