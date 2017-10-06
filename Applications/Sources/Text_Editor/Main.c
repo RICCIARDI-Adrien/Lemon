@@ -73,13 +73,13 @@ static int MainLoadFile(char *String_File_Name)
 	// Load file content
 	if (SystemFileRead(File_ID, Buffer, CONFIGURATION_BUFFER_MAXIMUM_SIZE, &Buffer_Characters_Count) != ERROR_CODE_NO_ERROR)
 	{
-		FileClose(File_ID);
+		SystemFileClose(File_ID);
 		MainDisplayMessage(STRING_MESSAGE_TITLE_ERROR, STRING_ERROR_CANT_LOAD_FILE, STRING_HIT_ENTER_TO_CONTINUE, SCREEN_COLOR_RED);
 		MainWaitForEnterKey();
 		return 1;
 	}
 	
-	FileClose(File_ID);
+	SystemFileClose(File_ID);
 	
 	// Show a message if the file is too big for the buffer
 	if (SystemFileGetSize(String_File_Name) > CONFIGURATION_BUFFER_MAXIMUM_SIZE)
@@ -112,14 +112,14 @@ static int MainSaveFile(char *String_File_Name)
 	// Write file content
 	if (SystemFileWrite(File_ID, Buffer, Buffer_Characters_Count) != ERROR_CODE_NO_ERROR)
 	{
-		FileClose(File_ID);
+		SystemFileClose(File_ID);
 		MainDisplayMessage(STRING_MESSAGE_TITLE_ERROR, STRING_ERROR_CANT_SAVE_FILE, STRING_HIT_ENTER_TO_CONTINUE, SCREEN_COLOR_RED);
 		MainWaitForEnterKey();
 		DisplayRenderToScreen(); // Restore the previously displayed buffer
 		return 1;
 	}
 	
-	FileClose(File_ID);
+	SystemFileClose(File_ID);
 	
 	return 0;
 }

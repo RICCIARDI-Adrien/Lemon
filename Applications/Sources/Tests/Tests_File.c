@@ -193,7 +193,7 @@ int TestsFileMaximumOpenedFiles(void)
 	// Close and delete all files
 	for (i = 0; i < SYSTEM_FILE_MAXIMUM_OPENED_COUNT; i++)
 	{
-		FileClose(File_IDs[i]);
+		SystemFileClose(File_IDs[i]);
 		
 		// Create the file name
 		StringConvertUnsignedIntegerToString(i, String_Number);
@@ -228,7 +228,7 @@ int TestsFileReopenSameFile(void)
 		goto Exit;
 	}
 	// Flush file content
-	FileClose(File_ID);
+	SystemFileClose(File_ID);
 	
 	// Try to open the same file 2 times
 	// The first time must succeed
@@ -252,7 +252,7 @@ int TestsFileReopenSameFile(void)
 	
 Exit:
 	ScreenWriteString("Removing the file...\n");
-	FileClose(File_ID);
+	SystemFileClose(File_ID);
 	FileDelete("_test_"); // This function can be called even if the file is not existing
 	return Return_Value;
 }
@@ -294,7 +294,7 @@ int TestsFileFillFilesList(void)
 			break;
 		}
 		
-		FileClose(File_ID);
+		SystemFileClose(File_ID);
 	}
 	
 	ScreenWriteString("Deleting all test generated files...\n");
@@ -366,7 +366,7 @@ int TestsFileFillBlocksList(void)
 	
 Exit:
 	ScreenWriteString("Deleting the test file...\n");
-	FileClose(File_ID);
+	SystemFileClose(File_ID);
 	FileDelete("_test_");
 	return Return_Value;
 }
@@ -391,7 +391,7 @@ int TestsFileCloseDeletedOpenedFile(void)
 		DisplayMessageErrorAndCode("while writing data to the file", Result);
 		goto Exit;
 	}
-	FileClose(File_ID);
+	SystemFileClose(File_ID);
 	
 	// Open the file for reading
 	Result = SystemFileOpen("_test_", 'r', &File_ID);
@@ -415,7 +415,7 @@ int TestsFileCloseDeletedOpenedFile(void)
 	Return_Value = 0;
 	
 Exit:
-	FileClose(File_ID);
+	SystemFileClose(File_ID);
 	FileDelete("_test_");
 	return Return_Value;
 }
@@ -433,7 +433,7 @@ int TestsFileRename(void)
 		DisplayMessageErrorAndCode("while creating the first file", Result);
 		goto Exit;
 	}
-	FileClose(File_ID);
+	SystemFileClose(File_ID);
 	// Second file
 	Result = SystemFileOpen("_test2_", 'w', &File_ID);
 	if (Result != ERROR_CODE_NO_ERROR)
@@ -441,7 +441,7 @@ int TestsFileRename(void)
 		DisplayMessageErrorAndCode("while creating the second file", Result);
 		goto Exit;
 	}
-	FileClose(File_ID);
+	SystemFileClose(File_ID);
 	
 	// Provide two bad file names
 	Result = FileRename("", "");
@@ -497,7 +497,7 @@ int TestsFileRename(void)
 		DisplayMessageErrorAndCode("while trying to open the renamed file", Result);
 		goto Exit;
 	}
-	FileClose(File_ID);
+	SystemFileClose(File_ID);
 	
 	Return_Value = 0;
 	

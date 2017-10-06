@@ -91,7 +91,7 @@ int SystemFileWrite(unsigned int File_ID, void *Pointer_Buffer, unsigned int Byt
 /** Close a previously opened file (do nothing if the file was not opened).
  * @param File_ID Identifier of the opened file.
  */
-void FileClose(unsigned int File_ID);
+void SystemFileClose(unsigned int File_ID);
 
 /** Delete an existing file.
  * @param String_File_Name The file to delete.

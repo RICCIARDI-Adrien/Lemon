@@ -129,7 +129,7 @@ int TFTPExecuteCommandGet(char *String_File_Name)
 	Return_Value = 0;
 	
 Exit:
-	FileClose(File_ID);
+	SystemFileClose(File_ID);
 	if (Return_Value != 0) FileDelete(String_File_Name); // Remove the partial file
 	return Return_Value;
 }
@@ -238,7 +238,7 @@ int TFTPExecuteCommandPut(char *String_File_Name)
 	Return_Value = 0;
 	
 Exit:
-	FileClose(File_ID);
+	SystemFileClose(File_ID);
 	return Return_Value;
 }
 

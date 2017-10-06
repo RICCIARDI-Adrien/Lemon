@@ -85,7 +85,7 @@ int CommandMainDiff(int argc, char *argv[])
 	Return_Value = 0;
 	
 Exit:
-	if (File_Descriptor_1 != 0xFFFFFFFF) FileClose(File_Descriptor_1);
-	if (File_Descriptor_2 != 0xFFFFFFFF) FileClose(File_Descriptor_2);
+	if (File_Descriptor_1 != 0xFFFFFFFF) SystemFileClose(File_Descriptor_1);
+	if (File_Descriptor_2 != 0xFFFFFFFF) SystemFileClose(File_Descriptor_2);
 	return Return_Value;
 }

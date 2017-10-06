@@ -75,6 +75,6 @@ int SystemConfigurationReadValue(char *String_Key, char *String_Value)
 	Return_Value = 0;
 	
 Exit:
-	FileClose(File_ID);
+	SystemFileClose(File_ID);
 	return Return_Value;
 }

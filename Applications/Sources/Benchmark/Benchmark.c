@@ -112,7 +112,7 @@ static void BenchmarkFileSystem(unsigned int *Pointer_Start_Time, unsigned int *
 			goto Exit_Error;
 		}
 
-		FileClose(File_ID);
+		SystemFileClose(File_ID);
 	}
 	
 	*Pointer_End_Time = SystemGetTimerValue();
@@ -123,7 +123,7 @@ Exit_Error:
 	ScreenWriteString("Error on file ");
 	ScreenWriteInteger(i);
 	ScreenWriteString(".\n");
-	FileClose(File_ID);
+	SystemFileClose(File_ID);
 	FileDelete("_test_");
 }
 
