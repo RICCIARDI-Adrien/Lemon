@@ -46,7 +46,7 @@ int TFTPExecuteCommandGet(char *String_File_Name)
 	Transfer_Mode_Length = StringGetSize(STRING_TFTP_TRANSFER_MODE);
 	
 	// Open the file to be ready to write it's content
-	if (FileOpen(String_File_Name, SYSTEM_FILE_OPENING_MODE_WRITE, &File_ID) != 0)
+	if (SystemFileOpen(String_File_Name, SYSTEM_FILE_OPENING_MODE_WRITE, &File_ID) != 0)
 	{
 		ScreenWriteString(STRING_COMMAND_TFTP_GET_CANT_OPEN_FILE);
 		return 1; // Do not go through Exit label path or a file with the same name than the one that would be opened could be deleted
@@ -146,7 +146,7 @@ int TFTPExecuteCommandPut(char *String_File_Name)
 	int Return_Value = 1;
 	
 	// Try to open the local file
-	if (FileOpen(String_File_Name, SYSTEM_FILE_OPENING_MODE_READ, &File_ID) != 0)
+	if (SystemFileOpen(String_File_Name, SYSTEM_FILE_OPENING_MODE_READ, &File_ID) != 0)
 	{
 		ScreenWriteString(STRING_COMMAND_TFTP_PUT_CANT_OPEN_FILE);
 		goto Exit;

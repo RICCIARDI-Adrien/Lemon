@@ -26,14 +26,14 @@ int CommandMainDiff(int argc, char *argv[])
 	String_File_2_Name = argv[2];
 	
 	// Try to open the files
-	if (FileOpen(String_File_1_Name, SYSTEM_FILE_OPENING_MODE_READ, &File_Descriptor_1) != ERROR_CODE_NO_ERROR)
+	if (SystemFileOpen(String_File_1_Name, SYSTEM_FILE_OPENING_MODE_READ, &File_Descriptor_1) != ERROR_CODE_NO_ERROR)
 	{
 		ScreenWriteString(STRING_COMMAND_DIFF_FILE_CANT_BE_OPENED_1);
 		ScreenWriteString(String_File_1_Name);
 		ScreenWriteString(STRING_COMMAND_DIFF_FILE_CANT_BE_OPENED_2);
 		goto Exit;
 	}
-	if (FileOpen(String_File_2_Name, SYSTEM_FILE_OPENING_MODE_READ, &File_Descriptor_2) != ERROR_CODE_NO_ERROR)
+	if (SystemFileOpen(String_File_2_Name, SYSTEM_FILE_OPENING_MODE_READ, &File_Descriptor_2) != ERROR_CODE_NO_ERROR)
 	{
 		ScreenWriteString(STRING_COMMAND_DIFF_FILE_CANT_BE_OPENED_1);
 		ScreenWriteString(String_File_2_Name);

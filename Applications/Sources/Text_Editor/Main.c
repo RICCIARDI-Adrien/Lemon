@@ -63,7 +63,7 @@ static int MainLoadFile(char *String_File_Name)
 	unsigned int File_ID;
 	
 	// Try to open the file
-	if (FileOpen(String_File_Name, SYSTEM_FILE_OPENING_MODE_READ, &File_ID) != ERROR_CODE_NO_ERROR)
+	if (SystemFileOpen(String_File_Name, SYSTEM_FILE_OPENING_MODE_READ, &File_ID) != ERROR_CODE_NO_ERROR)
 	{
 		MainDisplayMessage(STRING_MESSAGE_TITLE_ERROR, STRING_ERROR_CANT_OPEN_FILE, STRING_HIT_ENTER_TO_CONTINUE, SCREEN_COLOR_RED);
 		MainWaitForEnterKey();
@@ -101,7 +101,7 @@ static int MainSaveFile(char *String_File_Name)
 	unsigned int File_ID;
 	
 	// Try to open the file
-	if (FileOpen(String_File_Name, SYSTEM_FILE_OPENING_MODE_WRITE, &File_ID) != ERROR_CODE_NO_ERROR)
+	if (SystemFileOpen(String_File_Name, SYSTEM_FILE_OPENING_MODE_WRITE, &File_ID) != ERROR_CODE_NO_ERROR)
 	{
 		MainDisplayMessage(STRING_MESSAGE_TITLE_ERROR, STRING_ERROR_CANT_OPEN_FILE, STRING_HIT_ENTER_TO_CONTINUE, SCREEN_COLOR_RED);
 		MainWaitForEnterKey();

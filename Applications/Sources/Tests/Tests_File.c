@@ -27,31 +27,31 @@ int TestsFileFunctionsInputParameters(void)
 	unsigned int File_ID;
 	int Result;
 	
-	// Testing FileOpen()
+	// Testing SystemFileOpen()
 	// Bad filename (empty string, checked by kernel)
-	ScreenWriteString("Checking FileOpen()...\n");
-	Result = FileOpen("\0", 'r', &File_ID);
+	ScreenWriteString("Checking SystemFileOpen()...\n");
+	Result = SystemFileOpen("\0", 'r', &File_ID);
 	if (Result != ERROR_CODE_BAD_FILE_NAME)
 	{
 		DisplayMessageErrorAndCode("when given a bad file name", Result);
 		return 1;
 	}
 	// Bad filename (NULL string, checked by Libraries)
-	Result = FileOpen(NULL, 'r', &File_ID);
+	Result = SystemFileOpen(NULL, 'r', &File_ID);
 	if (Result != ERROR_CODE_BAD_FILE_NAME)
 	{
 		DisplayMessageErrorAndCode("when given a NULL file name", Result);
 		return 1;
 	}
 	// File not found
-	Result = FileOpen("_!azerty", 'r', &File_ID);
+	Result = SystemFileOpen("_!azerty", 'r', &File_ID);
 	if (Result != ERROR_CODE_FILE_NOT_FOUND)
 	{
 		DisplayMessageErrorAndCode("when given an unexisting file", Result);
 		return 1;
 	}
 	// Unknown opening mode
-	Result = FileOpen("Ignored", 't', &File_ID);
+	Result = SystemFileOpen("Ignored", 't', &File_ID);
 	if (Result != ERROR_CODE_UNKNOWN_OPENING_MODE)
 	{
 		DisplayMessageErrorAndCode("when given a bad opening mode", Result);
@@ -173,7 +173,7 @@ int TestsFileMaximumOpenedFiles(void)
 		StringConcatenate(String_File_Name, String_Number);
 		
 		// Open the file in write mode so the file should not exist yet
-		Result = FileOpen(String_File_Name, 'w', &File_IDs[i]);
+		Result = SystemFileOpen(String_File_Name, 'w', &File_IDs[i]);
 		if (Result != ERROR_CODE_NO_ERROR)
 		{
 			DisplayMessageErrorAndCode("while opening the files allowed count", Result);
@@ -183,7 +183,7 @@ int TestsFileMaximumOpenedFiles(void)
 	
 	// Opening one more file
 	ScreenWriteString("Opening one more file...\n");
-	Result = FileOpen("_test_!!!", 'w', &File_IDs[SYSTEM_FILE_MAXIMUM_OPENED_COUNT]);
+	Result = SystemFileOpen("_test_!!!", 'w', &File_IDs[SYSTEM_FILE_MAXIMUM_OPENED_COUNT]);
 	if (Result != ERROR_CODE_CANT_OPEN_MORE_FILES)
 	{
 		DisplayMessageErrorAndCode("while opening too much files in the same time", Result);
@@ -214,7 +214,7 @@ int TestsFileReopenSameFile(void)
 	
 	// Create a file
 	ScreenWriteString("Creating a file...\n");
-	Result = FileOpen("_test_", 'w', &File_ID);
+	Result = SystemFileOpen("_test_", 'w', &File_ID);
 	if (Result != ERROR_CODE_NO_ERROR)
 	{
 		DisplayMessageErrorAndCode("while opening the file in write mode", Result);
@@ -233,7 +233,7 @@ int TestsFileReopenSameFile(void)
 	// Try to open the same file 2 times
 	// The first time must succeed
 	ScreenWriteString("Opening the file for the first time...\n");
-	Result = FileOpen("_test_", 'r', &File_ID);
+	Result = SystemFileOpen("_test_", 'r', &File_ID);
 	if (Result != ERROR_CODE_NO_ERROR)
 	{
 		DisplayMessageErrorAndCode("while opening the file in read mode", Result);
@@ -241,7 +241,7 @@ int TestsFileReopenSameFile(void)
 	}
 	// The second time must fail
 	ScreenWriteString("Opening the file for the second time...\n");
-	Result = FileOpen("_test_", 'r', &File_ID_2);
+	Result = SystemFileOpen("_test_", 'r', &File_ID_2);
 	if (Result != ERROR_CODE_FILE_OPENED_YET)
 	{
 		DisplayMessageErrorAndCode("while reopening a previously opened file", Result);
@@ -281,7 +281,7 @@ int TestsFileFillFilesList(void)
 		StringConcatenate(String_File_Name, String_Number);
 		
 		// Create the file
-		Result = FileOpen(String_File_Name, 'w', &File_ID);
+		Result = SystemFileOpen(String_File_Name, 'w', &File_ID);
 		if (i == Free_Files_Count) // The one more file
 		{
 			if (Result == ERROR_CODE_FILES_LIST_FULL) Return_Value = 0;
@@ -330,7 +330,7 @@ int TestsFileFillBlocksList(void)
 	ScreenWriteString("Creating the test file...\n");
 	
 	// Create a file
-	Result = FileOpen("_test_", 'w', &File_ID);
+	Result = SystemFileOpen("_test_", 'w', &File_ID);
 	if (Result != ERROR_CODE_NO_ERROR)
 	{
 		DisplayMessageErrorAndCode("while creating the file", Result);
@@ -378,7 +378,7 @@ int TestsFileCloseDeletedOpenedFile(void)
 	char String_Data[] = "Test data";
 	
 	// Create a file
-	Result = FileOpen("_test_", 'w', &File_ID);
+	Result = SystemFileOpen("_test_", 'w', &File_ID);
 	if (Result != ERROR_CODE_NO_ERROR)
 	{
 		DisplayMessageErrorAndCode("while creating the file to delete", Result);
@@ -394,7 +394,7 @@ int TestsFileCloseDeletedOpenedFile(void)
 	FileClose(File_ID);
 	
 	// Open the file for reading
-	Result = FileOpen("_test_", 'r', &File_ID);
+	Result = SystemFileOpen("_test_", 'r', &File_ID);
 	if (Result != ERROR_CODE_NO_ERROR)
 	{
 		DisplayMessageErrorAndCode("while opening the file to delete for reading", Result);
@@ -405,7 +405,7 @@ int TestsFileCloseDeletedOpenedFile(void)
 	FileDelete("_test_");
 	
 	// Try to open the file another time (this must succeed because the previous file has been closed)
-	Result = FileOpen("_test_", 'w', &File_ID);
+	Result = SystemFileOpen("_test_", 'w', &File_ID);
 	if (Result != ERROR_CODE_NO_ERROR)
 	{
 		DisplayMessageErrorAndCode("while opening the deleted file a second time", Result);
@@ -427,7 +427,7 @@ int TestsFileRename(void)
 	
 	// Create two empty files
 	// First file
-	Result = FileOpen("_test1_", 'w', &File_ID);
+	Result = SystemFileOpen("_test1_", 'w', &File_ID);
 	if (Result != ERROR_CODE_NO_ERROR)
 	{
 		DisplayMessageErrorAndCode("while creating the first file", Result);
@@ -435,7 +435,7 @@ int TestsFileRename(void)
 	}
 	FileClose(File_ID);
 	// Second file
-	Result = FileOpen("_test2_", 'w', &File_ID);
+	Result = SystemFileOpen("_test2_", 'w', &File_ID);
 	if (Result != ERROR_CODE_NO_ERROR)
 	{
 		DisplayMessageErrorAndCode("while creating the second file", Result);
@@ -491,7 +491,7 @@ int TestsFileRename(void)
 		goto Exit;
 	}
 	// Make sure the file was successfully renamed
-	Result = FileOpen("_test3_", 'r', &File_ID);
+	Result = SystemFileOpen("_test3_", 'r', &File_ID);
 	if (Result != ERROR_CODE_NO_ERROR)
 	{
 		DisplayMessageErrorAndCode("while trying to open the renamed file", Result);

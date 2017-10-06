@@ -97,7 +97,7 @@ static void BenchmarkFileSystem(unsigned int *Pointer_Start_Time, unsigned int *
 	for (i = 0; i < BENCHMARK_FILE_SYSTEM_ITERATIONS_COUNT; i++)
 	{
 		// Create the file
-		Result = FileOpen("_test_", 'w', &File_ID);
+		Result = SystemFileOpen("_test_", 'w', &File_ID);
 		if (Result != ERROR_CODE_NO_ERROR)
 		{
 			ScreenWriteString("Error while opening the file for writing.\n");

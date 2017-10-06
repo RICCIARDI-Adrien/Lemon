@@ -37,7 +37,7 @@ int TestsFileFunctionsInputParameters(void);
  */
 int TestsFileSystemCalls(void);
 
-/** Try to open more than the maximum allowed number of files. The FileOpen() function must fail when the limit is reached.
+/** Try to open more than the maximum allowed number of files. The SystemFileOpen() function must fail when the limit is reached.
  * @return 0 if test was successful,
  * @return 1 if the test failed.
  */
