@@ -137,7 +137,7 @@ int CommandMainLs(int argc, char __attribute__((unused)) *argv[])
 	while (1)
 	{
 		// Get the next file name
-		FileListNext(Files_Informations[Files_Count].String_File_Name);
+		SystemFileListNext(Files_Informations[Files_Count].String_File_Name);
 		if (Files_Informations[Files_Count].String_File_Name[0] == 0) break;
 		
 		// Get the file size

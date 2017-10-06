@@ -47,7 +47,7 @@ void SystemFileListInitialize(void);
 /** Get the next file name for file listing.
  * @param String_File_Name Pointer on a SYSTEM_FILE_NAME_LENGTH + 1 wide string which will receive the file name.
  */
-void FileListNext(char *String_File_Name);
+void SystemFileListNext(char *String_File_Name);
 
 /** Open a file for reading or writing.
  * @param String_File_Name The file path. The file must exist for reading mode but can be non existent for writing mode.
