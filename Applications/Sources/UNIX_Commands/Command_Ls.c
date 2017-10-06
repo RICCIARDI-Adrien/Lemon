@@ -133,7 +133,7 @@ int CommandMainLs(int argc, char __attribute__((unused)) *argv[])
 	}
 	
 	// Get all hard disk files name and size
-	FileListInitialize();
+	SystemFileListInitialize();
 	while (1)
 	{
 		// Get the next file name
