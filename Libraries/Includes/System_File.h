@@ -32,7 +32,7 @@ typedef enum
  * @return 0 (false) if the file doesn't exist.
  * @return A non-zero value if the file exists.
  */
-int FileExists(char *String_File_Name);
+int SystemFileExists(char *String_File_Name);
 
 /** Tell the size of a file.
  * @param String_File_Name Name of the file.

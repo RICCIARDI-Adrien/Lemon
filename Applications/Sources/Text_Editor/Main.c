@@ -292,7 +292,7 @@ int main(int argc, char *argv[])
 	DisplayClear(); // Prepare the display with a blank screen in case it's a new file
 	
 	// Does the specified file exist ?
-	if (FileExists(String_File_Name))
+	if (SystemFileExists(String_File_Name))
 	{
 		// Load it in the buffer
 		if (MainLoadFile(String_File_Name) != 0) MainExitProgram();
