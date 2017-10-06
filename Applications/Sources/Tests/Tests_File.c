@@ -159,13 +159,13 @@ int TestsFileSystemCalls(void)
 
 int TestsFileMaximumOpenedFiles(void)
 {
-	unsigned int File_IDs[FILE_MAXIMUM_OPENED_COUNT + 1];
+	unsigned int File_IDs[SYSTEM_FILE_MAXIMUM_OPENED_COUNT + 1];
 	int i, Result;
 	char String_File_Name[SYSTEM_FILE_NAME_LENGTH + 1], String_Number[11];
 	
 	// Open the maximum number of files
 	ScreenWriteString("Opening as many files as possible...\n");
-	for (i = 0; i < FILE_MAXIMUM_OPENED_COUNT; i++)
+	for (i = 0; i < SYSTEM_FILE_MAXIMUM_OPENED_COUNT; i++)
 	{
 		// Create the file name
 		StringConvertUnsignedIntegerToString(i, String_Number);
@@ -183,7 +183,7 @@ int TestsFileMaximumOpenedFiles(void)
 	
 	// Opening one more file
 	ScreenWriteString("Opening one more file...\n");
-	Result = FileOpen("_test_!!!", 'w', &File_IDs[FILE_MAXIMUM_OPENED_COUNT]);
+	Result = FileOpen("_test_!!!", 'w', &File_IDs[SYSTEM_FILE_MAXIMUM_OPENED_COUNT]);
 	if (Result != ERROR_CODE_CANT_OPEN_MORE_FILES)
 	{
 		DisplayMessageErrorAndCode("while opening too much files in the same time", Result);
@@ -191,7 +191,7 @@ int TestsFileMaximumOpenedFiles(void)
 	}
 	
 	// Close and delete all files
-	for (i = 0; i < FILE_MAXIMUM_OPENED_COUNT; i++)
+	for (i = 0; i < SYSTEM_FILE_MAXIMUM_OPENED_COUNT; i++)
 	{
 		FileClose(File_IDs[i]);
 		

@@ -12,7 +12,7 @@
 #define SYSTEM_FILE_NAME_LENGTH 12
 
 /** How many files can be opened in the same time. */
-#define FILE_MAXIMUM_OPENED_COUNT 8
+#define SYSTEM_FILE_MAXIMUM_OPENED_COUNT 8
 
 //-------------------------------------------------------------------------------------------------
 // Types
