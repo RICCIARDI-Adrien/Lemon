@@ -16,7 +16,7 @@ int SystemConfigurationReadValue(char *String_Key, char *String_Value)
 	if (String_Key[0] == 0) return 2;
 	
 	// Try to open the configuration file
-	if (FileOpen(SYSTEM_CONFIGURATION_FILE_NAME, FILE_OPENING_MODE_READ, &File_ID) != 0) return 1;
+	if (FileOpen(SYSTEM_CONFIGURATION_FILE_NAME, SYSTEM_FILE_OPENING_MODE_READ, &File_ID) != 0) return 1;
 
 	// Browse the file until the key is found
 	do

@@ -6,7 +6,7 @@
 //-------------------------------------------------------------------------------------------------
 // Public functions
 //-------------------------------------------------------------------------------------------------
-int FileOpen(char *String_File_Name, TFileOpeningMode Opening_Mode, unsigned int *Pointer_File_ID)
+int FileOpen(char *String_File_Name, TSystemFileOpeningMode Opening_Mode, unsigned int *Pointer_File_ID)
 {
 	// Check for a NULL file name as the kernel can't be annoyed with this
 	if (String_File_Name == NULL) return ERROR_CODE_BAD_FILE_NAME;

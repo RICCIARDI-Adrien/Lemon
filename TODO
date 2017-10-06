@@ -52,3 +52,5 @@ Applications
 
 - utiliser api buffer pour affichage éditeur de texte (partiellement effectué)
 - éditeur de texte implémenter ctrl+c pour copier
+
+- remplacer les FileOpen 'r' ou 'w' par constantes dans tests

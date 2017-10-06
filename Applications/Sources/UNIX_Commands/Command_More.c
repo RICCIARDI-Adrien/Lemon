@@ -97,7 +97,7 @@ int CommandMainMore(int argc, char *argv[])
 	String_File_Name = argv[1];
 	
 	// Try to open the provided file
-	if (FileOpen(String_File_Name, FILE_OPENING_MODE_READ, &File_ID) != ERROR_CODE_NO_ERROR)
+	if (FileOpen(String_File_Name, SYSTEM_FILE_OPENING_MODE_READ, &File_ID) != ERROR_CODE_NO_ERROR)
 	{
 		ScreenWriteString(STRING_COMMAND_MORE_FILE_NOT_FOUND_1);
 		ScreenWriteString(String_File_Name);

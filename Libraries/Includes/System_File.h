@@ -20,9 +20,9 @@
 /** The allowed file opening modes. */
 typedef enum
 {
-	FILE_OPENING_MODE_READ = 'r',
-	FILE_OPENING_MODE_WRITE = 'w'
-} TFileOpeningMode;
+	SYSTEM_FILE_OPENING_MODE_READ = 'r',
+	SYSTEM_FILE_OPENING_MODE_WRITE = 'w'
+} TSystemFileOpeningMode;
 
 //-------------------------------------------------------------------------------------------------
 // Functions
@@ -62,7 +62,7 @@ void FileListNext(char *String_File_Name);
  * @return ERROR_CODE_BLOCKS_LIST_FULL if the file was opened in write mode an there is no more room in the Blocks List,
  * @return ERROR_CODE_NO_ERROR if the file was correctly opened.
  */
-int FileOpen(char *String_File_Name, TFileOpeningMode Opening_Mode, unsigned int *Pointer_File_ID);
+int FileOpen(char *String_File_Name, TSystemFileOpeningMode Opening_Mode, unsigned int *Pointer_File_ID);
 
 /** Read data from a previously opened file.
  * @param File_ID The file identifier.
