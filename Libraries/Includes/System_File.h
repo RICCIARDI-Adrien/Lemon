@@ -1,9 +1,9 @@
-/** @file File.h
+/** @file System_File.h
  * Simple file manipulation functions.
  * @author Adrien RICCIARDI
  */
-#ifndef H_FILE_H
-#define H_FILE_H
+#ifndef H_SYSTEM_FILE_H
+#define H_SYSTEM_FILE_H
 
 //-------------------------------------------------------------------------------------------------
 // Constants
