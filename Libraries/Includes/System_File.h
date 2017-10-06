@@ -39,7 +39,7 @@ int SystemFileExists(char *String_File_Name);
  * @return The file size in bytes if the file exists.
  * @return 0 if the file doesn't exist.
  */
-unsigned int FileGetSize(char *String_File_Name);
+unsigned int SystemFileGetSize(char *String_File_Name);
 
 /** Start a file listing. */
 void FileListInitialize(void);

@@ -141,7 +141,7 @@ int CommandMainLs(int argc, char __attribute__((unused)) *argv[])
 		if (Files_Informations[Files_Count].String_File_Name[0] == 0) break;
 		
 		// Get the file size
-		Files_Informations[Files_Count].Size_Bytes = FileGetSize(Files_Informations[Files_Count].String_File_Name);
+		Files_Informations[Files_Count].Size_Bytes = SystemFileGetSize(Files_Informations[Files_Count].String_File_Name);
 		
 		// Add the file informations to the pointers array
 		Pointer_Sorted_Files_Informations[Files_Count] = &(Files_Informations[Files_Count]);

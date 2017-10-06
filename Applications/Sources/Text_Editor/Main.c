@@ -82,7 +82,7 @@ static int MainLoadFile(char *String_File_Name)
 	FileClose(File_ID);
 	
 	// Show a message if the file is too big for the buffer
-	if (FileGetSize(String_File_Name) > CONFIGURATION_BUFFER_MAXIMUM_SIZE)
+	if (SystemFileGetSize(String_File_Name) > CONFIGURATION_BUFFER_MAXIMUM_SIZE)
 	{
 		MainDisplayMessage(STRING_MESSAGE_TITLE_WARNING, STRING_WARNING_FILE_IS_TOO_BIG, STRING_HIT_ENTER_TO_CONTINUE, SCREEN_COLOR_BROWN);
 		MainWaitForEnterKey();
