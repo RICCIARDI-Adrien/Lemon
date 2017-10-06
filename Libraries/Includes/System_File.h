@@ -108,10 +108,6 @@ int SystemFileDelete(char *String_File_Name);
  * @return ERROR_CODE_FILE_NOT_FOUND if the file was not found,
  * @return ERROR_CODE_FILE_ALREADY_EXISTS if the new name is attributed to an existing file.
  */
-int FileRename(char *String_Current_File_Name, char *String_New_File_Name);
-
-// TODO ?
-// FileCopy (avec calcul espace restant disque avant copie)
-
+int SystemFileRename(char *String_Current_File_Name, char *String_New_File_Name);
 
 #endif

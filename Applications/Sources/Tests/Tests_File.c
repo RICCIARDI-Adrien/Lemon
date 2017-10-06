@@ -444,47 +444,47 @@ int TestsFileRename(void)
 	SystemFileClose(File_ID);
 	
 	// Provide two bad file names
-	Result = FileRename("", "");
+	Result = SystemFileRename("", "");
 	if (Result != ERROR_CODE_BAD_FILE_NAME)
 	{
-		DisplayMessageErrorAndCode(": FileRename(\"\", \"\") did not fail with the expected error", Result);
+		DisplayMessageErrorAndCode(": SystemFileRename(\"\", \"\") did not fail with the expected error", Result);
 		goto Exit;
 	}
 	
 	// Provide a bad file name as first argument
-	Result = FileRename("", "_test1_");
+	Result = SystemFileRename("", "_test1_");
 	if (Result != ERROR_CODE_BAD_FILE_NAME)
 	{
-		DisplayMessageErrorAndCode(": FileRename(\"\", \"_test1_\") did not fail with the expected error", Result);
+		DisplayMessageErrorAndCode(": SystemFileRename(\"\", \"_test1_\") did not fail with the expected error", Result);
 		goto Exit;
 	}
 	
 	// Provide a bad file name as second argument
-	Result = FileRename("_test1_", "");
+	Result = SystemFileRename("_test1_", "");
 	if (Result != ERROR_CODE_BAD_FILE_NAME)
 	{
-		DisplayMessageErrorAndCode(": FileRename(\"_test1_\", \"\") did not fail with the expected error", Result);
+		DisplayMessageErrorAndCode(": SystemFileRename(\"_test1_\", \"\") did not fail with the expected error", Result);
 		goto Exit;
 	}
 	
 	// Provide an existing file as the new file name
-	Result = FileRename("_test1_", "_test2_");
+	Result = SystemFileRename("_test1_", "_test2_");
 	if (Result != ERROR_CODE_FILE_ALREADY_EXISTS)
 	{
-		DisplayMessageErrorAndCode(": FileRename(\"_test1_\", \"_test2_\") while _test2_ file exists did not fail with the expected error", Result);
+		DisplayMessageErrorAndCode(": SystemFileRename(\"_test1_\", \"_test2_\") while _test2_ file exists did not fail with the expected error", Result);
 		goto Exit;
 	}
 	
 	// Provide a non-existing file as the file to rename
-	Result = FileRename("_test28_", "_test3_");
+	Result = SystemFileRename("_test28_", "_test3_");
 	if (Result != ERROR_CODE_FILE_NOT_FOUND)
 	{
-		DisplayMessageErrorAndCode(": FileRename(\"_test28_\", \"_test2_\") while _test28_ file do not exists did not fail with the expected error", Result);
+		DisplayMessageErrorAndCode(": SystemFileRename(\"_test28_\", \"_test2_\") while _test28_ file do not exists did not fail with the expected error", Result);
 		goto Exit;
 	}
 	
 	// Do a real rename
-	Result = FileRename("_test1_", "_test3_");
+	Result = SystemFileRename("_test1_", "_test3_");
 	if (Result != ERROR_CODE_NO_ERROR)
 	{
 		DisplayMessageErrorAndCode("while doing a normal rename operation", Result);
