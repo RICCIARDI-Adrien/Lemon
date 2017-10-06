@@ -110,7 +110,7 @@ static int MainSaveFile(char *String_File_Name)
 	}
 	
 	// Write file content
-	if (FileWrite(File_ID, Buffer, Buffer_Characters_Count) != ERROR_CODE_NO_ERROR)
+	if (SystemFileWrite(File_ID, Buffer, Buffer_Characters_Count) != ERROR_CODE_NO_ERROR)
 	{
 		FileClose(File_ID);
 		MainDisplayMessage(STRING_MESSAGE_TITLE_ERROR, STRING_ERROR_CANT_SAVE_FILE, STRING_HIT_ENTER_TO_CONTINUE, SCREEN_COLOR_RED);

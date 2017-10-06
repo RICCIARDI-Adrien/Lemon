@@ -105,7 +105,7 @@ static void BenchmarkFileSystem(unsigned int *Pointer_Start_Time, unsigned int *
 		}
 		
 		// Write some random bytes
-		Result = FileWrite(File_ID, String_Data, sizeof(String_Data));
+		Result = SystemFileWrite(File_ID, String_Data, sizeof(String_Data));
 		if (Result != ERROR_CODE_NO_ERROR)
 		{
 			ScreenWriteString("Error while writing to the file.\n");

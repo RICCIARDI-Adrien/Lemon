@@ -86,7 +86,7 @@ int SystemFileRead(unsigned int File_ID, void *Pointer_Buffer, unsigned int Byte
  * @return ERROR_CODE_BAD_OPENING_MODE if the file is not opened in write mode,
  * @return ERROR_CODE_BLOCKS_LIST_FULL if there no more free blocks in the Blocks List and the data could not be written.
  */
-int FileWrite(unsigned int File_ID, void *Pointer_Buffer, unsigned int Bytes_Count);
+int SystemFileWrite(unsigned int File_ID, void *Pointer_Buffer, unsigned int Bytes_Count);
 
 /** Close a previously opened file (do nothing if the file was not opened).
  * @param File_ID Identifier of the opened file.

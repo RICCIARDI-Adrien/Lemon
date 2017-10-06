@@ -221,7 +221,7 @@ int TestsFileReopenSameFile(void)
 		goto Exit;
 	}
 	// Write some data
-	Result = FileWrite(File_ID, String_File_Content, sizeof(String_File_Content) - 1);
+	Result = SystemFileWrite(File_ID, String_File_Content, sizeof(String_File_Content) - 1);
 	if (Result != ERROR_CODE_NO_ERROR)
 	{
 		DisplayMessageErrorAndCode("while writing data to the file", Result);
@@ -345,7 +345,7 @@ int TestsFileFillBlocksList(void)
 	// Fill the Blocks List with one block more than the available space
 	for (i = 0; i <= Free_Blocks_Count; i++)
 	{
-		Result = FileWrite(File_ID, Buffer, Block_Size_Bytes);
+		Result = SystemFileWrite(File_ID, Buffer, Block_Size_Bytes);
 		
 		if (i == Free_Blocks_Count) // The offending block is reached
 		{
@@ -385,7 +385,7 @@ int TestsFileCloseDeletedOpenedFile(void)
 		goto Exit;
 	}
 	// Write some data to it
-	Result = FileWrite(File_ID, String_Data, sizeof(String_Data));
+	Result = SystemFileWrite(File_ID, String_Data, sizeof(String_Data));
 	if (Result != ERROR_CODE_NO_ERROR)
 	{
 		DisplayMessageErrorAndCode("while writing data to the file", Result);

@@ -105,7 +105,7 @@ int TFTPExecuteCommandGet(char *String_File_Name)
 		Data_Size -= sizeof(Packet.Opcode) + sizeof(Packet.Data.Block_Number);
 		
 		// Store data in the file
-		if (FileWrite(File_ID, Packet.Data.Buffer, Data_Size) != 0)
+		if (SystemFileWrite(File_ID, Packet.Data.Buffer, Data_Size) != 0)
 		{
 			ScreenWriteString(STRING_COMMAND_TFTP_GET_CANT_WRITE_TO_FILE);
 			goto Exit;
