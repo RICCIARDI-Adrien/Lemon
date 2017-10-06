@@ -35,7 +35,7 @@
 #define BAUD_RATE B115200
 
 /** The maximum length of a file name (this is the same value than the system has). */
-#define FILE_NAME_LENGTH 12
+#define SYSTEM_FILE_NAME_LENGTH 12
 
 //-------------------------------------------------------------------------------------------------
 // Private functions
@@ -197,8 +197,8 @@ int main(int argc, char *argv[])
 	File_Size_Bytes = htonl(File_Size_Bytes); // This value is not used anymore after this transfer, so it can be safely modified
 	write(File_Descriptor_Serial_Port, &File_Size_Bytes, 4);
 	
-	// Send file name (up to FILE_NAME_LENGTH characters)
-	write(File_Descriptor_Serial_Port, String_File_Name_On_System, FILE_NAME_LENGTH);
+	// Send file name (up to SYSTEM_FILE_NAME_LENGTH characters)
+	write(File_Descriptor_Serial_Port, String_File_Name_On_System, SYSTEM_FILE_NAME_LENGTH);
 	
 	// Wait for client's answer (for instance, he can abort the transfer if the file is too big)
 	do

@@ -9,7 +9,7 @@
 // Constants
 //-------------------------------------------------------------------------------------------------
 /** Length of a file name string (it does not include the terminating zero). */
-#define FILE_NAME_LENGTH 12
+#define SYSTEM_FILE_NAME_LENGTH 12
 
 /** How many files can be opened in the same time. */
 #define FILE_MAXIMUM_OPENED_COUNT 8
@@ -45,7 +45,7 @@ unsigned int FileGetSize(char *String_File_Name);
 void FileListInitialize(void);
 
 /** Get the next file name for file listing.
- * @param String_File_Name Pointer on a FILE_NAME_LENGTH + 1 wide string which will receive the file name.
+ * @param String_File_Name Pointer on a SYSTEM_FILE_NAME_LENGTH + 1 wide string which will receive the file name.
  */
 void FileListNext(char *String_File_Name);
 

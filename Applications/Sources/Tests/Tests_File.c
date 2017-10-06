@@ -161,7 +161,7 @@ int TestsFileMaximumOpenedFiles(void)
 {
 	unsigned int File_IDs[FILE_MAXIMUM_OPENED_COUNT + 1];
 	int i, Result;
-	char String_File_Name[FILE_NAME_LENGTH + 1], String_Number[11];
+	char String_File_Name[SYSTEM_FILE_NAME_LENGTH + 1], String_Number[11];
 	
 	// Open the maximum number of files
 	ScreenWriteString("Opening as many files as possible...\n");
@@ -261,7 +261,7 @@ int TestsFileFillFilesList(void)
 {
 	unsigned int i, Free_Files_Count, File_ID;
 	int Result, Return_Value = 1;
-	char String_File_Name[FILE_NAME_LENGTH + 1], String_Number[11];
+	char String_File_Name[SYSTEM_FILE_NAME_LENGTH + 1], String_Number[11];
 	
 	// Retrieve the amount of free Files List entries
 	SystemGetFileSystemFreeSize(&i, &Free_Files_Count); // The first parameter is not relevant here

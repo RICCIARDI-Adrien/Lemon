@@ -39,7 +39,7 @@ int TFTPExecuteCommandGet(char *String_File_Name)
 	// Prepare the read request
 	Packet.Opcode = NETWORK_SWAP_WORD(NETWORK_TFTP_OPCODE_READ_REQUEST);
 	// Append the requested file name
-	StringCopyUpToNumber(String_File_Name, Packet.Request.String_File_Name_And_Mode, FILE_NAME_LENGTH);
+	StringCopyUpToNumber(String_File_Name, Packet.Request.String_File_Name_And_Mode, SYSTEM_FILE_NAME_LENGTH);
 	File_Name_Length = StringGetSize(Packet.Request.String_File_Name_And_Mode);
 	// Append the transfer mode
 	StringCopy(STRING_TFTP_TRANSFER_MODE, &Packet.Request.String_File_Name_And_Mode[File_Name_Length + 1]); // Append the string right after the file name string terminating zero
@@ -155,7 +155,7 @@ int TFTPExecuteCommandPut(char *String_File_Name)
 	// Prepare the write request
 	Packet.Opcode = NETWORK_SWAP_WORD(NETWORK_TFTP_OPCODE_WRITE_REQUEST);
 	// Append the sent file name
-	StringCopyUpToNumber(String_File_Name, Packet.Request.String_File_Name_And_Mode, FILE_NAME_LENGTH);
+	StringCopyUpToNumber(String_File_Name, Packet.Request.String_File_Name_And_Mode, SYSTEM_FILE_NAME_LENGTH);
 	File_Name_Length = StringGetSize(Packet.Request.String_File_Name_And_Mode);
 	// Append the transfer mode
 	StringCopy(STRING_TFTP_TRANSFER_MODE, &Packet.Request.String_File_Name_And_Mode[File_Name_Length + 1]); // Append the string right after the file name string terminating zero
@@ -270,7 +270,7 @@ int CommandMainTFTP(int argc, char __attribute__((unused)) *argv[])
 	}
 	// File name
 	String_File_Name = argv[2];
-	if (StringGetSize(String_File_Name) > FILE_NAME_LENGTH)
+	if (StringGetSize(String_File_Name) > SYSTEM_FILE_NAME_LENGTH)
 	{
 		ScreenWriteString(STRING_COMMAND_TFTP_FILE_NAME_TOO_LONG);
 		return -1;
