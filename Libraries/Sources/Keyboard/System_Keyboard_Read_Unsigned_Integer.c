@@ -1,4 +1,4 @@
-/** @file Keyboard_Read_Unsigned_Integer.c
+/** @file System_Keyboard_Read_Unsigned_Integer.c
  * @author Adrien RICCIARDI
  */
 #include <System.h>
@@ -7,16 +7,16 @@
 // Private constants
 //-------------------------------------------------------------------------------------------------
 /** How many characters are needed to represent the maximum allowed number (i.e. 2^32). */
-#define KEYBOARD_READ_UNSIGNED_INTEGER_MAXIMUM_CHARACTERS_COUNT 10
+#define SYSTEM_KEYBOARD_READ_UNSIGNED_INTEGER_MAXIMUM_CHARACTERS_COUNT 10
 
 //-------------------------------------------------------------------------------------------------
 // Public functions
 //-------------------------------------------------------------------------------------------------
-unsigned int KeyboardReadUnsignedInteger(void)
+unsigned int SystemKeyboardReadUnsignedInteger(void)
 {
 	unsigned char Character;
 	int i = 0;
-	char String_Number[KEYBOARD_READ_UNSIGNED_INTEGER_MAXIMUM_CHARACTERS_COUNT + 1]; // +1 for the terminating zero
+	char String_Number[SYSTEM_KEYBOARD_READ_UNSIGNED_INTEGER_MAXIMUM_CHARACTERS_COUNT + 1]; // +1 for the terminating zero
 	
 	// Read the number string
 	while (1)
@@ -44,7 +44,7 @@ unsigned int KeyboardReadUnsignedInteger(void)
 		else if (!StringIsCharacterADigit(Character)) continue; // Allow only digits
 		
 		// Append the character to the string only if there is enough room to
-		if (i < KEYBOARD_READ_UNSIGNED_INTEGER_MAXIMUM_CHARACTERS_COUNT)
+		if (i < SYSTEM_KEYBOARD_READ_UNSIGNED_INTEGER_MAXIMUM_CHARACTERS_COUNT)
 		{
 			String_Number[i] = Character;
 			i++;

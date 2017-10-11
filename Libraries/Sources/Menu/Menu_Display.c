@@ -42,7 +42,7 @@ int MenuDisplay(TMenu *Pointer_Menu)
 		ScreenWriteString(Pointer_Menu->String_User_Prompt);
 		
 		// Wait for the user input
-		Selected_Number = (int) KeyboardReadUnsignedInteger();
+		Selected_Number = (int) SystemKeyboardReadUnsignedInteger();
 		if ((Selected_Number > 0) && (Selected_Number <= i))
 		{
 			ScreenClear();

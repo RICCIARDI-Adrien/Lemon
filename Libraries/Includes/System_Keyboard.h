@@ -103,7 +103,7 @@ int SystemKeyboardReadCharacter(void);
  * @note Only digits are allowed, other characters are discarded.
  * @note The result will be unpredictable if the entered number is greater than 4294967295.
  */
-unsigned int KeyboardReadUnsignedInteger(void);
+unsigned int SystemKeyboardReadUnsignedInteger(void);
 
 /** Get a bit field representing the state (pressed or released) of all modifier keys (like shift, control, ...).
  * @return The modifier keys bit field.
