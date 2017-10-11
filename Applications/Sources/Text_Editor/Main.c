@@ -309,7 +309,7 @@ int main(int argc, char *argv[])
 	while (1)
 	{
 		Character = SystemKeyboardReadCharacter();
-		Modifier_Keys_State = KeyboardReadModifierKeysState();
+		Modifier_Keys_State = SystemKeyboardReadModifierKeysState();
 		
 		// Always erase the cursor trace because the display may not be cleared
 		MainCursorEraseTrace();

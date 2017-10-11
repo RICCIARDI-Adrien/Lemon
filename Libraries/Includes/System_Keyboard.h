@@ -108,7 +108,7 @@ unsigned int SystemKeyboardReadUnsignedInteger(void);
 /** Get a bit field representing the state (pressed or released) of all modifier keys (like shift, control, ...).
  * @return The modifier keys bit field.
  */
-unsigned int KeyboardReadModifierKeysState(void);
+unsigned int SystemKeyboardReadModifierKeysState(void);
 
 // TODO
 // KeyboardReadString
