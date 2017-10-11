@@ -60,6 +60,6 @@ void SystemUARTWriteByte(unsigned char Byte);
  * @return 1 if there is data to read, or 0 if no data was received.
  * @note This is a non-blocking function.
  */
-int UARTIsDataReceived(void);
+int SystemUARTIsDataReceived(void);
 
 #endif
