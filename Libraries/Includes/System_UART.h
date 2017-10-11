@@ -49,7 +49,7 @@ int SystemUARTInitialize(unsigned char Frame_Format, unsigned short Data_Rate_Ba
  * @return The received byte.
  * @note This is a blocking function.
  */
-unsigned char UARTReadByte(void);
+unsigned char SystemUARTReadByte(void);
 
 /** Send a byte via serial port.
  * @param Byte The byte to send.
