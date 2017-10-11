@@ -96,7 +96,7 @@ int SystemKeyboardIsKeyAvailable(void);
  * @note This function is blocking.
  * @note The read character is not echoed on the terminal.
  */
-int KeyboardReadCharacter(void);
+int SystemKeyboardReadCharacter(void);
 
 /** Read an unsigned 32-bit number from the keyboard.
  * @return The read number converted to binary.

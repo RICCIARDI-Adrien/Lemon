@@ -171,7 +171,7 @@ void GameOfLife(void)
 		// Did the user hit a key
 		if (SystemKeyboardIsKeyAvailable())
 		{
-			switch (KeyboardReadCharacter())
+			switch (SystemKeyboardReadCharacter())
 			{
 				// Exit program
 				case KEYBOARD_KEY_CODE_ESCAPE:

@@ -121,7 +121,7 @@ static int ReadUserNumber(void)
 	
 	while (1)
 	{
-		Character = KeyboardReadCharacter();
+		Character = SystemKeyboardReadCharacter();
 		
 		// Backspace, delete last digit if possible
 		if (Character == '\b')
@@ -235,7 +235,7 @@ void BrainCalculation(void)
 				ScreenWriteInteger(Correct_Results_Count);
 				ScreenWriteString(STRING_BRAIN_CALCULATION_CORRECT_ANSWERS_COUNT_2);
 				
-				KeyboardReadCharacter();
+				SystemKeyboardReadCharacter();
 				break;
 			}
 		}

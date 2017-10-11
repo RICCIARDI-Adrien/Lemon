@@ -37,7 +37,7 @@ int main(void)
 	ScreenWriteString("    7. Test invalid system call\n");
 	ScreenWriteString("    Other. Quit\n\n");
 
-	switch (KeyboardReadCharacter())
+	switch (SystemKeyboardReadCharacter())
 	{
 		case '1':
 			ScreenWriteString("-> Privileged instructions test.\n");

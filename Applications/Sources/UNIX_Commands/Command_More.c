@@ -117,7 +117,7 @@ int CommandMainMore(int argc, char *argv[])
 	// Wait for a user key
 	while (1)
 	{
-		switch (KeyboardReadCharacter())
+		switch (SystemKeyboardReadCharacter())
 		{
 			// Display the next line
 			case '\n':

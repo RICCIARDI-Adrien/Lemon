@@ -28,7 +28,7 @@ static int MainReadUserMessage(void)
 	unsigned char Key;
 	
 	// Get the last pressed key
-	Key = KeyboardReadCharacter();
+	Key = SystemKeyboardReadCharacter();
 	
 	switch (Key)
 	{

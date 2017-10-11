@@ -174,7 +174,7 @@ int CommandMainLs(int argc, char __attribute__((unused)) *argv[])
 			ScreenWriteString(STRING_COMMAND_LS_WAIT_FOR_USER_INPUT);
 			ScreenSetFontColor(SCREEN_COLOR_BLUE);
 			
-			KeyboardReadCharacter();
+			SystemKeyboardReadCharacter();
 			ScreenWriteCharacter('\n');
 			
 			Displayed_Files_Count = 0;

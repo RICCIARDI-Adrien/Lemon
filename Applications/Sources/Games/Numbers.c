@@ -31,7 +31,7 @@ static int ReadUserNumber(void)
 	
 	while (1)
 	{
-		Character = KeyboardReadCharacter();
+		Character = SystemKeyboardReadCharacter();
 		
 		// Backspace, delete last digit if possible
 		if (Character == '\b')
@@ -135,5 +135,5 @@ void Numbers(void)
 End:
 	ScreenSetFontColor(SCREEN_COLOR_BLUE);
 	ScreenWriteString(STRING_NUMBERS_END);
-	KeyboardReadCharacter();
+	SystemKeyboardReadCharacter();
 }

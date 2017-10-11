@@ -50,7 +50,7 @@ static void MainDisplayMessage(char *String_Message_Title, char *String_Message_
 static inline void __attribute__((always_inline)) MainWaitForEnterKey(void)
 {
 	// Wait for the Enter key to be pressed
-	while (KeyboardReadCharacter() != KEYBOARD_KEY_CODE_ENTER);
+	while (SystemKeyboardReadCharacter() != KEYBOARD_KEY_CODE_ENTER);
 }
 
 /** Load a file to the internal buffer.
@@ -308,7 +308,7 @@ int main(int argc, char *argv[])
 	// Process the user keys
 	while (1)
 	{
-		Character = KeyboardReadCharacter();
+		Character = SystemKeyboardReadCharacter();
 		Modifier_Keys_State = KeyboardReadModifierKeysState();
 		
 		// Always erase the cursor trace because the display may not be cleared
@@ -326,7 +326,7 @@ int main(int argc, char *argv[])
 					// Wait for Enter or Escape key
 					do
 					{
-						Character = KeyboardReadCharacter();
+						Character = SystemKeyboardReadCharacter();
 					} while ((Character != KEYBOARD_KEY_CODE_ENTER) && (Character != KEYBOARD_KEY_CODE_ESCAPE));
 					
 					// Save the file if requested to

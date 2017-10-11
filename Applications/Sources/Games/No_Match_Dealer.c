@@ -69,7 +69,7 @@ void NoMatchDealer(void)
 		// Wait for Enter or Escape
 		do
 		{
-			Character = KeyboardReadCharacter();
+			Character = SystemKeyboardReadCharacter();
 		} while ((Character != '\n') && (Character != KEYBOARD_KEY_CODE_ESCAPE));
 		if (Character == KEYBOARD_KEY_CODE_ESCAPE) return;
 	}

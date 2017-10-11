@@ -118,7 +118,7 @@ void Submarine(void)
 		// Handle player keys
 		if (SystemKeyboardIsKeyAvailable())
 		{
-			switch (KeyboardReadCharacter())
+			switch (SystemKeyboardReadCharacter())
 			{
 				case KEYBOARD_KEY_CODE_ESCAPE:
 					return;
@@ -173,7 +173,7 @@ void Submarine(void)
 			ScreenSetBackgroundColor(SCREEN_COLOR_WHITE); // Restore the default background color
 			
 			// Wait for the player to hit "escape" key
-			while (KeyboardReadCharacter() != KEYBOARD_KEY_CODE_ESCAPE);
+			while (SystemKeyboardReadCharacter() != KEYBOARD_KEY_CODE_ESCAPE);
 			return;
 		}
 		

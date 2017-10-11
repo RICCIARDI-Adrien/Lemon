@@ -80,7 +80,7 @@ static char ReadLetter(void)
 	
 	while (1)
 	{
-		Letter = KeyboardReadCharacter();
+		Letter = SystemKeyboardReadCharacter();
 		
 		// Cast the letter to uppercase now to ease the following test
 		if ((Letter >= 'a') && (Letter <= 'z')) Letter -= 32;
@@ -244,7 +244,7 @@ void Hangman(void)
 			ScreenSetFontColor(SCREEN_COLOR_BLUE);
 			ScreenWriteString(STRING_HANGMAN_GAME_WON_2);
 			
-			while (KeyboardReadCharacter() != KEYBOARD_KEY_CODE_ENTER);
+			while (SystemKeyboardReadCharacter() != KEYBOARD_KEY_CODE_ENTER);
 			ScreenClear();
 			return;
 		}
@@ -259,7 +259,7 @@ void Hangman(void)
 				ScreenWriteString(STRING_HANGMAN_WORD_FOUND_1);
 				ScreenSetFontColor(SCREEN_COLOR_BLUE);
 				ScreenWriteString(STRING_HANGMAN_WORD_FOUND_2);
-				while (KeyboardReadCharacter() != KEYBOARD_KEY_CODE_ENTER);
+				while (SystemKeyboardReadCharacter() != KEYBOARD_KEY_CODE_ENTER);
 				break;
 			
 			case 1:
@@ -271,7 +271,7 @@ void Hangman(void)
 				ScreenWriteString(STRING_HANGMAN_WORD_NOT_FOUND_2);
 				ScreenWriteString(String_Current_Word);
 				ScreenWriteString(STRING_HANGMAN_WORD_NOT_FOUND_3);
-				while (KeyboardReadCharacter() != KEYBOARD_KEY_CODE_ENTER);
+				while (SystemKeyboardReadCharacter() != KEYBOARD_KEY_CODE_ENTER);
 				return;
 			
 			default:
