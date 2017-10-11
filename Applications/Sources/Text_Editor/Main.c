@@ -405,7 +405,7 @@ int main(int argc, char *argv[])
 				
 			default:
 				// Handle Control+<key> shortcuts
-				if (Modifier_Keys_State & (KEYBOARD_MODIFIER_KEY_BIT_MASK_LEFT_CONTROL | KEYBOARD_MODIFIER_KEY_BIT_MASK_RIGHT_CONTROL))
+				if (Modifier_Keys_State & (SYSTEM_KEYBOARD_MODIFIER_KEY_BIT_MASK_LEFT_CONTROL | SYSTEM_KEYBOARD_MODIFIER_KEY_BIT_MASK_RIGHT_CONTROL))
 				{
 					switch (Character)
 					{
