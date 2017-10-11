@@ -116,7 +116,7 @@ void Submarine(void)
 		Submarine_Screen_Buffer[Player_Row][SUBMARINE_PLAYER_COLUMN].Color = SUBMARINE_SEA_COLOR;
 		
 		// Handle player keys
-		if (KeyboardIsKeyAvailable())
+		if (SystemKeyboardIsKeyAvailable())
 		{
 			switch (KeyboardReadCharacter())
 			{

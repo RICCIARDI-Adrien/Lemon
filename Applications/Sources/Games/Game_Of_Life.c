@@ -169,7 +169,7 @@ void GameOfLife(void)
 		DisplayWorld();
 
 		// Did the user hit a key
-		if (KeyboardIsKeyAvailable())
+		if (SystemKeyboardIsKeyAvailable())
 		{
 			switch (KeyboardReadCharacter())
 			{

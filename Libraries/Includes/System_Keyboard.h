@@ -89,7 +89,7 @@
  * @return 0 (false) if no key was pressed or 1 (true) if the user pressed a key.
  * @note This function is non blocking.
  */
-int KeyboardIsKeyAvailable(void);
+int SystemKeyboardIsKeyAvailable(void);
 
 /** Read a character from the keyboard.
  * @return The character code.

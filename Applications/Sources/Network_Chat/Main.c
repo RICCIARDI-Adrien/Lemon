@@ -135,7 +135,7 @@ int main(int argc, char *argv[])
 		}
 		
 		// Is a key pressed ?
-		if (KeyboardIsKeyAvailable())
+		if (SystemKeyboardIsKeyAvailable())
 		{
 			switch (MainReadUserMessage())
 			{
