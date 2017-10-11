@@ -9,11 +9,11 @@
 // Constants
 //-------------------------------------------------------------------------------------------------
 /** Disable parity when initializing UART. */
-#define UART_DISABLE_PARITY 0x00
+#define SYSTEM_UART_PARITY_NONE 0x00
 /** Set odd parity (parity must be enabled to use this flag). */
-#define UART_ODD_PARITY 0x08
+#define SYSTEM_UART_PARITY_ODD 0x08
 /** Set even parity (parity must be enabled to use this flag). */
-#define UART_EVEN_PARITY 0x18
+#define SYSTEM_UART_PARITY_EVEN 0x18
 
 /** Baud rate at 1200 bit/s. */
 #define UART_BAUD_RATE_1200 96
@@ -38,7 +38,7 @@
 // Functions
 //-------------------------------------------------------------------------------------------------
 /** Initialize the UART with the specified frame format and baud rate.
- * @param Frame_Format The format of the RS-232 frame. Use a OR combination of UART_DISABLE_PARITY, UART_EVEN_PARITY and UART_ODD_PARITY to configure serial port.
+ * @param Frame_Format The format of the RS-232 frame. Use a constant from SYSTEM_UART_PARITY_NONE, SYSTEM_UART_PARITY_EVEN or SYSTEM_UART_PARITY_ODD to configure serial port.
  * @param Data_Rate_Bauds The data rate from a UART_BAUD_RATE_XX constant.
  * @return ERROR_CODE_NO_ERROR if the UART was correctly initialized,
  * @return ERROR_CODE_BAD_UART_PARAMETERS if the provided parameters did not come from UART_XXX contants.
