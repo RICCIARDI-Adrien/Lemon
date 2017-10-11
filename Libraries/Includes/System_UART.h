@@ -1,9 +1,9 @@
-/** @file UART.h
+/** @file System_UART.h
  * Read from and write to the PC serial port.
  * @author Adrien RICCIARDI
  */
-#ifndef H_UART_H
-#define H_UART_H
+#ifndef H_SYSTEM_UART_H
+#define H_SYSTEM_UART_H
 
 //-------------------------------------------------------------------------------------------------
 // Constants

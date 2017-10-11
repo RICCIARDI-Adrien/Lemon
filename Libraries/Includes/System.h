@@ -17,7 +17,7 @@
 #include <System_Calls.h> // System calls codes imported directly from the system
 #include <System_File.h>
 #include <System_Keyboard.h>
-#include <UART.h>
+#include <System_UART.h>
 
 //-------------------------------------------------------------------------------------------------
 // Constants and macros
