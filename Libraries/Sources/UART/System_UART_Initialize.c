@@ -1,4 +1,4 @@
-/** @file UART_Initialize.c
+/** @file System_UART_Initialize.c
  * @author Adrien RICCIARDI
  */
 #include <System.h>
@@ -6,7 +6,7 @@
 //-------------------------------------------------------------------------------------------------
 // Public functions
 //-------------------------------------------------------------------------------------------------
-int UARTInitialize(unsigned char Frame_Format, unsigned short Data_Rate_Bauds)
+int SystemUARTInitialize(unsigned char Frame_Format, unsigned short Data_Rate_Bauds)
 {
 	return SystemCall(SYSTEM_CALL_UART_INITIALIZE, Frame_Format, Data_Rate_Bauds, NULL, NULL);
 }
