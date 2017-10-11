@@ -1,9 +1,9 @@
-/** @file Keyboard.h
+/** @file System_Keyboard.h
  * Get and format data from the keyboard.
  * @author Adrien RICCIARDI
  */
-#ifndef H_KEYBOARD_H
-#define H_KEYBOARD_H
+#ifndef H_SYSTEM_KEYBOARD_H
+#define H_SYSTEM_KEYBOARD_H
 
 //-------------------------------------------------------------------------------------------------
 // Constants
