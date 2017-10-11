@@ -54,7 +54,7 @@ unsigned char SystemUARTReadByte(void);
 /** Send a byte via serial port.
  * @param Byte The byte to send.
  */
-void UARTWriteByte(unsigned char Byte);
+void SystemUARTWriteByte(unsigned char Byte);
 
 /** Tell if data was received by the UART.
  * @return 1 if there is data to read, or 0 if no data was received.
