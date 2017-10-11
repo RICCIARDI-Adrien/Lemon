@@ -120,14 +120,14 @@ void Submarine(void)
 		{
 			switch (SystemKeyboardReadCharacter())
 			{
-				case KEYBOARD_KEY_CODE_ESCAPE:
+				case SYSTEM_KEYBOARD_KEY_CODE_ESCAPE:
 					return;
 					
-				case KEYBOARD_KEY_CODE_ARROW_UP:
+				case SYSTEM_KEYBOARD_KEY_CODE_ARROW_UP:
 					if (Player_Row > 0) Player_Row--;
 					break;
 					
-				case KEYBOARD_KEY_CODE_ARROW_DOWN:
+				case SYSTEM_KEYBOARD_KEY_CODE_ARROW_DOWN:
 					if (Player_Row < SCREEN_ROWS_COUNT - 1) Player_Row++;
 					break;
 			}
@@ -173,7 +173,7 @@ void Submarine(void)
 			ScreenSetBackgroundColor(SCREEN_COLOR_WHITE); // Restore the default background color
 			
 			// Wait for the player to hit "escape" key
-			while (SystemKeyboardReadCharacter() != KEYBOARD_KEY_CODE_ESCAPE);
+			while (SystemKeyboardReadCharacter() != SYSTEM_KEYBOARD_KEY_CODE_ESCAPE);
 			return;
 		}
 		

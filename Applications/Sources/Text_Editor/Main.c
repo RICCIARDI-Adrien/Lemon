@@ -50,7 +50,7 @@ static void MainDisplayMessage(char *String_Message_Title, char *String_Message_
 static inline void __attribute__((always_inline)) MainWaitForEnterKey(void)
 {
 	// Wait for the Enter key to be pressed
-	while (SystemKeyboardReadCharacter() != KEYBOARD_KEY_CODE_ENTER);
+	while (SystemKeyboardReadCharacter() != SYSTEM_KEYBOARD_KEY_CODE_ENTER);
 }
 
 /** Load a file to the internal buffer.
@@ -317,7 +317,7 @@ int main(int argc, char *argv[])
 		switch (Character)
 		{
 			// Exit program
-			case KEYBOARD_KEY_CODE_ESCAPE:
+			case SYSTEM_KEYBOARD_KEY_CODE_ESCAPE:
 				// Ask the whether to save the document if the buffer has been modified without being saved
 				if (Is_Text_Modified)
 				{
@@ -327,19 +327,19 @@ int main(int argc, char *argv[])
 					do
 					{
 						Character = SystemKeyboardReadCharacter();
-					} while ((Character != KEYBOARD_KEY_CODE_ENTER) && (Character != KEYBOARD_KEY_CODE_ESCAPE));
+					} while ((Character != SYSTEM_KEYBOARD_KEY_CODE_ENTER) && (Character != SYSTEM_KEYBOARD_KEY_CODE_ESCAPE));
 					
 					// Save the file if requested to
-					if (Character == KEYBOARD_KEY_CODE_ENTER) MainSaveFile(String_File_Name);
+					if (Character == SYSTEM_KEYBOARD_KEY_CODE_ENTER) MainSaveFile(String_File_Name);
 				}
 				MainExitProgram();
 				break; // To make the compiler happy
 				
-			case KEYBOARD_KEY_CODE_ARROW_UP:
+			case SYSTEM_KEYBOARD_KEY_CODE_ARROW_UP:
 				if (CursorMoveToUp()) BufferDisplayPage(CursorGetBufferRow());
 				break;
 				
-			case KEYBOARD_KEY_CODE_ARROW_DOWN:
+			case SYSTEM_KEYBOARD_KEY_CODE_ARROW_DOWN:
 				if (CursorMoveToDown())
 				{
 					Temp = CursorGetBufferRow();
@@ -349,11 +349,11 @@ int main(int argc, char *argv[])
 				}
 				break;
 				
-			case KEYBOARD_KEY_CODE_ARROW_LEFT:
+			case SYSTEM_KEYBOARD_KEY_CODE_ARROW_LEFT:
 				if (CursorMoveToLeft()) BufferDisplayPage(CursorGetBufferRow());
 				break;
 				
-			case KEYBOARD_KEY_CODE_ARROW_RIGHT:
+			case SYSTEM_KEYBOARD_KEY_CODE_ARROW_RIGHT:
 				if (CursorMoveToRight())
 				{
 					Temp = CursorGetBufferRow();
@@ -363,11 +363,11 @@ int main(int argc, char *argv[])
 				}
 				break;
 				
-			case KEYBOARD_KEY_CODE_ORIGIN:
+			case SYSTEM_KEYBOARD_KEY_CODE_ORIGIN:
 				CursorGoToLineBeginning();
 				break;
 				
-			case KEYBOARD_KEY_CODE_END:
+			case SYSTEM_KEYBOARD_KEY_CODE_END:
 				CursorGoToLineEnd();
 				break;
 				
@@ -375,13 +375,13 @@ int main(int argc, char *argv[])
 			// TODO : page down
 			// TODO : insert
 				
-			case KEYBOARD_KEY_CODE_BACKSPACE:
-			case KEYBOARD_KEY_CODE_DELETE:
+			case SYSTEM_KEYBOARD_KEY_CODE_BACKSPACE:
+			case SYSTEM_KEYBOARD_KEY_CODE_DELETE:
 				if (Buffer_Characters_Count == 0) break; // Nothing to delete if the buffer is empty
 				
 				// Choose the character to remove according to the pressed key (delete removes the current character whereas backspace removes the previous character)
 				Temp = CursorGetBufferCharacterIndex();
-				if (Character == KEYBOARD_KEY_CODE_BACKSPACE)
+				if (Character == SYSTEM_KEYBOARD_KEY_CODE_BACKSPACE)
 				{
 					Temp--; // Remove the previous character
 					CursorMoveToLeft(); // Update the cursor location before changing the buffer content to avoid the cursor going to the end of the newly created upper line (which can be longer than the previous line was)
@@ -399,7 +399,7 @@ int main(int argc, char *argv[])
 				Is_Text_Modified = 1;
 				break;
 				
-			case KEYBOARD_KEY_CODE_F1:
+			case SYSTEM_KEYBOARD_KEY_CODE_F1:
 				MainDisplayTextInformation();
 				break;
 				
@@ -432,7 +432,7 @@ int main(int argc, char *argv[])
 				else
 				{
 					// Discard function keys
-					if ((Character >= KEYBOARD_KEY_CODE_F1) && (Character <= KEYBOARD_KEY_CODE_F11)) break;
+					if ((Character >= SYSTEM_KEYBOARD_KEY_CODE_F1) && (Character <= SYSTEM_KEYBOARD_KEY_CODE_F11)) break;
 					
 					// Append the character
 					if (BufferAppendCharacter(CursorGetBufferCharacterIndex(), (char) Character) != 0) break; // Nothing to do if the character could not be added (TODO : error message if the buffer is full)

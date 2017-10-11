@@ -86,7 +86,7 @@ static char ReadLetter(void)
 		if ((Letter >= 'a') && (Letter <= 'z')) Letter -= 32;
 		
 		// Is the character really a letter (or Escape) ?
-		if (((Letter >= 'A') && (Letter <= 'Z')) || (Letter == KEYBOARD_KEY_CODE_ESCAPE)) return Letter;
+		if (((Letter >= 'A') && (Letter <= 'Z')) || (Letter == SYSTEM_KEYBOARD_KEY_CODE_ESCAPE)) return Letter;
 	}
 }
 
@@ -161,7 +161,7 @@ static int Play(char *String_Word_To_Find, int Attempts_Count)
 	{
 		// Get the next letter
 		Letter = ReadLetter();
-		if (Letter == KEYBOARD_KEY_CODE_ESCAPE) return 2;
+		if (Letter == SYSTEM_KEYBOARD_KEY_CODE_ESCAPE) return 2;
 		
 		// Is this letter present in the word ?
 		if (IsLetterPresentInWord(Letter, String_Word_To_Find))
@@ -244,7 +244,7 @@ void Hangman(void)
 			ScreenSetFontColor(SCREEN_COLOR_BLUE);
 			ScreenWriteString(STRING_HANGMAN_GAME_WON_2);
 			
-			while (SystemKeyboardReadCharacter() != KEYBOARD_KEY_CODE_ENTER);
+			while (SystemKeyboardReadCharacter() != SYSTEM_KEYBOARD_KEY_CODE_ENTER);
 			ScreenClear();
 			return;
 		}
@@ -259,7 +259,7 @@ void Hangman(void)
 				ScreenWriteString(STRING_HANGMAN_WORD_FOUND_1);
 				ScreenSetFontColor(SCREEN_COLOR_BLUE);
 				ScreenWriteString(STRING_HANGMAN_WORD_FOUND_2);
-				while (SystemKeyboardReadCharacter() != KEYBOARD_KEY_CODE_ENTER);
+				while (SystemKeyboardReadCharacter() != SYSTEM_KEYBOARD_KEY_CODE_ENTER);
 				break;
 			
 			case 1:
@@ -271,7 +271,7 @@ void Hangman(void)
 				ScreenWriteString(STRING_HANGMAN_WORD_NOT_FOUND_2);
 				ScreenWriteString(String_Current_Word);
 				ScreenWriteString(STRING_HANGMAN_WORD_NOT_FOUND_3);
-				while (SystemKeyboardReadCharacter() != KEYBOARD_KEY_CODE_ENTER);
+				while (SystemKeyboardReadCharacter() != SYSTEM_KEYBOARD_KEY_CODE_ENTER);
 				return;
 			
 			default:

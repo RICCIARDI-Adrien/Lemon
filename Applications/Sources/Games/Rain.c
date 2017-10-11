@@ -50,14 +50,14 @@ static int Wait(unsigned int Period_Counts)
 	// Check only the keyboard if there is no need to wait
 	if (Period_Counts == 0)
 	{
-		if (SystemKeyboardIsKeyAvailable() && (SystemKeyboardReadCharacter() == KEYBOARD_KEY_CODE_ESCAPE)) return 1;
+		if (SystemKeyboardIsKeyAvailable() && (SystemKeyboardReadCharacter() == SYSTEM_KEYBOARD_KEY_CODE_ESCAPE)) return 1;
 	}
 	// Or wait the required time
 	else
 	{
 		while (Period_Counts > 0)
 		{
-			if (SystemKeyboardIsKeyAvailable() && (SystemKeyboardReadCharacter() == KEYBOARD_KEY_CODE_ESCAPE)) return 1;
+			if (SystemKeyboardIsKeyAvailable() && (SystemKeyboardReadCharacter() == SYSTEM_KEYBOARD_KEY_CODE_ESCAPE)) return 1;
 		
 			SystemWait(50);
 			Period_Counts--;

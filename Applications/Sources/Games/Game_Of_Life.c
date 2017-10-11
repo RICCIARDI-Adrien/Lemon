@@ -174,7 +174,7 @@ void GameOfLife(void)
 			switch (SystemKeyboardReadCharacter())
 			{
 				// Exit program
-				case KEYBOARD_KEY_CODE_ESCAPE:
+				case SYSTEM_KEYBOARD_KEY_CODE_ESCAPE:
 					return;
 					
 				// Display the world faster

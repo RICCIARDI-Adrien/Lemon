@@ -144,7 +144,7 @@ static int ReadUserNumber(void)
 		}
 		
 		// Escape key, return exit code
-		else if (Character == KEYBOARD_KEY_CODE_ESCAPE) return BRAIN_CALCULATION_EXIT_CODE;
+		else if (Character == SYSTEM_KEYBOARD_KEY_CODE_ESCAPE) return BRAIN_CALCULATION_EXIT_CODE;
 		
 		// Other characters, accept only digits if there is enough space in string
 		else if ((Character >= '0') && (Character <= '9') && (Digits_Count < sizeof(String) - 1))

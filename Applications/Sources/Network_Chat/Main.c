@@ -33,15 +33,15 @@ static int MainReadUserMessage(void)
 	switch (Key)
 	{
 		// Exit program
-		case KEYBOARD_KEY_CODE_ESCAPE:
+		case SYSTEM_KEYBOARD_KEY_CODE_ESCAPE:
 			return 3;
 			
-		case KEYBOARD_KEY_CODE_ENTER:
+		case SYSTEM_KEYBOARD_KEY_CODE_ENTER:
 			if (Main_User_Message_Length == 0) return 0; // The message must be almost one-character long to be displayed
 			return 2;
 			
 		// Remove the last typed character
-		case KEYBOARD_KEY_CODE_BACKSPACE:
+		case SYSTEM_KEYBOARD_KEY_CODE_BACKSPACE:
 			if (Main_User_Message_Length == 0) return 0; // Nothing to delete if the message is empty
 			Main_User_Message_Length--;
 			String_Main_User_Message[Main_User_Message_Length] = 0;

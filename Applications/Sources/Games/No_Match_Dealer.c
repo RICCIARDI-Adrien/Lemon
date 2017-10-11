@@ -70,7 +70,7 @@ void NoMatchDealer(void)
 		do
 		{
 			Character = SystemKeyboardReadCharacter();
-		} while ((Character != '\n') && (Character != KEYBOARD_KEY_CODE_ESCAPE));
-		if (Character == KEYBOARD_KEY_CODE_ESCAPE) return;
+		} while ((Character != '\n') && (Character != SYSTEM_KEYBOARD_KEY_CODE_ESCAPE));
+		if (Character == SYSTEM_KEYBOARD_KEY_CODE_ESCAPE) return;
 	}
 }
