@@ -1,4 +1,4 @@
-/** @file String_Concatenate_Up_To_Number.c
+/** @file System_String_Concatenate_Up_To_Number.c
  * @author Adrien RICCIARDI
  */
 #include <System.h>
@@ -6,7 +6,7 @@
 //-------------------------------------------------------------------------------------------------
 // Public functions
 //-------------------------------------------------------------------------------------------------
-void StringConcatenateUpToNumber(char *String_Destination, char *String_To_Append, unsigned int Characters_Count)
+void SystemStringConcatenateUpToNumber(char *String_Destination, char *String_To_Append, unsigned int Characters_Count)
 {
 	int i, j;
 	

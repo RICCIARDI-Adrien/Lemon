@@ -55,7 +55,7 @@ int TestsStringConcatenateUpToNumber(void)
 	int i;
 	
 	// First test
-	StringConcatenateUpToNumber(String_Destination, String_To_Concatenate, 40);
+	SystemStringConcatenateUpToNumber(String_Destination, String_To_Concatenate, 40);
 	// Check the string
 	for (i = 0; String_First_Test_Result[i] != 0; i++)
 	{
@@ -67,7 +67,7 @@ int TestsStringConcatenateUpToNumber(void)
 	}
 	
 	// Second test
-	StringConcatenateUpToNumber(String_Destination, String_To_Concatenate, 3);
+	SystemStringConcatenateUpToNumber(String_Destination, String_To_Concatenate, 3);
 	// Check the string
 	for (i = 0; String_Second_Test_Result[i] != 0; i++)
 	{

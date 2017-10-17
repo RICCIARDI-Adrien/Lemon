@@ -63,7 +63,7 @@ void SystemStringConcatenate(char *String_Destination, char *String_To_Append);
  * @param String_To_Append The string to append to the other string.
  * @param Characters_Count The maximum amount of characters to concatenate.
  */
-void StringConcatenateUpToNumber(char *String_Destination, char *String_To_Append, unsigned int Characters_Count);
+void SystemStringConcatenateUpToNumber(char *String_Destination, char *String_To_Append, unsigned int Characters_Count);
 
 /** Tell if the character is a lowercase or an uppercase letter.
  * @param Character The character to test.
