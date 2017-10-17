@@ -1,9 +1,9 @@
-/** @file Random.h
+/** @file System_Random.h
  * Generate pseudo-random numbers.
  * @author Adrien RICCIARDI
  */
-#ifndef H_RANDOM_H
-#define H_RANDOM_H
+#ifndef H_SYSTEM_RANDOM_H
+#define H_SYSTEM_RANDOM_H
 
 //-------------------------------------------------------------------------------------------------
 // Functions

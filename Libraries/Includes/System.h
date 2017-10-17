@@ -10,13 +10,13 @@
 #include <Math.h>
 #include <Menu.h>
 #include <Network.h>
-#include <Random.h>
 #include <Screen.h>
 #include <String.h>
 #include <System_Calls.h> // System calls codes imported directly from the system
 #include <System_File.h>
 #include <System_Keyboard.h>
 #include <System_Memory.h>
+#include <System_Random.h>
 #include <System_UART.h>
 
 //-------------------------------------------------------------------------------------------------
