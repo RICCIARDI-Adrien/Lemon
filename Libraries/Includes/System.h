@@ -8,7 +8,6 @@
 // Gather all the includes the system provides, so there is no need to include them in a program
 #include <Error_Codes.h> // Error codes imported directly from the system
 #include <Math.h>
-#include <Memory.h>
 #include <Menu.h>
 #include <Network.h>
 #include <Random.h>
@@ -17,6 +16,7 @@
 #include <System_Calls.h> // System calls codes imported directly from the system
 #include <System_File.h>
 #include <System_Keyboard.h>
+#include <System_Memory.h>
 #include <System_UART.h>
 
 //-------------------------------------------------------------------------------------------------

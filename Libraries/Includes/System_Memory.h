@@ -1,9 +1,9 @@
-/** @file Memory.h
+/** @file System_Memory.h
  * Various memory manipulation functions.
  * @author Adrien RICCIARDI
  */
-#ifndef H_MEMORY_H
-#define H_MEMORY_H
+#ifndef H_SYSTEM_MEMORY_H
+#define H_SYSTEM_MEMORY_H
 
 //-------------------------------------------------------------------------------------------------
 // Functions
