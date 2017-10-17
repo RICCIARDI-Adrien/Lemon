@@ -24,7 +24,7 @@ int NetworkIPConvertFromString(char *String_IP_Address, unsigned int *Pointer_IP
 			// The string is terminated
 			if (Character == 0) break;
 			// The character is a digit
-			else if (StringIsCharacterADigit(Character))
+			else if (SystemStringIsCharacterADigit(Character))
 			{
 				// Append the digit
 				String_Byte[Byte_String_Offset] = Character;

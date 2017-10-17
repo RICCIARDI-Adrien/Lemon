@@ -77,6 +77,6 @@ int SystemStringIsCharacterALetter(char Character);
  * @return 0 if the character is not a digit,
  * @return 1 if the character is a digit.
  */
-int StringIsCharacterADigit(char Character);
+int SystemStringIsCharacterADigit(char Character);
 
 #endif

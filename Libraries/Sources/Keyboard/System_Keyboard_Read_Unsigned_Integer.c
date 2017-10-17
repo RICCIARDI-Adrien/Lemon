@@ -41,7 +41,7 @@ unsigned int SystemKeyboardReadUnsignedInteger(void)
 			SystemCall(SYSTEM_CALL_SCREEN_WRITE_CHARACTER, '\n', 0, NULL, NULL);
 			break;
 		}
-		else if (!StringIsCharacterADigit(Character)) continue; // Allow only digits
+		else if (!SystemStringIsCharacterADigit(Character)) continue; // Allow only digits
 		
 		// Append the character to the string only if there is enough room to
 		if (i < SYSTEM_KEYBOARD_READ_UNSIGNED_INTEGER_MAXIMUM_CHARACTERS_COUNT)
