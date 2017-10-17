@@ -11,7 +11,7 @@ int NetworkInitializeSocket(TNetworkIPAddress *Pointer_Destination_IP_Address, u
 {
 	TNetworkIPAddress *Pointer_ARP_Resolution_IP_Address;
 	
-	RandomInitialize();
+	SystemRandomInitialize();
 	
 	// Set the destination IP address
 	Pointer_Socket->Destination_IP_Address = Pointer_Destination_IP_Address->Address;

@@ -97,7 +97,7 @@ void Rain(void)
 			return;
 	}
 	
-	RandomInitialize();
+	SystemRandomInitialize();
 	
 	while (1)
 	{

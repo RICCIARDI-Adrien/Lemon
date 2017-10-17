@@ -101,7 +101,7 @@ void Submarine(void)
 	unsigned int Start_Time, End_Time, Time_To_Wait, Score = 0;
 	char String_Score[64], String_Converted_Score_Value[16];
 	
-	RandomInitialize();
+	SystemRandomInitialize();
 	
 	// Reset the scene and the obstacles
 	ScreenClearBuffer(Submarine_Screen_Buffer, SUBMARINE_SEA_COLOR);

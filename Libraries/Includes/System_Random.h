@@ -9,7 +9,7 @@
 // Functions
 //-------------------------------------------------------------------------------------------------
 /** Initialize the random generator with the current timer value. */
-void RandomInitialize(void);
+void SystemRandomInitialize(void);
 
 /** Generate a pseudo-random number.
  * @return A pseudo-random number.

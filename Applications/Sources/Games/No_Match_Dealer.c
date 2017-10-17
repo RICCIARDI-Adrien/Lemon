@@ -26,7 +26,7 @@ void NoMatchDealer(void)
 	while (1)
 	{
 		// Generate numbers
-		RandomInitialize();
+		SystemRandomInitialize();
 		for (i = 0; i < NUMBERS_COUNT; i++) Numbers[i] = RandomGenerateNumber() % 100;
 
 		// Show numbers on 2 rows

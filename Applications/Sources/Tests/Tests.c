@@ -104,7 +104,7 @@ int main(void)
 {
 	unsigned int i;
 	
-	RandomInitialize();
+	SystemRandomInitialize();
 	
 	ScreenWriteString("### Automated tests ###\n\n");
 	

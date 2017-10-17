@@ -159,7 +159,7 @@ void GameOfLife(void)
 {
 	int Wait_Time = 2; // 100 ms
 
-	RandomInitialize();
+	SystemRandomInitialize();
 	CreateNewWorld();
 	DisplayWorld();
 

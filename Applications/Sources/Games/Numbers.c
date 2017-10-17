@@ -74,7 +74,7 @@ void Numbers(void)
 	int Computer_Number, Player_Number, Attempts = 0;
 	
 	// Choose number
-	RandomInitialize();
+	SystemRandomInitialize();
 	Computer_Number = RandomGenerateNumber() % MAXIMUM_NUMBER_VALUE + 1;
 	
 	// Show instructions

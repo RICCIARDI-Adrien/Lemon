@@ -182,7 +182,7 @@ void BrainCalculation(void)
 				return;
 		}
 		
-		RandomInitialize();
+		SystemRandomInitialize();
 		
 		// Show instructions
 		ScreenWriteString(STRING_BRAIN_CALCULATION_INSTRUCTIONS);

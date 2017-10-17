@@ -214,7 +214,7 @@ void Hangman(void)
 {	
 	char *String_Current_Word;
 	
-	RandomInitialize();
+	SystemRandomInitialize();
 	
 	// Reset the array
 	SystemMemorySetAreaValue(Is_Word_Solved, sizeof(Is_Word_Solved), 0);
