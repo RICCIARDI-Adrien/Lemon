@@ -12,7 +12,7 @@
  * @return 1 if the strings are the same,
  * @return 0 if the strings are different.
  */
-int StringCompare(char *String_1, char *String_2);
+int SystemStringCompare(char *String_1, char *String_2);
 
 /** Copy a string into another string.
  * @param String_Source The string to copy.

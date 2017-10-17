@@ -1,4 +1,4 @@
-/** @file String_Compare.c
+/** @file System_String_Compare.c
  * @author Adrien RICCIARDI
  */
 #include <System.h>
@@ -6,7 +6,7 @@
 //-------------------------------------------------------------------------------------------------
 // Public functions
 //-------------------------------------------------------------------------------------------------
-int StringCompare(char *String_1, char *String_2)
+int SystemStringCompare(char *String_1, char *String_2)
 {
 	while (*String_1 != 0)
 	{

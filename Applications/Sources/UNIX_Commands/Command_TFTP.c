@@ -261,8 +261,8 @@ int CommandMainTFTP(int argc, char __attribute__((unused)) *argv[])
 	
 	// Get parameters
 	// Command
-	if (StringCompare(argv[1], "get") == 1) Is_Get_Command = 1;
-	else if (StringCompare(argv[1], "put") == 1) Is_Get_Command = 0;
+	if (SystemStringCompare(argv[1], "get") == 1) Is_Get_Command = 1;
+	else if (SystemStringCompare(argv[1], "put") == 1) Is_Get_Command = 0;
 	else
 	{
 		ScreenWriteString(STRING_COMMAND_TFTP_INVALID_COMMAND);

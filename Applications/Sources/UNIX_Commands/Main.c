@@ -100,7 +100,7 @@ int main(int argc, char *argv[])
 	// Search for the requested command
 	for (i = 0; Commands[i].String_Command_Name != NULL; i++)
 	{
-		if (StringCompare(Commands[i].String_Command_Name, String_Requested_Command))
+		if (SystemStringCompare(Commands[i].String_Command_Name, String_Requested_Command))
 		{
 			// Remove the UNIX program name from the parameters when calling the command
 			Commands[i].CommandMain(argc - 1, &argv[1]);

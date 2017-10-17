@@ -88,7 +88,7 @@ int CommandMainMore(int argc, char *argv[])
 	}
 	
 	// Display the help if requested
-	if (StringCompare(argv[1], "-h"))
+	if (SystemStringCompare(argv[1], "-h"))
 	{
 		ScreenWriteString(STRING_COMMAND_MORE_USAGE);
 		Return_Value = 0;

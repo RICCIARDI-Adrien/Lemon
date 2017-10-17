@@ -64,8 +64,8 @@ static TTest Tests[] =
 	},
 	// String API tests
 	{
-		"StringCompare()",
-		TestsStringCompare
+		"SystemStringCompare()",
+		TestsSystemStringCompare
 	},
 	{
 		"StringConcatenate()",

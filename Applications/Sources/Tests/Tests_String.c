@@ -9,19 +9,19 @@
 //-------------------------------------------------------------------------------------------------
 // Public functions
 //-------------------------------------------------------------------------------------------------
-int TestsStringCompare(void)
+int TestsSystemStringCompare(void)
 {
 	char *String_1 = "abcdefgh", *String_2 = "abcd", *String_3 = "abcdefgh";
 	
 	// Testing with two different strings
-	if (StringCompare(String_2, String_1))
+	if (SystemStringCompare(String_2, String_1))
 	{
 		DisplayMessageError("two different strings are considered equal.");
 		return 1;
 	}
 	
 	// Testing with two equal strings
-	if (!StringCompare(String_1, String_3))
+	if (!SystemStringCompare(String_1, String_3))
 	{
 		DisplayMessageError("two equal strings are considered different.");
 		return 1;
@@ -114,7 +114,7 @@ int TestsStringConvertUnsignedIntegerToString(void)
 		ScreenWriteString("...\n");
 		
 		StringConvertUnsignedIntegerToString(Numbers[i], String_Result);
-		if (!StringCompare(String_Result, String_Results[i]))
+		if (!SystemStringCompare(String_Result, String_Results[i]))
 		{
 			DisplayMessageError("failed number to string conversion.");
 			return 1;
@@ -136,7 +136,7 @@ int TestsStringConvertIntegerToHexadecimal(void)
 		ScreenWriteString("...\n");
 		
 		StringConvertIntegerToHexadecimal((int) Numbers[i], String_Result);
-		if (!StringCompare(String_Result, String_Results[i]))
+		if (!SystemStringCompare(String_Result, String_Results[i]))
 		{
 			DisplayMessageError("failed to convert number to hexadecimal string.");
 			return 1;

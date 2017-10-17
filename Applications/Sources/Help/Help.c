@@ -173,7 +173,7 @@ int main(int argc, char *argv[])
 	for (i = 0; Commands[i].String_Name != NULL; i++)
 	{
 		// Display the command help if the command exists
-		if (StringCompare(String_Requested_Command, Commands[i].String_Name))
+		if (SystemStringCompare(String_Requested_Command, Commands[i].String_Name))
 		{
 			DisplayTitle(String_Requested_Command);
 			ScreenWriteString(Commands[i].String_Full_Description);

@@ -99,11 +99,11 @@ int TestsMemorySetSmallAreaValue(void);
 int TestsMemorySetBigAreaValue(void);
 
 // String API
-/** Test the StringCompare() function.
+/** Test the SystemStringCompare() function.
  * @return 0 if all tests were successful,
  * @return 1 if a test failed.
  */
-int TestsStringCompare(void);
+int TestsSystemStringCompare(void);
 
 /** Test the StringConcatenate() function.
  * @return 0 if all tests were successful,
