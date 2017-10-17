@@ -1,9 +1,9 @@
-/** @file String.h
+/** @file System_String.h
  * Contain string manipulation functions.
  * @author Adrien RICCIARDI
  */
-#ifndef H_STRING_H
-#define H_STRING_H
+#ifndef H_SYSTEM_STRING_H
+#define H_SYSTEM_STRING_H
 
 //-------------------------------------------------------------------------------------------------
 // Functions
