@@ -140,8 +140,8 @@ static void DisplayTitle(char *String_Title)
 	
 	// Embellish the title
 	SystemStringCopy("--- ", String_Embellished_Title);
-	StringConcatenate(String_Embellished_Title, String_Title);
-	StringConcatenate(String_Embellished_Title, " ---\n\n");
+	SystemStringConcatenate(String_Embellished_Title, String_Title);
+	SystemStringConcatenate(String_Embellished_Title, " ---\n\n");
 	
 	// Display it
 	ScreenSetFontColor(SCREEN_COLOR_GREEN);

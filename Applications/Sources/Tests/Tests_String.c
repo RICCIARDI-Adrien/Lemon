@@ -35,7 +35,7 @@ int TestsStringConcatenate(void)
 	char String_Destination[30] = "This is ", *String_To_Concatenate = "a test", *String_Full = "This is a test";
 	int i;
 	
-	StringConcatenate(String_Destination, String_To_Concatenate);
+	SystemStringConcatenate(String_Destination, String_To_Concatenate);
 	
 	// Check the full string
 	for (i = 0; String_Full[i] != 0; i++)

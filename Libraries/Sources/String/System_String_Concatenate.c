@@ -1,4 +1,4 @@
-/** @file String_Concatenate.c
+/** @file System_String_Concatenate.c
  * @author Adrien RICCIARDI
  */
 #include <System.h>
@@ -6,7 +6,7 @@
 //-------------------------------------------------------------------------------------------------
 // Public functions
 //-------------------------------------------------------------------------------------------------
-void StringConcatenate(char *String_Destination, char *String_To_Append)
+void SystemStringConcatenate(char *String_Destination, char *String_To_Append)
 {
 	int i, j;
 	

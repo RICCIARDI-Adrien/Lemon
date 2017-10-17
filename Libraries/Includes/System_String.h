@@ -56,7 +56,7 @@ unsigned int SystemStringGetSize(char *String);
  * @param String_Destination The string to concatenate to.
  * @param String_To_Append The string to append to the other string.
  */
-void StringConcatenate(char *String_Destination, char *String_To_Append);
+void SystemStringConcatenate(char *String_Destination, char *String_To_Append);
 
 /** Concatenate up to a specified number of a string's characters at the end of another string.
  * @param String_Destination The string to concatenate to.
