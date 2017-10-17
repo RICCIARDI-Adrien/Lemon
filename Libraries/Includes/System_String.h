@@ -70,7 +70,7 @@ void SystemStringConcatenateUpToNumber(char *String_Destination, char *String_To
  * @return 0 if the character is not a letter,
  * @return 1 if the character is a letter.
  */
-int StringIsCharacterALetter(char Character);
+int SystemStringIsCharacterALetter(char Character);
 
 /** Tell if the character is a digit or not.
  * @param Character The character to test.
