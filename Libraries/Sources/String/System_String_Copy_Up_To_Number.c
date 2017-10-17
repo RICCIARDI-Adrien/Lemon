@@ -1,4 +1,4 @@
-/** @file String_Copy_Up_To_Number.c
+/** @file System_String_Copy_Up_To_Number.c
  * @author Adrien RICCIARDI
  */
 #include <System.h>
@@ -6,7 +6,7 @@
 //-------------------------------------------------------------------------------------------------
 // Public functions
 //-------------------------------------------------------------------------------------------------
-void StringCopyUpToNumber(char *String_Source, char *String_Destination, unsigned int Bytes_Count)
+void SystemStringCopyUpToNumber(char *String_Source, char *String_Destination, unsigned int Bytes_Count)
 {
 	while ((*String_Source != 0) && (Bytes_Count > 0))
 	{

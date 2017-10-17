@@ -25,7 +25,7 @@ void SystemStringCopy(char *String_Source, char *String_Destination);
  * @param String_Destination The destination string.
  * @param Bytes_Count Copy up to this amount of bytes if the source string is too large.
  */
-void StringCopyUpToNumber(char *String_Source, char *String_Destination, unsigned int Bytes_Count);
+void SystemStringCopyUpToNumber(char *String_Source, char *String_Destination, unsigned int Bytes_Count);
 
 /** Convert a string representation of a base 10 number to an unsigned integer.
  * @param String The string to convert (can contain only digits).
