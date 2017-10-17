@@ -168,7 +168,7 @@ int TestsFileMaximumOpenedFiles(void)
 	for (i = 0; i < SYSTEM_FILE_MAXIMUM_OPENED_COUNT; i++)
 	{
 		// Create the file name
-		StringConvertUnsignedIntegerToString(i, String_Number);
+		SystemStringConvertUnsignedIntegerToString(i, String_Number);
 		SystemStringCopy("_test_", String_File_Name);
 		StringConcatenate(String_File_Name, String_Number);
 		
@@ -196,7 +196,7 @@ int TestsFileMaximumOpenedFiles(void)
 		SystemFileClose(File_IDs[i]);
 		
 		// Create the file name
-		StringConvertUnsignedIntegerToString(i, String_Number);
+		SystemStringConvertUnsignedIntegerToString(i, String_Number);
 		SystemStringCopy("_test_", String_File_Name);
 		StringConcatenate(String_File_Name, String_Number);
 		
@@ -276,7 +276,7 @@ int TestsFileFillFilesList(void)
 	for (i = 0; i <= Free_Files_Count; i++)
 	{
 		// Create the file name
-		StringConvertUnsignedIntegerToString(i, String_Number);
+		SystemStringConvertUnsignedIntegerToString(i, String_Number);
 		SystemStringCopy("_test_", String_File_Name);
 		StringConcatenate(String_File_Name, String_Number);
 		
@@ -303,7 +303,7 @@ int TestsFileFillFilesList(void)
 	for (i = 0; i < Free_Files_Count; i++)
 	{
 		// Create the file name
-		StringConvertUnsignedIntegerToString(i, String_Number);
+		SystemStringConvertUnsignedIntegerToString(i, String_Number);
 		SystemStringCopy("_test_", String_File_Name);
 		StringConcatenate(String_File_Name, String_Number);
 		

@@ -55,3 +55,4 @@ Applications
 
 - remplacer les FileOpen 'r' ou 'w' par constantes dans tests
 - remplacer les touches '\n' par les constantes clavier adéquates
+- dans Tests enlever les System rajoutés par le renommage des Libraries

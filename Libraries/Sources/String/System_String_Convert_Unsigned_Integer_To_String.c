@@ -1,4 +1,4 @@
-/** @file String_Convert_Unsigned_Integer_To_String.c
+/** @file System_String_Convert_Unsigned_Integer_To_String.c
  * @author Adrien RICCIARDI
  */
 #include <System.h>
@@ -6,7 +6,7 @@
 //-------------------------------------------------------------------------------------------------
 // Public functions
 //-------------------------------------------------------------------------------------------------
-void StringConvertUnsignedIntegerToString(unsigned int Number, char *String_Destination)
+void SystemStringConvertUnsignedIntegerToString(unsigned int Number, char *String_Destination)
 {
 	unsigned int Number_Divided_By_Ten;
 	int i = 10, j = 0; // Go to the temporary string last number, +1 as the variable is decremented first (see below)

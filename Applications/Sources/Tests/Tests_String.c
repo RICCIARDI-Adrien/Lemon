@@ -113,7 +113,7 @@ int TestsStringConvertUnsignedIntegerToString(void)
 		ScreenWriteString(String_Results[i]);
 		ScreenWriteString("...\n");
 		
-		StringConvertUnsignedIntegerToString(Numbers[i], String_Result);
+		SystemStringConvertUnsignedIntegerToString(Numbers[i], String_Result);
 		if (!SystemStringCompare(String_Result, String_Results[i]))
 		{
 			DisplayMessageError("failed number to string conversion.");

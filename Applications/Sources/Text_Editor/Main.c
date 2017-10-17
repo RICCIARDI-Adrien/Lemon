@@ -189,12 +189,12 @@ static void MainDisplayTextInformation(void)
 	
 	// Create the "lines count" string
 	SystemStringCopy(STRING_MESSAGE_TEXT_INFORMATION_CONTENT_1, String_Content);
-	StringConvertUnsignedIntegerToString(BufferGetLinesCount(), String_Number);
+	SystemStringConvertUnsignedIntegerToString(BufferGetLinesCount(), String_Number);
 	StringConcatenate(String_Content, String_Number);
 	
 	// Create the "characters count" string
 	StringConcatenate(String_Content, STRING_MESSAGE_TEXT_INFORMATION_CONTENT_2);
-	StringConvertUnsignedIntegerToString(Buffer_Characters_Count, String_Number);
+	SystemStringConvertUnsignedIntegerToString(Buffer_Characters_Count, String_Number);
 	StringConcatenate(String_Content, String_Number);
 	
 	MainDisplayMessage(STRING_MESSAGE_TEXT_INFORMATION_TITLE, String_Content, STRING_HIT_ENTER_TO_CONTINUE, SCREEN_COLOR_BLUE);

@@ -38,7 +38,7 @@ unsigned int SystemStringConvertStringToUnsignedInteger(char *String);
  * @param Number The number to convert.
  * @param String_Destination On output, contain the converted number. Be sure that the string has room enough for the number.
  */
-void StringConvertUnsignedIntegerToString(unsigned int Number, char *String_Destination);
+void SystemStringConvertUnsignedIntegerToString(unsigned int Number, char *String_Destination);
 
 /** Convert a 32-bit value to an hexadecimal string (always padded to 8 characters).
  * @param Integer The 32-bit value to convert (it can be also an unsigned integer).

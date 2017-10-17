@@ -165,7 +165,7 @@ void Submarine(void)
 			
 			// Display the score string below
 			StringConcatenate(String_Score, STRING_SUBMARINE_PLAYER_SCORE);
-			StringConvertUnsignedIntegerToString(Score, String_Converted_Score_Value);
+			SystemStringConvertUnsignedIntegerToString(Score, String_Converted_Score_Value);
 			StringConcatenate(String_Score, String_Converted_Score_Value);
 			ScreenSetCursorPosition((SCREEN_ROWS_COUNT / 2) + 1, 0); // The column coordinate will be computed by the ScreenWriteCenteredString() function
 			ScreenWriteCenteredString(String_Score);
