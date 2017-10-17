@@ -82,7 +82,7 @@ int TestsMemoryCopySmallArea(void)
 	int i;
 
 	// Use a small area (< 4 bytes) to bypass the "copy by 4 bytes" part of the function
-	for (i = 0; i < 3; i++) Tests_Memory_Source_Buffer[i] = (unsigned char) RandomGenerateNumber(); // Fill the buffer with random data
+	for (i = 0; i < 3; i++) Tests_Memory_Source_Buffer[i] = (unsigned char) SystemRandomGenerateNumber(); // Fill the buffer with random data
 	SystemMemoryCopyArea(Tests_Memory_Source_Buffer, Tests_Memory_Destination_Buffer, 3);
 	
 	if (!TestsMemoryAreAreasEqual(Tests_Memory_Source_Buffer, Tests_Memory_Destination_Buffer, 3)) return 1;
@@ -94,7 +94,7 @@ int TestsMemoryCopyBigArea(void)
 	int i;
 	
 	// Use a big area to test all parts of the function
-	for (i = 0; i < TESTS_MEMORY_BUFFER_SIZE; i++) Tests_Memory_Source_Buffer[i] = (unsigned char) RandomGenerateNumber(); // Fill the buffer with random data
+	for (i = 0; i < TESTS_MEMORY_BUFFER_SIZE; i++) Tests_Memory_Source_Buffer[i] = (unsigned char) SystemRandomGenerateNumber(); // Fill the buffer with random data
 	SystemMemoryCopyArea(Tests_Memory_Source_Buffer, Tests_Memory_Destination_Buffer, TESTS_MEMORY_BUFFER_SIZE);
 	
 	if (!TestsMemoryAreAreasEqual(Tests_Memory_Source_Buffer, Tests_Memory_Destination_Buffer, TESTS_MEMORY_BUFFER_SIZE)) return 1;
@@ -106,7 +106,7 @@ int TestsMemorySetSmallAreaValue(void)
 	unsigned char Value;
 	
 	// Use a small area (< 4 bytes) to bypass the "copy by 4 bytes" part of the function
-	Value = (unsigned char) RandomGenerateNumber(); // Get a random value
+	Value = (unsigned char) SystemRandomGenerateNumber(); // Get a random value
 	SystemMemorySetAreaValue(Tests_Memory_Source_Buffer, 3, Value);
 	
 	if (!TestsMemoryCheckAreaValue(Tests_Memory_Source_Buffer, Value, 3)) return 1;
@@ -118,7 +118,7 @@ int TestsMemorySetBigAreaValue(void)
 	unsigned char Value;
 	
 	// Use a big area to test all parts of the function
-	Value = (unsigned char) RandomGenerateNumber(); // Get a random value
+	Value = (unsigned char) SystemRandomGenerateNumber(); // Get a random value
 	SystemMemorySetAreaValue(Tests_Memory_Source_Buffer, TESTS_MEMORY_BUFFER_SIZE, Value);
 	
 	if (!TestsMemoryCheckAreaValue(Tests_Memory_Source_Buffer, Value, TESTS_MEMORY_BUFFER_SIZE)) return 1;

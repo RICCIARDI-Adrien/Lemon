@@ -110,8 +110,8 @@ void Rain(void)
 			// Choose drop location (avoiding (79, 24) because the console will scroll vertically going to next line)
 			do
 			{
-				Column = RandomGenerateNumber() % SCREEN_COLUMNS_COUNT;
-				Row = RandomGenerateNumber() % SCREEN_ROWS_COUNT;
+				Column = SystemRandomGenerateNumber() % SCREEN_COLUMNS_COUNT;
+				Row = SystemRandomGenerateNumber() % SCREEN_ROWS_COUNT;
 			} while ((Column == SCREEN_COLUMNS_COUNT - 1) && (Row == SCREEN_ROWS_COUNT - 1));
 			
 			// Print raindrop

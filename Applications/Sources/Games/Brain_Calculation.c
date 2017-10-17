@@ -55,7 +55,7 @@ static int RandomNumberRange(int Minimum, int Maximum)
 {
 	int Number;
 	
-	Number = RandomGenerateNumber() % (Maximum - Minimum);
+	Number = SystemRandomGenerateNumber() % (Maximum - Minimum);
 	Number += Minimum;
 	
 	return Number;
@@ -93,7 +93,7 @@ static void ChooseCalculus(int *Pointer_First_Number, char *Pointer_Operator, in
 		*Pointer_Second_Number = RandomNumberRange(Minimum_Value, Maximum_Value);
 		
 		// Choose operator and compute calculus
-		switch (RandomGenerateNumber() % 3)
+		switch (SystemRandomGenerateNumber() % 3)
 		{
 			case 0:
 				*Pointer_Operator = '+';

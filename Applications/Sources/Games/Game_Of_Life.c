@@ -40,7 +40,7 @@ static void CreateNewWorld(void)
 	{
 		for (Column = 0; Column < WORLD_COLUMNS_COUNT; Column++)
 		{
-			if (RandomGenerateNumber() % 7 == 2) Cell_State = CELL_STATE_ALIVE;
+			if (SystemRandomGenerateNumber() % 7 == 2) Cell_State = CELL_STATE_ALIVE;
 			else Cell_State = CELL_STATE_DEAD;
 
 			Current_World[Row][Column] = Cell_State;

@@ -80,17 +80,17 @@ int TestsFileSystemCalls(void)
 	int Result;
 
 	// Choose a random file size between 100 KB and 3 MB
-	File_Size_Bytes = ((RandomGenerateNumber() % 32) + 1) * 1024 * 100;
+	File_Size_Bytes = ((SystemRandomGenerateNumber() % 32) + 1) * 1024 * 100;
 	ScreenWriteString("File size : ");
 	ScreenWriteUnsignedInteger(File_Size_Bytes);
 	ScreenWriteCharacter('\n');
  
 	ScreenWriteString("Creating file content... ");
-	for (i = 0; i < File_Size_Bytes; i++) Buffer[i] = (unsigned char) RandomGenerateNumber();
+	for (i = 0; i < File_Size_Bytes; i++) Buffer[i] = (unsigned char) SystemRandomGenerateNumber();
 	ScreenWriteString("done\n");
 
 	ScreenWriteString("Computing CRC... ");
-	CRC_Seed = RandomGenerateNumber();
+	CRC_Seed = SystemRandomGenerateNumber();
 	Written_Data_CRC = crc32(CRC_Seed, Buffer, File_Size_Bytes);
 	ScreenWriteString("done (CRC = ");
 	ScreenWriteUnsignedInteger(Written_Data_CRC);
@@ -338,7 +338,7 @@ int TestsFileFillBlocksList(void)
 	}
 	
 	// Fill the buffer with crap data
-	for (i = 0; i < Block_Size_Bytes; i++) Buffer[i] = (unsigned char) RandomGenerateNumber();
+	for (i = 0; i < Block_Size_Bytes; i++) Buffer[i] = (unsigned char) SystemRandomGenerateNumber();
 	
 	ScreenWriteString("Filling the file...\n");
 	

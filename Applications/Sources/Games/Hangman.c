@@ -66,7 +66,7 @@ static char *ChooseNextWord(void)
 	if (Unsolved_Words_Count == 0) return NULL;
 	
 	// Select an unsolved word
-	i = RandomGenerateNumber() % Unsolved_Words_Count;
+	i = SystemRandomGenerateNumber() % Unsolved_Words_Count;
 	Is_Word_Solved[Unsolved_Words_List[i].Word_Index] = 1;
 	return Unsolved_Words_List[i].String_Word;
 }

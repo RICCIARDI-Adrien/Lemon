@@ -20,7 +20,7 @@ int NetworkTCPConnectToServer(TNetworkSocket *Pointer_Socket)
 	// Initiate the three-way handshake with the server
 	// Prepare a SYN packet
 	NetworkBaseTCPPrepareHeader(Pointer_Socket, NETWORK_TCP_FLAG_SYN, Pointer_TCP_Header);
-	Pointer_TCP_Header->Sequence_Number = RandomGenerateNumber(); // This value must always vary between two connections or the server will mark the connection as "TCP port reused" and nothing will work
+	Pointer_TCP_Header->Sequence_Number = SystemRandomGenerateNumber(); // This value must always vary between two connections or the server will mark the connection as "TCP port reused" and nothing will work
 	Pointer_TCP_Header->Acknowledgment_Number = 0;
 	// Compute checksum
 	Pointer_TCP_Header->Checksum = NetworkBaseTCPComputeChecksum(Pointer_Socket, Pointer_TCP_Header, sizeof(TNetworkTCPHeader));

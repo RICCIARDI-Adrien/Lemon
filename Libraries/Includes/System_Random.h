@@ -14,6 +14,6 @@ void SystemRandomInitialize(void);
 /** Generate a pseudo-random number.
  * @return A pseudo-random number.
  */
-int RandomGenerateNumber(void);
+int SystemRandomGenerateNumber(void);
 
 #endif

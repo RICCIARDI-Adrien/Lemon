@@ -27,7 +27,7 @@ void NoMatchDealer(void)
 	{
 		// Generate numbers
 		SystemRandomInitialize();
-		for (i = 0; i < NUMBERS_COUNT; i++) Numbers[i] = RandomGenerateNumber() % 100;
+		for (i = 0; i < NUMBERS_COUNT; i++) Numbers[i] = SystemRandomGenerateNumber() % 100;
 
 		// Show numbers on 2 rows
 		ScreenSetFontColor(SCREEN_COLOR_LIGHT_BLUE);

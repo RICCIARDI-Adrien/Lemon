@@ -75,7 +75,7 @@ void Numbers(void)
 	
 	// Choose number
 	SystemRandomInitialize();
-	Computer_Number = RandomGenerateNumber() % MAXIMUM_NUMBER_VALUE + 1;
+	Computer_Number = SystemRandomGenerateNumber() % MAXIMUM_NUMBER_VALUE + 1;
 	
 	// Show instructions
 	ScreenWriteString(STRING_NUMBERS_INSTRUCTIONS_1);

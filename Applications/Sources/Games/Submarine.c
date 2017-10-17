@@ -64,7 +64,7 @@ static void SubmarineGenerateNextColumn(void)
 		// Generate the obstacles
 		do
 		{
-			Obstacles_Bitmask = RandomGenerateNumber();
+			Obstacles_Bitmask = SystemRandomGenerateNumber();
 		} while ((Obstacles_Bitmask & 0x01FFFFFF) == 0x01FFFFFF); // Avoid generating a fully-filled column (WARNING, change this value if the number of rows changes too)
 		
 		// Fill the column with the obstacles
@@ -79,7 +79,7 @@ static void SubmarineGenerateNextColumn(void)
 		Submarine_Obstacles_Bitmask[SCREEN_COLUMNS_COUNT - 1] = Obstacles_Bitmask;
 		
 		// Choose the next column that will contain obstacles
-		Submarine_Obstacles_Generation_Counter = (RandomGenerateNumber() % (SUBMARINE_MAXIMUM_COLUMNS_COUNT_BETWEEN_OBSTACLES - SUBMARINE_MINIMUM_COLUMNS_COUNT_BETWEEN_OBSTACLES)) + SUBMARINE_MINIMUM_COLUMNS_COUNT_BETWEEN_OBSTACLES;
+		Submarine_Obstacles_Generation_Counter = (SystemRandomGenerateNumber() % (SUBMARINE_MAXIMUM_COLUMNS_COUNT_BETWEEN_OBSTACLES - SUBMARINE_MINIMUM_COLUMNS_COUNT_BETWEEN_OBSTACLES)) + SUBMARINE_MINIMUM_COLUMNS_COUNT_BETWEEN_OBSTACLES;
 	}
 	else
 	{
