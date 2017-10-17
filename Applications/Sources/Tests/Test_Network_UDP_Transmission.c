@@ -64,7 +64,7 @@ int main(int argc, char *argv[])
 	}
 	
 	// Fill the payload with a recognizable pattern
-	MemorySetAreaValue(Payload_Buffer, Payload_Size, 0xCA);
+	SystemMemorySetAreaValue(Payload_Buffer, Payload_Size, 0xCA);
 	
 	// Transmit forever
 	ScreenWriteString("Transmitting at maximum speed. Hit F12 to quit.\n");

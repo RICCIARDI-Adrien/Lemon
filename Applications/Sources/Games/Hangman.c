@@ -217,7 +217,7 @@ void Hangman(void)
 	RandomInitialize();
 	
 	// Reset the array
-	MemorySetAreaValue(Is_Word_Solved, sizeof(Is_Word_Solved), 0);
+	SystemMemorySetAreaValue(Is_Word_Solved, sizeof(Is_Word_Solved), 0);
 	
 	while (1)
 	{

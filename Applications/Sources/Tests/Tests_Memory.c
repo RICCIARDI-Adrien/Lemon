@@ -107,7 +107,7 @@ int TestsMemorySetSmallAreaValue(void)
 	
 	// Use a small area (< 4 bytes) to bypass the "copy by 4 bytes" part of the function
 	Value = (unsigned char) RandomGenerateNumber(); // Get a random value
-	MemorySetAreaValue(Tests_Memory_Source_Buffer, 3, Value);
+	SystemMemorySetAreaValue(Tests_Memory_Source_Buffer, 3, Value);
 	
 	if (!TestsMemoryCheckAreaValue(Tests_Memory_Source_Buffer, Value, 3)) return 1;
 	return 0;
@@ -119,7 +119,7 @@ int TestsMemorySetBigAreaValue(void)
 	
 	// Use a big area to test all parts of the function
 	Value = (unsigned char) RandomGenerateNumber(); // Get a random value
-	MemorySetAreaValue(Tests_Memory_Source_Buffer, TESTS_MEMORY_BUFFER_SIZE, Value);
+	SystemMemorySetAreaValue(Tests_Memory_Source_Buffer, TESTS_MEMORY_BUFFER_SIZE, Value);
 	
 	if (!TestsMemoryCheckAreaValue(Tests_Memory_Source_Buffer, Value, TESTS_MEMORY_BUFFER_SIZE)) return 1;
 	return 0;

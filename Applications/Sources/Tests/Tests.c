@@ -55,11 +55,11 @@ static TTest Tests[] =
 		TestsMemoryCopyBigArea
 	},
 	{
-		"MemorySetAreaValue() with a small area size",
+		"SystemMemorySetAreaValue() with a small area size",
 		TestsMemorySetSmallAreaValue
 	},
 	{
-		"MemorySetAreaValue() with a big area size",
+		"SystemMemorySetAreaValue() with a big area size",
 		TestsMemorySetBigAreaValue
 	},
 	// String API tests

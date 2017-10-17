@@ -48,7 +48,7 @@ static void CreateNewWorld(void)
 	}
 	
 	// Reset previous world to avoid erroneous comparisons
-	MemorySetAreaValue(Previous_World, sizeof(Previous_World), 0);
+	SystemMemorySetAreaValue(Previous_World, sizeof(Previous_World), 0);
 }
 
 /** Display the current world. */

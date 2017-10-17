@@ -13,7 +13,7 @@
  * @param Bytes_Count How many bytes to fill.
  * @param Value The value to put in each byte of the memory area.
  */
-void MemorySetAreaValue(void *Pointer_Area, unsigned int Bytes_Count, unsigned char Value);
+void SystemMemorySetAreaValue(void *Pointer_Area, unsigned int Bytes_Count, unsigned char Value);
 
 /** Copy an area content into another area.
  * @param Pointer_Source_Area The area to copy from.

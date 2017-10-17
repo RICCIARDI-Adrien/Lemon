@@ -116,7 +116,7 @@ int TestsFileSystemCalls(void)
 	ScreenWriteString("done\n");
 
 	// Flush read buffer
-	MemorySetAreaValue(Buffer, File_Size_Bytes, 0);
+	SystemMemorySetAreaValue(Buffer, File_Size_Bytes, 0);
 
 	ScreenWriteString("Reading data from file... ");
 	// Open the file

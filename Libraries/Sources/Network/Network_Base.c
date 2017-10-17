@@ -137,7 +137,7 @@ static int NetworkBaseARPSendRequest(TNetworkIPAddress *Pointer_Known_IP_Address
 	unsigned int Timer_Value, Timeout_Value, Received_Packet_Size;
 	
 	// Prepare the ethernet header
-	MemorySetAreaValue(Pointer_Ethernet_Header->Destination_MAC_Address, NETWORK_MAC_ADDRESS_SIZE, 0xFF); // Broadcast the frame to everyone on the local network
+	SystemMemorySetAreaValue(Pointer_Ethernet_Header->Destination_MAC_Address, NETWORK_MAC_ADDRESS_SIZE, 0xFF); // Broadcast the frame to everyone on the local network
 	Pointer_Ethernet_Header->Protocol_Type = NETWORK_BASE_ETHERNET_PROTOCOL_TYPE_ARP;
 	
 	// Prepare the ARP request

@@ -157,7 +157,7 @@ int main(int argc, char *argv[])
 					
 					// Display an empty user message prompt
 					Main_User_Message_Length = 0;
-					MemorySetAreaValue(String_Main_User_Message, sizeof(String_Main_User_Message), 0); // Clear all message bytes because if some data remain, there is a time when the current terminating zero will be overwritten and that the last character will become a previous message's one, resulting in displaying the previous message end
+					SystemMemorySetAreaValue(String_Main_User_Message, sizeof(String_Main_User_Message), 0); // Clear all message bytes because if some data remain, there is a time when the current terminating zero will be overwritten and that the last character will become a previous message's one, resulting in displaying the previous message end
 					InterfaceDisplayUserMessage("");
 					break;
 				
