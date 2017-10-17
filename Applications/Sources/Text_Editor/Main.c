@@ -230,7 +230,7 @@ void MainCutCurrentLine(void)
 	if (Main_Copy_Buffer_Length + Line_Length >= CONFIGURATION_COPY_BUFFER_MAXIMUM_SIZE) return;
 	
 	// Concatenate the cut text to the buffer
-	MemoryCopyArea(&Buffer[Line_Beginning], &Main_Copy_Buffer[Main_Copy_Buffer_Length], Line_Length);
+	SystemMemoryCopyArea(&Buffer[Line_Beginning], &Main_Copy_Buffer[Main_Copy_Buffer_Length], Line_Length);
 	Main_Copy_Buffer_Length += Line_Length;
 	
 	// Remove the string from the edition buffer (TODO optimize)

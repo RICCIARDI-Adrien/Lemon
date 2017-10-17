@@ -1,4 +1,4 @@
-/** @file Memory_Copy_Area.c
+/** @file System_Memory_Copy_Area.c
  * @author Adrien RICCIARDI
  */
 #include <System.h>
@@ -6,7 +6,7 @@
 //-------------------------------------------------------------------------------------------------
 // Public functions
 //-------------------------------------------------------------------------------------------------
-void MemoryCopyArea(void *Pointer_Source_Area, void *Pointer_Destination_Area, unsigned int Bytes_Count)
+void SystemMemoryCopyArea(void *Pointer_Source_Area, void *Pointer_Destination_Area, unsigned int Bytes_Count)
 {
 	unsigned int *Pointer_Source_Area_Dword, *Pointer_Destination_Area_Dword;
 	unsigned char *Pointer_Source_Area_Byte, *Pointer_Destination_Area_Byte;

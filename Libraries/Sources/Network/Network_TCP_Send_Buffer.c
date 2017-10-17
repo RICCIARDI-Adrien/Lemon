@@ -25,7 +25,7 @@ int NetworkTCPSendBuffer(TNetworkSocket *Pointer_Socket, unsigned int Buffer_Siz
 	Pointer_TCP_Header->Sequence_Number = NETWORK_SWAP_DOUBLE_WORD(Pointer_Socket->TCP_Sequence_Number);
 	Pointer_TCP_Header->Acknowledgment_Number = NETWORK_SWAP_DOUBLE_WORD(Pointer_Socket->TCP_Acknowledgement_Number);
 	// Append TCP data
-	MemoryCopyArea(Pointer_Buffer, Packet_Buffer + sizeof(TNetworkEthernetHeader) + sizeof(TNetworkIPv4Header) + sizeof(TNetworkTCPHeader), Buffer_Size);
+	SystemMemoryCopyArea(Pointer_Buffer, Packet_Buffer + sizeof(TNetworkEthernetHeader) + sizeof(TNetworkIPv4Header) + sizeof(TNetworkTCPHeader), Buffer_Size);
 	// Compute the TCP checksum now that the TCP packet is complete
 	TCP_Packet_Size = sizeof(TNetworkTCPHeader) + Buffer_Size;
 	Pointer_TCP_Header->Checksum = NetworkBaseTCPComputeChecksum(Pointer_Socket, Pointer_TCP_Header, TCP_Packet_Size);

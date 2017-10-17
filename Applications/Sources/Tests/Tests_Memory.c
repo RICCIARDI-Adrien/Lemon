@@ -83,7 +83,7 @@ int TestsMemoryCopySmallArea(void)
 
 	// Use a small area (< 4 bytes) to bypass the "copy by 4 bytes" part of the function
 	for (i = 0; i < 3; i++) Tests_Memory_Source_Buffer[i] = (unsigned char) RandomGenerateNumber(); // Fill the buffer with random data
-	MemoryCopyArea(Tests_Memory_Source_Buffer, Tests_Memory_Destination_Buffer, 3);
+	SystemMemoryCopyArea(Tests_Memory_Source_Buffer, Tests_Memory_Destination_Buffer, 3);
 	
 	if (!TestsMemoryAreAreasEqual(Tests_Memory_Source_Buffer, Tests_Memory_Destination_Buffer, 3)) return 1;
 	return 0;
@@ -95,7 +95,7 @@ int TestsMemoryCopyBigArea(void)
 	
 	// Use a big area to test all parts of the function
 	for (i = 0; i < TESTS_MEMORY_BUFFER_SIZE; i++) Tests_Memory_Source_Buffer[i] = (unsigned char) RandomGenerateNumber(); // Fill the buffer with random data
-	MemoryCopyArea(Tests_Memory_Source_Buffer, Tests_Memory_Destination_Buffer, TESTS_MEMORY_BUFFER_SIZE);
+	SystemMemoryCopyArea(Tests_Memory_Source_Buffer, Tests_Memory_Destination_Buffer, TESTS_MEMORY_BUFFER_SIZE);
 	
 	if (!TestsMemoryAreAreasEqual(Tests_Memory_Source_Buffer, Tests_Memory_Destination_Buffer, TESTS_MEMORY_BUFFER_SIZE)) return 1;
 	return 0;

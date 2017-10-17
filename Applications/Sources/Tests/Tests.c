@@ -47,11 +47,11 @@ static TTest Tests[] =
 	},
 	// Memory API tests
 	{
-		"MemoryCopyArea() with a small area size",
+		"SystemMemoryCopyArea() with a small area size",
 		TestsMemoryCopySmallArea
 	},
 	{
-		"MemoryCopyArea() with a big area size",
+		"SystemMemoryCopyArea() with a big area size",
 		TestsMemoryCopyBigArea
 	},
 	{

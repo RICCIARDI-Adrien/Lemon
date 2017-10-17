@@ -38,7 +38,7 @@ int NetworkTFTPReceivePacket(TNetworkSocket *Pointer_Socket, unsigned int Timeou
 			if (Data_Size > sizeof(TNetworkTFTPPacket)) continue;
 			
 			// Extract the packet content
-			MemoryCopyArea(Packet_Buffer + sizeof(TNetworkEthernetHeader) + sizeof(TNetworkIPv4Header) + sizeof(TNetworkUDPHeader), Pointer_Packet, Data_Size);
+			SystemMemoryCopyArea(Packet_Buffer + sizeof(TNetworkEthernetHeader) + sizeof(TNetworkIPv4Header) + sizeof(TNetworkUDPHeader), Pointer_Packet, Data_Size);
 			*Pointer_Packet_Size = Data_Size;
 			
 			return 0;

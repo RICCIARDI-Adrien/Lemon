@@ -21,6 +21,6 @@ void SystemMemorySetAreaValue(void *Pointer_Area, unsigned int Bytes_Count, unsi
  * @param Bytes_Count How many bytes to copy.
  * @warning Overlapping areas may lead to an unpredictable result.
  */
-void MemoryCopyArea(void *Pointer_Source_Area, void *Pointer_Destination_Area, unsigned int Bytes_Count);
+void SystemMemoryCopyArea(void *Pointer_Source_Area, void *Pointer_Destination_Area, unsigned int Bytes_Count);
 
 #endif

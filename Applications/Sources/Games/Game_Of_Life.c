@@ -149,7 +149,7 @@ static void ComputeNextWorldGeneration(void)
 	
 	// Generate a new world if the current one is stable
 	if ((!Is_Old_Generation_Different) || (!Is_New_Generation_Different)) CreateNewWorld();
-	else MemoryCopyArea(Next_World, Current_World, sizeof(Current_World)); // Update current world
+	else SystemMemoryCopyArea(Next_World, Current_World, sizeof(Current_World)); // Update current world
 }
 
 //-------------------------------------------------------------------------------------------------
