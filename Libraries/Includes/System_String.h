@@ -44,7 +44,7 @@ void SystemStringConvertUnsignedIntegerToString(unsigned int Number, char *Strin
  * @param Integer The 32-bit value to convert (it can be also an unsigned integer).
  * @param String_Hexadecimal_Output On output, contain the hexadecimal string. Make sure the string has enough room for 8 characters + terminating zero.
  */
-void StringConvertIntegerToHexadecimal(int Integer, char *String_Hexadecimal_Output);
+void SystemStringConvertIntegerToHexadecimal(int Integer, char *String_Hexadecimal_Output);
 
 /** Retrieve the characters count in a string.
  * @param String The string to get size.

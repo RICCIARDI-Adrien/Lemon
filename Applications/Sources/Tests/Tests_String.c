@@ -135,7 +135,7 @@ int TestsStringConvertIntegerToHexadecimal(void)
 		ScreenWriteString(String_Results[i]);
 		ScreenWriteString("...\n");
 		
-		StringConvertIntegerToHexadecimal((int) Numbers[i], String_Result);
+		SystemStringConvertIntegerToHexadecimal((int) Numbers[i], String_Result);
 		if (!SystemStringCompare(String_Result, String_Results[i]))
 		{
 			DisplayMessageError("failed to convert number to hexadecimal string.");

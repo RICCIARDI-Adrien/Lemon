@@ -10,6 +10,6 @@ void ScreenWriteHexadecimalInteger(int Integer)
 {
 	char String_Hexadecimal[9]; // 8 digits + terminating zero
 	
-	StringConvertIntegerToHexadecimal(Integer, String_Hexadecimal);
+	SystemStringConvertIntegerToHexadecimal(Integer, String_Hexadecimal);
 	SystemCall(SYSTEM_CALL_SCREEN_WRITE_STRING, 0, 0, String_Hexadecimal, NULL);
 }

@@ -1,4 +1,4 @@
-/** @file String_Convert_Integer_To_Hexadecimal.c
+/** @file System_String_Convert_Integer_To_Hexadecimal.c
  * @author Adrien RICCIARDI
  */
 #include <System.h>
@@ -6,7 +6,7 @@
 //-------------------------------------------------------------------------------------------------
 // Public functions
 //-------------------------------------------------------------------------------------------------
-void StringConvertIntegerToHexadecimal(int Integer, char *String_Hexadecimal_Output)
+void SystemStringConvertIntegerToHexadecimal(int Integer, char *String_Hexadecimal_Output)
 {
 	unsigned int i;
 	char Nibble;
