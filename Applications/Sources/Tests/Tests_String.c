@@ -170,14 +170,14 @@ int TestsStringGetSize(void)
 	char *String_Empty = "", String[] = "123456789"; // String must be an array in order to use sizeof() to get its size
 	
 	// Test with an empty string
-	if (StringGetSize(String_Empty) != 0)
+	if (SystemStringGetSize(String_Empty) != 0)
 	{
 		DisplayMessageError("an empty string has not a size of 0.\n");
 		return 1;
 	}
 	
 	// Test with an non-empty string
-	if (StringGetSize(String) != sizeof(String) - 1) // -1 to remove the terminating zero automatically added by the compiler
+	if (SystemStringGetSize(String) != sizeof(String) - 1) // -1 to remove the terminating zero automatically added by the compiler
 	{
 		DisplayMessageError("the string size is bad.\n");
 		return 1;

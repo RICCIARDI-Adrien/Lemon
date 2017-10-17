@@ -40,10 +40,10 @@ int TFTPExecuteCommandGet(char *String_File_Name)
 	Packet.Opcode = NETWORK_SWAP_WORD(NETWORK_TFTP_OPCODE_READ_REQUEST);
 	// Append the requested file name
 	SystemStringCopyUpToNumber(String_File_Name, Packet.Request.String_File_Name_And_Mode, SYSTEM_FILE_NAME_LENGTH);
-	File_Name_Length = StringGetSize(Packet.Request.String_File_Name_And_Mode);
+	File_Name_Length = SystemStringGetSize(Packet.Request.String_File_Name_And_Mode);
 	// Append the transfer mode
 	SystemStringCopy(STRING_TFTP_TRANSFER_MODE, &Packet.Request.String_File_Name_And_Mode[File_Name_Length + 1]); // Append the string right after the file name string terminating zero
-	Transfer_Mode_Length = StringGetSize(STRING_TFTP_TRANSFER_MODE);
+	Transfer_Mode_Length = SystemStringGetSize(STRING_TFTP_TRANSFER_MODE);
 	
 	// Open the file to be ready to write it's content
 	if (SystemFileOpen(String_File_Name, SYSTEM_FILE_OPENING_MODE_WRITE, &File_ID) != 0)
@@ -156,10 +156,10 @@ int TFTPExecuteCommandPut(char *String_File_Name)
 	Packet.Opcode = NETWORK_SWAP_WORD(NETWORK_TFTP_OPCODE_WRITE_REQUEST);
 	// Append the sent file name
 	SystemStringCopyUpToNumber(String_File_Name, Packet.Request.String_File_Name_And_Mode, SYSTEM_FILE_NAME_LENGTH);
-	File_Name_Length = StringGetSize(Packet.Request.String_File_Name_And_Mode);
+	File_Name_Length = SystemStringGetSize(Packet.Request.String_File_Name_And_Mode);
 	// Append the transfer mode
 	SystemStringCopy(STRING_TFTP_TRANSFER_MODE, &Packet.Request.String_File_Name_And_Mode[File_Name_Length + 1]); // Append the string right after the file name string terminating zero
-	Transfer_Mode_Length = StringGetSize(STRING_TFTP_TRANSFER_MODE);
+	Transfer_Mode_Length = SystemStringGetSize(STRING_TFTP_TRANSFER_MODE);
 	
 	// Send the write request
 	if (NetworkUDPSendBuffer(&Socket_Server, sizeof(Packet.Opcode) + File_Name_Length + 1 + Transfer_Mode_Length + 1, &Packet) != 0) // +2 bytes for both strings terminating zeroes
@@ -270,7 +270,7 @@ int CommandMainTFTP(int argc, char __attribute__((unused)) *argv[])
 	}
 	// File name
 	String_File_Name = argv[2];
-	if (StringGetSize(String_File_Name) > SYSTEM_FILE_NAME_LENGTH)
+	if (SystemStringGetSize(String_File_Name) > SYSTEM_FILE_NAME_LENGTH)
 	{
 		ScreenWriteString(STRING_COMMAND_TFTP_FILE_NAME_TOO_LONG);
 		return -1;

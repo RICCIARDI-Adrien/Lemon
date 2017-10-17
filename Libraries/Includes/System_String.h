@@ -50,7 +50,7 @@ void SystemStringConvertIntegerToHexadecimal(int Integer, char *String_Hexadecim
  * @param String The string to get size.
  * @return The size of the string in characters (not including the terminating zero).
  */
-unsigned int StringGetSize(char *String);
+unsigned int SystemStringGetSize(char *String);
 
 /** Concatenate a string at the end of another string.
  * @param String_Destination The string to concatenate to.

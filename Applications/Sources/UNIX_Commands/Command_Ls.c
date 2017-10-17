@@ -159,7 +159,7 @@ int CommandMainLs(int argc, char __attribute__((unused)) *argv[])
 		ScreenWriteString(Pointer_Sorted_Files_Informations[i]->String_File_Name);
 		
 		// Fill the eventually remaining space up to the beginning of the "file size" column
-		Remaining_Characters = (SYSTEM_FILE_NAME_LENGTH + 4) - StringGetSize(Pointer_Sorted_Files_Informations[i]->String_File_Name);
+		Remaining_Characters = (SYSTEM_FILE_NAME_LENGTH + 4) - SystemStringGetSize(Pointer_Sorted_Files_Informations[i]->String_File_Name);
 		for ( ; Remaining_Characters > 0; Remaining_Characters--) ScreenWriteCharacter(' ');
 		
 		// Display the file size

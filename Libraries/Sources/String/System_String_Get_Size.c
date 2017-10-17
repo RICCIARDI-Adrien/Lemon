@@ -1,4 +1,4 @@
-/** @file String_Get_Size.c
+/** @file System_String_Get_Size.c
  * @author Adrien RICCIARDI
  */
 #include <System.h>
@@ -6,7 +6,7 @@
 //-------------------------------------------------------------------------------------------------
 // Public functions
 //-------------------------------------------------------------------------------------------------
-unsigned int StringGetSize(char *String)
+unsigned int SystemStringGetSize(char *String)
 {
 	unsigned int Size = 0;
 	
