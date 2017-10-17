@@ -1,4 +1,4 @@
-/** @file String_Convert_String_To_Unsigned_Integer.c
+/** @file System_String_Convert_String_To_Unsigned_Integer.c
  * @author Adrien RICCIARDI
  */
 #include <System.h>
@@ -6,7 +6,7 @@
 //-------------------------------------------------------------------------------------------------
 // Public functions
 //-------------------------------------------------------------------------------------------------
-unsigned int StringConvertStringToUnsignedInteger(char *String)
+unsigned int SystemStringConvertStringToUnsignedInteger(char *String)
 {
 	unsigned int Result = 0;
 	

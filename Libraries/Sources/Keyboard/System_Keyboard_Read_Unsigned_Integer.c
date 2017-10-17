@@ -55,5 +55,5 @@ unsigned int SystemKeyboardReadUnsignedInteger(void)
 	}
 	
 	// Convert the number to binary
-	return StringConvertStringToUnsignedInteger(String_Number);
+	return SystemStringConvertStringToUnsignedInteger(String_Number);
 }

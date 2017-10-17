@@ -92,7 +92,7 @@ int main(int argc, char *argv[])
 		return 1;
 	}
 	// Destination port
-	Destination_Port = StringConvertStringToUnsignedInteger(argv[2]);
+	Destination_Port = SystemStringConvertStringToUnsignedInteger(argv[2]);
 	
 	// Initialize the network stack
 	Result = NetworkInitialize();

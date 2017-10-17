@@ -38,9 +38,9 @@ int main(int argc, char *argv[])
 		return 1;
 	}
 	// Port number
-	Port = StringConvertStringToUnsignedInteger(argv[2]);
+	Port = SystemStringConvertStringToUnsignedInteger(argv[2]);
 	// Payload size
-	Payload_Size = StringConvertStringToUnsignedInteger(argv[3]);
+	Payload_Size = SystemStringConvertStringToUnsignedInteger(argv[3]);
 	if (Payload_Size > MAXIMUM_PAYLOAD_SIZE)
 	{
 		ScreenWriteString("Error : maximum allowed payload size : ");

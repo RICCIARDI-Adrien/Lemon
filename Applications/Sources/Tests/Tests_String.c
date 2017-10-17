@@ -92,7 +92,7 @@ int TestsStringConvertStringToUnsignedInteger(void)
 		ScreenWriteString(String_Numbers[i]);
 		ScreenWriteString("\"...\n");
 		
-		if (StringConvertStringToUnsignedInteger(String_Numbers[i]) != Results[i])
+		if (SystemStringConvertStringToUnsignedInteger(String_Numbers[i]) != Results[i])
 		{
 			DisplayMessageError("failed string to number conversion.");
 			return 1;

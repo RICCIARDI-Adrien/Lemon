@@ -51,7 +51,7 @@ int NetworkIPConvertFromString(char *String_IP_Address, unsigned int *Pointer_IP
 		if (String_Byte[0] == 0) return 1;
 		
 		// Convert the number to binary
-		Byte = StringConvertStringToUnsignedInteger(String_Byte);
+		Byte = SystemStringConvertStringToUnsignedInteger(String_Byte);
 		if (Byte > 255) return 1; // Make sure the byte value is in range [0..255]
 		
 		// Append the converted byte to the result in a big endian way

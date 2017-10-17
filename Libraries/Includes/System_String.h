@@ -32,7 +32,7 @@ void SystemStringCopyUpToNumber(char *String_Source, char *String_Destination, u
  * @return The converted number.
  * @note Providing a string that contains characters other than digits gives unpredictable result.
  */
-unsigned int StringConvertStringToUnsignedInteger(char *String);
+unsigned int SystemStringConvertStringToUnsignedInteger(char *String);
 
 /** Convert a number into its string representation.
  * @param Number The number to convert.

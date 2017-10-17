@@ -294,7 +294,7 @@ int CommandMainTFTP(int argc, char __attribute__((unused)) *argv[])
 		ScreenWriteString(STRING_COMMAND_TFTP_CAN_RETRIEVE_SERVER_PORT);
 		return -1;
 	}
-	Port = StringConvertStringToUnsignedInteger(String_Temp);
+	Port = SystemStringConvertStringToUnsignedInteger(String_Temp);
 	
 	// Try to connect to the server
 	if (NetworkInitialize() != 0)

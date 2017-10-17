@@ -140,7 +140,7 @@ static int ReadUserNumber(void)
 			
 			String[Digits_Count] = 0;
 			ScreenWriteCharacter('\n');
-			return (int) StringConvertStringToUnsignedInteger(String);
+			return (int) SystemStringConvertStringToUnsignedInteger(String);
 		}
 		
 		// Escape key, return exit code
