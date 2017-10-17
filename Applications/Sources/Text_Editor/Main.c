@@ -188,7 +188,7 @@ static void MainDisplayTextInformation(void)
 	char String_Content[256], String_Number[11];
 	
 	// Create the "lines count" string
-	StringCopy(STRING_MESSAGE_TEXT_INFORMATION_CONTENT_1, String_Content);
+	SystemStringCopy(STRING_MESSAGE_TEXT_INFORMATION_CONTENT_1, String_Content);
 	StringConvertUnsignedIntegerToString(BufferGetLinesCount(), String_Number);
 	StringConcatenate(String_Content, String_Number);
 	

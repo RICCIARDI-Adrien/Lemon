@@ -135,11 +135,11 @@ int TestsStringConvertUnsignedIntegerToString(void);
  */
 int TestsStringConvertIntegerToHexadecimal(void);
 
-/** Test the StringCopy() function.
+/** Test the SystemStringCopy() function.
  * @return 0 if all tests were successful,
  * @return 1 if a test failed.
  */
-int TestsStringCopy(void);
+int TestsSystemStringCopy(void);
 
 /** Test the StringGetSize() function.
  * @return 0 if all tests were successful,

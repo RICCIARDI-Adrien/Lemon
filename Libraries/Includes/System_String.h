@@ -18,7 +18,7 @@ int SystemStringCompare(char *String_1, char *String_2);
  * @param String_Source The string to copy.
  * @param String_Destination The destination string.
  */
-void StringCopy(char *String_Source, char *String_Destination);
+void SystemStringCopy(char *String_Source, char *String_Destination);
 
 /** Copy a string into another string.
  * @param String_Source The string to copy.

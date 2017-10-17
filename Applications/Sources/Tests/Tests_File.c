@@ -169,7 +169,7 @@ int TestsFileMaximumOpenedFiles(void)
 	{
 		// Create the file name
 		StringConvertUnsignedIntegerToString(i, String_Number);
-		StringCopy("_test_", String_File_Name);
+		SystemStringCopy("_test_", String_File_Name);
 		StringConcatenate(String_File_Name, String_Number);
 		
 		// Open the file in write mode so the file should not exist yet
@@ -197,7 +197,7 @@ int TestsFileMaximumOpenedFiles(void)
 		
 		// Create the file name
 		StringConvertUnsignedIntegerToString(i, String_Number);
-		StringCopy("_test_", String_File_Name);
+		SystemStringCopy("_test_", String_File_Name);
 		StringConcatenate(String_File_Name, String_Number);
 		
 		SystemFileDelete(String_File_Name);
@@ -277,7 +277,7 @@ int TestsFileFillFilesList(void)
 	{
 		// Create the file name
 		StringConvertUnsignedIntegerToString(i, String_Number);
-		StringCopy("_test_", String_File_Name);
+		SystemStringCopy("_test_", String_File_Name);
 		StringConcatenate(String_File_Name, String_Number);
 		
 		// Create the file
@@ -304,7 +304,7 @@ int TestsFileFillFilesList(void)
 	{
 		// Create the file name
 		StringConvertUnsignedIntegerToString(i, String_Number);
-		StringCopy("_test_", String_File_Name);
+		SystemStringCopy("_test_", String_File_Name);
 		StringConcatenate(String_File_Name, String_Number);
 		
 		SystemFileDelete(String_File_Name);

@@ -42,7 +42,7 @@ int TFTPExecuteCommandGet(char *String_File_Name)
 	StringCopyUpToNumber(String_File_Name, Packet.Request.String_File_Name_And_Mode, SYSTEM_FILE_NAME_LENGTH);
 	File_Name_Length = StringGetSize(Packet.Request.String_File_Name_And_Mode);
 	// Append the transfer mode
-	StringCopy(STRING_TFTP_TRANSFER_MODE, &Packet.Request.String_File_Name_And_Mode[File_Name_Length + 1]); // Append the string right after the file name string terminating zero
+	SystemStringCopy(STRING_TFTP_TRANSFER_MODE, &Packet.Request.String_File_Name_And_Mode[File_Name_Length + 1]); // Append the string right after the file name string terminating zero
 	Transfer_Mode_Length = StringGetSize(STRING_TFTP_TRANSFER_MODE);
 	
 	// Open the file to be ready to write it's content
@@ -158,7 +158,7 @@ int TFTPExecuteCommandPut(char *String_File_Name)
 	StringCopyUpToNumber(String_File_Name, Packet.Request.String_File_Name_And_Mode, SYSTEM_FILE_NAME_LENGTH);
 	File_Name_Length = StringGetSize(Packet.Request.String_File_Name_And_Mode);
 	// Append the transfer mode
-	StringCopy(STRING_TFTP_TRANSFER_MODE, &Packet.Request.String_File_Name_And_Mode[File_Name_Length + 1]); // Append the string right after the file name string terminating zero
+	SystemStringCopy(STRING_TFTP_TRANSFER_MODE, &Packet.Request.String_File_Name_And_Mode[File_Name_Length + 1]); // Append the string right after the file name string terminating zero
 	Transfer_Mode_Length = StringGetSize(STRING_TFTP_TRANSFER_MODE);
 	
 	// Send the write request

@@ -18,7 +18,7 @@ void ScreenWriteInteger(int Integer)
 		String_Number[1] = 0;
 	}
 	// Handle 32-bit minimum negative value as it can't be represented on a 32-bit unsigned int
-	else if (Integer == -2147483647 - 1) StringCopy("-2147483648", String_Number); // Can't directly use the -2147483648 constant or the compiler will moan
+	else if (Integer == -2147483647 - 1) SystemStringCopy("-2147483648", String_Number); // Can't directly use the -2147483648 constant or the compiler will moan
 	else
 	{
 		// Store number sign for later use

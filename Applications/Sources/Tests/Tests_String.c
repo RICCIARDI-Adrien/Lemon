@@ -146,12 +146,12 @@ int TestsStringConvertIntegerToHexadecimal(void)
 	return 0;
 }
 
-int TestsStringCopy(void)
+int TestsSystemStringCopy(void)
 {
 	int i;
 	char *String_Source = "Irrelevant string content.", String_Destination[50];
 	
-	StringCopy(String_Source, String_Destination);
+	SystemStringCopy(String_Source, String_Destination);
 	
 	// Check if the copy was successful
 	for (i = 0; String_Source[i] != 0; i++)

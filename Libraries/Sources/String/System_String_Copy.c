@@ -1,4 +1,4 @@
-/** @file String_Copy.c
+/** @file System_String_Copy.c
  * @author Adrien RICCIARDI
  */
 #include <System.h>
@@ -6,7 +6,7 @@
 //-------------------------------------------------------------------------------------------------
 // Public functions
 //-------------------------------------------------------------------------------------------------
-void StringCopy(char *String_Source, char *String_Destination)
+void SystemStringCopy(char *String_Source, char *String_Destination)
 {
 	while (*String_Source != 0)
 	{

@@ -88,8 +88,8 @@ static TTest Tests[] =
 		TestsStringConvertIntegerToHexadecimal
 	},
 	{
-		"StringCopy()",
-		TestsStringCopy
+		"SystemStringCopy()",
+		TestsSystemStringCopy
 	},
 	{
 		"StringGetSize()",

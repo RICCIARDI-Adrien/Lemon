@@ -139,7 +139,7 @@ static void DisplayTitle(char *String_Title)
 	char String_Embellished_Title[128];
 	
 	// Embellish the title
-	StringCopy("--- ", String_Embellished_Title);
+	SystemStringCopy("--- ", String_Embellished_Title);
 	StringConcatenate(String_Embellished_Title, String_Title);
 	StringConcatenate(String_Embellished_Title, " ---\n\n");
 	
