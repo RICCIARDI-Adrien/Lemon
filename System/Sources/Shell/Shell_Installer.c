@@ -193,12 +193,16 @@ void Shell(void)
 			ScreenSetColor(SCREEN_COLOR_RED);
 			ScreenWriteString(STRING_SHELL_INSTALLER_ERROR_BAD_FILE_SYSTEM_PARAMETERS);
 			ShellReboot();
+			break; // ShellReboot() does not return but this makes gcc 7 happy
+			
 		case 2:
 			ScreenSetColor(SCREEN_COLOR_RED);
 			ScreenWriteString(STRING_SHELL_INSTALLER_ERROR_FILE_SYSTEM_TOO_BIG_FOR_HARD_DISK_1);
 			ScreenWriteString(itoa(HardDiskGetDriveSizeSectors()));
 			ScreenWriteString(STRING_SHELL_INSTALLER_ERROR_FILE_SYSTEM_TOO_BIG_FOR_HARD_DISK_2);
 			ShellReboot();
+			break;
+			
 		default:
 			break;
 	}
