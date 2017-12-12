@@ -36,7 +36,7 @@
 // Private variables
 //-------------------------------------------------------------------------------------------------
 /** The screen buffer. */
-static TScreenBufferCharacter Submarine_Screen_Buffer[SYSTEM_SCREEN_ROWS_COUNT][SYSTEM_SCREEN_COLUMNS_COUNT];
+static TSystemScreenBufferCharacter Submarine_Screen_Buffer[SYSTEM_SCREEN_ROWS_COUNT][SYSTEM_SCREEN_COLUMNS_COUNT];
 
 /** The obstacles array, covering a whole column. */
 static int Submarine_Obstacles_Bitmask[SYSTEM_SCREEN_COLUMNS_COUNT];

@@ -48,7 +48,7 @@ typedef struct __attribute__((packed))
 {
 	char ASCII_Code; //! The character ASCII code.
 	unsigned char Color; //! The character color.
-} TScreenBufferCharacter;
+} TSystemScreenBufferCharacter;
 
 //-------------------------------------------------------------------------------------------------
 // Functions

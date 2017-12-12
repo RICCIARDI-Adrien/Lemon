@@ -10,7 +10,7 @@
 // Private variables
 //-------------------------------------------------------------------------------------------------
 /** The buffer that will be sent verbatim to the VGA video memory. */
-static TScreenBufferCharacter Display_Video_Memory[CONFIGURATION_DISPLAY_ROWS_COUNT * CONFIGURATION_DISPLAY_COLUMNS_COUNT];
+static TSystemScreenBufferCharacter Display_Video_Memory[CONFIGURATION_DISPLAY_ROWS_COUNT * CONFIGURATION_DISPLAY_COLUMNS_COUNT];
 
 /** The cursor row location. */
 static unsigned int Display_Cursor_Row = 0;
@@ -35,7 +35,7 @@ void DisplayClear(void)
 
 void DisplayWriteCharacter(char Character)
 {
-	TScreenBufferCharacter Display_Character;
+	TSystemScreenBufferCharacter Display_Character;
 	
 	switch (Character)
 	{

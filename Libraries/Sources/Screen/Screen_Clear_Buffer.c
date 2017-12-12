@@ -9,7 +9,7 @@
 void ScreenClearBuffer(void *Pointer_Buffer, unsigned char Color)
 {
 	unsigned int Row, Column;
-	TScreenBufferCharacter *Pointer_Buffer_Character = (TScreenBufferCharacter *) Pointer_Buffer;
+	TSystemScreenBufferCharacter *Pointer_Buffer_Character = (TSystemScreenBufferCharacter *) Pointer_Buffer;
 	
 	for (Row = 0; Row < SYSTEM_SCREEN_ROWS_COUNT; Row++)
 	{
