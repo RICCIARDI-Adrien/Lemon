@@ -120,7 +120,7 @@ void SystemScreenDisplayBuffer(void *Pointer_Buffer);
 /** Scroll a SYSTEM_SCREEN_ROWS_COUNT*SYSTEM_SCREEN_COLUMNS_COUNT bytes buffer to one column on the left. The rightmost column is left as-is.
  * @param Pointer_Buffer The buffer to scroll.
  */
-void ScreenScrollBufferToLeft(void *Pointer_Buffer);
+void SystemScreenScrollBufferToLeft(void *Pointer_Buffer);
 
 /** Clear the buffer with 'space' characters and the specified color.
  * @param Pointer_Buffer The buffer to clear.

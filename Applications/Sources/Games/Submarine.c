@@ -54,7 +54,7 @@ static void SubmarineGenerateNextColumn(void)
 	unsigned char Color;
 	
 	// Move the scene to left
-	ScreenScrollBufferToLeft(Submarine_Screen_Buffer);
+	SystemScreenScrollBufferToLeft(Submarine_Screen_Buffer);
 	// Scroll the obstacles array too
 	for (i = 0; i < SYSTEM_SCREEN_COLUMNS_COUNT - 1; i++) Submarine_Obstacles_Bitmask[i] = Submarine_Obstacles_Bitmask[i + 1];
 	

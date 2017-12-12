@@ -1,4 +1,4 @@
-/** @file Screen_Scroll_Buffer_To_Left.c
+/** @file System_Screen_Scroll_Buffer_To_Left.c
  * @author Adrien RICCIARDI
  */
 #include <System.h>
@@ -6,7 +6,7 @@
 //-------------------------------------------------------------------------------------------------
 // Public functions
 //-------------------------------------------------------------------------------------------------
-void ScreenScrollBufferToLeft(void *Pointer_Buffer)
+void SystemScreenScrollBufferToLeft(void *Pointer_Buffer)
 {
 	int Row, Column;
 	unsigned short *Pointer_Buffer_Word = (unsigned short *) Pointer_Buffer; // Each buffer character is 2-byte long
