@@ -78,17 +78,17 @@ void Numbers(void)
 	Computer_Number = SystemRandomGenerateNumber() % MAXIMUM_NUMBER_VALUE + 1;
 	
 	// Show instructions
-	ScreenWriteString(STRING_NUMBERS_INSTRUCTIONS_1);
+	SystemScreenWriteString(STRING_NUMBERS_INSTRUCTIONS_1);
 	SystemScreenWriteInteger(MAXIMUM_NUMBER_VALUE);
-	ScreenWriteString(STRING_NUMBERS_INSTRUCTIONS_2);
+	SystemScreenWriteString(STRING_NUMBERS_INSTRUCTIONS_2);
 	SystemScreenWriteInteger(ATTEMPTS_COUNT);
-	ScreenWriteString(STRING_NUMBERS_INSTRUCTIONS_3);
+	SystemScreenWriteString(STRING_NUMBERS_INSTRUCTIONS_3);
 			
 	while (1)
 	{
 		// Get player's number
 		SystemScreenSetFontColor(SYSTEM_SCREEN_COLOR_LIGHT_BLUE);
-		ScreenWriteString(STRING_NUMBERS_INSERT_NUMBER);
+		SystemScreenWriteString(STRING_NUMBERS_INSERT_NUMBER);
 		SystemScreenSetFontColor(SYSTEM_SCREEN_COLOR_BLUE);
 		Player_Number = ReadUserNumber();
 				
@@ -99,9 +99,9 @@ void Numbers(void)
 		if (Attempts >= ATTEMPTS_COUNT)
 		{
 			SystemScreenSetFontColor(SYSTEM_SCREEN_COLOR_RED);
-			ScreenWriteString(STRING_NUMBERS_PLAYER_LOST_1);
+			SystemScreenWriteString(STRING_NUMBERS_PLAYER_LOST_1);
 			SystemScreenWriteInteger(Computer_Number);
-			ScreenWriteString(STRING_NUMBERS_PLAYER_LOST_2);
+			SystemScreenWriteString(STRING_NUMBERS_PLAYER_LOST_2);
 			goto End;
 		}
 		
@@ -109,31 +109,31 @@ void Numbers(void)
 		if (Player_Number == Computer_Number) // Player won
 		{
 			SystemScreenSetFontColor(SYSTEM_SCREEN_COLOR_GREEN);
-			ScreenWriteString(STRING_NUMBERS_PLAYER_WON_1);
+			SystemScreenWriteString(STRING_NUMBERS_PLAYER_WON_1);
 			SystemScreenWriteInteger(Attempts);
-			ScreenWriteString(STRING_NUMBERS_PLAYER_WON_2);
+			SystemScreenWriteString(STRING_NUMBERS_PLAYER_WON_2);
 			goto End;
 		}
 		else if (Player_Number < Computer_Number) // Too small
 		{
 			SystemScreenSetFontColor(SYSTEM_SCREEN_COLOR_RED);
-			ScreenWriteString(STRING_NUMBERS_NUMBER_TOO_SMALL);
+			SystemScreenWriteString(STRING_NUMBERS_NUMBER_TOO_SMALL);
 		}
 		else // Too big
 		{
 			SystemScreenSetFontColor(SYSTEM_SCREEN_COLOR_RED);
-			ScreenWriteString(STRING_NUMBERS_NUMBER_TOO_BIG);
+			SystemScreenWriteString(STRING_NUMBERS_NUMBER_TOO_BIG);
 		}
 
 		// Show remaining attempts
 		SystemScreenSetFontColor(SYSTEM_SCREEN_COLOR_BLUE);
-		ScreenWriteString(STRING_NUMBERS_REMAINING_ATTEMPTS_1);
+		SystemScreenWriteString(STRING_NUMBERS_REMAINING_ATTEMPTS_1);
 		SystemScreenWriteInteger(ATTEMPTS_COUNT - Attempts);
-		ScreenWriteString(STRING_NUMBERS_REMAINING_ATTEMPTS_2);
+		SystemScreenWriteString(STRING_NUMBERS_REMAINING_ATTEMPTS_2);
 	}
 	
 End:
 	SystemScreenSetFontColor(SYSTEM_SCREEN_COLOR_BLUE);
-	ScreenWriteString(STRING_NUMBERS_END);
+	SystemScreenWriteString(STRING_NUMBERS_END);
 	SystemKeyboardReadCharacter();
 }

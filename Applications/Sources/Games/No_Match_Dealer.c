@@ -21,7 +21,7 @@ void NoMatchDealer(void)
 	char Character;
 	
 	// Show instructions
-	ScreenWriteString(STRING_NO_MATCH_DEALER_INSTRUCTIONS);
+	SystemScreenWriteString(STRING_NO_MATCH_DEALER_INSTRUCTIONS);
 	
 	while (1)
 	{
@@ -52,19 +52,19 @@ void NoMatchDealer(void)
 				if ((i != j) && (Numbers[i] == Numbers[j]))
 				{
 					SystemScreenSetFontColor(SYSTEM_SCREEN_COLOR_RED);
-					ScreenWriteString(STRING_NO_MATCH_DEALER_GAME_LOST);
+					SystemScreenWriteString(STRING_NO_MATCH_DEALER_GAME_LOST);
 					goto End;
 				}
 			}
 		}
 
 		SystemScreenSetFontColor(SYSTEM_SCREEN_COLOR_GREEN);
-		ScreenWriteString(STRING_NO_MATCH_DEALER_GAME_WON);
+		SystemScreenWriteString(STRING_NO_MATCH_DEALER_GAME_WON);
 
 	End:
 		// Ask the player to retry or not
 		SystemScreenSetFontColor(SYSTEM_SCREEN_COLOR_BLUE);
-		ScreenWriteString(STRING_NO_MATCH_DEALER_ASK_FOR_RETRY);
+		SystemScreenWriteString(STRING_NO_MATCH_DEALER_ASK_FOR_RETRY);
 		
 		// Wait for Enter or Escape
 		do

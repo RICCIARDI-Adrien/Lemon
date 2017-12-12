@@ -33,22 +33,22 @@ static char *String_Error_Codes[] =
 //-------------------------------------------------------------------------------------------------
 void DisplayMessageTestStarting(char *String_Message)
 {
-	ScreenWriteString("--- Testing ");
-	ScreenWriteString(String_Message);
-	ScreenWriteString(" ---\n");
+	SystemScreenWriteString("--- Testing ");
+	SystemScreenWriteString(String_Message);
+	SystemScreenWriteString(" ---\n");
 }
 
 void DisplayMessageTestSuccessful(void)
 {
 	SystemScreenSetFontColor(SYSTEM_SCREEN_COLOR_GREEN);
-	ScreenWriteString("Test successful\n\n");
+	SystemScreenWriteString("Test successful\n\n");
 	SystemScreenSetFontColor(SYSTEM_SCREEN_COLOR_BLUE);
 }
 
 void DisplayMessageTestFailed(void)
 {
 	SystemScreenSetFontColor(SYSTEM_SCREEN_COLOR_RED);
-	ScreenWriteString("Test failed\n");
+	SystemScreenWriteString("Test failed\n");
 	SystemScreenSetFontColor(SYSTEM_SCREEN_COLOR_BLUE);
 	SystemExitProgram();
 }
@@ -59,16 +59,16 @@ void DisplayMessageErrorAndCode(char *String_Message, int Error_Code)
 	
 	// Display the user message
 	SystemScreenSetFontColor(SYSTEM_SCREEN_COLOR_RED);
-	ScreenWriteString("Error "); // User must provide the message
-	ScreenWriteString(String_Message);
-	ScreenWriteString(" : ");
+	SystemScreenWriteString("Error "); // User must provide the message
+	SystemScreenWriteString(String_Message);
+	SystemScreenWriteString(" : ");
 	
 	// Select the corresponding error string (if the error code is known)
 	if ((unsigned int) Error_Code >= SYSTEM_GET_ARRAY_ELEMENTS_COUNT(String_Error_Codes)) String_Error_Code = String_Unknown_Error_Code; // SYSTEM_GET_ARRAY_ELEMENTS_COUNT() returns an unsigned value
 	else String_Error_Code = String_Error_Codes[Error_Code];
 	
 	// Display the error code signification
-	ScreenWriteString(String_Error_Code);
+	SystemScreenWriteString(String_Error_Code);
 	SystemScreenWriteCharacter('\n');
 	SystemScreenSetFontColor(SYSTEM_SCREEN_COLOR_BLUE);
 }
@@ -76,8 +76,8 @@ void DisplayMessageErrorAndCode(char *String_Message, int Error_Code)
 void DisplayMessageError(char *String_Message)
 {
 	SystemScreenSetFontColor(SYSTEM_SCREEN_COLOR_RED);
-	ScreenWriteString("Error : ");
-	ScreenWriteString(String_Message);
+	SystemScreenWriteString("Error : ");
+	SystemScreenWriteString(String_Message);
 	SystemScreenWriteCharacter('\n');
 	SystemScreenSetFontColor(SYSTEM_SCREEN_COLOR_BLUE);
 }

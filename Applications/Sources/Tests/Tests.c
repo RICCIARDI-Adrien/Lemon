@@ -106,7 +106,7 @@ int main(void)
 	
 	SystemRandomInitialize();
 	
-	ScreenWriteString("### Automated tests ###\n\n");
+	SystemScreenWriteString("### Automated tests ###\n\n");
 	
 	for (i = 0; i < sizeof(Tests) / sizeof(TTest); i++)
 	{

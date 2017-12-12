@@ -63,18 +63,18 @@ static void DisplayUsage(char *String_Program_Name)
 {
 	int i;
 	
-	ScreenWriteString(STRING_USAGE_1);
-	ScreenWriteString(String_Program_Name);
-	ScreenWriteString(STRING_USAGE_2);
-	ScreenWriteString(String_Program_Name);
-	ScreenWriteString(STRING_USAGE_3);
+	SystemScreenWriteString(STRING_USAGE_1);
+	SystemScreenWriteString(String_Program_Name);
+	SystemScreenWriteString(STRING_USAGE_2);
+	SystemScreenWriteString(String_Program_Name);
+	SystemScreenWriteString(STRING_USAGE_3);
 	
-	ScreenWriteString(STRING_AVAILABLE_COMMANDS);
+	SystemScreenWriteString(STRING_AVAILABLE_COMMANDS);
 	
 	SystemScreenSetFontColor(SYSTEM_SCREEN_COLOR_LIGHT_BLUE);
 	for (i = 0; Commands[i].String_Command_Name != NULL; i++)
 	{
-		ScreenWriteString(Commands[i].String_Command_Name);
+		SystemScreenWriteString(Commands[i].String_Command_Name);
 		SystemScreenWriteCharacter(' ');
 	}
 	SystemScreenSetFontColor(SYSTEM_SCREEN_COLOR_BLUE);
@@ -110,7 +110,7 @@ int main(int argc, char *argv[])
 	
 	// The command was not found
 	SystemScreenSetFontColor(SYSTEM_SCREEN_COLOR_RED);
-	ScreenWriteString(STRING_UNKNOWN_COMMAND);
+	SystemScreenWriteString(STRING_UNKNOWN_COMMAND);
 	SystemScreenSetFontColor(SYSTEM_SCREEN_COLOR_BLUE);
 	
 	return 0;

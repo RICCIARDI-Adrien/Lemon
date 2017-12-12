@@ -118,7 +118,7 @@ int CommandMainLs(int argc, char __attribute__((unused)) *argv[])
 	// Check parameters
 	if (argc != 1)
 	{
-		ScreenWriteString(STRING_COMMAND_LS_USAGE);
+		SystemScreenWriteString(STRING_COMMAND_LS_USAGE);
 		return -1;
 	}
 	
@@ -127,7 +127,7 @@ int CommandMainLs(int argc, char __attribute__((unused)) *argv[])
 	if (Total_Files_Count > MAXIMUM_FILES_COUNT)
 	{
 		SystemScreenSetFontColor(SYSTEM_SCREEN_COLOR_RED);
-		ScreenWriteString(STRING_COMMAND_LS_NOT_ENOUGH_SPACE_TO_STORE_FILES);
+		SystemScreenWriteString(STRING_COMMAND_LS_NOT_ENOUGH_SPACE_TO_STORE_FILES);
 		SystemScreenSetFontColor(SYSTEM_SCREEN_COLOR_BLUE);
 		return -1;
 	}
@@ -156,7 +156,7 @@ int CommandMainLs(int argc, char __attribute__((unused)) *argv[])
 	for (i = 0; i < Files_Count; i++)
 	{
 		// Display the file name
-		ScreenWriteString(Pointer_Sorted_Files_Informations[i]->String_File_Name);
+		SystemScreenWriteString(Pointer_Sorted_Files_Informations[i]->String_File_Name);
 		
 		// Fill the eventually remaining space up to the beginning of the "file size" column
 		Remaining_Characters = (SYSTEM_FILE_NAME_LENGTH + 4) - SystemStringGetSize(Pointer_Sorted_Files_Informations[i]->String_File_Name);
@@ -164,14 +164,14 @@ int CommandMainLs(int argc, char __attribute__((unused)) *argv[])
 		
 		// Display the file size
 		ScreenWriteUnsignedInteger(Pointer_Sorted_Files_Informations[i]->Size_Bytes);
-		ScreenWriteString(STRING_COMMAND_LS_DISPLAYED_UNIT);
+		SystemScreenWriteString(STRING_COMMAND_LS_DISPLAYED_UNIT);
 		
 		// Wait for the user to press a key if the screen is full of displayed files
 		Displayed_Files_Count++;
 		if ((Displayed_Files_Count == SYSTEM_SCREEN_ROWS_COUNT - 1) && (i < Files_Count - 1)) // Do not display the wait prompt if there is no more file to display
 		{
 			SystemScreenSetFontColor(SYSTEM_SCREEN_COLOR_LIGHT_BLUE);
-			ScreenWriteString(STRING_COMMAND_LS_WAIT_FOR_USER_INPUT);
+			SystemScreenWriteString(STRING_COMMAND_LS_WAIT_FOR_USER_INPUT);
 			SystemScreenSetFontColor(SYSTEM_SCREEN_COLOR_BLUE);
 			
 			SystemKeyboardReadCharacter();

@@ -185,20 +185,20 @@ void BrainCalculation(void)
 		SystemRandomInitialize();
 		
 		// Show instructions
-		ScreenWriteString(STRING_BRAIN_CALCULATION_INSTRUCTIONS);
+		SystemScreenWriteString(STRING_BRAIN_CALCULATION_INSTRUCTIONS);
 		
 		while (1)
 		{
 			// Show calculus
 			ChooseCalculus(&First_Number, &Operator, &Second_Number, &Result);
 			SystemScreenSetFontColor(SYSTEM_SCREEN_COLOR_LIGHT_BLUE);
-			ScreenWriteString("   ");
+			SystemScreenWriteString("   ");
 			SystemScreenWriteInteger(First_Number);
 			SystemScreenWriteCharacter(' ');
 			SystemScreenWriteCharacter(Operator);
 			SystemScreenWriteCharacter(' ');
 			SystemScreenWriteInteger(Second_Number);
-			ScreenWriteString("  =  ");
+			SystemScreenWriteString("  =  ");
 			SystemScreenSetFontColor(SYSTEM_SCREEN_COLOR_BLUE);
 			
 			// Get user's number
@@ -208,9 +208,9 @@ void BrainCalculation(void)
 			if (Number == BRAIN_CALCULATION_EXIT_CODE)
 			{
 				SystemScreenWriteCharacter('\n');
-				ScreenWriteString(STRING_BRAIN_CALCULATION_CORRECT_ANSWERS_COUNT_1);
+				SystemScreenWriteString(STRING_BRAIN_CALCULATION_CORRECT_ANSWERS_COUNT_1);
 				SystemScreenWriteInteger(Correct_Results_Count);
-				ScreenWriteString(STRING_BRAIN_CALCULATION_CORRECT_ANSWERS_COUNT_2);
+				SystemScreenWriteString(STRING_BRAIN_CALCULATION_CORRECT_ANSWERS_COUNT_2);
 				return;
 			}
 			
@@ -218,7 +218,7 @@ void BrainCalculation(void)
 			if (Number == Result)
 			{
 				SystemScreenSetFontColor(SYSTEM_SCREEN_COLOR_GREEN);
-				ScreenWriteString(STRING_BRAIN_CALCULATION_GOOD_RESULT);
+				SystemScreenWriteString(STRING_BRAIN_CALCULATION_GOOD_RESULT);
 				SystemScreenSetFontColor(SYSTEM_SCREEN_COLOR_BLUE);
 				
 				Correct_Results_Count++;
@@ -226,14 +226,14 @@ void BrainCalculation(void)
 			else
 			{
 				SystemScreenSetFontColor(SYSTEM_SCREEN_COLOR_RED);
-				ScreenWriteString(STRING_BRAIN_CALCULATION_BAD_RESULT_1);
+				SystemScreenWriteString(STRING_BRAIN_CALCULATION_BAD_RESULT_1);
 				SystemScreenWriteInteger(Result);
-				ScreenWriteString(STRING_BRAIN_CALCULATION_BAD_RESULT_2);
+				SystemScreenWriteString(STRING_BRAIN_CALCULATION_BAD_RESULT_2);
 				
 				SystemScreenSetFontColor(SYSTEM_SCREEN_COLOR_BLUE);
-				ScreenWriteString(STRING_BRAIN_CALCULATION_CORRECT_ANSWERS_COUNT_1);
+				SystemScreenWriteString(STRING_BRAIN_CALCULATION_CORRECT_ANSWERS_COUNT_1);
 				SystemScreenWriteInteger(Correct_Results_Count);
-				ScreenWriteString(STRING_BRAIN_CALCULATION_CORRECT_ANSWERS_COUNT_2);
+				SystemScreenWriteString(STRING_BRAIN_CALCULATION_CORRECT_ANSWERS_COUNT_2);
 				
 				SystemKeyboardReadCharacter();
 				break;

@@ -32,7 +32,7 @@ static int DisplayNextLine(void)
 		// Try to read a character
 		if (SystemFileRead(File_ID, &Character, 1, &Read_Bytes_Count) != ERROR_CODE_NO_ERROR)
 		{
-			ScreenWriteString(STRING_COMMAND_MORE_ERROR_READING_FROM_FILE);
+			SystemScreenWriteString(STRING_COMMAND_MORE_ERROR_READING_FROM_FILE);
 			return -1;
 		}
 		
@@ -83,14 +83,14 @@ int CommandMainMore(int argc, char *argv[])
 	// Check parameters
 	if (argc != 2)
 	{
-		ScreenWriteString(STRING_COMMAND_MORE_USAGE);
+		SystemScreenWriteString(STRING_COMMAND_MORE_USAGE);
 		goto Exit;
 	}
 	
 	// Display the help if requested
 	if (SystemStringCompare(argv[1], "-h"))
 	{
-		ScreenWriteString(STRING_COMMAND_MORE_USAGE);
+		SystemScreenWriteString(STRING_COMMAND_MORE_USAGE);
 		Return_Value = 0;
 		goto Exit;
 	}
@@ -99,9 +99,9 @@ int CommandMainMore(int argc, char *argv[])
 	// Try to open the provided file
 	if (SystemFileOpen(String_File_Name, SYSTEM_FILE_OPENING_MODE_READ, &File_ID) != ERROR_CODE_NO_ERROR)
 	{
-		ScreenWriteString(STRING_COMMAND_MORE_FILE_NOT_FOUND_1);
-		ScreenWriteString(String_File_Name);
-		ScreenWriteString(STRING_COMMAND_MORE_FILE_NOT_FOUND_2);
+		SystemScreenWriteString(STRING_COMMAND_MORE_FILE_NOT_FOUND_1);
+		SystemScreenWriteString(String_File_Name);
+		SystemScreenWriteString(STRING_COMMAND_MORE_FILE_NOT_FOUND_2);
 		goto Exit;
 	}
 	

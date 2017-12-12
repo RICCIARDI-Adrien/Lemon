@@ -36,14 +36,14 @@ static void MainDisplayMessage(char *String_Message_Title, char *String_Message_
 	SystemScreenSetFontColor(Message_Title_Color);
 	SystemScreenWriteCenteredString(String_Message_Title);
 	SystemScreenSetFontColor(CONFIGURATION_TEXT_FOREGROUND_COLOR); // Restore the default color
-	ScreenWriteString("\n\n");
+	SystemScreenWriteString("\n\n");
 	
 	// Display the message content 
-	ScreenWriteString(String_Message_Content);
+	SystemScreenWriteString(String_Message_Content);
 
 	// Display the footer message
 	SystemScreenSetCursorPosition(SYSTEM_SCREEN_ROWS_COUNT - 1, 0);
-	ScreenWriteString(String_Message_Footer);
+	SystemScreenWriteString(String_Message_Footer);
 }
 
 /** Wait for the user to press the enter key. */
@@ -283,7 +283,7 @@ int main(int argc, char *argv[])
 	// Check parameters
 	if (argc != 2)
 	{
-		ScreenWriteString(STRING_USAGE);
+		SystemScreenWriteString(STRING_USAGE);
 		return -1;
 	}
 	String_File_Name = argv[1];

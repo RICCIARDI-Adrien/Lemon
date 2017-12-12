@@ -124,9 +124,9 @@ void Rain(void)
 			SystemScreenSetCursorPosition(SYSTEM_SCREEN_ROWS_COUNT - 1, 0);
 			SystemScreenSetBackgroundColor(SYSTEM_SCREEN_COLOR_WHITE);
 			SystemScreenSetFontColor(SYSTEM_SCREEN_COLOR_LIGHT_GREEN);
-			ScreenWriteString(STRING_RAIN_STATISTICS_1);
+			SystemScreenWriteString(STRING_RAIN_STATISTICS_1);
 			SystemScreenWriteInteger(Raindrops_Count);
-			ScreenWriteString(STRING_RAIN_STATISTICS_2);
+			SystemScreenWriteString(STRING_RAIN_STATISTICS_2);
 			SystemScreenWriteInteger(Loops_Count);
 			
 			// Wait required time

@@ -12,7 +12,7 @@ int main(void)
 	unsigned int Packet_Size, i;
 	unsigned char Packet_Buffer[NETWORK_MAXIMUM_PACKET_SIZE];
 	
-	ScreenWriteString("Hit F12 to exit.\n");
+	SystemScreenWriteString("Hit F12 to exit.\n");
 	
 	while (1)
 	{

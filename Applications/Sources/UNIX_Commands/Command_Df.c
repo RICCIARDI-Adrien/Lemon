@@ -16,7 +16,7 @@ int CommandMainDf(int argc, char __attribute__((unused)) *argv[])
 	// Check parameters
 	if (argc != 1)
 	{
-		ScreenWriteString(STRING_COMMAND_DF_USAGE);
+		SystemScreenWriteString(STRING_COMMAND_DF_USAGE);
 		return -1;
 	}
 	
@@ -29,25 +29,25 @@ int CommandMainDf(int argc, char __attribute__((unused)) *argv[])
 	Free_Storage *= Block_Size;
 	
 	// Display the files values
-	ScreenWriteString(STRING_COMMAND_DF_FILES_COUNT);
+	SystemScreenWriteString(STRING_COMMAND_DF_FILES_COUNT);
 	ScreenWriteUnsignedInteger(Total_Files_Count - Free_Files_Count);
 	SystemScreenWriteCharacter('/');
 	ScreenWriteUnsignedInteger(Total_Files_Count);
 	// Display the percentage
-	ScreenWriteString(" (");
+	SystemScreenWriteString(" (");
 	ScreenWriteUnsignedInteger(100 - ((100 * Free_Files_Count) / Total_Files_Count));
-	ScreenWriteString("%)\n");
+	SystemScreenWriteString("%)\n");
 	
 	// Display the remaining storage
-	ScreenWriteString(STRING_COMMAND_DF_REMAINING_STORAGE_1);
+	SystemScreenWriteString(STRING_COMMAND_DF_REMAINING_STORAGE_1);
 	ScreenWriteUnsignedInteger(Total_Storage - Free_Storage);
 	SystemScreenWriteCharacter('/');
 	ScreenWriteUnsignedInteger(Total_Storage);
-	ScreenWriteString(STRING_COMMAND_DF_REMAINING_STORAGE_2);
+	SystemScreenWriteString(STRING_COMMAND_DF_REMAINING_STORAGE_2);
 	// Display the percentage
-	ScreenWriteString(" (");
+	SystemScreenWriteString(" (");
 	ScreenWriteUnsignedInteger(100 - ((100 * Free_Storage) / Total_Storage));
-	ScreenWriteString("%)\n");
+	SystemScreenWriteString("%)\n");
 	
 	return 0;
 }

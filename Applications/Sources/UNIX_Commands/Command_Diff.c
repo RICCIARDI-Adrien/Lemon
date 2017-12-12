@@ -19,7 +19,7 @@ int CommandMainDiff(int argc, char *argv[])
 	// Check parameters
 	if (argc != 3)
 	{
-		ScreenWriteString(STRING_COMMAND_DIFF_USAGE);
+		SystemScreenWriteString(STRING_COMMAND_DIFF_USAGE);
 		goto Exit;
 	}
 	String_File_1_Name = argv[1];
@@ -28,17 +28,17 @@ int CommandMainDiff(int argc, char *argv[])
 	// Try to open the files
 	if (SystemFileOpen(String_File_1_Name, SYSTEM_FILE_OPENING_MODE_READ, &File_Descriptor_1) != ERROR_CODE_NO_ERROR)
 	{
-		ScreenWriteString(STRING_COMMAND_DIFF_FILE_CANT_BE_OPENED_1);
-		ScreenWriteString(String_File_1_Name);
-		ScreenWriteString(STRING_COMMAND_DIFF_FILE_CANT_BE_OPENED_2);
+		SystemScreenWriteString(STRING_COMMAND_DIFF_FILE_CANT_BE_OPENED_1);
+		SystemScreenWriteString(String_File_1_Name);
+		SystemScreenWriteString(STRING_COMMAND_DIFF_FILE_CANT_BE_OPENED_2);
 		goto Exit;
 	}
 	if (SystemFileOpen(String_File_2_Name, SYSTEM_FILE_OPENING_MODE_READ, &File_Descriptor_2) != ERROR_CODE_NO_ERROR)
 	{
-		ScreenWriteString(STRING_COMMAND_DIFF_FILE_CANT_BE_OPENED_1);
-		ScreenWriteString(String_File_2_Name);
-		ScreenWriteString(STRING_COMMAND_DIFF_FILE_CANT_BE_OPENED_2);
-		ScreenWriteString(STRING_COMMAND_DIFF_SAME_FILE_CANT_BE_REOPENED);
+		SystemScreenWriteString(STRING_COMMAND_DIFF_FILE_CANT_BE_OPENED_1);
+		SystemScreenWriteString(String_File_2_Name);
+		SystemScreenWriteString(STRING_COMMAND_DIFF_FILE_CANT_BE_OPENED_2);
+		SystemScreenWriteString(STRING_COMMAND_DIFF_SAME_FILE_CANT_BE_REOPENED);
 		goto Exit;
 	}
 	
@@ -48,9 +48,9 @@ int CommandMainDiff(int argc, char *argv[])
 		// Read a byte from the first file
 		if (SystemFileRead(File_Descriptor_1, &Byte_1, 1, &Read_Bytes_Count) != ERROR_CODE_NO_ERROR)
 		{
-			ScreenWriteString(STRING_COMMAND_DIFF_FILE_READ_ERROR_1);
-			ScreenWriteString(String_File_1_Name);
-			ScreenWriteString(STRING_COMMAND_DIFF_FILE_READ_ERROR_2);
+			SystemScreenWriteString(STRING_COMMAND_DIFF_FILE_READ_ERROR_1);
+			SystemScreenWriteString(String_File_1_Name);
+			SystemScreenWriteString(STRING_COMMAND_DIFF_FILE_READ_ERROR_2);
 			goto Exit;
 		}
 		if (Read_Bytes_Count == 0) Is_End_Of_First_File_Reached = 1;
@@ -58,9 +58,9 @@ int CommandMainDiff(int argc, char *argv[])
 		// Read a byte from the second file
 		if (SystemFileRead(File_Descriptor_2, &Byte_2, 1, &Read_Bytes_Count) != ERROR_CODE_NO_ERROR)
 		{
-			ScreenWriteString(STRING_COMMAND_DIFF_FILE_READ_ERROR_1);
-			ScreenWriteString(String_File_2_Name);
-			ScreenWriteString(STRING_COMMAND_DIFF_FILE_READ_ERROR_2);
+			SystemScreenWriteString(STRING_COMMAND_DIFF_FILE_READ_ERROR_1);
+			SystemScreenWriteString(String_File_2_Name);
+			SystemScreenWriteString(STRING_COMMAND_DIFF_FILE_READ_ERROR_2);
 			goto Exit;
 		}
 		if (Read_Bytes_Count == 0) Is_End_Of_Second_File_Reached = 1;
@@ -69,7 +69,7 @@ int CommandMainDiff(int argc, char *argv[])
 		if ((Is_End_Of_First_File_Reached && !Is_End_Of_Second_File_Reached) || (!Is_End_Of_First_File_Reached && Is_End_Of_Second_File_Reached) || (Byte_1 != Byte_2))
 		{
 			SystemScreenSetFontColor(SYSTEM_SCREEN_COLOR_RED);
-			ScreenWriteString(STRING_COMMAND_DIFF_FILES_ARE_DIFFERENT);
+			SystemScreenWriteString(STRING_COMMAND_DIFF_FILES_ARE_DIFFERENT);
 			break;
 		}
 		
@@ -77,7 +77,7 @@ int CommandMainDiff(int argc, char *argv[])
 		if (Is_End_Of_First_File_Reached) // No need to check for other file end because they are of same length
 		{
 			SystemScreenSetFontColor(SYSTEM_SCREEN_COLOR_GREEN);
-			ScreenWriteString(STRING_COMMAND_DIFF_FILES_ARE_EQUAL);
+			SystemScreenWriteString(STRING_COMMAND_DIFF_FILES_ARE_EQUAL);
 			break;
 		}
 	}

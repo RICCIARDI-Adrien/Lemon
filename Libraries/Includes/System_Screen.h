@@ -87,7 +87,7 @@ void SystemScreenWriteCharacter(char Character);
 /** Display an ASCIIZ string.
  * @param String The string to display.
  */
-void ScreenWriteString(char *String);
+void SystemScreenWriteString(char *String);
 
 /** Display a centered ASCIIZ string.
  * @param String The string to display.

@@ -29,7 +29,7 @@ int TestsFileFunctionsInputParameters(void)
 	
 	// Testing SystemFileOpen()
 	// Bad filename (empty string, checked by kernel)
-	ScreenWriteString("Checking SystemFileOpen()...\n");
+	SystemScreenWriteString("Checking SystemFileOpen()...\n");
 	Result = SystemFileOpen("\0", 'r', &File_ID);
 	if (Result != ERROR_CODE_BAD_FILE_NAME)
 	{
@@ -62,7 +62,7 @@ int TestsFileFunctionsInputParameters(void)
 	// Testing SystemFileRead()
 	// Open a file 
 	// Bad file ID
-	/*ScreenWriteString("Checking SystemFileRead()...\n");
+	/*SystemScreenWriteString("Checking SystemFileRead()...\n");
 	Result = SystemFileRead(123456, );
 	if (Result != ERROR_CODE_FILE_NOT_FOUND)
 	{
@@ -81,22 +81,22 @@ int TestsFileSystemCalls(void)
 
 	// Choose a random file size between 100 KB and 3 MB
 	File_Size_Bytes = ((SystemRandomGenerateNumber() % 32) + 1) * 1024 * 100;
-	ScreenWriteString("File size : ");
+	SystemScreenWriteString("File size : ");
 	ScreenWriteUnsignedInteger(File_Size_Bytes);
 	SystemScreenWriteCharacter('\n');
  
-	ScreenWriteString("Creating file content... ");
+	SystemScreenWriteString("Creating file content... ");
 	for (i = 0; i < File_Size_Bytes; i++) Buffer[i] = (unsigned char) SystemRandomGenerateNumber();
-	ScreenWriteString("done\n");
+	SystemScreenWriteString("done\n");
 
-	ScreenWriteString("Computing CRC... ");
+	SystemScreenWriteString("Computing CRC... ");
 	CRC_Seed = SystemRandomGenerateNumber();
 	Written_Data_CRC = crc32(CRC_Seed, Buffer, File_Size_Bytes);
-	ScreenWriteString("done (CRC = ");
+	SystemScreenWriteString("done (CRC = ");
 	ScreenWriteUnsignedInteger(Written_Data_CRC);
-	ScreenWriteString(")\n");
+	SystemScreenWriteString(")\n");
 
-	ScreenWriteString("Writing data to file... ");
+	SystemScreenWriteString("Writing data to file... ");
 	// Open the file
 	Result = SystemCall(SYSTEM_CALL_FILE_OPEN, 'w', 0, "_test_", &File_ID);
 	if (Result != ERROR_CODE_NO_ERROR)
@@ -113,12 +113,12 @@ int TestsFileSystemCalls(void)
 	}
 	// Close the file
 	SystemCall(SYSTEM_CALL_FILE_CLOSE, File_ID, 0, NULL, NULL);
-	ScreenWriteString("done\n");
+	SystemScreenWriteString("done\n");
 
 	// Flush read buffer
 	SystemMemorySetAreaValue(Buffer, File_Size_Bytes, 0);
 
-	ScreenWriteString("Reading data from file... ");
+	SystemScreenWriteString("Reading data from file... ");
 	// Open the file
 	Result = SystemCall(SYSTEM_CALL_FILE_OPEN, 'r', 0, "_test_", &File_ID);
 	if (Result != ERROR_CODE_NO_ERROR)
@@ -135,15 +135,15 @@ int TestsFileSystemCalls(void)
 	}
 	// Close the file
 	SystemCall(SYSTEM_CALL_FILE_CLOSE, File_ID, 0, NULL, NULL);
-	ScreenWriteString("done (");
+	SystemScreenWriteString("done (");
 	ScreenWriteUnsignedInteger(Read_Bytes_Count);
-	ScreenWriteString(" bytes read)\n");
+	SystemScreenWriteString(" bytes read)\n");
 
-	ScreenWriteString("Computing CRC... ");
+	SystemScreenWriteString("Computing CRC... ");
 	Read_Data_CRC = crc32(CRC_Seed, Buffer, File_Size_Bytes);
-	ScreenWriteString("done (CRC = ");
+	SystemScreenWriteString("done (CRC = ");
 	ScreenWriteUnsignedInteger(Read_Data_CRC);
-	ScreenWriteString(")\n");
+	SystemScreenWriteString(")\n");
 
 	// Delete the file
 	Result = SystemFileDelete("_test_");
@@ -164,7 +164,7 @@ int TestsFileMaximumOpenedFiles(void)
 	char String_File_Name[SYSTEM_FILE_NAME_LENGTH + 1], String_Number[11];
 	
 	// Open the maximum number of files
-	ScreenWriteString("Opening as many files as possible...\n");
+	SystemScreenWriteString("Opening as many files as possible...\n");
 	for (i = 0; i < SYSTEM_FILE_MAXIMUM_OPENED_COUNT; i++)
 	{
 		// Create the file name
@@ -182,7 +182,7 @@ int TestsFileMaximumOpenedFiles(void)
 	}
 	
 	// Opening one more file
-	ScreenWriteString("Opening one more file...\n");
+	SystemScreenWriteString("Opening one more file...\n");
 	Result = SystemFileOpen("_test_!!!", 'w', &File_IDs[SYSTEM_FILE_MAXIMUM_OPENED_COUNT]);
 	if (Result != ERROR_CODE_CANT_OPEN_MORE_FILES)
 	{
@@ -213,7 +213,7 @@ int TestsFileReopenSameFile(void)
 	char *String_File_Content = "This is an empty test file.";
 	
 	// Create a file
-	ScreenWriteString("Creating a file...\n");
+	SystemScreenWriteString("Creating a file...\n");
 	Result = SystemFileOpen("_test_", 'w', &File_ID);
 	if (Result != ERROR_CODE_NO_ERROR)
 	{
@@ -232,7 +232,7 @@ int TestsFileReopenSameFile(void)
 	
 	// Try to open the same file 2 times
 	// The first time must succeed
-	ScreenWriteString("Opening the file for the first time...\n");
+	SystemScreenWriteString("Opening the file for the first time...\n");
 	Result = SystemFileOpen("_test_", 'r', &File_ID);
 	if (Result != ERROR_CODE_NO_ERROR)
 	{
@@ -240,7 +240,7 @@ int TestsFileReopenSameFile(void)
 		goto Exit;
 	}
 	// The second time must fail
-	ScreenWriteString("Opening the file for the second time...\n");
+	SystemScreenWriteString("Opening the file for the second time...\n");
 	Result = SystemFileOpen("_test_", 'r', &File_ID_2);
 	if (Result != ERROR_CODE_FILE_OPENED_YET)
 	{
@@ -251,7 +251,7 @@ int TestsFileReopenSameFile(void)
 	Return_Value = 0;
 	
 Exit:
-	ScreenWriteString("Removing the file...\n");
+	SystemScreenWriteString("Removing the file...\n");
 	SystemFileClose(File_ID);
 	SystemFileDelete("_test_"); // This function can be called even if the file is not existing
 	return Return_Value;
@@ -266,11 +266,11 @@ int TestsFileFillFilesList(void)
 	// Retrieve the amount of free Files List entries
 	SystemGetFileSystemFreeSize(&i, &Free_Files_Count); // The first parameter is not relevant here
 	
-	ScreenWriteString("There are ");
+	SystemScreenWriteString("There are ");
 	ScreenWriteUnsignedInteger(Free_Files_Count);
-	ScreenWriteString(" free Files List entries.\n");
+	SystemScreenWriteString(" free Files List entries.\n");
 	
-	ScreenWriteString("Filling all entries...\n");
+	SystemScreenWriteString("Filling all entries...\n");
 	
 	// Create one more files than the free Files List entries amount
 	for (i = 0; i <= Free_Files_Count; i++)
@@ -297,7 +297,7 @@ int TestsFileFillFilesList(void)
 		SystemFileClose(File_ID);
 	}
 	
-	ScreenWriteString("Deleting all test generated files...\n");
+	SystemScreenWriteString("Deleting all test generated files...\n");
 	
 	// Delete all files
 	for (i = 0; i < Free_Files_Count; i++)
@@ -323,11 +323,11 @@ int TestsFileFillBlocksList(void)
 	// Retrieve a block size in bytes
 	SystemGetFileSystemTotalSize(&Block_Size_Bytes, &i, &i);
 	
-	ScreenWriteString("There are ");
+	SystemScreenWriteString("There are ");
 	ScreenWriteUnsignedInteger(Free_Blocks_Count);
-	ScreenWriteString(" free Blocks List entries.\n");
+	SystemScreenWriteString(" free Blocks List entries.\n");
 	
-	ScreenWriteString("Creating the test file...\n");
+	SystemScreenWriteString("Creating the test file...\n");
 	
 	// Create a file
 	Result = SystemFileOpen("_test_", 'w', &File_ID);
@@ -340,7 +340,7 @@ int TestsFileFillBlocksList(void)
 	// Fill the buffer with crap data
 	for (i = 0; i < Block_Size_Bytes; i++) Buffer[i] = (unsigned char) SystemRandomGenerateNumber();
 	
-	ScreenWriteString("Filling the file...\n");
+	SystemScreenWriteString("Filling the file...\n");
 	
 	// Fill the Blocks List with one block more than the available space
 	for (i = 0; i <= Free_Blocks_Count; i++)
@@ -365,7 +365,7 @@ int TestsFileFillBlocksList(void)
 	}
 	
 Exit:
-	ScreenWriteString("Deleting the test file...\n");
+	SystemScreenWriteString("Deleting the test file...\n");
 	SystemFileClose(File_ID);
 	SystemFileDelete("_test_");
 	return Return_Value;

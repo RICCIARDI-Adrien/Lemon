@@ -17,7 +17,7 @@ void InterfaceDisplayMessage(char *String_Message, TSystemScreenColor Message_Co
 	// Display the message at the screen end
 	SystemScreenSetCursorPosition(SYSTEM_SCREEN_ROWS_COUNT - 1, 0);
 	SystemScreenSetFontColor(Message_Color);
-	ScreenWriteString(String_Message);
+	SystemScreenWriteString(String_Message);
 }
 
 void InterfaceDisplayUserMessage(char *String_Message)
@@ -27,7 +27,7 @@ void InterfaceDisplayUserMessage(char *String_Message)
 	// Display the prompt
 	SystemScreenSetCursorPosition(0, 0);
 	SystemScreenSetFontColor(SYSTEM_SCREEN_COLOR_GREEN);
-	ScreenWriteString("> ");
+	SystemScreenWriteString("> ");
 	
 	// Display the current written message
 	SystemScreenSetFontColor(SYSTEM_SCREEN_COLOR_BLUE);

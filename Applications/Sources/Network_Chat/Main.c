@@ -77,9 +77,9 @@ int main(int argc, char *argv[])
 	// Check parameters
 	if (argc != 3)
 	{
-		ScreenWriteString(STRING_USAGE_1);
-		ScreenWriteString(argv[0]);
-		ScreenWriteString(STRING_USAGE_2);
+		SystemScreenWriteString(STRING_USAGE_1);
+		SystemScreenWriteString(argv[0]);
+		SystemScreenWriteString(STRING_USAGE_2);
 		return 1;
 	}
 	
@@ -88,7 +88,7 @@ int main(int argc, char *argv[])
 	if (NetworkInitializeIPAddress(argv[1], &Destination_IP_Address) != 0)
 	{
 		SystemScreenSetFontColor(SYSTEM_SCREEN_COLOR_RED);
-		ScreenWriteString(STRING_ERROR_INVALID_IP_ADDRESS);
+		SystemScreenWriteString(STRING_ERROR_INVALID_IP_ADDRESS);
 		return 1;
 	}
 	// Destination port
@@ -99,20 +99,20 @@ int main(int argc, char *argv[])
 	if (Result == 1)
 	{
 		SystemScreenSetFontColor(SYSTEM_SCREEN_COLOR_RED);
-		ScreenWriteString(STRING_ERROR_NETWORK_INITIALIZATION_NO_NETWORK_SUPPORT);
+		SystemScreenWriteString(STRING_ERROR_NETWORK_INITIALIZATION_NO_NETWORK_SUPPORT);
 		return 1;
 	}
 	else if (Result == 2)
 	{
 		SystemScreenSetFontColor(SYSTEM_SCREEN_COLOR_RED);
-		ScreenWriteString(STRING_ERROR_NETWORK_INITIALIZATION_BAD_CONFIGURATION_PARAMETERS);
+		SystemScreenWriteString(STRING_ERROR_NETWORK_INITIALIZATION_BAD_CONFIGURATION_PARAMETERS);
 		return 1;
 	}
 	
 	if (NetworkInitializeSocket(&Destination_IP_Address, Destination_Port, NETWORK_IP_PROTOCOL_UDP, &Socket) != 0)
 	{
 		SystemScreenSetFontColor(SYSTEM_SCREEN_COLOR_RED);
-		ScreenWriteString(STRING_ERROR_NETWORK_SOCKET_INITIALIZATION);
+		SystemScreenWriteString(STRING_ERROR_NETWORK_SOCKET_INITIALIZATION);
 		return 1;
 	}
 	

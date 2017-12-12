@@ -88,9 +88,9 @@ int TestsStringConvertStringToUnsignedInteger(void)
 	
 	for (i = 0; i < SYSTEM_GET_ARRAY_ELEMENTS_COUNT(Results); i++)
 	{
-		ScreenWriteString("Testing string \"");
-		ScreenWriteString(String_Numbers[i]);
-		ScreenWriteString("\"...\n");
+		SystemScreenWriteString("Testing string \"");
+		SystemScreenWriteString(String_Numbers[i]);
+		SystemScreenWriteString("\"...\n");
 		
 		if (SystemStringConvertStringToUnsignedInteger(String_Numbers[i]) != Results[i])
 		{
@@ -109,9 +109,9 @@ int TestsStringConvertUnsignedIntegerToString(void)
 	
 	for (i = 0; i < SYSTEM_GET_ARRAY_ELEMENTS_COUNT(Numbers); i++)
 	{
-		ScreenWriteString("Testing number ");
-		ScreenWriteString(String_Results[i]);
-		ScreenWriteString("...\n");
+		SystemScreenWriteString("Testing number ");
+		SystemScreenWriteString(String_Results[i]);
+		SystemScreenWriteString("...\n");
 		
 		SystemStringConvertUnsignedIntegerToString(Numbers[i], String_Result);
 		if (!SystemStringCompare(String_Result, String_Results[i]))
@@ -131,9 +131,9 @@ int TestsStringConvertIntegerToHexadecimal(void)
 	
 	for (i = 0; i < SYSTEM_GET_ARRAY_ELEMENTS_COUNT(Numbers); i++)
 	{
-		ScreenWriteString("Testing number ");
-		ScreenWriteString(String_Results[i]);
-		ScreenWriteString("...\n");
+		SystemScreenWriteString("Testing number ");
+		SystemScreenWriteString(String_Results[i]);
+		SystemScreenWriteString("...\n");
 		
 		SystemStringConvertIntegerToHexadecimal((int) Numbers[i], String_Result);
 		if (!SystemStringCompare(String_Result, String_Results[i]))

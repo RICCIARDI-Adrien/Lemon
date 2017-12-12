@@ -108,13 +108,13 @@ static void DisplayCommandsList(void)
 {
 	int i, Spaces_Count;
 	
-	ScreenWriteString(STRING_AVAILABLE_COMMANDS);
+	SystemScreenWriteString(STRING_AVAILABLE_COMMANDS);
 	
 	for (i = 0; Commands[i].String_Name != NULL; i++)
 	{
 		// Display the command
 		SystemScreenSetFontColor(SYSTEM_SCREEN_COLOR_LIGHT_BLUE);
-		ScreenWriteString(Commands[i].String_Name);
+		SystemScreenWriteString(Commands[i].String_Name);
 		SystemScreenSetFontColor(SYSTEM_SCREEN_COLOR_BLUE);
 		
 		// Display as many spaces as needed to align the command description on the requested column
@@ -126,7 +126,7 @@ static void DisplayCommandsList(void)
 		}
 		
 		// Display the command description
-		ScreenWriteString(Commands[i].String_Short_Description);
+		SystemScreenWriteString(Commands[i].String_Short_Description);
 		SystemScreenWriteCharacter('\n');
 	}
 }
@@ -160,9 +160,9 @@ int main(int argc, char *argv[])
 	// Display the generic help if no argument is provided
 	if (argc < 2)
 	{
-		ScreenWriteString(STRING_USAGE_1);
-		ScreenWriteString(argv[0]);
-		ScreenWriteString(STRING_USAGE_2);
+		SystemScreenWriteString(STRING_USAGE_1);
+		SystemScreenWriteString(argv[0]);
+		SystemScreenWriteString(STRING_USAGE_2);
 		
 		DisplayCommandsList();
 		return -1;
@@ -176,15 +176,15 @@ int main(int argc, char *argv[])
 		if (SystemStringCompare(String_Requested_Command, Commands[i].String_Name))
 		{
 			DisplayTitle(String_Requested_Command);
-			ScreenWriteString(Commands[i].String_Full_Description);
+			SystemScreenWriteString(Commands[i].String_Full_Description);
 			SystemScreenWriteCharacter('\n');
 			return 0;
 		}
 	}
 	
 	// Unknown command
-	ScreenWriteString(STRING_UNKNOWN_COMMAND_1);
-	ScreenWriteString(String_Requested_Command);
-	ScreenWriteString(STRING_UNKNOWN_COMMAND_2);
+	SystemScreenWriteString(STRING_UNKNOWN_COMMAND_1);
+	SystemScreenWriteString(String_Requested_Command);
+	SystemScreenWriteString(STRING_UNKNOWN_COMMAND_2);
 	return 0;
 }

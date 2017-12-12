@@ -100,7 +100,7 @@ static void BenchmarkFileSystem(unsigned int *Pointer_Start_Time, unsigned int *
 		Result = SystemFileOpen("_test_", 'w', &File_ID);
 		if (Result != ERROR_CODE_NO_ERROR)
 		{
-			ScreenWriteString("Error while opening the file for writing.\n");
+			SystemScreenWriteString("Error while opening the file for writing.\n");
 			goto Exit_Error;
 		}
 		
@@ -108,7 +108,7 @@ static void BenchmarkFileSystem(unsigned int *Pointer_Start_Time, unsigned int *
 		Result = SystemFileWrite(File_ID, String_Data, sizeof(String_Data));
 		if (Result != ERROR_CODE_NO_ERROR)
 		{
-			ScreenWriteString("Error while writing to the file.\n");
+			SystemScreenWriteString("Error while writing to the file.\n");
 			goto Exit_Error;
 		}
 
@@ -120,9 +120,9 @@ static void BenchmarkFileSystem(unsigned int *Pointer_Start_Time, unsigned int *
 	return;
 	
 Exit_Error:
-	ScreenWriteString("Error on file ");
+	SystemScreenWriteString("Error on file ");
 	SystemScreenWriteInteger(i);
-	ScreenWriteString(".\n");
+	SystemScreenWriteString(".\n");
 	SystemFileClose(File_ID);
 	SystemFileDelete("_test_");
 }
@@ -150,23 +150,23 @@ int main(void)
 	for (i = 0; i < sizeof(Benchmark_Tests) / sizeof(TBenchmarkTest); i++)
 	{
 		// Display benchmark information
-		ScreenWriteString("### Evaluating ");
+		SystemScreenWriteString("### Evaluating ");
 		SystemScreenSetFontColor(SYSTEM_SCREEN_COLOR_GREEN);
-		ScreenWriteString(Benchmark_Tests[i].String_Tested_Subsystem);
+		SystemScreenWriteString(Benchmark_Tests[i].String_Tested_Subsystem);
 		SystemScreenSetFontColor(SYSTEM_SCREEN_COLOR_BLUE);
-		ScreenWriteString(" ###\n");
-		ScreenWriteString(Benchmark_Tests[i].String_Description);
-		ScreenWriteString(".\n");
+		SystemScreenWriteString(" ###\n");
+		SystemScreenWriteString(Benchmark_Tests[i].String_Description);
+		SystemScreenWriteString(".\n");
 		
 		// Execute it
 		Benchmark_Tests[i].Function(&Start_Time, &End_Time);
 		
 		// Display elapsed time
-		ScreenWriteString("Benchmark duration : ");
+		SystemScreenWriteString("Benchmark duration : ");
 		SystemScreenSetFontColor(SYSTEM_SCREEN_COLOR_GREEN);
 		ScreenWriteUnsignedInteger(End_Time - Start_Time);
 		SystemScreenSetFontColor(SYSTEM_SCREEN_COLOR_BLUE);
-		ScreenWriteString(" milliseconds.\n\n");
+		SystemScreenWriteString(" milliseconds.\n\n");
 	}
 	
 	return 0;

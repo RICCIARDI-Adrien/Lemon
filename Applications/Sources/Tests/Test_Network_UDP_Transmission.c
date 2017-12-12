@@ -24,9 +24,9 @@ int main(int argc, char *argv[])
 	// Check parameters
 	if (argc != 4)
 	{
-		ScreenWriteString("Usage : ");
-		ScreenWriteString(argv[0]);
-		ScreenWriteString(" IP_Address Port Payload_Size_Bytes\n");
+		SystemScreenWriteString("Usage : ");
+		SystemScreenWriteString(argv[0]);
+		SystemScreenWriteString(" IP_Address Port Payload_Size_Bytes\n");
 		return 1;
 	}
 	
@@ -34,7 +34,7 @@ int main(int argc, char *argv[])
 	// IP address
 	if (NetworkInitializeIPAddress(argv[1], &IP_Address) != 0)
 	{
-		ScreenWriteString("Error : malformed IP address.\n");
+		SystemScreenWriteString("Error : malformed IP address.\n");
 		return 1;
 	}
 	// Port number
@@ -43,23 +43,23 @@ int main(int argc, char *argv[])
 	Payload_Size = SystemStringConvertStringToUnsignedInteger(argv[3]);
 	if (Payload_Size > MAXIMUM_PAYLOAD_SIZE)
 	{
-		ScreenWriteString("Error : maximum allowed payload size : ");
+		SystemScreenWriteString("Error : maximum allowed payload size : ");
 		ScreenWriteUnsignedInteger(MAXIMUM_PAYLOAD_SIZE);
-		ScreenWriteString(".\n");
+		SystemScreenWriteString(".\n");
 		return 1;
 	}
 	
 	// Initialize network stack
 	if (NetworkInitialize() != 0)
 	{
-		ScreenWriteString("Error : failed to initialize network stack.\n");
+		SystemScreenWriteString("Error : failed to initialize network stack.\n");
 		return 1;
 	}
 	
 	// Create the socket used to transmit the datagrams
 	if (NetworkInitializeSocket(&IP_Address, Port, NETWORK_IP_PROTOCOL_UDP, &Socket) != 0)
 	{
-		ScreenWriteString("Error : failed to initialize socket.\n");
+		SystemScreenWriteString("Error : failed to initialize socket.\n");
 		return 1;
 	}
 	
@@ -67,12 +67,12 @@ int main(int argc, char *argv[])
 	SystemMemorySetAreaValue(Payload_Buffer, Payload_Size, 0xCA);
 	
 	// Transmit forever
-	ScreenWriteString("Transmitting at maximum speed. Hit F12 to quit.\n");
+	SystemScreenWriteString("Transmitting at maximum speed. Hit F12 to quit.\n");
 	while (1)
 	{
 		if (NetworkUDPSendBuffer(&Socket, Payload_Size, Payload_Buffer) != 0)
 		{
-			ScreenWriteString("Error : failed to transmit a packet.\n");
+			SystemScreenWriteString("Error : failed to transmit a packet.\n");
 			return 1;
 		}
 	}

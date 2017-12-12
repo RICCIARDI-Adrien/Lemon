@@ -25,28 +25,28 @@ int main(void)
 	volatile unsigned int *Pointer;
 	volatile unsigned int Divided = 1234, Divisor = 0;
 	
-	ScreenWriteString("--- Protection check ---\n");
-	ScreenWriteString("All tests must generate an error handled by the system to success.\n\n");
+	SystemScreenWriteString("--- Protection check ---\n");
+	SystemScreenWriteString("All tests must generate an error handled by the system to success.\n\n");
 	
-	ScreenWriteString("    1. Test privileged instructions\n");
-	ScreenWriteString("    2. Test I/O instructions\n");
-	ScreenWriteString("    3. Test stack overflow\n");
-	ScreenWriteString("    4. Test out of bounds memory access\n");
-	ScreenWriteString("    5. Test division by zero\n");
-	ScreenWriteString("    6. Test malicious user space pointer\n");
-	ScreenWriteString("    7. Test invalid system call\n");
-	ScreenWriteString("    Other. Quit\n\n");
+	SystemScreenWriteString("    1. Test privileged instructions\n");
+	SystemScreenWriteString("    2. Test I/O instructions\n");
+	SystemScreenWriteString("    3. Test stack overflow\n");
+	SystemScreenWriteString("    4. Test out of bounds memory access\n");
+	SystemScreenWriteString("    5. Test division by zero\n");
+	SystemScreenWriteString("    6. Test malicious user space pointer\n");
+	SystemScreenWriteString("    7. Test invalid system call\n");
+	SystemScreenWriteString("    Other. Quit\n\n");
 
 	switch (SystemKeyboardReadCharacter())
 	{
 		case '1':
-			ScreenWriteString("-> Privileged instructions test.\n");
+			SystemScreenWriteString("-> Privileged instructions test.\n");
 			asm("cli");
-			ScreenWriteString("-> Test failed !\n");
+			SystemScreenWriteString("-> Test failed !\n");
 			break;
 			
 		case '2':
-			ScreenWriteString("-> I/O instructions test.\n");
+			SystemScreenWriteString("-> I/O instructions test.\n");
 			asm
 			(
 				"mov dx, 0x3F2\n"
@@ -55,40 +55,40 @@ int main(void)
 				: // No input parameter
 				: "eax", "edx"
 			);
-			ScreenWriteString("-> Test failed !\n");
+			SystemScreenWriteString("-> Test failed !\n");
 			break;
 			
 		case '3':
-			ScreenWriteString("-> Stack overflow test.\n");
+			SystemScreenWriteString("-> Stack overflow test.\n");
 			StackOverflow();
-			ScreenWriteString("-> Test failed !\n");
+			SystemScreenWriteString("-> Test failed !\n");
 			break;
 		
 		case '4':
-			ScreenWriteString("-> Out of bounds memory access (the system must have less than 4GB of RAM).\n");
+			SystemScreenWriteString("-> Out of bounds memory access (the system must have less than 4GB of RAM).\n");
 			Pointer = (unsigned int *) 0xF0000000; // Go to end of memory
 			*Pointer = 0x12345678;
-			ScreenWriteString("Read value : ");
+			SystemScreenWriteString("Read value : ");
 			ScreenWriteUnsignedInteger(*Pointer);
-			ScreenWriteString("(= 305 419 896)\n");
-			ScreenWriteString("-> Test failed !\n");
+			SystemScreenWriteString("(= 305 419 896)\n");
+			SystemScreenWriteString("-> Test failed !\n");
 			break;
 			
 		case '5':
-			ScreenWriteString("-> Division per zero test.\n");
+			SystemScreenWriteString("-> Division per zero test.\n");
 			Divided = Divided / Divisor;
-			ScreenWriteString("-> Test failed !\n");
+			SystemScreenWriteString("-> Test failed !\n");
 			break;
 			
 		case '6':
-			ScreenWriteString("-> Doing a system call with a malicious pointer as parameter.\n");
+			SystemScreenWriteString("-> Doing a system call with a malicious pointer as parameter.\n");
 			Pointer = (unsigned int *) (0xFFFFFFFF - 0x000F0000); // The kernel will add 0x00100000 to this value, resulting in a pointer in the kernel space
-			ScreenWriteString((char *) Pointer);
-			ScreenWriteString("-> Test failed !\n");
+			SystemScreenWriteString((char *) Pointer);
+			SystemScreenWriteString("-> Test failed !\n");
 			break;
 			
 		case '7':
-			ScreenWriteString("-> Requesting an invalid system call.\n");
+			SystemScreenWriteString("-> Requesting an invalid system call.\n");
 			asm
 			(
 				"mov eax, 0xFFFFFFFF\n"
