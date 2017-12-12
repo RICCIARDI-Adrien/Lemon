@@ -1,9 +1,9 @@
-/** @file Screen.h
+/** @file System_Screen.h
  * Display data on the screen, modify cursor location and provide a direct access to the video memory for games.
  * @author Adrien RICCIARDI
  */
-#ifndef H_SCREEN_H
-#define H_SCREEN_H
+#ifndef H_SYSTEM_SCREEN_H
+#define H_SYSTEM_SCREEN_H
 
 //-------------------------------------------------------------------------------------------------
 // Constants and macros
