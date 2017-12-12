@@ -27,7 +27,7 @@ static int DisplayNextLine(void)
 	unsigned int Read_Bytes_Count;
 	
 	// Read a whole line
-	for (i = 0; i < SCREEN_COLUMNS_COUNT; i++)
+	for (i = 0; i < SYSTEM_SCREEN_COLUMNS_COUNT; i++)
 	{
 		// Try to read a character
 		if (SystemFileRead(File_ID, &Character, 1, &Read_Bytes_Count) != ERROR_CODE_NO_ERROR)

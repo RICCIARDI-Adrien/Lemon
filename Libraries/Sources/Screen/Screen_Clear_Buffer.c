@@ -13,7 +13,7 @@ void ScreenClearBuffer(void *Pointer_Buffer, unsigned char Color)
 	
 	for (Row = 0; Row < SYSTEM_SCREEN_ROWS_COUNT; Row++)
 	{
-		for (Column = 0; Column < SCREEN_COLUMNS_COUNT; Column++)
+		for (Column = 0; Column < SYSTEM_SCREEN_COLUMNS_COUNT; Column++)
 		{
 			Pointer_Buffer_Character->ASCII_Code = ' ';
 			Pointer_Buffer_Character->Color = Color;

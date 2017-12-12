@@ -13,7 +13,7 @@ void ScreenScrollBufferToLeft(void *Pointer_Buffer)
 	
 	for (Row = 0; Row < SYSTEM_SCREEN_ROWS_COUNT; Row++)
 	{
-		for (Column = 0; Column < SCREEN_COLUMNS_COUNT - 1; Column++) // Stop one column before the last one
+		for (Column = 0; Column < SYSTEM_SCREEN_COLUMNS_COUNT - 1; Column++) // Stop one column before the last one
 		{
 			*Pointer_Buffer_Word = *(Pointer_Buffer_Word + 1);
 			Pointer_Buffer_Word++;

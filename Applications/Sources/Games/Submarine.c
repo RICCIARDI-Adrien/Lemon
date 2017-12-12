@@ -36,10 +36,10 @@
 // Private variables
 //-------------------------------------------------------------------------------------------------
 /** The screen buffer. */
-static TScreenBufferCharacter Submarine_Screen_Buffer[SYSTEM_SCREEN_ROWS_COUNT][SCREEN_COLUMNS_COUNT];
+static TScreenBufferCharacter Submarine_Screen_Buffer[SYSTEM_SCREEN_ROWS_COUNT][SYSTEM_SCREEN_COLUMNS_COUNT];
 
 /** The obstacles array, covering a whole column. */
-static int Submarine_Obstacles_Bitmask[SCREEN_COLUMNS_COUNT];
+static int Submarine_Obstacles_Bitmask[SYSTEM_SCREEN_COLUMNS_COUNT];
 
 /** Generate a column of obstacles when this variables reaches SUBMARINE_OBSTACLES_GENERATION_FREQUENCY_DIVIDER. */ 
 static int Submarine_Obstacles_Generation_Counter; // This variable is not local to a function in order to be reset by the game entry point
@@ -56,7 +56,7 @@ static void SubmarineGenerateNextColumn(void)
 	// Move the scene to left
 	ScreenScrollBufferToLeft(Submarine_Screen_Buffer);
 	// Scroll the obstacles array too
-	for (i = 0; i < SCREEN_COLUMNS_COUNT - 1; i++) Submarine_Obstacles_Bitmask[i] = Submarine_Obstacles_Bitmask[i + 1];
+	for (i = 0; i < SYSTEM_SCREEN_COLUMNS_COUNT - 1; i++) Submarine_Obstacles_Bitmask[i] = Submarine_Obstacles_Bitmask[i + 1];
 	
 	// Should a column of obstacles be generated ?
 	if (Submarine_Obstacles_Generation_Counter == 0)
@@ -73,10 +73,10 @@ static void SubmarineGenerateNextColumn(void)
 			if (Obstacles_Bitmask & (1 << i)) Color = SUBMARINE_OBSTACLE_COLOR; // There is an obstacle on this row
 			else Color = SUBMARINE_SEA_COLOR;
 			
-			Submarine_Screen_Buffer[i][SCREEN_COLUMNS_COUNT - 1].Color = Color;
+			Submarine_Screen_Buffer[i][SYSTEM_SCREEN_COLUMNS_COUNT - 1].Color = Color;
 		}
 		
-		Submarine_Obstacles_Bitmask[SCREEN_COLUMNS_COUNT - 1] = Obstacles_Bitmask;
+		Submarine_Obstacles_Bitmask[SYSTEM_SCREEN_COLUMNS_COUNT - 1] = Obstacles_Bitmask;
 		
 		// Choose the next column that will contain obstacles
 		Submarine_Obstacles_Generation_Counter = (SystemRandomGenerateNumber() % (SUBMARINE_MAXIMUM_COLUMNS_COUNT_BETWEEN_OBSTACLES - SUBMARINE_MINIMUM_COLUMNS_COUNT_BETWEEN_OBSTACLES)) + SUBMARINE_MINIMUM_COLUMNS_COUNT_BETWEEN_OBSTACLES;
@@ -84,9 +84,9 @@ static void SubmarineGenerateNextColumn(void)
 	else
 	{
 		// Fill the whole column with "water"
-		for (i = 0; i < SYSTEM_SCREEN_ROWS_COUNT; i++) Submarine_Screen_Buffer[i][SCREEN_COLUMNS_COUNT - 1].Color = SUBMARINE_SEA_COLOR;
+		for (i = 0; i < SYSTEM_SCREEN_ROWS_COUNT; i++) Submarine_Screen_Buffer[i][SYSTEM_SCREEN_COLUMNS_COUNT - 1].Color = SUBMARINE_SEA_COLOR;
 		
-		Submarine_Obstacles_Bitmask[SCREEN_COLUMNS_COUNT - 1] = 0;
+		Submarine_Obstacles_Bitmask[SYSTEM_SCREEN_COLUMNS_COUNT - 1] = 0;
 		Submarine_Obstacles_Generation_Counter--;
 	}
 }

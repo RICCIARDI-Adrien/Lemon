@@ -11,7 +11,7 @@
 /** Screen rows number. */
 #define SYSTEM_SCREEN_ROWS_COUNT 25
 /** Screen columns number. */
-#define SCREEN_COLUMNS_COUNT 80
+#define SYSTEM_SCREEN_COLUMNS_COUNT 80
 
 /** Create a complete color using a foreground and a background colors.
  * @param Foreground_Color The text color.
@@ -74,7 +74,7 @@ void ScreenGetCursorPosition(unsigned int *Pointer_Row, unsigned int *Pointer_Co
 
 /** Set the screen cursor position.
  * @param Row Row coordinate in range [0, SYSTEM_SCREEN_ROWS_COUNT - 1].
- * @param Column Column coordinate in range [0, SCREEN_COLUMNS_COUNT - 1].
+ * @param Column Column coordinate in range [0, SYSTEM_SCREEN_COLUMNS_COUNT - 1].
  * @note The function does nothing if the specified coordinates are out of the screen bounds.
  */
 void ScreenSetCursorPosition(unsigned int Row, unsigned int Column);
@@ -112,12 +112,12 @@ void ScreenWriteHexadecimalInteger(int Integer);
 // "Rendering" functions
 /** Display a buffer representing the raw video memory data on the screen.
  * @param Pointer_Buffer The buffer.
- * @note The buffer must be (SYSTEM_SCREEN_ROWS_COUNT * SCREEN_COLUMNS_COUNT * 2) bytes large. Even byte is character ASCII code and odd byte is character color attributes.
+ * @note The buffer must be (SYSTEM_SCREEN_ROWS_COUNT * SYSTEM_SCREEN_COLUMNS_COUNT * 2) bytes large. Even byte is character ASCII code and odd byte is character color attributes.
  * @see IBM BIOS text mode 3 for more informations.
  */
 void ScreenDisplayBuffer(void *Pointer_Buffer);
 
-/** Scroll a SYSTEM_SCREEN_ROWS_COUNT*SCREEN_COLUMNS_COUNT bytes buffer to one column on the left. The rightmost column is left as-is.
+/** Scroll a SYSTEM_SCREEN_ROWS_COUNT*SYSTEM_SCREEN_COLUMNS_COUNT bytes buffer to one column on the left. The rightmost column is left as-is.
  * @param Pointer_Buffer The buffer to scroll.
  */
 void ScreenScrollBufferToLeft(void *Pointer_Buffer);

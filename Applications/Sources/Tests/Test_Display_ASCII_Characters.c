@@ -15,7 +15,7 @@
 //-------------------------------------------------------------------------------------------------------------------------------
 int main(void)
 {
-	unsigned char Video_Buffer[SYSTEM_SCREEN_ROWS_COUNT * SCREEN_COLUMNS_COUNT * 2];
+	unsigned char Video_Buffer[SYSTEM_SCREEN_ROWS_COUNT * SYSTEM_SCREEN_COLUMNS_COUNT * 2];
 	unsigned int Row, Column, Index = 0;
 	unsigned char Character_Code = 0;
 	
@@ -38,7 +38,7 @@ int main(void)
 		}
 		
 		// Go to the next line beginning
-		Index += (SCREEN_COLUMNS_COUNT - LINE_COLUMNS_COUNT) * 2;
+		Index += (SYSTEM_SCREEN_COLUMNS_COUNT - LINE_COLUMNS_COUNT) * 2;
 	}
 	
 	ScreenDisplayBuffer(Video_Buffer);

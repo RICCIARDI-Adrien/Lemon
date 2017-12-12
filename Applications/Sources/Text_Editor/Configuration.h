@@ -14,10 +14,10 @@
 #define CONFIGURATION_BUFFER_MAXIMUM_SIZE (10 * 1024 * 1024)
 
 /** How many characters the copy buffer can contain. */
-#define CONFIGURATION_COPY_BUFFER_MAXIMUM_SIZE (SYSTEM_SCREEN_ROWS_COUNT * SCREEN_COLUMNS_COUNT * 10) // Up to 10 full pages
+#define CONFIGURATION_COPY_BUFFER_MAXIMUM_SIZE (SYSTEM_SCREEN_ROWS_COUNT * SYSTEM_SCREEN_COLUMNS_COUNT * 10) // Up to 10 full pages
 
 /** A line length in characters (i.e. the display width). */
-#define CONFIGURATION_DISPLAY_COLUMNS_COUNT SCREEN_COLUMNS_COUNT
+#define CONFIGURATION_DISPLAY_COLUMNS_COUNT SYSTEM_SCREEN_COLUMNS_COUNT
 /** How many lines can be displayed in the same time on the display. */
 #define CONFIGURATION_DISPLAY_ROWS_COUNT SYSTEM_SCREEN_ROWS_COUNT
 
