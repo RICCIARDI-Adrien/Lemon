@@ -82,7 +82,7 @@ void SystemScreenSetCursorPosition(unsigned int Row, unsigned int Column);
 /** Display a single character.
  * @param Character The character to display.
  */
-void ScreenWriteCharacter(char Character);
+void SystemScreenWriteCharacter(char Character);
 
 /** Display an ASCIIZ string.
  * @param String The string to display.

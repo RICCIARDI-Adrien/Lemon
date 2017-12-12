@@ -39,7 +39,7 @@ static int ReadUserNumber(void)
 			if (Digits_Count <= 0) continue;
 			Digits_Count--;
 			String[Digits_Count] = 0;
-			ScreenWriteCharacter('\b');
+			SystemScreenWriteCharacter('\b');
 		}
 		
 		// Enter, convert and return number only if user entered almost one digit
@@ -49,7 +49,7 @@ static int ReadUserNumber(void)
 			if (Digits_Count == 0) continue;
 			
 			String[Digits_Count] = 0;
-			ScreenWriteCharacter('\n');
+			SystemScreenWriteCharacter('\n');
 			return (int) SystemStringConvertStringToUnsignedInteger(String);
 		}
 		
@@ -61,7 +61,7 @@ static int ReadUserNumber(void)
 		{
 			String[Digits_Count] = Character;
 			Digits_Count++;
-			ScreenWriteCharacter(Character);
+			SystemScreenWriteCharacter(Character);
 		}
 	}
 }

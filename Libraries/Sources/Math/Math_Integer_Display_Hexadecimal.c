@@ -28,7 +28,7 @@ void MathIntegerDisplayHexadecimal(PMathInteger Operand)
 			else Nibble += 'A' - 10; // Letter
 			
 			// Display the nibble
-			ScreenWriteCharacter(Nibble);
+			SystemScreenWriteCharacter(Nibble);
 		}
 	}
 }

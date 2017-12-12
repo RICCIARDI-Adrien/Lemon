@@ -31,7 +31,7 @@ int CommandMainDf(int argc, char __attribute__((unused)) *argv[])
 	// Display the files values
 	ScreenWriteString(STRING_COMMAND_DF_FILES_COUNT);
 	ScreenWriteUnsignedInteger(Total_Files_Count - Free_Files_Count);
-	ScreenWriteCharacter('/');
+	SystemScreenWriteCharacter('/');
 	ScreenWriteUnsignedInteger(Total_Files_Count);
 	// Display the percentage
 	ScreenWriteString(" (");
@@ -41,7 +41,7 @@ int CommandMainDf(int argc, char __attribute__((unused)) *argv[])
 	// Display the remaining storage
 	ScreenWriteString(STRING_COMMAND_DF_REMAINING_STORAGE_1);
 	ScreenWriteUnsignedInteger(Total_Storage - Free_Storage);
-	ScreenWriteCharacter('/');
+	SystemScreenWriteCharacter('/');
 	ScreenWriteUnsignedInteger(Total_Storage);
 	ScreenWriteString(STRING_COMMAND_DF_REMAINING_STORAGE_2);
 	// Display the percentage

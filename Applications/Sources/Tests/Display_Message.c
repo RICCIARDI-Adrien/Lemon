@@ -69,7 +69,7 @@ void DisplayMessageErrorAndCode(char *String_Message, int Error_Code)
 	
 	// Display the error code signification
 	ScreenWriteString(String_Error_Code);
-	ScreenWriteCharacter('\n');
+	SystemScreenWriteCharacter('\n');
 	SystemScreenSetFontColor(SYSTEM_SCREEN_COLOR_BLUE);
 }
 
@@ -78,6 +78,6 @@ void DisplayMessageError(char *String_Message)
 	SystemScreenSetFontColor(SYSTEM_SCREEN_COLOR_RED);
 	ScreenWriteString("Error : ");
 	ScreenWriteString(String_Message);
-	ScreenWriteCharacter('\n');
+	SystemScreenWriteCharacter('\n');
 	SystemScreenSetFontColor(SYSTEM_SCREEN_COLOR_BLUE);
 }

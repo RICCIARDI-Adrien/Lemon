@@ -83,7 +83,7 @@ int TestsFileSystemCalls(void)
 	File_Size_Bytes = ((SystemRandomGenerateNumber() % 32) + 1) * 1024 * 100;
 	ScreenWriteString("File size : ");
 	ScreenWriteUnsignedInteger(File_Size_Bytes);
-	ScreenWriteCharacter('\n');
+	SystemScreenWriteCharacter('\n');
  
 	ScreenWriteString("Creating file content... ");
 	for (i = 0; i < File_Size_Bytes; i++) Buffer[i] = (unsigned char) SystemRandomGenerateNumber();

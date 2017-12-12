@@ -12,7 +12,7 @@ void InterfaceDisplayMessage(char *String_Message, TSystemScreenColor Message_Co
 {
 	// Force the screen to scroll
 	SystemScreenSetCursorPosition(SYSTEM_SCREEN_ROWS_COUNT - 1, SYSTEM_SCREEN_COLUMNS_COUNT - 1);
-	ScreenWriteCharacter('\n');
+	SystemScreenWriteCharacter('\n');
 	
 	// Display the message at the screen end
 	SystemScreenSetCursorPosition(SYSTEM_SCREEN_ROWS_COUNT - 1, 0);
@@ -31,9 +31,9 @@ void InterfaceDisplayUserMessage(char *String_Message)
 	
 	// Display the current written message
 	SystemScreenSetFontColor(SYSTEM_SCREEN_COLOR_BLUE);
-	for (i = 0; (String_Message[i] != 0) && (i < INTERFACE_USER_MESSAGE_MAXIMUM_SIZE); i++) ScreenWriteCharacter(String_Message[i]);
+	for (i = 0; (String_Message[i] != 0) && (i < INTERFACE_USER_MESSAGE_MAXIMUM_SIZE); i++) SystemScreenWriteCharacter(String_Message[i]);
 	
 	// Clear the last user message line up to its end
 	SystemScreenGetCursorPosition(&Cursor_Row, &Cursor_Column);
-	for ( ; Cursor_Column < SYSTEM_SCREEN_COLUMNS_COUNT; Cursor_Column++) ScreenWriteCharacter(' ');
+	for ( ; Cursor_Column < SYSTEM_SCREEN_COLUMNS_COUNT; Cursor_Column++) SystemScreenWriteCharacter(' ');
 }

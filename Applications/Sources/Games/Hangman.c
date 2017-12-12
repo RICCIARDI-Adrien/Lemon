@@ -129,8 +129,8 @@ static void DisplayInvalidLetter(char Letter)
 	// Display the letter
 	SystemScreenSetCursorPosition(ROW_INVALID_LETTERS, Invalid_Letters_Column);
 	SystemScreenSetFontColor(SYSTEM_SCREEN_COLOR_LIGHT_BLUE);
-	ScreenWriteCharacter(Letter);
-	ScreenWriteCharacter(' ');
+	SystemScreenWriteCharacter(Letter);
+	SystemScreenWriteCharacter(' ');
 	SystemScreenSetFontColor(SYSTEM_SCREEN_COLOR_BLUE);
 	Invalid_Letters_Column += 2;
 }
@@ -226,7 +226,7 @@ void Hangman(void)
 		SystemScreenSetFontColor(SYSTEM_SCREEN_COLOR_GREEN);
 		SystemScreenWriteCenteredString(STRING_HANGMAN_TITLE);
 		SystemScreenSetFontColor(SYSTEM_SCREEN_COLOR_BLUE);
-		ScreenWriteCharacter('\n');
+		SystemScreenWriteCharacter('\n');
 			
 		// Display the interface parts that will never change
 		SystemScreenSetCursorPosition(ROW_INVALID_LETTERS - 1, 0);

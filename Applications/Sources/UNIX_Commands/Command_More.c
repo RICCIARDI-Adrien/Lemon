@@ -40,7 +40,7 @@ static int DisplayNextLine(void)
 		if (Read_Bytes_Count == 0) return 0;
 		
 		// Display the character
-		ScreenWriteCharacter(Character);
+		SystemScreenWriteCharacter(Character);
 		
 		// Exit if the character is a new line
 		if (Character == '\n') return 1;
@@ -153,7 +153,7 @@ Exit:
 	SystemFileClose(File_ID);
 	// Append a new line character if the cursor is not at the begining of a line
 	SystemScreenGetCursorPosition(&Cursor_Row, &Cursor_Column);
-	if (Cursor_Column > 0) ScreenWriteCharacter('\n');
+	if (Cursor_Column > 0) SystemScreenWriteCharacter('\n');
 	
 	return Return_Value;
 }

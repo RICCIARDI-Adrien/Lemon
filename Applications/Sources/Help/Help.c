@@ -121,13 +121,13 @@ static void DisplayCommandsList(void)
 		Spaces_Count = HELP_SHORT_DESCRIPTION_STARTING_COLUMN - SystemStringGetSize(Commands[i].String_Name);
 		while (Spaces_Count > 0)
 		{
-			ScreenWriteCharacter(' ');
+			SystemScreenWriteCharacter(' ');
 			Spaces_Count--;
 		}
 		
 		// Display the command description
 		ScreenWriteString(Commands[i].String_Short_Description);
-		ScreenWriteCharacter('\n');
+		SystemScreenWriteCharacter('\n');
 	}
 }
 
@@ -177,7 +177,7 @@ int main(int argc, char *argv[])
 		{
 			DisplayTitle(String_Requested_Command);
 			ScreenWriteString(Commands[i].String_Full_Description);
-			ScreenWriteCharacter('\n');
+			SystemScreenWriteCharacter('\n');
 			return 0;
 		}
 	}

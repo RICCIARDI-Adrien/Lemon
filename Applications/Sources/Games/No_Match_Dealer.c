@@ -34,14 +34,14 @@ void NoMatchDealer(void)
 		for (i = 0; i < NUMBERS_COUNT; i++)
 		{
 			// Pad number with a space character to keep alignment when drawing to screen
-			if (Numbers[i] < 10) ScreenWriteCharacter(' ');
+			if (Numbers[i] < 10) SystemScreenWriteCharacter(' ');
 			ScreenWriteInteger(Numbers[i]);
-			ScreenWriteCharacter(' ');
+			SystemScreenWriteCharacter(' ');
 			
 			// Go to next line if needed
-			if (i % (NUMBERS_COUNT / 2) == 7) ScreenWriteCharacter('\n');
+			if (i % (NUMBERS_COUNT / 2) == 7) SystemScreenWriteCharacter('\n');
 		}
-		ScreenWriteCharacter('\n');
+		SystemScreenWriteCharacter('\n');
 		SystemScreenSetFontColor(SYSTEM_SCREEN_COLOR_BLUE);
 
 		// Check for matches

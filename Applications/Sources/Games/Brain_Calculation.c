@@ -129,7 +129,7 @@ static int ReadUserNumber(void)
 			if (Digits_Count <= 0) continue;
 			Digits_Count--;
 			String[Digits_Count] = 0;
-			ScreenWriteCharacter('\b');
+			SystemScreenWriteCharacter('\b');
 		}
 		
 		// Enter, convert and return number only if user entered almost one digit
@@ -139,7 +139,7 @@ static int ReadUserNumber(void)
 			if (Digits_Count == 0) continue;
 			
 			String[Digits_Count] = 0;
-			ScreenWriteCharacter('\n');
+			SystemScreenWriteCharacter('\n');
 			return (int) SystemStringConvertStringToUnsignedInteger(String);
 		}
 		
@@ -151,7 +151,7 @@ static int ReadUserNumber(void)
 		{
 			String[Digits_Count] = Character;
 			Digits_Count++;
-			ScreenWriteCharacter(Character);
+			SystemScreenWriteCharacter(Character);
 		}
 	}
 }
@@ -194,9 +194,9 @@ void BrainCalculation(void)
 			SystemScreenSetFontColor(SYSTEM_SCREEN_COLOR_LIGHT_BLUE);
 			ScreenWriteString("   ");
 			ScreenWriteInteger(First_Number);
-			ScreenWriteCharacter(' ');
-			ScreenWriteCharacter(Operator);
-			ScreenWriteCharacter(' ');
+			SystemScreenWriteCharacter(' ');
+			SystemScreenWriteCharacter(Operator);
+			SystemScreenWriteCharacter(' ');
 			ScreenWriteInteger(Second_Number);
 			ScreenWriteString("  =  ");
 			SystemScreenSetFontColor(SYSTEM_SCREEN_COLOR_BLUE);
@@ -207,7 +207,7 @@ void BrainCalculation(void)
 			// Does the user want to exit program ?
 			if (Number == BRAIN_CALCULATION_EXIT_CODE)
 			{
-				ScreenWriteCharacter('\n');
+				SystemScreenWriteCharacter('\n');
 				ScreenWriteString(STRING_BRAIN_CALCULATION_CORRECT_ANSWERS_COUNT_1);
 				ScreenWriteInteger(Correct_Results_Count);
 				ScreenWriteString(STRING_BRAIN_CALCULATION_CORRECT_ANSWERS_COUNT_2);

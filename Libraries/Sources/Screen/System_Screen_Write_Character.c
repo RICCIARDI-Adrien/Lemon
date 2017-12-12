@@ -1,4 +1,4 @@
-/** @file Screen_Write_Character.c
+/** @file System_Screen_Write_Character.c
  * @author Adrien RICCIARDI
  */
 #include <System.h>
@@ -6,7 +6,7 @@
 //-------------------------------------------------------------------------------------------------
 // Public functions
 //-------------------------------------------------------------------------------------------------
-void ScreenWriteCharacter(char Character)
+void SystemScreenWriteCharacter(char Character)
 {
 	SystemCall(SYSTEM_CALL_SCREEN_WRITE_CHARACTER, Character, 0, NULL, NULL);
 }

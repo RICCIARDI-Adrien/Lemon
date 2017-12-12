@@ -33,7 +33,7 @@ int MenuDisplay(TMenu *Pointer_Menu)
 			// Display the item text
 			SystemScreenSetFontColor(MENU_ITEM_TEXT_COLOR);
 			ScreenWriteString(Pointer_Menu->String_Items[i]);
-			ScreenWriteCharacter('\n');
+			SystemScreenWriteCharacter('\n');
 		}
 		
 		// Display the user prompt on the screen bottom

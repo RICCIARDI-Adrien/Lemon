@@ -117,7 +117,7 @@ void Rain(void)
 			// Print raindrop
 			SystemScreenSetCursorPosition(Row, Column);
 			SystemScreenSetBackgroundColor(SYSTEM_SCREEN_COLOR_BLUE);
-			ScreenWriteCharacter(' ');
+			SystemScreenWriteCharacter(' ');
 			Raindrops_Count++;
 			
 			// Print loop count

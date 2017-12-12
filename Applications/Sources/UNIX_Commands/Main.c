@@ -75,10 +75,10 @@ static void DisplayUsage(char *String_Program_Name)
 	for (i = 0; Commands[i].String_Command_Name != NULL; i++)
 	{
 		ScreenWriteString(Commands[i].String_Command_Name);
-		ScreenWriteCharacter(' ');
+		SystemScreenWriteCharacter(' ');
 	}
 	SystemScreenSetFontColor(SYSTEM_SCREEN_COLOR_BLUE);
-	ScreenWriteCharacter('\n');
+	SystemScreenWriteCharacter('\n');
 }
 
 //-------------------------------------------------------------------------------------------------

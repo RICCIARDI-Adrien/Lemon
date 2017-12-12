@@ -67,7 +67,7 @@ static int TestsMemoryCheckAreaValue(unsigned char *Pointer_Memory_Area, unsigne
 			ScreenWriteUnsignedInteger(Pointer_Memory_Area[Offset]);
 			ScreenWriteString("\nExpected value : ");
 			ScreenWriteUnsignedInteger(Value);
-			ScreenWriteCharacter('\n');
+			SystemScreenWriteCharacter('\n');
 			return 0;
 		}
 	}

@@ -24,8 +24,8 @@ int main(void)
 		for (i = 0; i < Packet_Size; i++)
 		{
 			ScreenWriteUnsignedInteger(Packet_Buffer[i]);
-			ScreenWriteCharacter(' ');
+			SystemScreenWriteCharacter(' ');
 		}
-		ScreenWriteCharacter('\n');
+		SystemScreenWriteCharacter('\n');
 	}
 }

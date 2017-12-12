@@ -13,7 +13,7 @@ void StackOverflow(void)
 	if (j >= 100000)
 	{
 		ScreenWriteUnsignedInteger(i);
-		ScreenWriteCharacter('\n');
+		SystemScreenWriteCharacter('\n');
 		j = 0;
 	}
 	
