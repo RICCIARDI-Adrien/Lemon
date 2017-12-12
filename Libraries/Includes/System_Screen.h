@@ -17,7 +17,7 @@
  * @param Foreground_Color The text color.
  * @param Background_Color The background color.
  */
-#define SCREEN_MAKE_COLOR(Foreground_Color, Background_Color) ((Background_Color << 4) | Foreground_Color)
+#define SYSTEM_SCREEN_MAKE_COLOR(Foreground_Color, Background_Color) ((Background_Color << 4) | Foreground_Color)
 
 //-------------------------------------------------------------------------------------------------
 // Types
@@ -124,7 +124,7 @@ void ScreenScrollBufferToLeft(void *Pointer_Buffer);
 
 /** Clear the buffer with 'space' characters and the specified color.
  * @param Pointer_Buffer The buffer to clear.
- * @param Color The clearing color (use SCREEN_MAKE_COLOR() to specify it).
+ * @param Color The clearing color (use SYSTEM_SCREEN_MAKE_COLOR() to specify it).
  */
 void ScreenClearBuffer(void *Pointer_Buffer, unsigned char Color);
 

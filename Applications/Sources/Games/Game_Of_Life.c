@@ -20,7 +20,7 @@
 #define CELL_STATE_ALIVE 1
 
 /** The foreground and background colors used to display an alive cell. */
-#define CELL_DISPLAYING_COLOR SCREEN_MAKE_COLOR(SCREEN_COLOR_GREEN, SCREEN_COLOR_BLACK)
+#define CELL_DISPLAYING_COLOR SYSTEM_SCREEN_MAKE_COLOR(SCREEN_COLOR_GREEN, SCREEN_COLOR_BLACK)
 
 //-------------------------------------------------------------------------------------------------
 // Private variables

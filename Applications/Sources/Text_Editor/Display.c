@@ -18,7 +18,7 @@ static unsigned int Display_Cursor_Row = 0;
 static unsigned int Display_Cursor_Column = 0;
 
 /** The current color (foreground and background). */
-static unsigned char Display_Color = SCREEN_MAKE_COLOR(CONFIGURATION_TEXT_FOREGROUND_COLOR, CONFIGURATION_TEXT_BACKGROUND_COLOR);
+static unsigned char Display_Color = SYSTEM_SCREEN_MAKE_COLOR(CONFIGURATION_TEXT_FOREGROUND_COLOR, CONFIGURATION_TEXT_BACKGROUND_COLOR);
 
 //-------------------------------------------------------------------------------------------------
 // Functions
@@ -26,7 +26,7 @@ static unsigned char Display_Color = SCREEN_MAKE_COLOR(CONFIGURATION_TEXT_FOREGR
 void DisplayClear(void)
 {
 	// Clear the screen
-	ScreenClearBuffer(Display_Video_Memory, SCREEN_MAKE_COLOR(CONFIGURATION_TEXT_FOREGROUND_COLOR, CONFIGURATION_TEXT_BACKGROUND_COLOR));
+	ScreenClearBuffer(Display_Video_Memory, SYSTEM_SCREEN_MAKE_COLOR(CONFIGURATION_TEXT_FOREGROUND_COLOR, CONFIGURATION_TEXT_BACKGROUND_COLOR));
 	
 	// Put the cursor to the upper left corner
 	Display_Cursor_Row = 0;

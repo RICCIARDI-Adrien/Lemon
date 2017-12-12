@@ -23,7 +23,7 @@ int main(void)
 	for (Row = 0; Row < sizeof(Video_Buffer); Row += 2)
 	{
 		Video_Buffer[Row] = ' ';
-		Video_Buffer[Row + 1] = SCREEN_MAKE_COLOR(SCREEN_COLOR_BLACK, SCREEN_COLOR_BLACK);
+		Video_Buffer[Row + 1] = SYSTEM_SCREEN_MAKE_COLOR(SCREEN_COLOR_BLACK, SCREEN_COLOR_BLACK);
 	}
 	
 	// Display characters
@@ -32,7 +32,7 @@ int main(void)
 		for (Column = 0; Column < LINE_COLUMNS_COUNT; Column++)
 		{
 			Video_Buffer[Index] = Character_Code;
-			Video_Buffer[Index + 1] = SCREEN_MAKE_COLOR(SCREEN_COLOR_WHITE, SCREEN_COLOR_BLACK);
+			Video_Buffer[Index + 1] = SYSTEM_SCREEN_MAKE_COLOR(SCREEN_COLOR_WHITE, SCREEN_COLOR_BLACK);
 			Index += 2;
 			Character_Code++;
 		}
