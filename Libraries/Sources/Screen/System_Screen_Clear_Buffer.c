@@ -1,4 +1,4 @@
-/** @file Screen_Clear_Buffer.c
+/** @file System_Screen_Clear_Buffer.c
  * @author Adrien RICCIARDI
  */
 #include <System.h>
@@ -6,7 +6,7 @@
 //-------------------------------------------------------------------------------------------------
 // Public functions
 //-------------------------------------------------------------------------------------------------
-void ScreenClearBuffer(void *Pointer_Buffer, unsigned char Color)
+void SystemScreenClearBuffer(void *Pointer_Buffer, unsigned char Color)
 {
 	unsigned int Row, Column;
 	TSystemScreenBufferCharacter *Pointer_Buffer_Character = (TSystemScreenBufferCharacter *) Pointer_Buffer;

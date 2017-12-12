@@ -126,6 +126,6 @@ void ScreenScrollBufferToLeft(void *Pointer_Buffer);
  * @param Pointer_Buffer The buffer to clear.
  * @param Color The clearing color (use SYSTEM_SCREEN_MAKE_COLOR() to specify it).
  */
-void ScreenClearBuffer(void *Pointer_Buffer, unsigned char Color);
+void SystemScreenClearBuffer(void *Pointer_Buffer, unsigned char Color);
 
 #endif

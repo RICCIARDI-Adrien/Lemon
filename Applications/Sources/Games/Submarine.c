@@ -104,7 +104,7 @@ void Submarine(void)
 	SystemRandomInitialize();
 	
 	// Reset the scene and the obstacles
-	ScreenClearBuffer(Submarine_Screen_Buffer, SUBMARINE_SEA_COLOR);
+	SystemScreenClearBuffer(Submarine_Screen_Buffer, SUBMARINE_SEA_COLOR);
 	SystemMemorySetAreaValue(Submarine_Obstacles_Bitmask, sizeof(Submarine_Obstacles_Bitmask), 0);
 	Submarine_Obstacles_Generation_Counter = 0; // Generate immediately a column of obstacles
 	

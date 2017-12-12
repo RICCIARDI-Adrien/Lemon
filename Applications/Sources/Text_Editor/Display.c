@@ -26,7 +26,7 @@ static unsigned char Display_Color = SYSTEM_SCREEN_MAKE_COLOR(CONFIGURATION_TEXT
 void DisplayClear(void)
 {
 	// Clear the screen
-	ScreenClearBuffer(Display_Video_Memory, SYSTEM_SCREEN_MAKE_COLOR(CONFIGURATION_TEXT_FOREGROUND_COLOR, CONFIGURATION_TEXT_BACKGROUND_COLOR));
+	SystemScreenClearBuffer(Display_Video_Memory, SYSTEM_SCREEN_MAKE_COLOR(CONFIGURATION_TEXT_FOREGROUND_COLOR, CONFIGURATION_TEXT_BACKGROUND_COLOR));
 	
 	// Put the cursor to the upper left corner
 	Display_Cursor_Row = 0;
