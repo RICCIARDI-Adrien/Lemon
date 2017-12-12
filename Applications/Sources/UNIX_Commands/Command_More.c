@@ -60,7 +60,7 @@ static int DisplayNextPage(void)
 	int i, Result;
 	
 	// Display a full page of text
-	for (i = 0; i < SCREEN_ROWS_COUNT - 1; i++)
+	for (i = 0; i < SYSTEM_SCREEN_ROWS_COUNT - 1; i++)
 	{
 		// Read a line
 		Result = DisplayNextLine(); // Recycle i variable

@@ -36,7 +36,7 @@
 // Private variables
 //-------------------------------------------------------------------------------------------------
 /** The screen buffer. */
-static TScreenBufferCharacter Submarine_Screen_Buffer[SCREEN_ROWS_COUNT][SCREEN_COLUMNS_COUNT];
+static TScreenBufferCharacter Submarine_Screen_Buffer[SYSTEM_SCREEN_ROWS_COUNT][SCREEN_COLUMNS_COUNT];
 
 /** The obstacles array, covering a whole column. */
 static int Submarine_Obstacles_Bitmask[SCREEN_COLUMNS_COUNT];
@@ -68,7 +68,7 @@ static void SubmarineGenerateNextColumn(void)
 		} while ((Obstacles_Bitmask & 0x01FFFFFF) == 0x01FFFFFF); // Avoid generating a fully-filled column (WARNING, change this value if the number of rows changes too)
 		
 		// Fill the column with the obstacles
-		for (i = 0; i < SCREEN_ROWS_COUNT; i++)
+		for (i = 0; i < SYSTEM_SCREEN_ROWS_COUNT; i++)
 		{
 			if (Obstacles_Bitmask & (1 << i)) Color = SUBMARINE_OBSTACLE_COLOR; // There is an obstacle on this row
 			else Color = SUBMARINE_SEA_COLOR;
@@ -84,7 +84,7 @@ static void SubmarineGenerateNextColumn(void)
 	else
 	{
 		// Fill the whole column with "water"
-		for (i = 0; i < SCREEN_ROWS_COUNT; i++) Submarine_Screen_Buffer[i][SCREEN_COLUMNS_COUNT - 1].Color = SUBMARINE_SEA_COLOR;
+		for (i = 0; i < SYSTEM_SCREEN_ROWS_COUNT; i++) Submarine_Screen_Buffer[i][SCREEN_COLUMNS_COUNT - 1].Color = SUBMARINE_SEA_COLOR;
 		
 		Submarine_Obstacles_Bitmask[SCREEN_COLUMNS_COUNT - 1] = 0;
 		Submarine_Obstacles_Generation_Counter--;
@@ -96,7 +96,7 @@ static void SubmarineGenerateNextColumn(void)
 //-------------------------------------------------------------------------------------------------
 void Submarine(void)
 {
-	int Scene_Scrolling_Frequency_Divider = 0, Is_Player_Dead = 0, Player_Row = SCREEN_ROWS_COUNT / 2; // Center the player
+	int Scene_Scrolling_Frequency_Divider = 0, Is_Player_Dead = 0, Player_Row = SYSTEM_SCREEN_ROWS_COUNT / 2; // Center the player
 	unsigned char Player_Color = SUBMARINE_ALIVE_PLAYER_COLOR;
 	unsigned int Start_Time, End_Time, Time_To_Wait, Score = 0;
 	char String_Score[64], String_Converted_Score_Value[16];
@@ -128,7 +128,7 @@ void Submarine(void)
 					break;
 					
 				case SYSTEM_KEYBOARD_KEY_CODE_ARROW_DOWN:
-					if (Player_Row < SCREEN_ROWS_COUNT - 1) Player_Row++;
+					if (Player_Row < SYSTEM_SCREEN_ROWS_COUNT - 1) Player_Row++;
 					break;
 			}
 		}
@@ -160,14 +160,14 @@ void Submarine(void)
 			// Display the string on the screen's middle
 			ScreenSetFontColor(SCREEN_COLOR_WHITE);
 			ScreenSetBackgroundColor(SCREEN_COLOR_RED);
-			ScreenSetCursorPosition(SCREEN_ROWS_COUNT / 2, 0); // The column coordinate will be computed by the ScreenWriteCenteredString() function
+			ScreenSetCursorPosition(SYSTEM_SCREEN_ROWS_COUNT / 2, 0); // The column coordinate will be computed by the ScreenWriteCenteredString() function
 			ScreenWriteCenteredString(STRING_SUBMARINE_PLAYER_LOST);
 			
 			// Display the score string below
 			SystemStringConcatenate(String_Score, STRING_SUBMARINE_PLAYER_SCORE);
 			SystemStringConvertUnsignedIntegerToString(Score, String_Converted_Score_Value);
 			SystemStringConcatenate(String_Score, String_Converted_Score_Value);
-			ScreenSetCursorPosition((SCREEN_ROWS_COUNT / 2) + 1, 0); // The column coordinate will be computed by the ScreenWriteCenteredString() function
+			ScreenSetCursorPosition((SYSTEM_SCREEN_ROWS_COUNT / 2) + 1, 0); // The column coordinate will be computed by the ScreenWriteCenteredString() function
 			ScreenWriteCenteredString(String_Score);
 			
 			ScreenSetBackgroundColor(SCREEN_COLOR_WHITE); // Restore the default background color

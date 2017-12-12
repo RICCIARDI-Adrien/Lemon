@@ -10,7 +10,7 @@
 // Private constants
 //-------------------------------------------------------------------------------------------------
 /** Vertical size of the world. */
-#define WORLD_ROWS_COUNT SCREEN_ROWS_COUNT
+#define WORLD_ROWS_COUNT SYSTEM_SCREEN_ROWS_COUNT
 /** Horizontal size of the world. */
 #define WORLD_COLUMNS_COUNT SCREEN_COLUMNS_COUNT
 
@@ -54,12 +54,12 @@ static void CreateNewWorld(void)
 /** Display the current world. */
 static void DisplayWorld(void)
 {
-	unsigned char Video_Buffer[SCREEN_ROWS_COUNT][SCREEN_COLUMNS_COUNT * 2];
+	unsigned char Video_Buffer[SYSTEM_SCREEN_ROWS_COUNT][SCREEN_COLUMNS_COUNT * 2];
 	char Character;
 	int Row, Column, Video_Column;
 
 	// Create the raw video buffer representing the world state (yes, this is not optimized)
-	for (Row = 0; Row < SCREEN_ROWS_COUNT; Row++)
+	for (Row = 0; Row < SYSTEM_SCREEN_ROWS_COUNT; Row++)
 	{
 		for (Column = 0; Column < SCREEN_COLUMNS_COUNT; Column++)
 		{

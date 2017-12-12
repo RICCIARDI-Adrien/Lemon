@@ -168,7 +168,7 @@ int CommandMainLs(int argc, char __attribute__((unused)) *argv[])
 		
 		// Wait for the user to press a key if the screen is full of displayed files
 		Displayed_Files_Count++;
-		if ((Displayed_Files_Count == SCREEN_ROWS_COUNT - 1) && (i < Files_Count - 1)) // Do not display the wait prompt if there is no more file to display
+		if ((Displayed_Files_Count == SYSTEM_SCREEN_ROWS_COUNT - 1) && (i < Files_Count - 1)) // Do not display the wait prompt if there is no more file to display
 		{
 			ScreenSetFontColor(SCREEN_COLOR_LIGHT_BLUE);
 			ScreenWriteString(STRING_COMMAND_LS_WAIT_FOR_USER_INPUT);

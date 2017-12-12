@@ -15,7 +15,7 @@
 //-------------------------------------------------------------------------------------------------------------------------------
 int main(void)
 {
-	unsigned char Video_Buffer[SCREEN_ROWS_COUNT * SCREEN_COLUMNS_COUNT * 2];
+	unsigned char Video_Buffer[SYSTEM_SCREEN_ROWS_COUNT * SCREEN_COLUMNS_COUNT * 2];
 	unsigned int Row, Column, Index = 0;
 	unsigned char Character_Code = 0;
 	

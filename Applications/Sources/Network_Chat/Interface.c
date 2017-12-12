@@ -11,11 +11,11 @@
 void InterfaceDisplayMessage(char *String_Message, TScreenColor Message_Color)
 {
 	// Force the screen to scroll
-	ScreenSetCursorPosition(SCREEN_ROWS_COUNT - 1, SCREEN_COLUMNS_COUNT - 1);
+	ScreenSetCursorPosition(SYSTEM_SCREEN_ROWS_COUNT - 1, SCREEN_COLUMNS_COUNT - 1);
 	ScreenWriteCharacter('\n');
 	
 	// Display the message at the screen end
-	ScreenSetCursorPosition(SCREEN_ROWS_COUNT - 1, 0);
+	ScreenSetCursorPosition(SYSTEM_SCREEN_ROWS_COUNT - 1, 0);
 	ScreenSetFontColor(Message_Color);
 	ScreenWriteString(String_Message);
 }

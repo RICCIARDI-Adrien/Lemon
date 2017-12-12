@@ -111,8 +111,8 @@ void Rain(void)
 			do
 			{
 				Column = SystemRandomGenerateNumber() % SCREEN_COLUMNS_COUNT;
-				Row = SystemRandomGenerateNumber() % SCREEN_ROWS_COUNT;
-			} while ((Column == SCREEN_COLUMNS_COUNT - 1) && (Row == SCREEN_ROWS_COUNT - 1));
+				Row = SystemRandomGenerateNumber() % SYSTEM_SCREEN_ROWS_COUNT;
+			} while ((Column == SCREEN_COLUMNS_COUNT - 1) && (Row == SYSTEM_SCREEN_ROWS_COUNT - 1));
 			
 			// Print raindrop
 			ScreenSetCursorPosition(Row, Column);
@@ -121,7 +121,7 @@ void Rain(void)
 			Raindrops_Count++;
 			
 			// Print loop count
-			ScreenSetCursorPosition(SCREEN_ROWS_COUNT - 1, 0);
+			ScreenSetCursorPosition(SYSTEM_SCREEN_ROWS_COUNT - 1, 0);
 			ScreenSetBackgroundColor(SCREEN_COLOR_WHITE);
 			ScreenSetFontColor(SCREEN_COLOR_LIGHT_GREEN);
 			ScreenWriteString(STRING_RAIN_STATISTICS_1);

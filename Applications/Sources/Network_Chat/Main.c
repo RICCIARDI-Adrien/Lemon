@@ -174,6 +174,6 @@ Exit:
 	// Put the cursor at the beginning of the last screen line
 	InterfaceDisplayMessage("", SCREEN_COLOR_WHITE); // Scroll the screen a last time to make the last line blank
 	InterfaceDisplayUserMessage("");
-	ScreenSetCursorPosition(SCREEN_ROWS_COUNT - 1, 0);
+	ScreenSetCursorPosition(SYSTEM_SCREEN_ROWS_COUNT - 1, 0);
 	return 0;
 }

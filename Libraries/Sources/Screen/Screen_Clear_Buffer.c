@@ -11,7 +11,7 @@ void ScreenClearBuffer(void *Pointer_Buffer, unsigned char Color)
 	unsigned int Row, Column;
 	TScreenBufferCharacter *Pointer_Buffer_Character = (TScreenBufferCharacter *) Pointer_Buffer;
 	
-	for (Row = 0; Row < SCREEN_ROWS_COUNT; Row++)
+	for (Row = 0; Row < SYSTEM_SCREEN_ROWS_COUNT; Row++)
 	{
 		for (Column = 0; Column < SCREEN_COLUMNS_COUNT; Column++)
 		{
