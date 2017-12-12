@@ -27,7 +27,7 @@ int MenuDisplay(TMenu *Pointer_Menu)
 			
 			// Display the item number
 			SystemScreenSetFontColor(MENU_ITEM_NUMBER_COLOR);
-			ScreenWriteInteger(i + 1);
+			SystemScreenWriteInteger(i + 1);
 			ScreenWriteString(". ");
 			
 			// Display the item text

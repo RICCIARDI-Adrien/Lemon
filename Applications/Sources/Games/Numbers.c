@@ -79,9 +79,9 @@ void Numbers(void)
 	
 	// Show instructions
 	ScreenWriteString(STRING_NUMBERS_INSTRUCTIONS_1);
-	ScreenWriteInteger(MAXIMUM_NUMBER_VALUE);
+	SystemScreenWriteInteger(MAXIMUM_NUMBER_VALUE);
 	ScreenWriteString(STRING_NUMBERS_INSTRUCTIONS_2);
-	ScreenWriteInteger(ATTEMPTS_COUNT);
+	SystemScreenWriteInteger(ATTEMPTS_COUNT);
 	ScreenWriteString(STRING_NUMBERS_INSTRUCTIONS_3);
 			
 	while (1)
@@ -100,7 +100,7 @@ void Numbers(void)
 		{
 			SystemScreenSetFontColor(SYSTEM_SCREEN_COLOR_RED);
 			ScreenWriteString(STRING_NUMBERS_PLAYER_LOST_1);
-			ScreenWriteInteger(Computer_Number);
+			SystemScreenWriteInteger(Computer_Number);
 			ScreenWriteString(STRING_NUMBERS_PLAYER_LOST_2);
 			goto End;
 		}
@@ -110,7 +110,7 @@ void Numbers(void)
 		{
 			SystemScreenSetFontColor(SYSTEM_SCREEN_COLOR_GREEN);
 			ScreenWriteString(STRING_NUMBERS_PLAYER_WON_1);
-			ScreenWriteInteger(Attempts);
+			SystemScreenWriteInteger(Attempts);
 			ScreenWriteString(STRING_NUMBERS_PLAYER_WON_2);
 			goto End;
 		}
@@ -128,7 +128,7 @@ void Numbers(void)
 		// Show remaining attempts
 		SystemScreenSetFontColor(SYSTEM_SCREEN_COLOR_BLUE);
 		ScreenWriteString(STRING_NUMBERS_REMAINING_ATTEMPTS_1);
-		ScreenWriteInteger(ATTEMPTS_COUNT - Attempts);
+		SystemScreenWriteInteger(ATTEMPTS_COUNT - Attempts);
 		ScreenWriteString(STRING_NUMBERS_REMAINING_ATTEMPTS_2);
 	}
 	

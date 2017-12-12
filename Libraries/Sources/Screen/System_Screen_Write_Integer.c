@@ -1,4 +1,4 @@
-/** @file Screen_Write_Integer.c
+/** @file System_Screen_Write_Integer.c
  * @author Adrien RICCIARDI
  */
 #include <System.h>
@@ -6,7 +6,7 @@
 //-------------------------------------------------------------------------------------------------
 // Public functions
 //-------------------------------------------------------------------------------------------------
-void ScreenWriteInteger(int Integer)
+void SystemScreenWriteInteger(int Integer)
 {
 	char String_Number[12]; // The minus sign + 10 digits (the maximum digits count for a 32-bit number) + terminating zero
 	int Temp, Display_Index = 0, Is_Number_Negative = 0;

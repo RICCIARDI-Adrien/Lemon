@@ -125,9 +125,9 @@ void Rain(void)
 			SystemScreenSetBackgroundColor(SYSTEM_SCREEN_COLOR_WHITE);
 			SystemScreenSetFontColor(SYSTEM_SCREEN_COLOR_LIGHT_GREEN);
 			ScreenWriteString(STRING_RAIN_STATISTICS_1);
-			ScreenWriteInteger(Raindrops_Count);
+			SystemScreenWriteInteger(Raindrops_Count);
 			ScreenWriteString(STRING_RAIN_STATISTICS_2);
-			ScreenWriteInteger(Loops_Count);
+			SystemScreenWriteInteger(Loops_Count);
 			
 			// Wait required time
 			if (Wait(Raining_Speed)) // Exit program if the player hit Escape key

@@ -193,11 +193,11 @@ void BrainCalculation(void)
 			ChooseCalculus(&First_Number, &Operator, &Second_Number, &Result);
 			SystemScreenSetFontColor(SYSTEM_SCREEN_COLOR_LIGHT_BLUE);
 			ScreenWriteString("   ");
-			ScreenWriteInteger(First_Number);
+			SystemScreenWriteInteger(First_Number);
 			SystemScreenWriteCharacter(' ');
 			SystemScreenWriteCharacter(Operator);
 			SystemScreenWriteCharacter(' ');
-			ScreenWriteInteger(Second_Number);
+			SystemScreenWriteInteger(Second_Number);
 			ScreenWriteString("  =  ");
 			SystemScreenSetFontColor(SYSTEM_SCREEN_COLOR_BLUE);
 			
@@ -209,7 +209,7 @@ void BrainCalculation(void)
 			{
 				SystemScreenWriteCharacter('\n');
 				ScreenWriteString(STRING_BRAIN_CALCULATION_CORRECT_ANSWERS_COUNT_1);
-				ScreenWriteInteger(Correct_Results_Count);
+				SystemScreenWriteInteger(Correct_Results_Count);
 				ScreenWriteString(STRING_BRAIN_CALCULATION_CORRECT_ANSWERS_COUNT_2);
 				return;
 			}
@@ -227,12 +227,12 @@ void BrainCalculation(void)
 			{
 				SystemScreenSetFontColor(SYSTEM_SCREEN_COLOR_RED);
 				ScreenWriteString(STRING_BRAIN_CALCULATION_BAD_RESULT_1);
-				ScreenWriteInteger(Result);
+				SystemScreenWriteInteger(Result);
 				ScreenWriteString(STRING_BRAIN_CALCULATION_BAD_RESULT_2);
 				
 				SystemScreenSetFontColor(SYSTEM_SCREEN_COLOR_BLUE);
 				ScreenWriteString(STRING_BRAIN_CALCULATION_CORRECT_ANSWERS_COUNT_1);
-				ScreenWriteInteger(Correct_Results_Count);
+				SystemScreenWriteInteger(Correct_Results_Count);
 				ScreenWriteString(STRING_BRAIN_CALCULATION_CORRECT_ANSWERS_COUNT_2);
 				
 				SystemKeyboardReadCharacter();

@@ -121,7 +121,7 @@ static void BenchmarkFileSystem(unsigned int *Pointer_Start_Time, unsigned int *
 	
 Exit_Error:
 	ScreenWriteString("Error on file ");
-	ScreenWriteInteger(i);
+	SystemScreenWriteInteger(i);
 	ScreenWriteString(".\n");
 	SystemFileClose(File_ID);
 	SystemFileDelete("_test_");

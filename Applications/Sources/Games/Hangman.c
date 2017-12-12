@@ -116,7 +116,7 @@ static void DisplayRemainingAttempts(int Remaining_Attempts)
 	// Display the remaining attempts
 	SystemScreenSetCursorPosition(ROW_REMAINING_ATTEMPTS, 0);
 	SystemScreenSetFontColor(SYSTEM_SCREEN_COLOR_LIGHT_BLUE);
-	ScreenWriteInteger(Remaining_Attempts);
+	SystemScreenWriteInteger(Remaining_Attempts);
 	ScreenWriteString("     "); // Clear the eventually remaining characters (as the number is decrementing)
 	SystemScreenSetFontColor(SYSTEM_SCREEN_COLOR_BLUE);
 }

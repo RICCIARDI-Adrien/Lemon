@@ -35,7 +35,7 @@ void NoMatchDealer(void)
 		{
 			// Pad number with a space character to keep alignment when drawing to screen
 			if (Numbers[i] < 10) SystemScreenWriteCharacter(' ');
-			ScreenWriteInteger(Numbers[i]);
+			SystemScreenWriteInteger(Numbers[i]);
 			SystemScreenWriteCharacter(' ');
 			
 			// Go to next line if needed
