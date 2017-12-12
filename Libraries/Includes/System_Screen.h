@@ -77,7 +77,7 @@ void SystemScreenGetCursorPosition(unsigned int *Pointer_Row, unsigned int *Poin
  * @param Column Column coordinate in range [0, SYSTEM_SCREEN_COLUMNS_COUNT - 1].
  * @note The function does nothing if the specified coordinates are out of the screen bounds.
  */
-void ScreenSetCursorPosition(unsigned int Row, unsigned int Column);
+void SystemScreenSetCursorPosition(unsigned int Row, unsigned int Column);
 
 /** Display a single character.
  * @param Character The character to display.

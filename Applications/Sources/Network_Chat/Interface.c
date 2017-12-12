@@ -11,11 +11,11 @@
 void InterfaceDisplayMessage(char *String_Message, TSystemScreenColor Message_Color)
 {
 	// Force the screen to scroll
-	ScreenSetCursorPosition(SYSTEM_SCREEN_ROWS_COUNT - 1, SYSTEM_SCREEN_COLUMNS_COUNT - 1);
+	SystemScreenSetCursorPosition(SYSTEM_SCREEN_ROWS_COUNT - 1, SYSTEM_SCREEN_COLUMNS_COUNT - 1);
 	ScreenWriteCharacter('\n');
 	
 	// Display the message at the screen end
-	ScreenSetCursorPosition(SYSTEM_SCREEN_ROWS_COUNT - 1, 0);
+	SystemScreenSetCursorPosition(SYSTEM_SCREEN_ROWS_COUNT - 1, 0);
 	ScreenSetFontColor(Message_Color);
 	ScreenWriteString(String_Message);
 }
@@ -25,7 +25,7 @@ void InterfaceDisplayUserMessage(char *String_Message)
 	unsigned int i, Cursor_Row, Cursor_Column;
 	
 	// Display the prompt
-	ScreenSetCursorPosition(0, 0);
+	SystemScreenSetCursorPosition(0, 0);
 	ScreenSetFontColor(SYSTEM_SCREEN_COLOR_GREEN);
 	ScreenWriteString("> ");
 	

@@ -114,7 +114,7 @@ static int IsLetterPresentInWord(char Letter, char *String_Word)
 static void DisplayRemainingAttempts(int Remaining_Attempts)
 {
 	// Display the remaining attempts
-	ScreenSetCursorPosition(ROW_REMAINING_ATTEMPTS, 0);
+	SystemScreenSetCursorPosition(ROW_REMAINING_ATTEMPTS, 0);
 	ScreenSetFontColor(SYSTEM_SCREEN_COLOR_LIGHT_BLUE);
 	ScreenWriteInteger(Remaining_Attempts);
 	ScreenWriteString("     "); // Clear the eventually remaining characters (as the number is decrementing)
@@ -127,7 +127,7 @@ static void DisplayRemainingAttempts(int Remaining_Attempts)
 static void DisplayInvalidLetter(char Letter)
 {
 	// Display the letter
-	ScreenSetCursorPosition(ROW_INVALID_LETTERS, Invalid_Letters_Column);
+	SystemScreenSetCursorPosition(ROW_INVALID_LETTERS, Invalid_Letters_Column);
 	ScreenSetFontColor(SYSTEM_SCREEN_COLOR_LIGHT_BLUE);
 	ScreenWriteCharacter(Letter);
 	ScreenWriteCharacter(' ');
@@ -152,7 +152,7 @@ static int Play(char *String_Word_To_Find, int Attempts_Count)
 	String_Found_Letters[i] = 0; // Add terminating zero
 	
 	// Display the updated interface
-	ScreenSetCursorPosition(ROW_FOUND_LETTERS, 0);
+	SystemScreenSetCursorPosition(ROW_FOUND_LETTERS, 0);
 	ScreenWriteString(String_Found_Letters);
 	Invalid_Letters_Column = 0; // Reset the invalid letters column
 	DisplayRemainingAttempts(Attempts_Count);
@@ -173,7 +173,7 @@ static int Play(char *String_Word_To_Find, int Attempts_Count)
 			}
 			
 			// Display the currently found letters
-			ScreenSetCursorPosition(ROW_FOUND_LETTERS, 0);
+			SystemScreenSetCursorPosition(ROW_FOUND_LETTERS, 0);
 			ScreenWriteString(String_Found_Letters);
 			
 			// Stop if all letters were found
@@ -229,9 +229,9 @@ void Hangman(void)
 		ScreenWriteCharacter('\n');
 			
 		// Display the interface parts that will never change
-		ScreenSetCursorPosition(ROW_INVALID_LETTERS - 1, 0);
+		SystemScreenSetCursorPosition(ROW_INVALID_LETTERS - 1, 0);
 		ScreenWriteString(STRING_HANGMAN_BAD_LETTERS_LIST);
-		ScreenSetCursorPosition(ROW_REMAINING_ATTEMPTS - 1, 0);
+		SystemScreenSetCursorPosition(ROW_REMAINING_ATTEMPTS - 1, 0);
 		ScreenWriteString(STRING_HANGMAN_REMAINING_ATTEMPTS);
 		
 		String_Current_Word = ChooseNextWord();

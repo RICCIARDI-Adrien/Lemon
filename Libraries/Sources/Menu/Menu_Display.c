@@ -38,7 +38,7 @@ int MenuDisplay(TMenu *Pointer_Menu)
 		
 		// Display the user prompt on the screen bottom
 		ScreenSetFontColor(SYSTEM_SCREEN_COLOR_BLUE);
-		ScreenSetCursorPosition(SYSTEM_SCREEN_ROWS_COUNT - 1, 0);
+		SystemScreenSetCursorPosition(SYSTEM_SCREEN_ROWS_COUNT - 1, 0);
 		ScreenWriteString(Pointer_Menu->String_User_Prompt);
 		
 		// Wait for the user input

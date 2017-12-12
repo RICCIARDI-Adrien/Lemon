@@ -115,13 +115,13 @@ void Rain(void)
 			} while ((Column == SYSTEM_SCREEN_COLUMNS_COUNT - 1) && (Row == SYSTEM_SCREEN_ROWS_COUNT - 1));
 			
 			// Print raindrop
-			ScreenSetCursorPosition(Row, Column);
+			SystemScreenSetCursorPosition(Row, Column);
 			SystemScreenSetBackgroundColor(SYSTEM_SCREEN_COLOR_BLUE);
 			ScreenWriteCharacter(' ');
 			Raindrops_Count++;
 			
 			// Print loop count
-			ScreenSetCursorPosition(SYSTEM_SCREEN_ROWS_COUNT - 1, 0);
+			SystemScreenSetCursorPosition(SYSTEM_SCREEN_ROWS_COUNT - 1, 0);
 			SystemScreenSetBackgroundColor(SYSTEM_SCREEN_COLOR_WHITE);
 			ScreenSetFontColor(SYSTEM_SCREEN_COLOR_LIGHT_GREEN);
 			ScreenWriteString(STRING_RAIN_STATISTICS_1);

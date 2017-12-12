@@ -42,7 +42,7 @@ static void MainDisplayMessage(char *String_Message_Title, char *String_Message_
 	ScreenWriteString(String_Message_Content);
 
 	// Display the footer message
-	ScreenSetCursorPosition(SYSTEM_SCREEN_ROWS_COUNT - 1, 0);
+	SystemScreenSetCursorPosition(SYSTEM_SCREEN_ROWS_COUNT - 1, 0);
 	ScreenWriteString(String_Message_Footer);
 }
 

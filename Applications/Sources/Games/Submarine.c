@@ -160,14 +160,14 @@ void Submarine(void)
 			// Display the string on the screen's middle
 			ScreenSetFontColor(SYSTEM_SCREEN_COLOR_WHITE);
 			SystemScreenSetBackgroundColor(SYSTEM_SCREEN_COLOR_RED);
-			ScreenSetCursorPosition(SYSTEM_SCREEN_ROWS_COUNT / 2, 0); // The column coordinate will be computed by the ScreenWriteCenteredString() function
+			SystemScreenSetCursorPosition(SYSTEM_SCREEN_ROWS_COUNT / 2, 0); // The column coordinate will be computed by the ScreenWriteCenteredString() function
 			ScreenWriteCenteredString(STRING_SUBMARINE_PLAYER_LOST);
 			
 			// Display the score string below
 			SystemStringConcatenate(String_Score, STRING_SUBMARINE_PLAYER_SCORE);
 			SystemStringConvertUnsignedIntegerToString(Score, String_Converted_Score_Value);
 			SystemStringConcatenate(String_Score, String_Converted_Score_Value);
-			ScreenSetCursorPosition((SYSTEM_SCREEN_ROWS_COUNT / 2) + 1, 0); // The column coordinate will be computed by the ScreenWriteCenteredString() function
+			SystemScreenSetCursorPosition((SYSTEM_SCREEN_ROWS_COUNT / 2) + 1, 0); // The column coordinate will be computed by the ScreenWriteCenteredString() function
 			ScreenWriteCenteredString(String_Score);
 			
 			SystemScreenSetBackgroundColor(SYSTEM_SCREEN_COLOR_WHITE); // Restore the default background color
