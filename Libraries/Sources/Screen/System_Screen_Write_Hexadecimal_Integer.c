@@ -1,4 +1,4 @@
-/** @file Screen_Write_Hexadecimal_Integer.c
+/** @file System_Screen_Write_Hexadecimal_Integer.c
  * @author Adrien RICCIARDI
  */
 #include <System.h>
@@ -6,7 +6,7 @@
 //-------------------------------------------------------------------------------------------------
 // Public functions
 //-------------------------------------------------------------------------------------------------
-void ScreenWriteHexadecimalInteger(int Integer)
+void SystemScreenWriteHexadecimalInteger(int Integer)
 {
 	char String_Hexadecimal[9]; // 8 digits + terminating zero
 	
