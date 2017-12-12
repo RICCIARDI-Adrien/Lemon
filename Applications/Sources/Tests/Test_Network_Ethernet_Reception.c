@@ -23,7 +23,7 @@ int main(void)
 		if (Packet_Size > 64) Packet_Size = 64;
 		for (i = 0; i < Packet_Size; i++)
 		{
-			ScreenWriteUnsignedInteger(Packet_Buffer[i]);
+			SystemScreenWriteUnsignedInteger(Packet_Buffer[i]);
 			SystemScreenWriteCharacter(' ');
 		}
 		SystemScreenWriteCharacter('\n');

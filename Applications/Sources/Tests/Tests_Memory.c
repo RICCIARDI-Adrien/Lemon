@@ -36,7 +36,7 @@ static int TestsMemoryAreAreasEqual(unsigned char *Pointer_Memory_Area_1, unsign
 		if (Pointer_Memory_Area_1[Offset] != Pointer_Memory_Area_2[Offset])
 		{
 			SystemScreenWriteString("Error : the two area are different at offset ");
-			ScreenWriteUnsignedInteger(Offset);
+			SystemScreenWriteUnsignedInteger(Offset);
 			SystemScreenWriteString(".\n");
 			return 0;
 		}
@@ -60,13 +60,13 @@ static int TestsMemoryCheckAreaValue(unsigned char *Pointer_Memory_Area, unsigne
 		if (Pointer_Memory_Area[Offset] != Value)
 		{
 			SystemScreenWriteString("Error : the byte at offset ");
-			ScreenWriteUnsignedInteger(Offset);
+			SystemScreenWriteUnsignedInteger(Offset);
 			SystemScreenWriteString(" has a bad value.\n");
 			
 			SystemScreenWriteString("Read value : ");
-			ScreenWriteUnsignedInteger(Pointer_Memory_Area[Offset]);
+			SystemScreenWriteUnsignedInteger(Pointer_Memory_Area[Offset]);
 			SystemScreenWriteString("\nExpected value : ");
-			ScreenWriteUnsignedInteger(Value);
+			SystemScreenWriteUnsignedInteger(Value);
 			SystemScreenWriteCharacter('\n');
 			return 0;
 		}

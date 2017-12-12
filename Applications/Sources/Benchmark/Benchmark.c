@@ -164,7 +164,7 @@ int main(void)
 		// Display elapsed time
 		SystemScreenWriteString("Benchmark duration : ");
 		SystemScreenSetFontColor(SYSTEM_SCREEN_COLOR_GREEN);
-		ScreenWriteUnsignedInteger(End_Time - Start_Time);
+		SystemScreenWriteUnsignedInteger(End_Time - Start_Time);
 		SystemScreenSetFontColor(SYSTEM_SCREEN_COLOR_BLUE);
 		SystemScreenWriteString(" milliseconds.\n\n");
 	}

@@ -36,13 +36,13 @@ int CommandMainUptime(int argc, char __attribute__((unused)) *argv[])
 	
 	// Display up time
 	SystemScreenWriteString(STRING_COMMAND_UPTIME_BOOTED_TIME_1);
-	ScreenWriteUnsignedInteger(Days);
+	SystemScreenWriteUnsignedInteger(Days);
 	SystemScreenWriteString(STRING_COMMAND_UPTIME_BOOTED_TIME_2);
-	ScreenWriteUnsignedInteger(Hours);
+	SystemScreenWriteUnsignedInteger(Hours);
 	SystemScreenWriteString(STRING_COMMAND_UPTIME_BOOTED_TIME_3);
-	ScreenWriteUnsignedInteger(Minutes);
+	SystemScreenWriteUnsignedInteger(Minutes);
 	SystemScreenWriteString(STRING_COMMAND_UPTIME_BOOTED_TIME_4);
-	ScreenWriteUnsignedInteger(Seconds);
+	SystemScreenWriteUnsignedInteger(Seconds);
 	SystemScreenWriteString(STRING_COMMAND_UPTIME_BOOTED_TIME_5);
 	
 	return 0;

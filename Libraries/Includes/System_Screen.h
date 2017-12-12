@@ -102,7 +102,7 @@ void SystemScreenWriteInteger(int Integer);
 /** Display the string representation of an unsigned integer.
  * @param Unsigned_Integer The unsigned integer number to display.
  */
-void ScreenWriteUnsignedInteger(unsigned int Unsigned_Integer);
+void SystemScreenWriteUnsignedInteger(unsigned int Unsigned_Integer);
 
 /** Display the hexadecimal representation of a 32-bit value (always padded to 8 characters).
  * @param Integer The 32-bit value to display (it can be also an unsigned integer).

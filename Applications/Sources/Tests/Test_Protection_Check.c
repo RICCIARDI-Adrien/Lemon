@@ -12,7 +12,7 @@ void StackOverflow(void)
 	j++;
 	if (j >= 100000)
 	{
-		ScreenWriteUnsignedInteger(i);
+		SystemScreenWriteUnsignedInteger(i);
 		SystemScreenWriteCharacter('\n');
 		j = 0;
 	}
@@ -69,7 +69,7 @@ int main(void)
 			Pointer = (unsigned int *) 0xF0000000; // Go to end of memory
 			*Pointer = 0x12345678;
 			SystemScreenWriteString("Read value : ");
-			ScreenWriteUnsignedInteger(*Pointer);
+			SystemScreenWriteUnsignedInteger(*Pointer);
 			SystemScreenWriteString("(= 305 419 896)\n");
 			SystemScreenWriteString("-> Test failed !\n");
 			break;

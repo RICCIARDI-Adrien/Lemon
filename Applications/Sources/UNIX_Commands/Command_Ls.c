@@ -163,7 +163,7 @@ int CommandMainLs(int argc, char __attribute__((unused)) *argv[])
 		for ( ; Remaining_Characters > 0; Remaining_Characters--) SystemScreenWriteCharacter(' ');
 		
 		// Display the file size
-		ScreenWriteUnsignedInteger(Pointer_Sorted_Files_Informations[i]->Size_Bytes);
+		SystemScreenWriteUnsignedInteger(Pointer_Sorted_Files_Informations[i]->Size_Bytes);
 		SystemScreenWriteString(STRING_COMMAND_LS_DISPLAYED_UNIT);
 		
 		// Wait for the user to press a key if the screen is full of displayed files

@@ -44,7 +44,7 @@ int main(int argc, char *argv[])
 	if (Payload_Size > MAXIMUM_PAYLOAD_SIZE)
 	{
 		SystemScreenWriteString("Error : maximum allowed payload size : ");
-		ScreenWriteUnsignedInteger(MAXIMUM_PAYLOAD_SIZE);
+		SystemScreenWriteUnsignedInteger(MAXIMUM_PAYLOAD_SIZE);
 		SystemScreenWriteString(".\n");
 		return 1;
 	}

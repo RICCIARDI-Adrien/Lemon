@@ -93,9 +93,9 @@ int TFTPExecuteCommandGet(char *String_File_Name)
 		if (Received_Block_Number != Expected_Block_Number)
 		{
 			SystemScreenWriteString(STRING_COMMAND_TFTP_GET_BAD_BLOCK_NUMBER_1);
-			ScreenWriteUnsignedInteger(Received_Block_Number);
+			SystemScreenWriteUnsignedInteger(Received_Block_Number);
 			SystemScreenWriteString(STRING_COMMAND_TFTP_GET_BAD_BLOCK_NUMBER_2);
-			ScreenWriteUnsignedInteger(Expected_Block_Number);
+			SystemScreenWriteUnsignedInteger(Expected_Block_Number);
 			SystemScreenWriteString(STRING_COMMAND_TFTP_GET_BAD_BLOCK_NUMBER_3);
 			goto Exit;
 		}
@@ -123,7 +123,7 @@ int TFTPExecuteCommandGet(char *String_File_Name)
 	// Display a success message
 	SystemScreenSetFontColor(SYSTEM_SCREEN_COLOR_GREEN);
 	SystemScreenWriteString(STRING_COMMAND_TFTP_GET_DOWNLOAD_SUCCESSFUL_1);
-	ScreenWriteUnsignedInteger(NETWORK_SWAP_WORD(Packet.Data.Block_Number));
+	SystemScreenWriteUnsignedInteger(NETWORK_SWAP_WORD(Packet.Data.Block_Number));
 	SystemScreenWriteString(STRING_COMMAND_TFTP_GET_DOWNLOAD_SUCCESSFUL_2);
 	SystemScreenSetFontColor(SYSTEM_SCREEN_COLOR_BLUE);
 	Return_Value = 0;
@@ -202,9 +202,9 @@ int TFTPExecuteCommandPut(char *String_File_Name)
 		if (Received_Block_Number != Sent_Block_Number)
 		{
 			SystemScreenWriteString(STRING_COMMAND_TFTP_PUT_BAD_BLOCK_NUMBER_1);
-			ScreenWriteUnsignedInteger(Received_Block_Number);
+			SystemScreenWriteUnsignedInteger(Received_Block_Number);
 			SystemScreenWriteString(STRING_COMMAND_TFTP_PUT_BAD_BLOCK_NUMBER_2);
-			ScreenWriteUnsignedInteger(Sent_Block_Number);
+			SystemScreenWriteUnsignedInteger(Sent_Block_Number);
 			SystemScreenWriteString(STRING_COMMAND_TFTP_PUT_BAD_BLOCK_NUMBER_3);
 			goto Exit;
 		}
@@ -232,7 +232,7 @@ int TFTPExecuteCommandPut(char *String_File_Name)
 	// Display a success message
 	SystemScreenSetFontColor(SYSTEM_SCREEN_COLOR_GREEN);
 	SystemScreenWriteString(STRING_COMMAND_TFTP_PUT_UPLOAD_SUCCESSFUL_1);
-	ScreenWriteUnsignedInteger(Sent_Block_Number);
+	SystemScreenWriteUnsignedInteger(Sent_Block_Number);
 	SystemScreenWriteString(STRING_COMMAND_TFTP_PUT_UPLOAD_SUCCESSFUL_2);
 	SystemScreenSetFontColor(SYSTEM_SCREEN_COLOR_BLUE);
 	Return_Value = 0;

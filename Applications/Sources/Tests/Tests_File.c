@@ -82,7 +82,7 @@ int TestsFileSystemCalls(void)
 	// Choose a random file size between 100 KB and 3 MB
 	File_Size_Bytes = ((SystemRandomGenerateNumber() % 32) + 1) * 1024 * 100;
 	SystemScreenWriteString("File size : ");
-	ScreenWriteUnsignedInteger(File_Size_Bytes);
+	SystemScreenWriteUnsignedInteger(File_Size_Bytes);
 	SystemScreenWriteCharacter('\n');
  
 	SystemScreenWriteString("Creating file content... ");
@@ -93,7 +93,7 @@ int TestsFileSystemCalls(void)
 	CRC_Seed = SystemRandomGenerateNumber();
 	Written_Data_CRC = crc32(CRC_Seed, Buffer, File_Size_Bytes);
 	SystemScreenWriteString("done (CRC = ");
-	ScreenWriteUnsignedInteger(Written_Data_CRC);
+	SystemScreenWriteUnsignedInteger(Written_Data_CRC);
 	SystemScreenWriteString(")\n");
 
 	SystemScreenWriteString("Writing data to file... ");
@@ -136,13 +136,13 @@ int TestsFileSystemCalls(void)
 	// Close the file
 	SystemCall(SYSTEM_CALL_FILE_CLOSE, File_ID, 0, NULL, NULL);
 	SystemScreenWriteString("done (");
-	ScreenWriteUnsignedInteger(Read_Bytes_Count);
+	SystemScreenWriteUnsignedInteger(Read_Bytes_Count);
 	SystemScreenWriteString(" bytes read)\n");
 
 	SystemScreenWriteString("Computing CRC... ");
 	Read_Data_CRC = crc32(CRC_Seed, Buffer, File_Size_Bytes);
 	SystemScreenWriteString("done (CRC = ");
-	ScreenWriteUnsignedInteger(Read_Data_CRC);
+	SystemScreenWriteUnsignedInteger(Read_Data_CRC);
 	SystemScreenWriteString(")\n");
 
 	// Delete the file
@@ -267,7 +267,7 @@ int TestsFileFillFilesList(void)
 	SystemGetFileSystemFreeSize(&i, &Free_Files_Count); // The first parameter is not relevant here
 	
 	SystemScreenWriteString("There are ");
-	ScreenWriteUnsignedInteger(Free_Files_Count);
+	SystemScreenWriteUnsignedInteger(Free_Files_Count);
 	SystemScreenWriteString(" free Files List entries.\n");
 	
 	SystemScreenWriteString("Filling all entries...\n");
@@ -324,7 +324,7 @@ int TestsFileFillBlocksList(void)
 	SystemGetFileSystemTotalSize(&Block_Size_Bytes, &i, &i);
 	
 	SystemScreenWriteString("There are ");
-	ScreenWriteUnsignedInteger(Free_Blocks_Count);
+	SystemScreenWriteUnsignedInteger(Free_Blocks_Count);
 	SystemScreenWriteString(" free Blocks List entries.\n");
 	
 	SystemScreenWriteString("Creating the test file...\n");
