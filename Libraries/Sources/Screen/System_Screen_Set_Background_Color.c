@@ -1,4 +1,4 @@
-/** @file Screen_Set_Background_Color.c
+/** @file System_Screen_Set_Background_Color.c
  * @author Adrien RICCIARDI
  */
 #include <System.h>
@@ -6,7 +6,7 @@
 //-------------------------------------------------------------------------------------------------
 // Public functions
 //-------------------------------------------------------------------------------------------------
-void ScreenSetBackgroundColor(TSystemScreenColor Color_Code)
+void SystemScreenSetBackgroundColor(TSystemScreenColor Color_Code)
 {
 	unsigned char Color;
 	

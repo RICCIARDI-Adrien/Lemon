@@ -64,7 +64,7 @@ void ScreenSetFontColor(TSystemScreenColor Color_Code);
 /** Set the screen background color.
  * @param Color_Code The color to use.
  */
-void ScreenSetBackgroundColor(TSystemScreenColor Color_Code);
+void SystemScreenSetBackgroundColor(TSystemScreenColor Color_Code);
 
 /** Get the screen cursor position.
  * @param Pointer_Row On output will contain the row coordinate.

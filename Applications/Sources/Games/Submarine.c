@@ -159,7 +159,7 @@ void Submarine(void)
 		{
 			// Display the string on the screen's middle
 			ScreenSetFontColor(SYSTEM_SCREEN_COLOR_WHITE);
-			ScreenSetBackgroundColor(SYSTEM_SCREEN_COLOR_RED);
+			SystemScreenSetBackgroundColor(SYSTEM_SCREEN_COLOR_RED);
 			ScreenSetCursorPosition(SYSTEM_SCREEN_ROWS_COUNT / 2, 0); // The column coordinate will be computed by the ScreenWriteCenteredString() function
 			ScreenWriteCenteredString(STRING_SUBMARINE_PLAYER_LOST);
 			
@@ -170,7 +170,7 @@ void Submarine(void)
 			ScreenSetCursorPosition((SYSTEM_SCREEN_ROWS_COUNT / 2) + 1, 0); // The column coordinate will be computed by the ScreenWriteCenteredString() function
 			ScreenWriteCenteredString(String_Score);
 			
-			ScreenSetBackgroundColor(SYSTEM_SCREEN_COLOR_WHITE); // Restore the default background color
+			SystemScreenSetBackgroundColor(SYSTEM_SCREEN_COLOR_WHITE); // Restore the default background color
 			
 			// Wait for the player to hit "escape" key
 			while (SystemKeyboardReadCharacter() != SYSTEM_KEYBOARD_KEY_CODE_ESCAPE);
