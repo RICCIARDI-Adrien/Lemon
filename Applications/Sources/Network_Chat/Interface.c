@@ -34,6 +34,6 @@ void InterfaceDisplayUserMessage(char *String_Message)
 	for (i = 0; (String_Message[i] != 0) && (i < INTERFACE_USER_MESSAGE_MAXIMUM_SIZE); i++) ScreenWriteCharacter(String_Message[i]);
 	
 	// Clear the last user message line up to its end
-	ScreenGetCursorPosition(&Cursor_Row, &Cursor_Column);
+	SystemScreenGetCursorPosition(&Cursor_Row, &Cursor_Column);
 	for ( ; Cursor_Column < SYSTEM_SCREEN_COLUMNS_COUNT; Cursor_Column++) ScreenWriteCharacter(' ');
 }

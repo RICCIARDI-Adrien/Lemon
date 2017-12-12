@@ -152,7 +152,7 @@ int CommandMainMore(int argc, char *argv[])
 Exit:
 	SystemFileClose(File_ID);
 	// Append a new line character if the cursor is not at the begining of a line
-	ScreenGetCursorPosition(&Cursor_Row, &Cursor_Column);
+	SystemScreenGetCursorPosition(&Cursor_Row, &Cursor_Column);
 	if (Cursor_Column > 0) ScreenWriteCharacter('\n');
 	
 	return Return_Value;

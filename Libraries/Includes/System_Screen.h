@@ -70,7 +70,7 @@ void ScreenSetBackgroundColor(TSystemScreenColor Color_Code);
  * @param Pointer_Row On output will contain the row coordinate.
  * @param Pointer_Column On output will contain the column coordinate.
  */
-void ScreenGetCursorPosition(unsigned int *Pointer_Row, unsigned int *Pointer_Column);
+void SystemScreenGetCursorPosition(unsigned int *Pointer_Row, unsigned int *Pointer_Column);
 
 /** Set the screen cursor position.
  * @param Row Row coordinate in range [0, SYSTEM_SCREEN_ROWS_COUNT - 1].
