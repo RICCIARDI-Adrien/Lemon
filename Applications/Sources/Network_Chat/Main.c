@@ -117,7 +117,7 @@ int main(int argc, char *argv[])
 	}
 	
 	// Prepare the screen
-	ScreenClear();
+	SystemScreenClear();
 	InterfaceDisplayUserMessage(""); // Display an empty prompt
 	
 	while (1)

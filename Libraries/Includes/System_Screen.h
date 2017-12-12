@@ -54,7 +54,7 @@ typedef struct __attribute__((packed))
 // Functions
 //-------------------------------------------------------------------------------------------------
 /** Clear the whole screen using the current background color. */
-void ScreenClear(void);
+void SystemScreenClear(void);
 
 /** Set the screen font color.
  * @param Color_Code The color to use.

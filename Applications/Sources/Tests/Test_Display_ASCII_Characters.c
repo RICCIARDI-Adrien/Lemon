@@ -44,6 +44,6 @@ int main(void)
 	ScreenDisplayBuffer(Video_Buffer);
 	SystemKeyboardReadCharacter();
 	
-	ScreenClear();
+	SystemScreenClear();
 	return 0;
 }

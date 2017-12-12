@@ -102,7 +102,7 @@ void Rain(void)
 	while (1)
 	{
 		ScreenSetBackgroundColor(SYSTEM_SCREEN_COLOR_WHITE);
-		ScreenClear();
+		SystemScreenClear();
 		Raindrops_Count = 0;
 		
 		for (i = 0; i < 200; i++)
@@ -132,7 +132,7 @@ void Rain(void)
 			// Wait required time
 			if (Wait(Raining_Speed)) // Exit program if the player hit Escape key
 			{
-				ScreenClear();
+				SystemScreenClear();
 				return;
 			}
 		}

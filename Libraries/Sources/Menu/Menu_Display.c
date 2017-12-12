@@ -13,7 +13,7 @@ int MenuDisplay(TMenu *Pointer_Menu)
 	// Display the menu until a valid choice has been done
 	while (1)
 	{
-		ScreenClear();
+		SystemScreenClear();
 		
 		// Display the title only if it is shorter than the screen width
 		ScreenSetFontColor(MENU_TITLE_COLOR);
@@ -45,7 +45,7 @@ int MenuDisplay(TMenu *Pointer_Menu)
 		Selected_Number = (int) SystemKeyboardReadUnsignedInteger();
 		if ((Selected_Number > 0) && (Selected_Number <= i))
 		{
-			ScreenClear();
+			SystemScreenClear();
 			return Selected_Number;
 		}
 	}

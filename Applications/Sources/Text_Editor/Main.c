@@ -30,7 +30,7 @@ static unsigned int Main_Copy_Buffer_Length = 0;
  */
 static void MainDisplayMessage(char *String_Message_Title, char *String_Message_Content, char *String_Message_Footer, TSystemScreenColor Message_Title_Color)
 {
-	ScreenClear();
+	SystemScreenClear();
 	
 	// Display the title with the specified color
 	ScreenSetFontColor(Message_Title_Color);
@@ -266,7 +266,7 @@ void MainPasteCopyBuffer(void)
 /** Gracefully exit to system. */
 static void MainExitProgram(void)
 {
-	ScreenClear();
+	SystemScreenClear();
 	SystemExitProgram();
 }
 
@@ -288,7 +288,7 @@ int main(int argc, char *argv[])
 	}
 	String_File_Name = argv[1];
 	
-	ScreenClear();
+	SystemScreenClear();
 	DisplayClear(); // Prepare the display with a blank screen in case it's a new file
 	
 	// Does the specified file exist ?

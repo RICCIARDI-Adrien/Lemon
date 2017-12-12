@@ -222,7 +222,7 @@ void Hangman(void)
 	while (1)
 	{
 		// Display the title
-		ScreenClear();
+		SystemScreenClear();
 		ScreenSetFontColor(SYSTEM_SCREEN_COLOR_GREEN);
 		ScreenWriteCenteredString(STRING_HANGMAN_TITLE);
 		ScreenSetFontColor(SYSTEM_SCREEN_COLOR_BLUE);
@@ -238,14 +238,14 @@ void Hangman(void)
 		if (String_Current_Word == NULL)
 		{
 			// The player found all words
-			ScreenClear();
+			SystemScreenClear();
 			ScreenSetFontColor(SYSTEM_SCREEN_COLOR_GREEN);
 			ScreenWriteString(STRING_HANGMAN_GAME_WON_1);
 			ScreenSetFontColor(SYSTEM_SCREEN_COLOR_BLUE);
 			ScreenWriteString(STRING_HANGMAN_GAME_WON_2);
 			
 			while (SystemKeyboardReadCharacter() != SYSTEM_KEYBOARD_KEY_CODE_ENTER);
-			ScreenClear();
+			SystemScreenClear();
 			return;
 		}
 		
@@ -254,7 +254,7 @@ void Hangman(void)
 		{
 			case 0:
 				// The player successfully found the word
-				ScreenClear();
+				SystemScreenClear();
 				ScreenSetFontColor(SYSTEM_SCREEN_COLOR_GREEN);
 				ScreenWriteString(STRING_HANGMAN_WORD_FOUND_1);
 				ScreenSetFontColor(SYSTEM_SCREEN_COLOR_BLUE);
@@ -264,7 +264,7 @@ void Hangman(void)
 			
 			case 1:
 				// The player did not find the word
-				ScreenClear();
+				SystemScreenClear();
 				ScreenSetFontColor(SYSTEM_SCREEN_COLOR_RED);
 				ScreenWriteString(STRING_HANGMAN_WORD_NOT_FOUND_1);
 				ScreenSetFontColor(SYSTEM_SCREEN_COLOR_BLUE);
