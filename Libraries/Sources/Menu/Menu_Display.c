@@ -17,7 +17,7 @@ int MenuDisplay(TMenu *Pointer_Menu)
 		
 		// Display the title only if it is shorter than the screen width
 		SystemScreenSetFontColor(MENU_TITLE_COLOR);
-		ScreenWriteCenteredString(Pointer_Menu->String_Title);
+		SystemScreenWriteCenteredString(Pointer_Menu->String_Title);
 		ScreenWriteString("\n\n");
 		
 		// Display each item

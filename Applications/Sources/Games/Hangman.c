@@ -224,7 +224,7 @@ void Hangman(void)
 		// Display the title
 		SystemScreenClear();
 		SystemScreenSetFontColor(SYSTEM_SCREEN_COLOR_GREEN);
-		ScreenWriteCenteredString(STRING_HANGMAN_TITLE);
+		SystemScreenWriteCenteredString(STRING_HANGMAN_TITLE);
 		SystemScreenSetFontColor(SYSTEM_SCREEN_COLOR_BLUE);
 		ScreenWriteCharacter('\n');
 			

@@ -145,7 +145,7 @@ static void DisplayTitle(char *String_Title)
 	
 	// Display it
 	SystemScreenSetFontColor(SYSTEM_SCREEN_COLOR_GREEN);
-	ScreenWriteCenteredString(String_Embellished_Title);
+	SystemScreenWriteCenteredString(String_Embellished_Title);
 	SystemScreenSetFontColor(SYSTEM_SCREEN_COLOR_BLUE);
 }
 

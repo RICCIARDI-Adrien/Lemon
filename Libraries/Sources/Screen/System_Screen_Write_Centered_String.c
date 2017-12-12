@@ -1,4 +1,4 @@
-/** @file Screen_Write_Centered_String.c
+/** @file System_Screen_Write_Centered_String.c
  * @author Adrien RICCIARDI
  */
 #include <System.h>
@@ -6,7 +6,7 @@
 //-------------------------------------------------------------------------------------------------
 // Public functions
 //-------------------------------------------------------------------------------------------------
-void ScreenWriteCenteredString(char *String)
+void SystemScreenWriteCenteredString(char *String)
 {
 	int Length, Column, Current_Cursor_Row, Current_Cursor_Column;
 	
