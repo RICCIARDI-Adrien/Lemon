@@ -96,5 +96,5 @@ void DisplaySetCursorPosition(unsigned int Row, unsigned int Column)
 
 void DisplayRenderToScreen(void)
 {
-	ScreenDisplayBuffer((unsigned char *) Display_Video_Memory);
+	SystemScreenDisplayBuffer((unsigned char *) Display_Video_Memory);
 }

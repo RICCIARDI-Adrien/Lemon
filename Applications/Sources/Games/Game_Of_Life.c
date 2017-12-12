@@ -76,7 +76,7 @@ static void DisplayWorld(void)
 		}
 	}
 
-	ScreenDisplayBuffer((unsigned char *) Video_Buffer);
+	SystemScreenDisplayBuffer((unsigned char *) Video_Buffer);
 }
 
 /** Retrieve the number of neighbor cells a specified cell has.

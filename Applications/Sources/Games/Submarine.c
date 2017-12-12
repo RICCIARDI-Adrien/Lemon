@@ -153,7 +153,7 @@ void Submarine(void)
 		Submarine_Screen_Buffer[Player_Row][SUBMARINE_PLAYER_COLUMN].Color = Player_Color;
 		
 		// Refresh the screen every time to force the game to run at 60Hz
-		ScreenDisplayBuffer(Submarine_Screen_Buffer);
+		SystemScreenDisplayBuffer(Submarine_Screen_Buffer);
 		
 		if (Is_Player_Dead)
 		{

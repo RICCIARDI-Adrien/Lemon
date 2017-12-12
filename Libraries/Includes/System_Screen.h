@@ -115,7 +115,7 @@ void ScreenWriteHexadecimalInteger(int Integer);
  * @note The buffer must be (SYSTEM_SCREEN_ROWS_COUNT * SYSTEM_SCREEN_COLUMNS_COUNT * 2) bytes large. Even byte is character ASCII code and odd byte is character color attributes.
  * @see IBM BIOS text mode 3 for more informations.
  */
-void ScreenDisplayBuffer(void *Pointer_Buffer);
+void SystemScreenDisplayBuffer(void *Pointer_Buffer);
 
 /** Scroll a SYSTEM_SCREEN_ROWS_COUNT*SYSTEM_SCREEN_COLUMNS_COUNT bytes buffer to one column on the left. The rightmost column is left as-is.
  * @param Pointer_Buffer The buffer to scroll.

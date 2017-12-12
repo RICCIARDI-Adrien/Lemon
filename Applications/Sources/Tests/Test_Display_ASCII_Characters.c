@@ -41,7 +41,7 @@ int main(void)
 		Index += (SYSTEM_SCREEN_COLUMNS_COUNT - LINE_COLUMNS_COUNT) * 2;
 	}
 	
-	ScreenDisplayBuffer(Video_Buffer);
+	SystemScreenDisplayBuffer(Video_Buffer);
 	SystemKeyboardReadCharacter();
 	
 	SystemScreenClear();
