@@ -11,11 +11,11 @@
 // Constants
 //-------------------------------------------------------------------------------------------------
 /** The menu title color. */
-#define MENU_TITLE_COLOR SCREEN_COLOR_GREEN
+#define MENU_TITLE_COLOR SYSTEM_SCREEN_COLOR_GREEN
 /** A menu item number color. */
-#define MENU_ITEM_NUMBER_COLOR SCREEN_COLOR_GRAY
+#define MENU_ITEM_NUMBER_COLOR SYSTEM_SCREEN_COLOR_GRAY
 /** A menu item text color. */
-#define MENU_ITEM_TEXT_COLOR SCREEN_COLOR_BLUE
+#define MENU_ITEM_TEXT_COLOR SYSTEM_SCREEN_COLOR_BLUE
 
 /** The maximum amount of menu items. */
 #define MENU_MAXIMUM_ITEMS_COUNT 20

@@ -20,7 +20,7 @@
  * @param String_Message The message to display.
  * @param Message_Color The color to set when displaying the message.
  */
-void InterfaceDisplayMessage(char *String_Message, TScreenColor Message_Color);
+void InterfaceDisplayMessage(char *String_Message, TSystemScreenColor Message_Color);
 
 /** Display a prompt at the screen top followed by the user message content.
  * @param String_Message The user message content.

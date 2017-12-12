@@ -25,23 +25,23 @@
 /** All available colors. */
 typedef enum
 {
-	SCREEN_COLOR_BLACK,
-	SCREEN_COLOR_BLUE,
-	SCREEN_COLOR_GREEN,
-	SCREEN_COLOR_CYAN,
-	SCREEN_COLOR_RED,
-	SCREEN_COLOR_MAGENTA,
-	SCREEN_COLOR_BROWN,
-	SCREEN_COLOR_LIGHT_GRAY,
-	SCREEN_COLOR_GRAY,
-	SCREEN_COLOR_LIGHT_BLUE,
-	SCREEN_COLOR_LIGHT_GREEN,
-	SCREEN_COLOR_LIGHT_CYAN,
-	SCREEN_COLOR_LIGHT_RED,
-	SCREEN_COLOR_LIGHT_MAGENTA,
-	SCREEN_COLOR_YELLOW,
-	SCREEN_COLOR_WHITE
-} TScreenColor;
+	SYSTEM_SCREEN_COLOR_BLACK,
+	SYSTEM_SCREEN_COLOR_BLUE,
+	SYSTEM_SCREEN_COLOR_GREEN,
+	SYSTEM_SCREEN_COLOR_CYAN,
+	SYSTEM_SCREEN_COLOR_RED,
+	SYSTEM_SCREEN_COLOR_MAGENTA,
+	SYSTEM_SCREEN_COLOR_BROWN,
+	SYSTEM_SCREEN_COLOR_LIGHT_GRAY,
+	SYSTEM_SCREEN_COLOR_GRAY,
+	SYSTEM_SCREEN_COLOR_LIGHT_BLUE,
+	SYSTEM_SCREEN_COLOR_LIGHT_GREEN,
+	SYSTEM_SCREEN_COLOR_LIGHT_CYAN,
+	SYSTEM_SCREEN_COLOR_LIGHT_RED,
+	SYSTEM_SCREEN_COLOR_LIGHT_MAGENTA,
+	SYSTEM_SCREEN_COLOR_YELLOW,
+	SYSTEM_SCREEN_COLOR_WHITE
+} TSystemScreenColor;
 
 /** A character representation in the VGA mode 3 video memory. */
 typedef struct __attribute__((packed))
@@ -59,12 +59,12 @@ void ScreenClear(void);
 /** Set the screen font color.
  * @param Color_Code The color to use.
  */
-void ScreenSetFontColor(TScreenColor Color_Code);
+void ScreenSetFontColor(TSystemScreenColor Color_Code);
 
 /** Set the screen background color.
  * @param Color_Code The color to use.
  */
-void ScreenSetBackgroundColor(TScreenColor Color_Code);
+void ScreenSetBackgroundColor(TSystemScreenColor Color_Code);
 
 /** Get the screen cursor position.
  * @param Pointer_Row On output will contain the row coordinate.

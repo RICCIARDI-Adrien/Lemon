@@ -87,7 +87,7 @@ int main(int argc, char *argv[])
 	// IP address
 	if (NetworkInitializeIPAddress(argv[1], &Destination_IP_Address) != 0)
 	{
-		ScreenSetFontColor(SCREEN_COLOR_RED);
+		ScreenSetFontColor(SYSTEM_SCREEN_COLOR_RED);
 		ScreenWriteString(STRING_ERROR_INVALID_IP_ADDRESS);
 		return 1;
 	}
@@ -98,20 +98,20 @@ int main(int argc, char *argv[])
 	Result = NetworkInitialize();
 	if (Result == 1)
 	{
-		ScreenSetFontColor(SCREEN_COLOR_RED);
+		ScreenSetFontColor(SYSTEM_SCREEN_COLOR_RED);
 		ScreenWriteString(STRING_ERROR_NETWORK_INITIALIZATION_NO_NETWORK_SUPPORT);
 		return 1;
 	}
 	else if (Result == 2)
 	{
-		ScreenSetFontColor(SCREEN_COLOR_RED);
+		ScreenSetFontColor(SYSTEM_SCREEN_COLOR_RED);
 		ScreenWriteString(STRING_ERROR_NETWORK_INITIALIZATION_BAD_CONFIGURATION_PARAMETERS);
 		return 1;
 	}
 	
 	if (NetworkInitializeSocket(&Destination_IP_Address, Destination_Port, NETWORK_IP_PROTOCOL_UDP, &Socket) != 0)
 	{
-		ScreenSetFontColor(SCREEN_COLOR_RED);
+		ScreenSetFontColor(SYSTEM_SCREEN_COLOR_RED);
 		ScreenWriteString(STRING_ERROR_NETWORK_SOCKET_INITIALIZATION);
 		return 1;
 	}
@@ -130,7 +130,7 @@ int main(int argc, char *argv[])
 			else String_Received_Message[Received_Message_Size] = 0; // Append a terminating zero to the message end
 			
 			// Append the message to the conversation
-			InterfaceDisplayMessage(String_Received_Message, SCREEN_COLOR_LIGHT_RED);
+			InterfaceDisplayMessage(String_Received_Message, SYSTEM_SCREEN_COLOR_LIGHT_RED);
 			InterfaceDisplayUserMessage(String_Main_User_Message); // Redraw the input area
 		}
 		
@@ -147,7 +147,7 @@ int main(int argc, char *argv[])
 				// The user sent the message
 				case 2:
 					// Display the message
-					InterfaceDisplayMessage(String_Main_User_Message, SCREEN_COLOR_LIGHT_BLUE);
+					InterfaceDisplayMessage(String_Main_User_Message, SYSTEM_SCREEN_COLOR_LIGHT_BLUE);
 					
 					// Append a new line character
 					String_Main_User_Message[Main_User_Message_Length] = '\n'; // The user message buffer is one byte larger than the maximum message size to allow a terminating zero to be inserted, so the new line character appending can't overflow this buffer
@@ -172,7 +172,7 @@ int main(int argc, char *argv[])
 	
 Exit:
 	// Put the cursor at the beginning of the last screen line
-	InterfaceDisplayMessage("", SCREEN_COLOR_WHITE); // Scroll the screen a last time to make the last line blank
+	InterfaceDisplayMessage("", SYSTEM_SCREEN_COLOR_WHITE); // Scroll the screen a last time to make the last line blank
 	InterfaceDisplayUserMessage("");
 	ScreenSetCursorPosition(SYSTEM_SCREEN_ROWS_COUNT - 1, 0);
 	return 0;

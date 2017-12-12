@@ -22,7 +22,7 @@ void DisplayWriteCharacter(char Character);
 /** Set the display background color.
  * @param Color_Code The color to use.
  */
-void DisplaySetBackgroundColor(TScreenColor Color_Code);
+void DisplaySetBackgroundColor(TSystemScreenColor Color_Code);
 
 /** Get the display cursor position.
  * @param Pointer_Row On output will contain the row coordinate.

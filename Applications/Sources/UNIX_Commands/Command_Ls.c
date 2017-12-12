@@ -126,9 +126,9 @@ int CommandMainLs(int argc, char __attribute__((unused)) *argv[])
 	SystemGetFileSystemTotalSize(&Block_Size, &Total_Blocks_Count, &Total_Files_Count);
 	if (Total_Files_Count > MAXIMUM_FILES_COUNT)
 	{
-		ScreenSetFontColor(SCREEN_COLOR_RED);
+		ScreenSetFontColor(SYSTEM_SCREEN_COLOR_RED);
 		ScreenWriteString(STRING_COMMAND_LS_NOT_ENOUGH_SPACE_TO_STORE_FILES);
-		ScreenSetFontColor(SCREEN_COLOR_BLUE);
+		ScreenSetFontColor(SYSTEM_SCREEN_COLOR_BLUE);
 		return -1;
 	}
 	
@@ -170,9 +170,9 @@ int CommandMainLs(int argc, char __attribute__((unused)) *argv[])
 		Displayed_Files_Count++;
 		if ((Displayed_Files_Count == SYSTEM_SCREEN_ROWS_COUNT - 1) && (i < Files_Count - 1)) // Do not display the wait prompt if there is no more file to display
 		{
-			ScreenSetFontColor(SCREEN_COLOR_LIGHT_BLUE);
+			ScreenSetFontColor(SYSTEM_SCREEN_COLOR_LIGHT_BLUE);
 			ScreenWriteString(STRING_COMMAND_LS_WAIT_FOR_USER_INPUT);
-			ScreenSetFontColor(SCREEN_COLOR_BLUE);
+			ScreenSetFontColor(SYSTEM_SCREEN_COLOR_BLUE);
 			
 			SystemKeyboardReadCharacter();
 			ScreenWriteCharacter('\n');

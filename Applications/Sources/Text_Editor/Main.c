@@ -28,7 +28,7 @@ static unsigned int Main_Copy_Buffer_Length = 0;
  * @param String_Message_Footer What to display on the screen bottom line.
  * @param Message_Title_Color The message content color.
  */
-static void MainDisplayMessage(char *String_Message_Title, char *String_Message_Content, char *String_Message_Footer, TScreenColor Message_Title_Color)
+static void MainDisplayMessage(char *String_Message_Title, char *String_Message_Content, char *String_Message_Footer, TSystemScreenColor Message_Title_Color)
 {
 	ScreenClear();
 	
@@ -65,7 +65,7 @@ static int MainLoadFile(char *String_File_Name)
 	// Try to open the file
 	if (SystemFileOpen(String_File_Name, SYSTEM_FILE_OPENING_MODE_READ, &File_ID) != ERROR_CODE_NO_ERROR)
 	{
-		MainDisplayMessage(STRING_MESSAGE_TITLE_ERROR, STRING_ERROR_CANT_OPEN_FILE, STRING_HIT_ENTER_TO_CONTINUE, SCREEN_COLOR_RED);
+		MainDisplayMessage(STRING_MESSAGE_TITLE_ERROR, STRING_ERROR_CANT_OPEN_FILE, STRING_HIT_ENTER_TO_CONTINUE, SYSTEM_SCREEN_COLOR_RED);
 		MainWaitForEnterKey();
 		return 1;
 	}
@@ -74,7 +74,7 @@ static int MainLoadFile(char *String_File_Name)
 	if (SystemFileRead(File_ID, Buffer, CONFIGURATION_BUFFER_MAXIMUM_SIZE, &Buffer_Characters_Count) != ERROR_CODE_NO_ERROR)
 	{
 		SystemFileClose(File_ID);
-		MainDisplayMessage(STRING_MESSAGE_TITLE_ERROR, STRING_ERROR_CANT_LOAD_FILE, STRING_HIT_ENTER_TO_CONTINUE, SCREEN_COLOR_RED);
+		MainDisplayMessage(STRING_MESSAGE_TITLE_ERROR, STRING_ERROR_CANT_LOAD_FILE, STRING_HIT_ENTER_TO_CONTINUE, SYSTEM_SCREEN_COLOR_RED);
 		MainWaitForEnterKey();
 		return 1;
 	}
@@ -84,7 +84,7 @@ static int MainLoadFile(char *String_File_Name)
 	// Show a message if the file is too big for the buffer
 	if (SystemFileGetSize(String_File_Name) > CONFIGURATION_BUFFER_MAXIMUM_SIZE)
 	{
-		MainDisplayMessage(STRING_MESSAGE_TITLE_WARNING, STRING_WARNING_FILE_IS_TOO_BIG, STRING_HIT_ENTER_TO_CONTINUE, SCREEN_COLOR_BROWN);
+		MainDisplayMessage(STRING_MESSAGE_TITLE_WARNING, STRING_WARNING_FILE_IS_TOO_BIG, STRING_HIT_ENTER_TO_CONTINUE, SYSTEM_SCREEN_COLOR_BROWN);
 		MainWaitForEnterKey();
 	}
 	
@@ -103,7 +103,7 @@ static int MainSaveFile(char *String_File_Name)
 	// Try to open the file
 	if (SystemFileOpen(String_File_Name, SYSTEM_FILE_OPENING_MODE_WRITE, &File_ID) != ERROR_CODE_NO_ERROR)
 	{
-		MainDisplayMessage(STRING_MESSAGE_TITLE_ERROR, STRING_ERROR_CANT_OPEN_FILE, STRING_HIT_ENTER_TO_CONTINUE, SCREEN_COLOR_RED);
+		MainDisplayMessage(STRING_MESSAGE_TITLE_ERROR, STRING_ERROR_CANT_OPEN_FILE, STRING_HIT_ENTER_TO_CONTINUE, SYSTEM_SCREEN_COLOR_RED);
 		MainWaitForEnterKey();
 		DisplayRenderToScreen(); // Restore the previously displayed buffer
 		return 1;
@@ -113,7 +113,7 @@ static int MainSaveFile(char *String_File_Name)
 	if (SystemFileWrite(File_ID, Buffer, Buffer_Characters_Count) != ERROR_CODE_NO_ERROR)
 	{
 		SystemFileClose(File_ID);
-		MainDisplayMessage(STRING_MESSAGE_TITLE_ERROR, STRING_ERROR_CANT_SAVE_FILE, STRING_HIT_ENTER_TO_CONTINUE, SCREEN_COLOR_RED);
+		MainDisplayMessage(STRING_MESSAGE_TITLE_ERROR, STRING_ERROR_CANT_SAVE_FILE, STRING_HIT_ENTER_TO_CONTINUE, SYSTEM_SCREEN_COLOR_RED);
 		MainWaitForEnterKey();
 		DisplayRenderToScreen(); // Restore the previously displayed buffer
 		return 1;
@@ -197,7 +197,7 @@ static void MainDisplayTextInformation(void)
 	SystemStringConvertUnsignedIntegerToString(Buffer_Characters_Count, String_Number);
 	SystemStringConcatenate(String_Content, String_Number);
 	
-	MainDisplayMessage(STRING_MESSAGE_TEXT_INFORMATION_TITLE, String_Content, STRING_HIT_ENTER_TO_CONTINUE, SCREEN_COLOR_BLUE);
+	MainDisplayMessage(STRING_MESSAGE_TEXT_INFORMATION_TITLE, String_Content, STRING_HIT_ENTER_TO_CONTINUE, SYSTEM_SCREEN_COLOR_BLUE);
 	MainWaitForEnterKey();
 	DisplayRenderToScreen(); // Restore the previously displayed buffer
 }
@@ -321,7 +321,7 @@ int main(int argc, char *argv[])
 				// Ask the whether to save the document if the buffer has been modified without being saved
 				if (Is_Text_Modified)
 				{
-					MainDisplayMessage(STRING_MESSAGE_TITLE_WARNING, STRING_MESSAGE_UNSAVED_TEXT_WARNING_CONTENT, STRING_MESSAGE_UNSAVED_TEXT_WARNING_FOOTER, SCREEN_COLOR_BROWN);
+					MainDisplayMessage(STRING_MESSAGE_TITLE_WARNING, STRING_MESSAGE_UNSAVED_TEXT_WARNING_CONTENT, STRING_MESSAGE_UNSAVED_TEXT_WARNING_FOOTER, SYSTEM_SCREEN_COLOR_BROWN);
 					
 					// Wait for Enter or Escape key
 					do

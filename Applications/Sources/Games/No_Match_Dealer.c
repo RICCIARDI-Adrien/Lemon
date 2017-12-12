@@ -30,7 +30,7 @@ void NoMatchDealer(void)
 		for (i = 0; i < NUMBERS_COUNT; i++) Numbers[i] = SystemRandomGenerateNumber() % 100;
 
 		// Show numbers on 2 rows
-		ScreenSetFontColor(SCREEN_COLOR_LIGHT_BLUE);
+		ScreenSetFontColor(SYSTEM_SCREEN_COLOR_LIGHT_BLUE);
 		for (i = 0; i < NUMBERS_COUNT; i++)
 		{
 			// Pad number with a space character to keep alignment when drawing to screen
@@ -42,7 +42,7 @@ void NoMatchDealer(void)
 			if (i % (NUMBERS_COUNT / 2) == 7) ScreenWriteCharacter('\n');
 		}
 		ScreenWriteCharacter('\n');
-		ScreenSetFontColor(SCREEN_COLOR_BLUE);
+		ScreenSetFontColor(SYSTEM_SCREEN_COLOR_BLUE);
 
 		// Check for matches
 		for (i = 0; i < NUMBERS_COUNT; i++)
@@ -51,19 +51,19 @@ void NoMatchDealer(void)
 			{
 				if ((i != j) && (Numbers[i] == Numbers[j]))
 				{
-					ScreenSetFontColor(SCREEN_COLOR_RED);
+					ScreenSetFontColor(SYSTEM_SCREEN_COLOR_RED);
 					ScreenWriteString(STRING_NO_MATCH_DEALER_GAME_LOST);
 					goto End;
 				}
 			}
 		}
 
-		ScreenSetFontColor(SCREEN_COLOR_GREEN);
+		ScreenSetFontColor(SYSTEM_SCREEN_COLOR_GREEN);
 		ScreenWriteString(STRING_NO_MATCH_DEALER_GAME_WON);
 
 	End:
 		// Ask the player to retry or not
-		ScreenSetFontColor(SCREEN_COLOR_BLUE);
+		ScreenSetFontColor(SYSTEM_SCREEN_COLOR_BLUE);
 		ScreenWriteString(STRING_NO_MATCH_DEALER_ASK_FOR_RETRY);
 		
 		// Wait for Enter or Escape

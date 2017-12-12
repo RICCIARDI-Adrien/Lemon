@@ -151,9 +151,9 @@ int main(void)
 	{
 		// Display benchmark information
 		ScreenWriteString("### Evaluating ");
-		ScreenSetFontColor(SCREEN_COLOR_GREEN);
+		ScreenSetFontColor(SYSTEM_SCREEN_COLOR_GREEN);
 		ScreenWriteString(Benchmark_Tests[i].String_Tested_Subsystem);
-		ScreenSetFontColor(SCREEN_COLOR_BLUE);
+		ScreenSetFontColor(SYSTEM_SCREEN_COLOR_BLUE);
 		ScreenWriteString(" ###\n");
 		ScreenWriteString(Benchmark_Tests[i].String_Description);
 		ScreenWriteString(".\n");
@@ -163,9 +163,9 @@ int main(void)
 		
 		// Display elapsed time
 		ScreenWriteString("Benchmark duration : ");
-		ScreenSetFontColor(SCREEN_COLOR_GREEN);
+		ScreenSetFontColor(SYSTEM_SCREEN_COLOR_GREEN);
 		ScreenWriteUnsignedInteger(End_Time - Start_Time);
-		ScreenSetFontColor(SCREEN_COLOR_BLUE);
+		ScreenSetFontColor(SYSTEM_SCREEN_COLOR_BLUE);
 		ScreenWriteString(" milliseconds.\n\n");
 	}
 	

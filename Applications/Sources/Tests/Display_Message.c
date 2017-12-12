@@ -40,16 +40,16 @@ void DisplayMessageTestStarting(char *String_Message)
 
 void DisplayMessageTestSuccessful(void)
 {
-	ScreenSetFontColor(SCREEN_COLOR_GREEN);
+	ScreenSetFontColor(SYSTEM_SCREEN_COLOR_GREEN);
 	ScreenWriteString("Test successful\n\n");
-	ScreenSetFontColor(SCREEN_COLOR_BLUE);
+	ScreenSetFontColor(SYSTEM_SCREEN_COLOR_BLUE);
 }
 
 void DisplayMessageTestFailed(void)
 {
-	ScreenSetFontColor(SCREEN_COLOR_RED);
+	ScreenSetFontColor(SYSTEM_SCREEN_COLOR_RED);
 	ScreenWriteString("Test failed\n");
-	ScreenSetFontColor(SCREEN_COLOR_BLUE);
+	ScreenSetFontColor(SYSTEM_SCREEN_COLOR_BLUE);
 	SystemExitProgram();
 }
 
@@ -58,7 +58,7 @@ void DisplayMessageErrorAndCode(char *String_Message, int Error_Code)
 	char *String_Unknown_Error_Code = "Unknown error code", *String_Error_Code;
 	
 	// Display the user message
-	ScreenSetFontColor(SCREEN_COLOR_RED);
+	ScreenSetFontColor(SYSTEM_SCREEN_COLOR_RED);
 	ScreenWriteString("Error "); // User must provide the message
 	ScreenWriteString(String_Message);
 	ScreenWriteString(" : ");
@@ -70,14 +70,14 @@ void DisplayMessageErrorAndCode(char *String_Message, int Error_Code)
 	// Display the error code signification
 	ScreenWriteString(String_Error_Code);
 	ScreenWriteCharacter('\n');
-	ScreenSetFontColor(SCREEN_COLOR_BLUE);
+	ScreenSetFontColor(SYSTEM_SCREEN_COLOR_BLUE);
 }
 
 void DisplayMessageError(char *String_Message)
 {
-	ScreenSetFontColor(SCREEN_COLOR_RED);
+	ScreenSetFontColor(SYSTEM_SCREEN_COLOR_RED);
 	ScreenWriteString("Error : ");
 	ScreenWriteString(String_Message);
 	ScreenWriteCharacter('\n');
-	ScreenSetFontColor(SCREEN_COLOR_BLUE);
+	ScreenSetFontColor(SYSTEM_SCREEN_COLOR_BLUE);
 }

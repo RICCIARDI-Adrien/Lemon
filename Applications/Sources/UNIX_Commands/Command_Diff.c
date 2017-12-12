@@ -68,7 +68,7 @@ int CommandMainDiff(int argc, char *argv[])
 		// Are the file of different size, or are the current read bytes different ?
 		if ((Is_End_Of_First_File_Reached && !Is_End_Of_Second_File_Reached) || (!Is_End_Of_First_File_Reached && Is_End_Of_Second_File_Reached) || (Byte_1 != Byte_2))
 		{
-			ScreenSetFontColor(SCREEN_COLOR_RED);
+			ScreenSetFontColor(SYSTEM_SCREEN_COLOR_RED);
 			ScreenWriteString(STRING_COMMAND_DIFF_FILES_ARE_DIFFERENT);
 			break;
 		}
@@ -76,7 +76,7 @@ int CommandMainDiff(int argc, char *argv[])
 		// Coming here when a file end has been reached is possible only if both file are of same length and have same content
 		if (Is_End_Of_First_File_Reached) // No need to check for other file end because they are of same length
 		{
-			ScreenSetFontColor(SCREEN_COLOR_GREEN);
+			ScreenSetFontColor(SYSTEM_SCREEN_COLOR_GREEN);
 			ScreenWriteString(STRING_COMMAND_DIFF_FILES_ARE_EQUAL);
 			break;
 		}

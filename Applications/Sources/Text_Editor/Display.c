@@ -73,7 +73,7 @@ void DisplayWriteCharacter(char Character)
 	}
 }
 
-void DisplaySetBackgroundColor(TScreenColor Color_Code)
+void DisplaySetBackgroundColor(TSystemScreenColor Color_Code)
 {
 	Display_Color &= 0x0F; // Erase the current background color
 	Display_Color |= (Color_Code & 0x0F) << 4; // Set the new one

@@ -121,11 +121,11 @@ int TFTPExecuteCommandGet(char *String_File_Name)
 	} while (Data_Size == NETWORK_TFTP_BLOCK_SIZE); // Exit if the data size is different from a block size
 	
 	// Display a success message
-	ScreenSetFontColor(SCREEN_COLOR_GREEN);
+	ScreenSetFontColor(SYSTEM_SCREEN_COLOR_GREEN);
 	ScreenWriteString(STRING_COMMAND_TFTP_GET_DOWNLOAD_SUCCESSFUL_1);
 	ScreenWriteUnsignedInteger(NETWORK_SWAP_WORD(Packet.Data.Block_Number));
 	ScreenWriteString(STRING_COMMAND_TFTP_GET_DOWNLOAD_SUCCESSFUL_2);
-	ScreenSetFontColor(SCREEN_COLOR_BLUE);
+	ScreenSetFontColor(SYSTEM_SCREEN_COLOR_BLUE);
 	Return_Value = 0;
 	
 Exit:
@@ -230,11 +230,11 @@ int TFTPExecuteCommandPut(char *String_File_Name)
 	} while (Read_Bytes_Count == NETWORK_TFTP_BLOCK_SIZE); // Exit when the whole file has been sent
 	
 	// Display a success message
-	ScreenSetFontColor(SCREEN_COLOR_GREEN);
+	ScreenSetFontColor(SYSTEM_SCREEN_COLOR_GREEN);
 	ScreenWriteString(STRING_COMMAND_TFTP_PUT_UPLOAD_SUCCESSFUL_1);
 	ScreenWriteUnsignedInteger(Sent_Block_Number);
 	ScreenWriteString(STRING_COMMAND_TFTP_PUT_UPLOAD_SUCCESSFUL_2);
-	ScreenSetFontColor(SCREEN_COLOR_BLUE);
+	ScreenSetFontColor(SYSTEM_SCREEN_COLOR_BLUE);
 	Return_Value = 0;
 	
 Exit:

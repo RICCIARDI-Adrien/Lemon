@@ -115,10 +115,10 @@ static void DisplayRemainingAttempts(int Remaining_Attempts)
 {
 	// Display the remaining attempts
 	ScreenSetCursorPosition(ROW_REMAINING_ATTEMPTS, 0);
-	ScreenSetFontColor(SCREEN_COLOR_LIGHT_BLUE);
+	ScreenSetFontColor(SYSTEM_SCREEN_COLOR_LIGHT_BLUE);
 	ScreenWriteInteger(Remaining_Attempts);
 	ScreenWriteString("     "); // Clear the eventually remaining characters (as the number is decrementing)
-	ScreenSetFontColor(SCREEN_COLOR_BLUE);
+	ScreenSetFontColor(SYSTEM_SCREEN_COLOR_BLUE);
 }
 
 /** Display an invalid letter.
@@ -128,10 +128,10 @@ static void DisplayInvalidLetter(char Letter)
 {
 	// Display the letter
 	ScreenSetCursorPosition(ROW_INVALID_LETTERS, Invalid_Letters_Column);
-	ScreenSetFontColor(SCREEN_COLOR_LIGHT_BLUE);
+	ScreenSetFontColor(SYSTEM_SCREEN_COLOR_LIGHT_BLUE);
 	ScreenWriteCharacter(Letter);
 	ScreenWriteCharacter(' ');
-	ScreenSetFontColor(SCREEN_COLOR_BLUE);
+	ScreenSetFontColor(SYSTEM_SCREEN_COLOR_BLUE);
 	Invalid_Letters_Column += 2;
 }
 
@@ -223,9 +223,9 @@ void Hangman(void)
 	{
 		// Display the title
 		ScreenClear();
-		ScreenSetFontColor(SCREEN_COLOR_GREEN);
+		ScreenSetFontColor(SYSTEM_SCREEN_COLOR_GREEN);
 		ScreenWriteCenteredString(STRING_HANGMAN_TITLE);
-		ScreenSetFontColor(SCREEN_COLOR_BLUE);
+		ScreenSetFontColor(SYSTEM_SCREEN_COLOR_BLUE);
 		ScreenWriteCharacter('\n');
 			
 		// Display the interface parts that will never change
@@ -239,9 +239,9 @@ void Hangman(void)
 		{
 			// The player found all words
 			ScreenClear();
-			ScreenSetFontColor(SCREEN_COLOR_GREEN);
+			ScreenSetFontColor(SYSTEM_SCREEN_COLOR_GREEN);
 			ScreenWriteString(STRING_HANGMAN_GAME_WON_1);
-			ScreenSetFontColor(SCREEN_COLOR_BLUE);
+			ScreenSetFontColor(SYSTEM_SCREEN_COLOR_BLUE);
 			ScreenWriteString(STRING_HANGMAN_GAME_WON_2);
 			
 			while (SystemKeyboardReadCharacter() != SYSTEM_KEYBOARD_KEY_CODE_ENTER);
@@ -255,9 +255,9 @@ void Hangman(void)
 			case 0:
 				// The player successfully found the word
 				ScreenClear();
-				ScreenSetFontColor(SCREEN_COLOR_GREEN);
+				ScreenSetFontColor(SYSTEM_SCREEN_COLOR_GREEN);
 				ScreenWriteString(STRING_HANGMAN_WORD_FOUND_1);
-				ScreenSetFontColor(SCREEN_COLOR_BLUE);
+				ScreenSetFontColor(SYSTEM_SCREEN_COLOR_BLUE);
 				ScreenWriteString(STRING_HANGMAN_WORD_FOUND_2);
 				while (SystemKeyboardReadCharacter() != SYSTEM_KEYBOARD_KEY_CODE_ENTER);
 				break;
@@ -265,9 +265,9 @@ void Hangman(void)
 			case 1:
 				// The player did not find the word
 				ScreenClear();
-				ScreenSetFontColor(SCREEN_COLOR_RED);
+				ScreenSetFontColor(SYSTEM_SCREEN_COLOR_RED);
 				ScreenWriteString(STRING_HANGMAN_WORD_NOT_FOUND_1);
-				ScreenSetFontColor(SCREEN_COLOR_BLUE);
+				ScreenSetFontColor(SYSTEM_SCREEN_COLOR_BLUE);
 				ScreenWriteString(STRING_HANGMAN_WORD_NOT_FOUND_2);
 				ScreenWriteString(String_Current_Word);
 				ScreenWriteString(STRING_HANGMAN_WORD_NOT_FOUND_3);

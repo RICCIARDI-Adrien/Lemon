@@ -10,13 +10,13 @@
 // Private constants
 //-------------------------------------------------------------------------------------------------
 /** The player in-game color. */
-#define SUBMARINE_ALIVE_PLAYER_COLOR SYSTEM_SCREEN_MAKE_COLOR(SCREEN_COLOR_LIGHT_GRAY, SCREEN_COLOR_LIGHT_GRAY)
+#define SUBMARINE_ALIVE_PLAYER_COLOR SYSTEM_SCREEN_MAKE_COLOR(SYSTEM_SCREEN_COLOR_LIGHT_GRAY, SYSTEM_SCREEN_COLOR_LIGHT_GRAY)
 /** The player dead color. */
-#define SUBMARINE_DEAD_PLAYER_COLOR SYSTEM_SCREEN_MAKE_COLOR(SCREEN_COLOR_RED, SCREEN_COLOR_RED)
+#define SUBMARINE_DEAD_PLAYER_COLOR SYSTEM_SCREEN_MAKE_COLOR(SYSTEM_SCREEN_COLOR_RED, SYSTEM_SCREEN_COLOR_RED)
 /** The sea color. */
-#define SUBMARINE_SEA_COLOR SYSTEM_SCREEN_MAKE_COLOR(SCREEN_COLOR_BLUE, SCREEN_COLOR_BLUE)
+#define SUBMARINE_SEA_COLOR SYSTEM_SCREEN_MAKE_COLOR(SYSTEM_SCREEN_COLOR_BLUE, SYSTEM_SCREEN_COLOR_BLUE)
 /** The obstacles color. */
-#define SUBMARINE_OBSTACLE_COLOR SYSTEM_SCREEN_MAKE_COLOR(SCREEN_COLOR_BROWN, SCREEN_COLOR_BROWN)
+#define SUBMARINE_OBSTACLE_COLOR SYSTEM_SCREEN_MAKE_COLOR(SYSTEM_SCREEN_COLOR_BROWN, SYSTEM_SCREEN_COLOR_BROWN)
 
 /** The minimum amount of columns between two obstacles. */
 #define SUBMARINE_MINIMUM_COLUMNS_COUNT_BETWEEN_OBSTACLES 8
@@ -158,8 +158,8 @@ void Submarine(void)
 		if (Is_Player_Dead)
 		{
 			// Display the string on the screen's middle
-			ScreenSetFontColor(SCREEN_COLOR_WHITE);
-			ScreenSetBackgroundColor(SCREEN_COLOR_RED);
+			ScreenSetFontColor(SYSTEM_SCREEN_COLOR_WHITE);
+			ScreenSetBackgroundColor(SYSTEM_SCREEN_COLOR_RED);
 			ScreenSetCursorPosition(SYSTEM_SCREEN_ROWS_COUNT / 2, 0); // The column coordinate will be computed by the ScreenWriteCenteredString() function
 			ScreenWriteCenteredString(STRING_SUBMARINE_PLAYER_LOST);
 			
@@ -170,7 +170,7 @@ void Submarine(void)
 			ScreenSetCursorPosition((SYSTEM_SCREEN_ROWS_COUNT / 2) + 1, 0); // The column coordinate will be computed by the ScreenWriteCenteredString() function
 			ScreenWriteCenteredString(String_Score);
 			
-			ScreenSetBackgroundColor(SCREEN_COLOR_WHITE); // Restore the default background color
+			ScreenSetBackgroundColor(SYSTEM_SCREEN_COLOR_WHITE); // Restore the default background color
 			
 			// Wait for the player to hit "escape" key
 			while (SystemKeyboardReadCharacter() != SYSTEM_KEYBOARD_KEY_CODE_ESCAPE);

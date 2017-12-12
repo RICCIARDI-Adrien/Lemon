@@ -8,7 +8,7 @@
 //-------------------------------------------------------------------------------------------------
 // Public functions
 //-------------------------------------------------------------------------------------------------
-void InterfaceDisplayMessage(char *String_Message, TScreenColor Message_Color)
+void InterfaceDisplayMessage(char *String_Message, TSystemScreenColor Message_Color)
 {
 	// Force the screen to scroll
 	ScreenSetCursorPosition(SYSTEM_SCREEN_ROWS_COUNT - 1, SYSTEM_SCREEN_COLUMNS_COUNT - 1);
@@ -26,11 +26,11 @@ void InterfaceDisplayUserMessage(char *String_Message)
 	
 	// Display the prompt
 	ScreenSetCursorPosition(0, 0);
-	ScreenSetFontColor(SCREEN_COLOR_GREEN);
+	ScreenSetFontColor(SYSTEM_SCREEN_COLOR_GREEN);
 	ScreenWriteString("> ");
 	
 	// Display the current written message
-	ScreenSetFontColor(SCREEN_COLOR_BLUE);
+	ScreenSetFontColor(SYSTEM_SCREEN_COLOR_BLUE);
 	for (i = 0; (String_Message[i] != 0) && (i < INTERFACE_USER_MESSAGE_MAXIMUM_SIZE); i++) ScreenWriteCharacter(String_Message[i]);
 	
 	// Clear the last user message line up to its end
