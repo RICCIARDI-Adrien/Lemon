@@ -123,7 +123,7 @@ void Rain(void)
 			// Print loop count
 			SystemScreenSetCursorPosition(SYSTEM_SCREEN_ROWS_COUNT - 1, 0);
 			SystemScreenSetBackgroundColor(SYSTEM_SCREEN_COLOR_WHITE);
-			ScreenSetFontColor(SYSTEM_SCREEN_COLOR_LIGHT_GREEN);
+			SystemScreenSetFontColor(SYSTEM_SCREEN_COLOR_LIGHT_GREEN);
 			ScreenWriteString(STRING_RAIN_STATISTICS_1);
 			ScreenWriteInteger(Raindrops_Count);
 			ScreenWriteString(STRING_RAIN_STATISTICS_2);

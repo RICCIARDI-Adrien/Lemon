@@ -87,9 +87,9 @@ void Numbers(void)
 	while (1)
 	{
 		// Get player's number
-		ScreenSetFontColor(SYSTEM_SCREEN_COLOR_LIGHT_BLUE);
+		SystemScreenSetFontColor(SYSTEM_SCREEN_COLOR_LIGHT_BLUE);
 		ScreenWriteString(STRING_NUMBERS_INSERT_NUMBER);
-		ScreenSetFontColor(SYSTEM_SCREEN_COLOR_BLUE);
+		SystemScreenSetFontColor(SYSTEM_SCREEN_COLOR_BLUE);
 		Player_Number = ReadUserNumber();
 				
 		// Quit game ?
@@ -98,7 +98,7 @@ void Numbers(void)
 		Attempts++;
 		if (Attempts >= ATTEMPTS_COUNT)
 		{
-			ScreenSetFontColor(SYSTEM_SCREEN_COLOR_RED);
+			SystemScreenSetFontColor(SYSTEM_SCREEN_COLOR_RED);
 			ScreenWriteString(STRING_NUMBERS_PLAYER_LOST_1);
 			ScreenWriteInteger(Computer_Number);
 			ScreenWriteString(STRING_NUMBERS_PLAYER_LOST_2);
@@ -108,7 +108,7 @@ void Numbers(void)
 		// Compare to computer number
 		if (Player_Number == Computer_Number) // Player won
 		{
-			ScreenSetFontColor(SYSTEM_SCREEN_COLOR_GREEN);
+			SystemScreenSetFontColor(SYSTEM_SCREEN_COLOR_GREEN);
 			ScreenWriteString(STRING_NUMBERS_PLAYER_WON_1);
 			ScreenWriteInteger(Attempts);
 			ScreenWriteString(STRING_NUMBERS_PLAYER_WON_2);
@@ -116,24 +116,24 @@ void Numbers(void)
 		}
 		else if (Player_Number < Computer_Number) // Too small
 		{
-			ScreenSetFontColor(SYSTEM_SCREEN_COLOR_RED);
+			SystemScreenSetFontColor(SYSTEM_SCREEN_COLOR_RED);
 			ScreenWriteString(STRING_NUMBERS_NUMBER_TOO_SMALL);
 		}
 		else // Too big
 		{
-			ScreenSetFontColor(SYSTEM_SCREEN_COLOR_RED);
+			SystemScreenSetFontColor(SYSTEM_SCREEN_COLOR_RED);
 			ScreenWriteString(STRING_NUMBERS_NUMBER_TOO_BIG);
 		}
 
 		// Show remaining attempts
-		ScreenSetFontColor(SYSTEM_SCREEN_COLOR_BLUE);
+		SystemScreenSetFontColor(SYSTEM_SCREEN_COLOR_BLUE);
 		ScreenWriteString(STRING_NUMBERS_REMAINING_ATTEMPTS_1);
 		ScreenWriteInteger(ATTEMPTS_COUNT - Attempts);
 		ScreenWriteString(STRING_NUMBERS_REMAINING_ATTEMPTS_2);
 	}
 	
 End:
-	ScreenSetFontColor(SYSTEM_SCREEN_COLOR_BLUE);
+	SystemScreenSetFontColor(SYSTEM_SCREEN_COLOR_BLUE);
 	ScreenWriteString(STRING_NUMBERS_END);
 	SystemKeyboardReadCharacter();
 }

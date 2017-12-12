@@ -33,9 +33,9 @@ static void MainDisplayMessage(char *String_Message_Title, char *String_Message_
 	SystemScreenClear();
 	
 	// Display the title with the specified color
-	ScreenSetFontColor(Message_Title_Color);
+	SystemScreenSetFontColor(Message_Title_Color);
 	ScreenWriteCenteredString(String_Message_Title);
-	ScreenSetFontColor(CONFIGURATION_TEXT_FOREGROUND_COLOR); // Restore the default color
+	SystemScreenSetFontColor(CONFIGURATION_TEXT_FOREGROUND_COLOR); // Restore the default color
 	ScreenWriteString("\n\n");
 	
 	// Display the message content 

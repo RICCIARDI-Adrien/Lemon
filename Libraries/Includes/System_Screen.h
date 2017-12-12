@@ -59,7 +59,7 @@ void SystemScreenClear(void);
 /** Set the screen font color.
  * @param Color_Code The color to use.
  */
-void ScreenSetFontColor(TSystemScreenColor Color_Code);
+void SystemScreenSetFontColor(TSystemScreenColor Color_Code);
 
 /** Set the screen background color.
  * @param Color_Code The color to use.

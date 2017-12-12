@@ -113,9 +113,9 @@ static void DisplayCommandsList(void)
 	for (i = 0; Commands[i].String_Name != NULL; i++)
 	{
 		// Display the command
-		ScreenSetFontColor(SYSTEM_SCREEN_COLOR_LIGHT_BLUE);
+		SystemScreenSetFontColor(SYSTEM_SCREEN_COLOR_LIGHT_BLUE);
 		ScreenWriteString(Commands[i].String_Name);
-		ScreenSetFontColor(SYSTEM_SCREEN_COLOR_BLUE);
+		SystemScreenSetFontColor(SYSTEM_SCREEN_COLOR_BLUE);
 		
 		// Display as many spaces as needed to align the command description on the requested column
 		Spaces_Count = HELP_SHORT_DESCRIPTION_STARTING_COLUMN - SystemStringGetSize(Commands[i].String_Name);
@@ -144,9 +144,9 @@ static void DisplayTitle(char *String_Title)
 	SystemStringConcatenate(String_Embellished_Title, " ---\n\n");
 	
 	// Display it
-	ScreenSetFontColor(SYSTEM_SCREEN_COLOR_GREEN);
+	SystemScreenSetFontColor(SYSTEM_SCREEN_COLOR_GREEN);
 	ScreenWriteCenteredString(String_Embellished_Title);
-	ScreenSetFontColor(SYSTEM_SCREEN_COLOR_BLUE);
+	SystemScreenSetFontColor(SYSTEM_SCREEN_COLOR_BLUE);
 }
 
 //-------------------------------------------------------------------------------------------------

@@ -191,7 +191,7 @@ void BrainCalculation(void)
 		{
 			// Show calculus
 			ChooseCalculus(&First_Number, &Operator, &Second_Number, &Result);
-			ScreenSetFontColor(SYSTEM_SCREEN_COLOR_LIGHT_BLUE);
+			SystemScreenSetFontColor(SYSTEM_SCREEN_COLOR_LIGHT_BLUE);
 			ScreenWriteString("   ");
 			ScreenWriteInteger(First_Number);
 			ScreenWriteCharacter(' ');
@@ -199,7 +199,7 @@ void BrainCalculation(void)
 			ScreenWriteCharacter(' ');
 			ScreenWriteInteger(Second_Number);
 			ScreenWriteString("  =  ");
-			ScreenSetFontColor(SYSTEM_SCREEN_COLOR_BLUE);
+			SystemScreenSetFontColor(SYSTEM_SCREEN_COLOR_BLUE);
 			
 			// Get user's number
 			Number = ReadUserNumber();
@@ -217,20 +217,20 @@ void BrainCalculation(void)
 			// Check if user's result is correct
 			if (Number == Result)
 			{
-				ScreenSetFontColor(SYSTEM_SCREEN_COLOR_GREEN);
+				SystemScreenSetFontColor(SYSTEM_SCREEN_COLOR_GREEN);
 				ScreenWriteString(STRING_BRAIN_CALCULATION_GOOD_RESULT);
-				ScreenSetFontColor(SYSTEM_SCREEN_COLOR_BLUE);
+				SystemScreenSetFontColor(SYSTEM_SCREEN_COLOR_BLUE);
 				
 				Correct_Results_Count++;
 			}
 			else
 			{
-				ScreenSetFontColor(SYSTEM_SCREEN_COLOR_RED);
+				SystemScreenSetFontColor(SYSTEM_SCREEN_COLOR_RED);
 				ScreenWriteString(STRING_BRAIN_CALCULATION_BAD_RESULT_1);
 				ScreenWriteInteger(Result);
 				ScreenWriteString(STRING_BRAIN_CALCULATION_BAD_RESULT_2);
 				
-				ScreenSetFontColor(SYSTEM_SCREEN_COLOR_BLUE);
+				SystemScreenSetFontColor(SYSTEM_SCREEN_COLOR_BLUE);
 				ScreenWriteString(STRING_BRAIN_CALCULATION_CORRECT_ANSWERS_COUNT_1);
 				ScreenWriteInteger(Correct_Results_Count);
 				ScreenWriteString(STRING_BRAIN_CALCULATION_CORRECT_ANSWERS_COUNT_2);

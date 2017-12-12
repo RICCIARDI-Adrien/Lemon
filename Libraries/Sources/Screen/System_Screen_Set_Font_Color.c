@@ -1,4 +1,4 @@
-/** @file Screen_Set_Font_Color.c
+/** @file System_Screen_Set_Font_Color.c
  * @author Adrien RICCIARDI
  */
 #include <System.h>
@@ -6,7 +6,7 @@
 //-------------------------------------------------------------------------------------------------
 // Public functions
 //-------------------------------------------------------------------------------------------------
-void ScreenSetFontColor(TSystemScreenColor Color_Code)
+void SystemScreenSetFontColor(TSystemScreenColor Color_Code)
 {
 	unsigned char Color;
 	

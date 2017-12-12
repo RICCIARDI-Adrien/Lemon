@@ -158,7 +158,7 @@ void Submarine(void)
 		if (Is_Player_Dead)
 		{
 			// Display the string on the screen's middle
-			ScreenSetFontColor(SYSTEM_SCREEN_COLOR_WHITE);
+			SystemScreenSetFontColor(SYSTEM_SCREEN_COLOR_WHITE);
 			SystemScreenSetBackgroundColor(SYSTEM_SCREEN_COLOR_RED);
 			SystemScreenSetCursorPosition(SYSTEM_SCREEN_ROWS_COUNT / 2, 0); // The column coordinate will be computed by the ScreenWriteCenteredString() function
 			ScreenWriteCenteredString(STRING_SUBMARINE_PLAYER_LOST);

@@ -87,7 +87,7 @@ int main(int argc, char *argv[])
 	// IP address
 	if (NetworkInitializeIPAddress(argv[1], &Destination_IP_Address) != 0)
 	{
-		ScreenSetFontColor(SYSTEM_SCREEN_COLOR_RED);
+		SystemScreenSetFontColor(SYSTEM_SCREEN_COLOR_RED);
 		ScreenWriteString(STRING_ERROR_INVALID_IP_ADDRESS);
 		return 1;
 	}
@@ -98,20 +98,20 @@ int main(int argc, char *argv[])
 	Result = NetworkInitialize();
 	if (Result == 1)
 	{
-		ScreenSetFontColor(SYSTEM_SCREEN_COLOR_RED);
+		SystemScreenSetFontColor(SYSTEM_SCREEN_COLOR_RED);
 		ScreenWriteString(STRING_ERROR_NETWORK_INITIALIZATION_NO_NETWORK_SUPPORT);
 		return 1;
 	}
 	else if (Result == 2)
 	{
-		ScreenSetFontColor(SYSTEM_SCREEN_COLOR_RED);
+		SystemScreenSetFontColor(SYSTEM_SCREEN_COLOR_RED);
 		ScreenWriteString(STRING_ERROR_NETWORK_INITIALIZATION_BAD_CONFIGURATION_PARAMETERS);
 		return 1;
 	}
 	
 	if (NetworkInitializeSocket(&Destination_IP_Address, Destination_Port, NETWORK_IP_PROTOCOL_UDP, &Socket) != 0)
 	{
-		ScreenSetFontColor(SYSTEM_SCREEN_COLOR_RED);
+		SystemScreenSetFontColor(SYSTEM_SCREEN_COLOR_RED);
 		ScreenWriteString(STRING_ERROR_NETWORK_SOCKET_INITIALIZATION);
 		return 1;
 	}

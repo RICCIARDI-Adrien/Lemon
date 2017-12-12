@@ -16,7 +16,7 @@ int MenuDisplay(TMenu *Pointer_Menu)
 		SystemScreenClear();
 		
 		// Display the title only if it is shorter than the screen width
-		ScreenSetFontColor(MENU_TITLE_COLOR);
+		SystemScreenSetFontColor(MENU_TITLE_COLOR);
 		ScreenWriteCenteredString(Pointer_Menu->String_Title);
 		ScreenWriteString("\n\n");
 		
@@ -26,18 +26,18 @@ int MenuDisplay(TMenu *Pointer_Menu)
 			ScreenWriteString("    ");
 			
 			// Display the item number
-			ScreenSetFontColor(MENU_ITEM_NUMBER_COLOR);
+			SystemScreenSetFontColor(MENU_ITEM_NUMBER_COLOR);
 			ScreenWriteInteger(i + 1);
 			ScreenWriteString(". ");
 			
 			// Display the item text
-			ScreenSetFontColor(MENU_ITEM_TEXT_COLOR);
+			SystemScreenSetFontColor(MENU_ITEM_TEXT_COLOR);
 			ScreenWriteString(Pointer_Menu->String_Items[i]);
 			ScreenWriteCharacter('\n');
 		}
 		
 		// Display the user prompt on the screen bottom
-		ScreenSetFontColor(SYSTEM_SCREEN_COLOR_BLUE);
+		SystemScreenSetFontColor(SYSTEM_SCREEN_COLOR_BLUE);
 		SystemScreenSetCursorPosition(SYSTEM_SCREEN_ROWS_COUNT - 1, 0);
 		ScreenWriteString(Pointer_Menu->String_User_Prompt);
 		

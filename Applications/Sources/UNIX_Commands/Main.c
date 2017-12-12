@@ -71,13 +71,13 @@ static void DisplayUsage(char *String_Program_Name)
 	
 	ScreenWriteString(STRING_AVAILABLE_COMMANDS);
 	
-	ScreenSetFontColor(SYSTEM_SCREEN_COLOR_LIGHT_BLUE);
+	SystemScreenSetFontColor(SYSTEM_SCREEN_COLOR_LIGHT_BLUE);
 	for (i = 0; Commands[i].String_Command_Name != NULL; i++)
 	{
 		ScreenWriteString(Commands[i].String_Command_Name);
 		ScreenWriteCharacter(' ');
 	}
-	ScreenSetFontColor(SYSTEM_SCREEN_COLOR_BLUE);
+	SystemScreenSetFontColor(SYSTEM_SCREEN_COLOR_BLUE);
 	ScreenWriteCharacter('\n');
 }
 
@@ -109,9 +109,9 @@ int main(int argc, char *argv[])
 	}
 	
 	// The command was not found
-	ScreenSetFontColor(SYSTEM_SCREEN_COLOR_RED);
+	SystemScreenSetFontColor(SYSTEM_SCREEN_COLOR_RED);
 	ScreenWriteString(STRING_UNKNOWN_COMMAND);
-	ScreenSetFontColor(SYSTEM_SCREEN_COLOR_BLUE);
+	SystemScreenSetFontColor(SYSTEM_SCREEN_COLOR_BLUE);
 	
 	return 0;
 }
