@@ -13,4 +13,9 @@
  */
 unsigned int SystemTimerGetValue(void);
 
+/** Wait for the specified number of milliseconds.
+ * @param Periods_Count How many milliseconds to wait.
+ */
+void SystemTimerWait(unsigned int Milliseconds_Count);
+
 #endif

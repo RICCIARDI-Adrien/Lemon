@@ -55,11 +55,6 @@
  */
 int SystemCall(TSystemCall Request_Code, int Integer_1, int Integer_2, void *Pointer_1, void *Pointer_2);
 
-/** Wait for the specified number of milliseconds.
- * @param Periods_Count How many milliseconds to wait.
- */
-void SystemWait(unsigned int Milliseconds_Count);
-
 /** Abort the current program and return to the system. */
 void SystemExitProgram(void);
 
