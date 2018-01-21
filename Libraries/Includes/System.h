@@ -17,6 +17,7 @@
 #include <System_Random.h>
 #include <System_Screen.h>
 #include <System_String.h>
+#include <System_Timer.h>
 #include <System_UART.h>
 
 //-------------------------------------------------------------------------------------------------
@@ -61,11 +62,6 @@ void SystemWait(unsigned int Milliseconds_Count);
 
 /** Abort the current program and return to the system. */
 void SystemExitProgram(void);
-
-/** Get the timer current value. This timer is incremented by one every millisecond and starts from zero on system boot.
- * @return The timer value (the unit is 1 ms).
- */
-unsigned int SystemGetTimerValue(void);
 
 /** Read a configuration value from the configuration file.
  * @param String_Key The value key (the string that identifies the value).

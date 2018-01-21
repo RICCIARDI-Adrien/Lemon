@@ -110,7 +110,7 @@ void Submarine(void)
 	
 	while (1)
 	{
-		Start_Time = SystemGetTimerValue();
+		Start_Time = SystemTimerGetValue();
 		
 		// Clear player trace before the screen is scrolled or the player moved
 		Submarine_Screen_Buffer[Player_Row][SUBMARINE_PLAYER_COLUMN].Color = SUBMARINE_SEA_COLOR;
@@ -178,7 +178,7 @@ void Submarine(void)
 		}
 		
 		// Wait enough time to make the game work at the desired refresh rate
-		End_Time = SystemGetTimerValue();
+		End_Time = SystemTimerGetValue();
 		Time_To_Wait = SUBMARINE_FRAME_PERIOD_MILLISECONDS - (End_Time - Start_Time); // TODO Handle roll-over, even if the system needs to be booted for 49 days for it to happen
 		if (Time_To_Wait <= SUBMARINE_FRAME_PERIOD_MILLISECONDS) SystemWait(Time_To_Wait); // Do not wait if the frame time has elapsed yet
 	}

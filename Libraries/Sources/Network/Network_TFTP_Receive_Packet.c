@@ -15,10 +15,10 @@ int NetworkTFTPReceivePacket(TNetworkSocket *Pointer_Socket, unsigned int Timeou
 	TNetworkUDPHeader *Pointer_UDP_Header = (TNetworkUDPHeader *) (Packet_Buffer + sizeof(TNetworkEthernetHeader) + sizeof(TNetworkIPv4Header));
 	
 	// Adjust timeout to the maximum expected value
-	Timeout_Milliseconds += SystemGetTimerValue();
+	Timeout_Milliseconds += SystemTimerGetValue();
 	
 	// Wait for a packet to be received
-	while (SystemGetTimerValue() <= Timeout_Milliseconds)
+	while (SystemTimerGetValue() <= Timeout_Milliseconds)
 	{
 		// Check if a packet is available
 		Result = NetworkBaseIPReceivePacket(Pointer_Socket, 0, &Data_Size, Packet_Buffer);

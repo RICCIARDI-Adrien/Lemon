@@ -160,11 +160,11 @@ static int NetworkBaseARPSendRequest(TNetworkIPAddress *Pointer_Known_IP_Address
 		NetworkBaseEthernetSendPacket(sizeof(TNetworkEthernetHeader) + sizeof(TNetworkBaseARPPayload), Transmission_Packet);
 		
 		// Wait 3ms for a reply
-		Timeout_Value = SystemGetTimerValue() + 3;
+		Timeout_Value = SystemTimerGetValue() + 3;
 		do
 		{
 			Is_Packet_Received = NetworkBaseEthernetIsPacketReceived();
-			Timer_Value = SystemGetTimerValue();
+			Timer_Value = SystemTimerGetValue();
 		} while ((!Is_Packet_Received) && (Timer_Value < Timeout_Value));
 		
 		if (!Is_Packet_Received) continue; // Nothing was received, retry
@@ -471,8 +471,8 @@ int NetworkBaseTCPReceivePacket(TNetworkSocket *Pointer_Socket, unsigned short F
 	// Convert flags to big endian to fastly compare them with the received packet
 	Flags_To_Check = NETWORK_SWAP_WORD(Flags_To_Check);
 	
-	Timeout_Milliseconds = NETWORK_BASE_TCP_RECEPTION_TIMEOUT_MILLISECONDS + SystemGetTimerValue();
-	while (SystemGetTimerValue() <= Timeout_Milliseconds)
+	Timeout_Milliseconds = NETWORK_BASE_TCP_RECEPTION_TIMEOUT_MILLISECONDS + SystemTimerGetValue();
+	while (SystemTimerGetValue() <= Timeout_Milliseconds)
 	{
 		// Check if a packet is available
 		Result = NetworkBaseIPReceivePacket(Pointer_Socket, 0, Pointer_Packet_Size, Pointer_Packet_Buffer);

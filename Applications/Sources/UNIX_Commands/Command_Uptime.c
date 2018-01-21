@@ -21,7 +21,7 @@ int CommandMainUptime(int argc, char __attribute__((unused)) *argv[])
 	}
 	
 	// Get the running time in seconds
-	Seconds = SystemGetTimerValue() / 1000;
+	Seconds = SystemTimerGetValue() / 1000;
 	
 	// Convert it to a human-readable value
 	// Days count

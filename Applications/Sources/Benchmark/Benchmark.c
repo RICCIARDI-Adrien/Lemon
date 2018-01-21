@@ -73,7 +73,7 @@ static void BenchmarkProcessor(unsigned int *Pointer_Start_Time, unsigned int *P
 	MathIntegerInitializeFromInt(0, &Penultimate_Number);
 	MathIntegerInitializeFromInt(1, &Last_Number);
 	
-	*Pointer_Start_Time = SystemGetTimerValue();
+	*Pointer_Start_Time = SystemTimerGetValue();
 	
 	for (Iterations = 0; Iterations < BENCHMARK_PROCESSOR_ITERATIONS_COUNT; Iterations++)
 	{
@@ -82,7 +82,7 @@ static void BenchmarkProcessor(unsigned int *Pointer_Start_Time, unsigned int *P
 		MathIntegerCopy(&Result, &Last_Number);
 	}
 	
-	*Pointer_End_Time = SystemGetTimerValue();
+	*Pointer_End_Time = SystemTimerGetValue();
 }
 
 static void BenchmarkFileSystem(unsigned int *Pointer_Start_Time, unsigned int *Pointer_End_Time)
@@ -92,7 +92,7 @@ static void BenchmarkFileSystem(unsigned int *Pointer_Start_Time, unsigned int *
 	char String_Data[] = "Benchmarking...";
 	
 	// Keep benchmark starting time to compute the elapsed time at benchmark end
-	*Pointer_Start_Time = SystemGetTimerValue();
+	*Pointer_Start_Time = SystemTimerGetValue();
 	
 	for (i = 0; i < BENCHMARK_FILE_SYSTEM_ITERATIONS_COUNT; i++)
 	{
@@ -115,7 +115,7 @@ static void BenchmarkFileSystem(unsigned int *Pointer_Start_Time, unsigned int *
 		SystemFileClose(File_ID);
 	}
 	
-	*Pointer_End_Time = SystemGetTimerValue();
+	*Pointer_End_Time = SystemTimerGetValue();
 	SystemFileDelete("_test_");
 	return;
 	
@@ -132,11 +132,11 @@ static void BenchmarkSystemCall(unsigned int *Pointer_Start_Time, unsigned int *
 	unsigned int i;
 	
 	// Keep benchmark starting time to compute the elapsed time at benchmark end
-	*Pointer_Start_Time = SystemGetTimerValue();
+	*Pointer_Start_Time = SystemTimerGetValue();
 	
 	for (i = 0; i < BENCHMARK_SYSTEM_CALL_ITERATIONS_COUNT; i++) SystemCall(SYSTEM_CALL_SCREEN_GET_COLOR, 0, 0, NULL, NULL);
 	
-	*Pointer_End_Time = SystemGetTimerValue();
+	*Pointer_End_Time = SystemTimerGetValue();
 }
 
 //-------------------------------------------------------------------------------------------------
