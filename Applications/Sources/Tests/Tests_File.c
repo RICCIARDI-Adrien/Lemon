@@ -264,7 +264,7 @@ int TestsFileFillFilesList(void)
 	char String_File_Name[SYSTEM_FILE_NAME_LENGTH + 1], String_Number[11];
 	
 	// Retrieve the amount of free Files List entries
-	SystemGetFileSystemFreeSize(&i, &Free_Files_Count); // The first parameter is not relevant here
+	SystemFileSystemGetFreeSize(&i, &Free_Files_Count); // The first parameter is not relevant here
 	
 	SystemScreenWriteString("There are ");
 	SystemScreenWriteUnsignedInteger(Free_Files_Count);
@@ -319,7 +319,7 @@ int TestsFileFillBlocksList(void)
 	int Result, Return_Value = 1;
 	
 	// Retrieve the amount of free Blocks List entries
-	SystemGetFileSystemFreeSize(&Free_Blocks_Count, &i);
+	SystemFileSystemGetFreeSize(&Free_Blocks_Count, &i);
 	// Retrieve a block size in bytes
 	SystemFileSystemGetTotalSize(&Block_Size_Bytes, &i, &i);
 	

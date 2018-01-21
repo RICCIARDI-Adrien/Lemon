@@ -62,12 +62,6 @@ void SystemWait(unsigned int Milliseconds_Count);
 /** Abort the current program and return to the system. */
 void SystemExitProgram(void);
 
-/** Get the file system free space.
- * @param Pointer_Blocks_Count On output, contain the amount of available blocks.
- * @param Pointer_Files_Count On output, contain the amount of available Files List entries.
- */
-void SystemGetFileSystemFreeSize(unsigned int *Pointer_Blocks_Count, unsigned int *Pointer_Files_Count);
-
 /** Get the timer current value. This timer is incremented by one every millisecond and starts from zero on system boot.
  * @return The timer value (the unit is 1 ms).
  */

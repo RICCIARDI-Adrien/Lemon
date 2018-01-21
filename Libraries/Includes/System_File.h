@@ -118,4 +118,10 @@ int SystemFileRename(char *String_Current_File_Name, char *String_New_File_Name)
  */
 void SystemFileSystemGetTotalSize(unsigned int *Pointer_Block_Size, unsigned int *Pointer_Blocks_Count, unsigned int *Pointer_Files_Count);
 
+/** Get the file system free space.
+ * @param Pointer_Blocks_Count On output, contain the amount of available blocks.
+ * @param Pointer_Files_Count On output, contain the amount of available Files List entries.
+ */
+void SystemFileSystemGetFreeSize(unsigned int *Pointer_Blocks_Count, unsigned int *Pointer_Files_Count);
+
 #endif
