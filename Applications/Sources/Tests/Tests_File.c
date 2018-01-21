@@ -321,7 +321,7 @@ int TestsFileFillBlocksList(void)
 	// Retrieve the amount of free Blocks List entries
 	SystemGetFileSystemFreeSize(&Free_Blocks_Count, &i);
 	// Retrieve a block size in bytes
-	SystemGetFileSystemTotalSize(&Block_Size_Bytes, &i, &i);
+	SystemFileSystemGetTotalSize(&Block_Size_Bytes, &i, &i);
 	
 	SystemScreenWriteString("There are ");
 	SystemScreenWriteUnsignedInteger(Free_Blocks_Count);

@@ -110,4 +110,12 @@ int SystemFileDelete(char *String_File_Name);
  */
 int SystemFileRename(char *String_Current_File_Name, char *String_New_File_Name);
 
+/** Get the total file system size.
+ * The file system can store up to Pointer_Files_Count files, and all files size must not exceed Pointer_Blocks_Count * Pointer_Block_Size bytes.
+ * @param Pointer_Block_Size The size of a block in bytes. A block is the smaller storage unit to store file data.
+ * @param Pointer_Blocks_Count How many blocks in the file system.
+ * @param Pointer_Files_Count How many different files can be handled by the file system.
+ */
+void SystemFileSystemGetTotalSize(unsigned int *Pointer_Block_Size, unsigned int *Pointer_Blocks_Count, unsigned int *Pointer_Files_Count);
+
 #endif

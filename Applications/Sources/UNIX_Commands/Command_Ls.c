@@ -123,7 +123,7 @@ int CommandMainLs(int argc, char __attribute__((unused)) *argv[])
 	}
 	
 	// Check if the allocated RAM is enough to store all the file system files
-	SystemGetFileSystemTotalSize(&Block_Size, &Total_Blocks_Count, &Total_Files_Count);
+	SystemFileSystemGetTotalSize(&Block_Size, &Total_Blocks_Count, &Total_Files_Count);
 	if (Total_Files_Count > MAXIMUM_FILES_COUNT)
 	{
 		SystemScreenSetFontColor(SYSTEM_SCREEN_COLOR_RED);
