@@ -11,14 +11,14 @@
 // Constants
 //-------------------------------------------------------------------------------------------------
 /** The menu title color. */
-#define MENU_TITLE_COLOR SYSTEM_SCREEN_COLOR_GREEN
+#define SYSTEM_MENU_TITLE_COLOR SYSTEM_SCREEN_COLOR_GREEN
 /** A menu item number color. */
-#define MENU_ITEM_NUMBER_COLOR SYSTEM_SCREEN_COLOR_GRAY
+#define SYSTEM_MENU_ITEM_NUMBER_COLOR SYSTEM_SCREEN_COLOR_GRAY
 /** A menu item text color. */
-#define MENU_ITEM_TEXT_COLOR SYSTEM_SCREEN_COLOR_BLUE
+#define SYSTEM_MENU_ITEM_TEXT_COLOR SYSTEM_SCREEN_COLOR_BLUE
 
 /** The maximum amount of menu items. */
-#define MENU_MAXIMUM_ITEMS_COUNT 20
+#define SYSTEM_MENU_MAXIMUM_ITEMS_COUNT 20
 
 //-------------------------------------------------------------------------------------------------
 // Types
@@ -28,7 +28,7 @@ typedef struct
 {
 	char *String_Title; //! The menu title.
 	char *String_User_Prompt; //! The prompt displayed to the user.
-	char *String_Items[MENU_MAXIMUM_ITEMS_COUNT]; //! All menu items, the array must be NULL-terminated if not all items are filled.
+	char *String_Items[SYSTEM_MENU_MAXIMUM_ITEMS_COUNT]; //! All menu items, the array must be NULL-terminated if not all items are filled.
 } TMenu;
 
 //-------------------------------------------------------------------------------------------------
