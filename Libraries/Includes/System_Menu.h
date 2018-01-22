@@ -1,9 +1,9 @@
-/** @file Menu.h
+/** @file System_Menu.h
  * Display text-based menus.
  * @author Adrien RICCIARDI
  */
-#ifndef H_MENU_H
-#define H_MENU_H
+#ifndef H_SYSTEM_MENU_H
+#define H_SYSTEM_MENU_H
 
 #include <System.h> // To have the colors definition
 
