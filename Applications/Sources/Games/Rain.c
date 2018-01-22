@@ -23,7 +23,7 @@
 // Private variables
 //-------------------------------------------------------------------------------------------------
 /** Allow to select the rain speed. */
-static TMenu Menu_Rain_Speed =
+static TSystemMenu Menu_Rain_Speed =
 {
 	STRING_RAIN_MENU_TITLE,
 	STRING_RAIN_MENU_PROMPT,

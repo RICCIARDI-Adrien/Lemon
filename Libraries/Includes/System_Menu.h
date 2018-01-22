@@ -26,10 +26,10 @@
 /** A menu description. */
 typedef struct
 {
-	char *String_Title; //! The menu title.
-	char *String_User_Prompt; //! The prompt displayed to the user.
-	char *String_Items[SYSTEM_MENU_MAXIMUM_ITEMS_COUNT]; //! All menu items, the array must be NULL-terminated if not all items are filled.
-} TMenu;
+	char *String_Title; //!< The menu title.
+	char *String_User_Prompt; //!< The prompt displayed to the user.
+	char *String_Items[SYSTEM_MENU_MAXIMUM_ITEMS_COUNT]; //!< All menu items, the array must be NULL-terminated if not all items are filled.
+} TSystemMenu;
 
 //-------------------------------------------------------------------------------------------------
 // Functions
@@ -38,6 +38,6 @@ typedef struct
  * @param Pointer_Menu The menu to display.
  * @return The selected item number (starting from 1 for the first item).
  */
-int MenuDisplay(TMenu *Pointer_Menu);
+int MenuDisplay(TSystemMenu *Pointer_Menu);
 
 #endif

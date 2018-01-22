@@ -6,7 +6,7 @@
 //-------------------------------------------------------------------------------------------------
 // Public functions
 //-------------------------------------------------------------------------------------------------
-int MenuDisplay(TMenu *Pointer_Menu)
+int MenuDisplay(TSystemMenu *Pointer_Menu)
 {
 	int i, Selected_Number;
 	

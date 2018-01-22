@@ -27,7 +27,7 @@ typedef enum
 // Private variables
 //-------------------------------------------------------------------------------------------------
 /** Difficulty-level selection menu. */
-static TMenu Menu_Difficulty_Level =
+static TSystemMenu Menu_Difficulty_Level =
 {
 	STRING_BRAIN_CALCULATION_MENU_TITLE,
 	STRING_BRAIN_CALCULATION_MENU_PROMPT,

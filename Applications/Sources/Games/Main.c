@@ -16,7 +16,7 @@ typedef void (*PointerGameEntryPoint)(void);
 // Private variables
 //-------------------------------------------------------------------------------------------------
 /** The main menu. */
-static TMenu Menu_Main =
+static TSystemMenu Menu_Main =
 {
 	STRING_MAIN_MENU_TITLE,
 	STRING_MAIN_MENU_PROMPT,
