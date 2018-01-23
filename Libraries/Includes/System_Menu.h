@@ -38,6 +38,6 @@ typedef struct
  * @param Pointer_Menu The menu to display.
  * @return The selected item number (starting from 1 for the first item).
  */
-int MenuDisplay(TSystemMenu *Pointer_Menu);
+int SystemMenuDisplay(TSystemMenu *Pointer_Menu);
 
 #endif

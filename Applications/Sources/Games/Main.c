@@ -54,7 +54,7 @@ int main(void)
 	
 	while (1)
 	{
-		Selected_Menu_Entry = MenuDisplay(&Menu_Main) - 1; // Returned menu entry index starts from 1
+		Selected_Menu_Entry = SystemMenuDisplay(&Menu_Main) - 1; // Returned menu entry index starts from 1
 		
 		// Exit program ?
 		if (Selected_Menu_Entry >= sizeof(Game_Entry_Points) / sizeof(PointerGameEntryPoint)) return 0;

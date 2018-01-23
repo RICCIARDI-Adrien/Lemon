@@ -75,7 +75,7 @@ void Rain(void)
 	int Row, Column, i, Raining_Speed, Loops_Count = 1, Raindrops_Count;
 	
 	// Ask the user for the rain speed
-	switch (MenuDisplay(&Menu_Rain_Speed))
+	switch (SystemMenuDisplay(&Menu_Rain_Speed))
 	{
 		case 1:
 			Raining_Speed = RAINING_SPEED_SLOW;

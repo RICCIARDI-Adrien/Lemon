@@ -167,7 +167,7 @@ void BrainCalculation(void)
 	while (1)
 	{
 		// Let the player select the game difficulty
-		switch (MenuDisplay(&Menu_Difficulty_Level))
+		switch (SystemMenuDisplay(&Menu_Difficulty_Level))
 		{
 			case 1:
 				Difficulty_Level = BRAIN_CALCULATION_DIFFICULTY_LEVEL_EASY;

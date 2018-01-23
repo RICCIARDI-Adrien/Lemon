@@ -1,4 +1,4 @@
-/** @file Menu_Display.c
+/** @file System_Menu_Display.c
  * @author Adrien RICCIARDI
  */
 #include <System.h>
@@ -6,7 +6,7 @@
 //-------------------------------------------------------------------------------------------------
 // Public functions
 //-------------------------------------------------------------------------------------------------
-int MenuDisplay(TSystemMenu *Pointer_Menu)
+int SystemMenuDisplay(TSystemMenu *Pointer_Menu)
 {
 	int i, Selected_Number;
 	
