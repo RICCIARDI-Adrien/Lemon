@@ -1,12 +1,12 @@
-/** @file System_Screen_Get_Cursor_Position.c
+/** @file Libraries_Screen_Get_Cursor_Position.c
  * @author Adrien RICCIARDI
  */
-#include <System.h>
+#include <Libraries.h>
 
 //-------------------------------------------------------------------------------------------------
 // Public functions
 //-------------------------------------------------------------------------------------------------
-void SystemScreenGetCursorPosition(unsigned int *Pointer_Row, unsigned int *Pointer_Column)
+void LibrariesScreenGetCursorPosition(unsigned int *Pointer_Row, unsigned int *Pointer_Column)
 {
 	LibrariesSystemCall(SYSTEM_CALL_SCREEN_GET_CURSOR_POSITION, 0, 0, Pointer_Row, Pointer_Column);
 }

@@ -1,4 +1,4 @@
-/** @file System_Keyboard.h
+/** @file Libraries_Keyboard.h
  * Get and format data from the keyboard.
  * @author Adrien RICCIARDI
  */
@@ -89,26 +89,26 @@
  * @return 0 (false) if no key was pressed or 1 (true) if the user pressed a key.
  * @note This function is non blocking.
  */
-int SystemKeyboardIsKeyAvailable(void);
+int LibrariesKeyboardIsKeyAvailable(void);
 
 /** Read a character from the keyboard.
  * @return The character code.
  * @note This function is blocking.
  * @note The read character is not echoed on the terminal.
  */
-int SystemKeyboardReadCharacter(void);
+int LibrariesKeyboardReadCharacter(void);
 
 /** Read an unsigned 32-bit number from the keyboard.
  * @return The read number converted to binary.
  * @note Only digits are allowed, other characters are discarded.
  * @note The result will be unpredictable if the entered number is greater than 4294967295.
  */
-unsigned int SystemKeyboardReadUnsignedInteger(void);
+unsigned int LibrariesKeyboardReadUnsignedInteger(void);
 
 /** Get a bit field representing the state (pressed or released) of all modifier keys (like shift, control, ...).
  * @return The modifier keys bit field.
  */
-unsigned int SystemKeyboardReadModifierKeysState(void);
+unsigned int LibrariesKeyboardReadModifierKeysState(void);
 
 // TODO
 // KeyboardReadString

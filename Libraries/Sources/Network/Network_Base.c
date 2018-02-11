@@ -3,7 +3,7 @@
  * @author Adrien RICCIARDI
  */
 #include <Network_Base.h>
-#include <System.h>
+#include <Libraries.h>
 
 //-------------------------------------------------------------------------------------------------
 // Private constants
@@ -137,7 +137,7 @@ static int NetworkBaseARPSendRequest(TNetworkIPAddress *Pointer_Known_IP_Address
 	unsigned int Timer_Value, Timeout_Value, Received_Packet_Size;
 	
 	// Prepare the ethernet header
-	SystemMemorySetAreaValue(Pointer_Ethernet_Header->Destination_MAC_Address, NETWORK_MAC_ADDRESS_SIZE, 0xFF); // Broadcast the frame to everyone on the local network
+	LibrariesMemorySetAreaValue(Pointer_Ethernet_Header->Destination_MAC_Address, NETWORK_MAC_ADDRESS_SIZE, 0xFF); // Broadcast the frame to everyone on the local network
 	Pointer_Ethernet_Header->Protocol_Type = NETWORK_BASE_ETHERNET_PROTOCOL_TYPE_ARP;
 	
 	// Prepare the ARP request
@@ -146,7 +146,7 @@ static int NetworkBaseARPSendRequest(TNetworkIPAddress *Pointer_Known_IP_Address
 	Pointer_ARP_Payload->Hardware_Address_Size = NETWORK_MAC_ADDRESS_SIZE;
 	Pointer_ARP_Payload->Protocol_Address_Size = NETWORK_BASE_IP_ADDRESS_SIZE;
 	Pointer_ARP_Payload->Opcode = NETWORK_BASE_ARP_OPCODE_REQUEST;
-	SystemMemoryCopyArea(Network_Base_System_MAC_Address, Pointer_ARP_Payload->Sender_Hardware_Address, NETWORK_MAC_ADDRESS_SIZE);
+	LibrariesMemoryCopyArea(Network_Base_System_MAC_Address, Pointer_ARP_Payload->Sender_Hardware_Address, NETWORK_MAC_ADDRESS_SIZE);
 	Pointer_ARP_Payload->Sender_Protocol_Address = Network_Base_System_IP_Address.Address;
 	Pointer_ARP_Payload->Target_Protocol_Address = Pointer_Known_IP_Address->Address;
 	
@@ -160,11 +160,11 @@ static int NetworkBaseARPSendRequest(TNetworkIPAddress *Pointer_Known_IP_Address
 		NetworkBaseEthernetSendPacket(sizeof(TNetworkEthernetHeader) + sizeof(TNetworkBaseARPPayload), Transmission_Packet);
 		
 		// Wait 3ms for a reply
-		Timeout_Value = SystemTimerGetValue() + 3;
+		Timeout_Value = LibrariesTimerGetValue() + 3;
 		do
 		{
 			Is_Packet_Received = NetworkBaseEthernetIsPacketReceived();
-			Timer_Value = SystemTimerGetValue();
+			Timer_Value = LibrariesTimerGetValue();
 		} while ((!Is_Packet_Received) && (Timer_Value < Timeout_Value));
 		
 		if (!Is_Packet_Received) continue; // Nothing was received, retry
@@ -182,7 +182,7 @@ static int NetworkBaseARPSendRequest(TNetworkIPAddress *Pointer_Known_IP_Address
 		if (Pointer_ARP_Payload->Sender_Protocol_Address != Pointer_Known_IP_Address->Address) continue;
 		
 		// This is our reply, get the MAC address
-		SystemMemoryCopyArea(Pointer_ARP_Payload->Sender_Hardware_Address, Pointer_Found_MAC_Address, NETWORK_MAC_ADDRESS_SIZE);
+		LibrariesMemoryCopyArea(Pointer_ARP_Payload->Sender_Hardware_Address, Pointer_Found_MAC_Address, NETWORK_MAC_ADDRESS_SIZE);
 		return 0;
 	}
 	
@@ -212,14 +212,14 @@ static void NetworkBaseARPSendReply(void *Pointer_Packet_Buffer)
 	// Prepare the reply
 	Pointer_ARP_Payload->Opcode = NETWORK_BASE_ARP_OPCODE_REPLY; // Tell this is a reply
 	// Set the receiver addresses (the one from the equipment that sent the ARP request)
-	SystemMemoryCopyArea(Pointer_ARP_Payload->Sender_Hardware_Address, Pointer_ARP_Payload->Target_Harware_Address, NETWORK_MAC_ADDRESS_SIZE);
+	LibrariesMemoryCopyArea(Pointer_ARP_Payload->Sender_Hardware_Address, Pointer_ARP_Payload->Target_Harware_Address, NETWORK_MAC_ADDRESS_SIZE);
 	Pointer_ARP_Payload->Target_Protocol_Address = Pointer_ARP_Payload->Sender_Protocol_Address;
 	// Set the sender addresses (this system ones)
-	SystemMemoryCopyArea(Network_Base_System_MAC_Address, Pointer_ARP_Payload->Sender_Hardware_Address, NETWORK_MAC_ADDRESS_SIZE);
+	LibrariesMemoryCopyArea(Network_Base_System_MAC_Address, Pointer_ARP_Payload->Sender_Hardware_Address, NETWORK_MAC_ADDRESS_SIZE);
 	Pointer_ARP_Payload->Sender_Protocol_Address = Network_Base_System_IP_Address.Address;
 	
 	// Set the recipient MAC
-	SystemMemoryCopyArea(Pointer_ARP_Payload->Target_Harware_Address, Pointer_Ethernet_Header->Destination_MAC_Address, NETWORK_MAC_ADDRESS_SIZE);
+	LibrariesMemoryCopyArea(Pointer_ARP_Payload->Target_Harware_Address, Pointer_Ethernet_Header->Destination_MAC_Address, NETWORK_MAC_ADDRESS_SIZE);
 	
 	// Send the reply
 	NetworkBaseEthernetSendPacket(sizeof(TNetworkEthernetHeader) + sizeof(TNetworkBaseARPPayload), Pointer_Packet_Buffer);
@@ -306,8 +306,8 @@ int NetworkBaseInitialize(TNetworkIPAddress *Pointer_System_IP_Address, TNetwork
 	LibrariesSystemCall(SYSTEM_CALL_SYSTEM_GET_PARAMETER, SYSTEM_CALL_SYSTEM_PARAMETER_ID_ETHERNET_CONTROLLER_MAC_ADDRESS, 0, Network_Base_System_MAC_Address, NULL);
 	
 	// Set IP addresses
-	SystemMemoryCopyArea(Pointer_System_IP_Address, &Network_Base_System_IP_Address, sizeof(TNetworkIPAddress));
-	SystemMemoryCopyArea(Pointer_Gateway_IP_Address, &Network_Base_Gateway_IP_Address, sizeof(TNetworkIPAddress)); // Do not cache the gateway MAC address now because this equipment could be down at the network configuration time
+	LibrariesMemoryCopyArea(Pointer_System_IP_Address, &Network_Base_System_IP_Address, sizeof(TNetworkIPAddress));
+	LibrariesMemoryCopyArea(Pointer_Gateway_IP_Address, &Network_Base_Gateway_IP_Address, sizeof(TNetworkIPAddress)); // Do not cache the gateway MAC address now because this equipment could be down at the network configuration time
 	
 	// Flush the network controller reception buffer
 	if (NetworkBaseEthernetIsPacketReceived()) NetworkBaseEthernetReceivePacket(&Packet_Size, Packet_Buffer);
@@ -330,7 +330,7 @@ int NetworkBaseGetMACAddressFromARPTable(TNetworkIPAddress *Pointer_IP_Address, 
 			if (Network_Base_ARP_Table_Entries[i].IP_Address == Pointer_IP_Address->Address)
 			{
 				// The IP was found, get the corresponding MAC
-				SystemMemoryCopyArea(Network_Base_ARP_Table_Entries[i].MAC_Address, Pointer_MAC_Address, NETWORK_MAC_ADDRESS_SIZE);
+				LibrariesMemoryCopyArea(Network_Base_ARP_Table_Entries[i].MAC_Address, Pointer_MAC_Address, NETWORK_MAC_ADDRESS_SIZE);
 				return 0;
 			}
 		}
@@ -349,7 +349,7 @@ int NetworkBaseGetMACAddressFromARPTable(TNetworkIPAddress *Pointer_IP_Address, 
 			if (Network_Base_ARP_Table_Entries[i].Is_Entry_Free)
 			{
 				Network_Base_ARP_Table_Entries[i].IP_Address = Pointer_IP_Address->Address;
-				SystemMemoryCopyArea(Pointer_MAC_Address, Network_Base_ARP_Table_Entries[i].MAC_Address, NETWORK_MAC_ADDRESS_SIZE);
+				LibrariesMemoryCopyArea(Pointer_MAC_Address, Network_Base_ARP_Table_Entries[i].MAC_Address, NETWORK_MAC_ADDRESS_SIZE);
 				Network_Base_ARP_Table_Entries[i].Is_Entry_Free = 0;
 				
 				Network_Base_ARP_Table_Used_Entries_Count++;
@@ -412,7 +412,7 @@ int NetworkBaseIPSendPacket(TNetworkSocket *Pointer_Socket, unsigned int Payload
 	if (Total_Packet_Size > NETWORK_MAXIMUM_PACKET_SIZE) return 1;
 	
 	// Fill the ethernet header
-	SystemMemoryCopyArea(Pointer_Socket->Destination_MAC_Address, Pointer_Ethernet_Header->Destination_MAC_Address, NETWORK_MAC_ADDRESS_SIZE); // Set the destination MAC address
+	LibrariesMemoryCopyArea(Pointer_Socket->Destination_MAC_Address, Pointer_Ethernet_Header->Destination_MAC_Address, NETWORK_MAC_ADDRESS_SIZE); // Set the destination MAC address
 	Pointer_Ethernet_Header->Protocol_Type = NETWORK_BASE_ETHERNET_PROTOCOL_TYPE_IP; // Tell that the frame contains IP data
 	
 	// Fill the IPv4 header
@@ -471,8 +471,8 @@ int NetworkBaseTCPReceivePacket(TNetworkSocket *Pointer_Socket, unsigned short F
 	// Convert flags to big endian to fastly compare them with the received packet
 	Flags_To_Check = NETWORK_SWAP_WORD(Flags_To_Check);
 	
-	Timeout_Milliseconds = NETWORK_BASE_TCP_RECEPTION_TIMEOUT_MILLISECONDS + SystemTimerGetValue();
-	while (SystemTimerGetValue() <= Timeout_Milliseconds)
+	Timeout_Milliseconds = NETWORK_BASE_TCP_RECEPTION_TIMEOUT_MILLISECONDS + LibrariesTimerGetValue();
+	while (LibrariesTimerGetValue() <= Timeout_Milliseconds)
 	{
 		// Check if a packet is available
 		Result = NetworkBaseIPReceivePacket(Pointer_Socket, 0, Pointer_Packet_Size, Pointer_Packet_Buffer);

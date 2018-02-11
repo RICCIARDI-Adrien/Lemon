@@ -1,12 +1,12 @@
-/** @file System_String_Compare.c
+/** @file Libraries_String_Compare.c
  * @author Adrien RICCIARDI
  */
-#include <System.h>
+#include <Libraries.h>
 
 //-------------------------------------------------------------------------------------------------
 // Public functions
 //-------------------------------------------------------------------------------------------------
-int SystemStringCompare(char *String_1, char *String_2)
+int LibrariesStringCompare(char *String_1, char *String_2)
 {
 	while (*String_1 != 0)
 	{

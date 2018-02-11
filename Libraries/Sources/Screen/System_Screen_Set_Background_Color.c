@@ -1,12 +1,12 @@
-/** @file System_Screen_Set_Background_Color.c
+/** @file Libraries_Screen_Set_Background_Color.c
  * @author Adrien RICCIARDI
  */
-#include <System.h>
+#include <Libraries.h>
 
 //-------------------------------------------------------------------------------------------------
 // Public functions
 //-------------------------------------------------------------------------------------------------
-void SystemScreenSetBackgroundColor(TSystemScreenColor Color_Code)
+void LibrariesScreenSetBackgroundColor(TLibrariesScreenColor Color_Code)
 {
 	unsigned char Color;
 	

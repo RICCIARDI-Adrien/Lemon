@@ -1,4 +1,4 @@
-/** @file System_Memory.h
+/** @file Libraries_Memory.h
  * Various memory manipulation functions.
  * @author Adrien RICCIARDI
  */
@@ -13,7 +13,7 @@
  * @param Bytes_Count How many bytes to fill.
  * @param Value The value to put in each byte of the memory area.
  */
-void SystemMemorySetAreaValue(void *Pointer_Area, unsigned int Bytes_Count, unsigned char Value);
+void LibrariesMemorySetAreaValue(void *Pointer_Area, unsigned int Bytes_Count, unsigned char Value);
 
 /** Copy an area content into another area.
  * @param Pointer_Source_Area The area to copy from.
@@ -21,6 +21,6 @@ void SystemMemorySetAreaValue(void *Pointer_Area, unsigned int Bytes_Count, unsi
  * @param Bytes_Count How many bytes to copy.
  * @warning Overlapping areas may lead to an unpredictable result.
  */
-void SystemMemoryCopyArea(void *Pointer_Source_Area, void *Pointer_Destination_Area, unsigned int Bytes_Count);
+void LibrariesMemoryCopyArea(void *Pointer_Source_Area, void *Pointer_Destination_Area, unsigned int Bytes_Count);
 
 #endif

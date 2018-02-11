@@ -2,7 +2,7 @@
  * @author Adrien RICCIARDI
  */
 #include <Network_Base.h>
-#include <System.h>
+#include <Libraries.h>
 
 //-------------------------------------------------------------------------------------------------
 // Public function
@@ -29,7 +29,7 @@ int NetworkUDPReceiveBuffer(TNetworkSocket *Pointer_Socket, int Is_Call_Blocking
 	if (Data_Size > NETWORK_MAXIMUM_PACKET_SIZE - sizeof(TNetworkEthernetHeader) - sizeof(TNetworkIPv4Header) - sizeof(TNetworkUDPHeader)) return 2;
 	
 	// Extract the packet content
-	SystemMemoryCopyArea(Packet_Buffer + sizeof(TNetworkEthernetHeader) + sizeof(TNetworkIPv4Header) + sizeof(TNetworkUDPHeader), Pointer_Buffer, Data_Size);
+	LibrariesMemoryCopyArea(Packet_Buffer + sizeof(TNetworkEthernetHeader) + sizeof(TNetworkIPv4Header) + sizeof(TNetworkUDPHeader), Pointer_Buffer, Data_Size);
 	*Pointer_Buffer_Size = Data_Size;
 
 	return 0;

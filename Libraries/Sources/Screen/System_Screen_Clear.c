@@ -1,12 +1,12 @@
-/** @file System_Screen_Clear.c
+/** @file Libraries_Screen_Clear.c
  * @author Adrien RICCIARDI
  */
-#include <System.h>
+#include <Libraries.h>
 
 //-------------------------------------------------------------------------------------------------
 // Public functions
 //-------------------------------------------------------------------------------------------------
-void SystemScreenClear(void)
+void LibrariesScreenClear(void)
 {
 	LibrariesSystemCall(SYSTEM_CALL_SCREEN_CLEAR, 0, 0, NULL, NULL);
 }

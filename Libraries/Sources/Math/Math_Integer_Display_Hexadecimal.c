@@ -1,7 +1,7 @@
 /** @file Math_Integer_Display_Hexadecimal.c
  * @author Adrien RICCIARDI
  */
-#include <System.h>
+#include <Libraries.h>
 
 //-------------------------------------------------------------------------------------------------
 // Public functions
@@ -28,7 +28,7 @@ void MathIntegerDisplayHexadecimal(PMathInteger Operand)
 			else Nibble += 'A' - 10; // Letter
 			
 			// Display the nibble
-			SystemScreenWriteCharacter(Nibble);
+			LibrariesScreenWriteCharacter(Nibble);
 		}
 	}
 }

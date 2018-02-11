@@ -1,12 +1,12 @@
-/** @file System_File_Close.c
+/** @file Libraries_File_Close.c
  * @author Adrien RICCIARDI
  */
-#include <System.h>
+#include <Libraries.h>
 
 //-------------------------------------------------------------------------------------------------
 // Public functions
 //-------------------------------------------------------------------------------------------------
-void SystemFileClose(unsigned int File_ID)
+void LibrariesFileClose(unsigned int File_ID)
 {
 	LibrariesSystemCall(SYSTEM_CALL_FILE_CLOSE, File_ID, 0, NULL, NULL);
 }

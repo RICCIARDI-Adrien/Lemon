@@ -1,12 +1,12 @@
-/** @file System_Memory_Set_Area_Value.c
+/** @file Libraries_Memory_Set_Area_Value.c
  * @author Adrien RICCIARDI
  */
-#include <System.h>
+#include <Libraries.h>
 
 //-------------------------------------------------------------------------------------------------
 // Public functions
 //-------------------------------------------------------------------------------------------------
-void SystemMemorySetAreaValue(void *Pointer_Area, unsigned int Bytes_Count, unsigned char Value)
+void LibrariesMemorySetAreaValue(void *Pointer_Area, unsigned int Bytes_Count, unsigned char Value)
 {
 	unsigned int *Pointer_Area_Dword, Value_Dword;
 	unsigned char *Pointer_Area_Byte;

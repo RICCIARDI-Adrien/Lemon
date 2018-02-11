@@ -1,19 +1,19 @@
-/** @file System_Random_Generate_Number.c
+/** @file Libraries_Random_Generate_Number.c
  * @author Adrien RICCIARDI
  */
-#include <System.h>
+#include <Libraries.h>
 
 //-------------------------------------------------------------------------------------------------
 // Public variables
 //-------------------------------------------------------------------------------------------------
 /** The seed shared with the random initialization function. */
-unsigned int System_Random_Libraries_Seed;
+unsigned int Libraries_Random_Libraries_Seed;
 
 //-------------------------------------------------------------------------------------------------
 // Public functions
 //-------------------------------------------------------------------------------------------------
-int SystemRandomGenerateNumber(void)
+int LibrariesRandomGenerateNumber(void)
 {
-	System_Random_Libraries_Seed = System_Random_Libraries_Seed * 1103515245 + 12345; // Based on OpenBSD rand serie
-	return System_Random_Libraries_Seed % 2147483648UL;
+	Libraries_Random_Libraries_Seed = Libraries_Random_Libraries_Seed * 1103515245 + 12345; // Based on OpenBSD rand serie
+	return Libraries_Random_Libraries_Seed % 2147483648UL;
 }

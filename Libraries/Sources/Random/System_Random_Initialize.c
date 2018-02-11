@@ -1,17 +1,17 @@
-/** @file System_Random_Initialize.c
+/** @file Libraries_Random_Initialize.c
  * @author Adrien RICCIARDI
  */
-#include <System.h>
+#include <Libraries.h>
 
 //-------------------------------------------------------------------------------------------------
 // Public variables
 //-------------------------------------------------------------------------------------------------
-extern unsigned int System_Random_Libraries_Seed;
+extern unsigned int Libraries_Random_Libraries_Seed;
 
 //-------------------------------------------------------------------------------------------------
 // Public functions
 //-------------------------------------------------------------------------------------------------
-void SystemRandomInitialize(void)
+void LibrariesRandomInitialize(void)
 {
-	System_Random_Libraries_Seed = LibrariesSystemCall(SYSTEM_CALL_TIMER_READ_VALUE, 0, 0, NULL, NULL);
+	Libraries_Random_Libraries_Seed = LibrariesSystemCall(SYSTEM_CALL_TIMER_READ_VALUE, 0, 0, NULL, NULL);
 }

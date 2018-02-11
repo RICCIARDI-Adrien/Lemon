@@ -1,15 +1,15 @@
-/** @file System_Screen_Clear_Buffer.c
+/** @file Libraries_Screen_Clear_Buffer.c
  * @author Adrien RICCIARDI
  */
-#include <System.h>
+#include <Libraries.h>
 
 //-------------------------------------------------------------------------------------------------
 // Public functions
 //-------------------------------------------------------------------------------------------------
-void SystemScreenClearBuffer(void *Pointer_Buffer, unsigned char Color)
+void LibrariesScreenClearBuffer(void *Pointer_Buffer, unsigned char Color)
 {
 	unsigned int Row, Column;
-	TSystemScreenBufferCharacter *Pointer_Buffer_Character = (TSystemScreenBufferCharacter *) Pointer_Buffer;
+	TLibrariesScreenBufferCharacter *Pointer_Buffer_Character = (TLibrariesScreenBufferCharacter *) Pointer_Buffer;
 	
 	for (Row = 0; Row < LIBRARIES_SCREEN_ROWS_COUNT; Row++)
 	{

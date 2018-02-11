@@ -1,8 +1,8 @@
-/** @file System_Program_Entry_Point.c
+/** @file Libraries_System_Program_Entry_Point.c
  * This code is executed before the program main() function.
  * @author Adrien RICCIARDI
  */
-#include <System.h>
+#include <Libraries.h>
 
 //-------------------------------------------------------------------------------------------------
 // Private constants and macros

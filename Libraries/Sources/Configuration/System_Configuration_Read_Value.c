@@ -1,12 +1,12 @@
-/** @file System_Configuration_Read_Value.c
+/** @file Libraries_Configuration_Read_Value.c
  * @author Adrien RICCIARDI
  */
-#include <System.h>
+#include <Libraries.h>
 
 //-------------------------------------------------------------------------------------------------
 // Public functions
 //-------------------------------------------------------------------------------------------------
-int SystemConfigurationReadValue(char *String_Key, char *String_Value)
+int LibrariesConfigurationReadValue(char *String_Key, char *String_Value)
 {
 	unsigned int File_ID, Read_Bytes_Count;
 	char Character;
@@ -16,7 +16,7 @@ int SystemConfigurationReadValue(char *String_Key, char *String_Value)
 	if (String_Key[0] == 0) return 2;
 	
 	// Try to open the configuration file
-	if (SystemFileOpen(LIBRARIES_CONFIGURATION_FILE_NAME, LIBRARIES_FILE_OPENING_MODE_READ, &File_ID) != 0) return 1;
+	if (LibrariesFileOpen(LIBRARIES_CONFIGURATION_FILE_NAME, LIBRARIES_FILE_OPENING_MODE_READ, &File_ID) != 0) return 1;
 
 	// Browse the file until the key is found
 	do
@@ -27,7 +27,7 @@ int SystemConfigurationReadValue(char *String_Key, char *String_Value)
 		while (String_Key[i] != 0)
 		{
 			// Read a single character
-			if (SystemFileRead(File_ID, &Character, 1, &Read_Bytes_Count) != 0) return 3;
+			if (LibrariesFileRead(File_ID, &Character, 1, &Read_Bytes_Count) != 0) return 3;
 			if (Read_Bytes_Count == 0) goto Exit; // The file terminated before the key was found
 			
 			// Match the key in the same time
@@ -36,7 +36,7 @@ int SystemConfigurationReadValue(char *String_Key, char *String_Value)
 				// Go to the next key (read the file up to find a new line character or to reach the file end)
 				do
 				{
-					if (SystemFileRead(File_ID, &Character, 1, &Read_Bytes_Count) != 0) return 3;
+					if (LibrariesFileRead(File_ID, &Character, 1, &Read_Bytes_Count) != 0) return 3;
 					if (Read_Bytes_Count == 0) goto Exit; // The file terminated before the key was found
 				} while (Character != '\n');
 				
@@ -50,7 +50,7 @@ int SystemConfigurationReadValue(char *String_Key, char *String_Value)
 		// Is the next character a '=' ?
 		if (Is_Key_Found)
 		{
-			if (SystemFileRead(File_ID, &Character, 1, &Read_Bytes_Count) != 0) return 3; // Read a single character
+			if (LibrariesFileRead(File_ID, &Character, 1, &Read_Bytes_Count) != 0) return 3; // Read a single character
 			if (Read_Bytes_Count == 0) goto Exit; // The file terminated before the key was found
 			if (Character != '=') Is_Key_Found = 0; // This is not the right key, it is a longer key that has the same beginning
 		}
@@ -60,7 +60,7 @@ int SystemConfigurationReadValue(char *String_Key, char *String_Value)
 	for (i = 0; i < LIBRARIES_CONFIGURATION_FILE_MAXIMUM_VALUE_SIZE; i++)
 	{
 		// Read a single character
-		if (SystemFileRead(File_ID, &Character, 1, &Read_Bytes_Count) != 0) return 3;
+		if (LibrariesFileRead(File_ID, &Character, 1, &Read_Bytes_Count) != 0) return 3;
 		if (Read_Bytes_Count == 0) break; // End of file is reached
 		
 		// Is the end of the value reached ?
@@ -75,6 +75,6 @@ int SystemConfigurationReadValue(char *String_Key, char *String_Value)
 	Return_Value = 0;
 	
 Exit:
-	SystemFileClose(File_ID);
+	LibrariesFileClose(File_ID);
 	return Return_Value;
 }

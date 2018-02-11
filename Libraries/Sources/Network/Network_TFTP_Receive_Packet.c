@@ -2,7 +2,7 @@
  * @author Adrien RICCIARDI
  */
 #include <Network_Base.h>
-#include <System.h>
+#include <Libraries.h>
 
 //-------------------------------------------------------------------------------------------------
 // Public functions
@@ -15,10 +15,10 @@ int NetworkTFTPReceivePacket(TNetworkSocket *Pointer_Socket, unsigned int Timeou
 	TNetworkUDPHeader *Pointer_UDP_Header = (TNetworkUDPHeader *) (Packet_Buffer + sizeof(TNetworkEthernetHeader) + sizeof(TNetworkIPv4Header));
 	
 	// Adjust timeout to the maximum expected value
-	Timeout_Milliseconds += SystemTimerGetValue();
+	Timeout_Milliseconds += LibrariesTimerGetValue();
 	
 	// Wait for a packet to be received
-	while (SystemTimerGetValue() <= Timeout_Milliseconds)
+	while (LibrariesTimerGetValue() <= Timeout_Milliseconds)
 	{
 		// Check if a packet is available
 		Result = NetworkBaseIPReceivePacket(Pointer_Socket, 0, &Data_Size, Packet_Buffer);
@@ -38,7 +38,7 @@ int NetworkTFTPReceivePacket(TNetworkSocket *Pointer_Socket, unsigned int Timeou
 			if (Data_Size > sizeof(TNetworkTFTPPacket)) continue;
 			
 			// Extract the packet content
-			SystemMemoryCopyArea(Packet_Buffer + sizeof(TNetworkEthernetHeader) + sizeof(TNetworkIPv4Header) + sizeof(TNetworkUDPHeader), Pointer_Packet, Data_Size);
+			LibrariesMemoryCopyArea(Packet_Buffer + sizeof(TNetworkEthernetHeader) + sizeof(TNetworkIPv4Header) + sizeof(TNetworkUDPHeader), Pointer_Packet, Data_Size);
 			*Pointer_Packet_Size = Data_Size;
 			
 			return 0;

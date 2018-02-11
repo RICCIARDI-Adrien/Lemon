@@ -1,7 +1,7 @@
 /** @file Math_Integer_Initialize_From_Int.c
  * @author Adrien RICCIARDI
  */
-#include <System.h>
+#include <Libraries.h>
 
 //-------------------------------------------------------------------------------------------------
 // Public functions

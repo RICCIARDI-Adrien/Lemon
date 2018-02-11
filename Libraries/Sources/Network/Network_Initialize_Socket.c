@@ -2,7 +2,7 @@
  * @author Adrien RICCIARDI
  */
 #include <Network_Base.h>
-#include <System.h>
+#include <Libraries.h>
 
 //-------------------------------------------------------------------------------------------------
 // Public functions
@@ -11,7 +11,7 @@ int NetworkInitializeSocket(TNetworkIPAddress *Pointer_Destination_IP_Address, u
 {
 	TNetworkIPAddress *Pointer_ARP_Resolution_IP_Address;
 	
-	SystemRandomInitialize();
+	LibrariesRandomInitialize();
 	
 	// Set the destination IP address
 	Pointer_Socket->Destination_IP_Address = Pointer_Destination_IP_Address->Address;
@@ -23,7 +23,7 @@ int NetworkInitializeSocket(TNetworkIPAddress *Pointer_Destination_IP_Address, u
 	if (NetworkBaseGetMACAddressFromARPTable(Pointer_ARP_Resolution_IP_Address, Pointer_Socket->Destination_MAC_Address) != 0) return 1;
 	
 	// Set remaining useful fields
-	Pointer_Socket->Source_Port = NETWORK_SWAP_WORD(((SystemRandomGenerateNumber() % (65536 - 1024)) + 1024)); // Choose a random non-reserved port as the source port
+	Pointer_Socket->Source_Port = NETWORK_SWAP_WORD(((LibrariesRandomGenerateNumber() % (65536 - 1024)) + 1024)); // Choose a random non-reserved port as the source port
 	Pointer_Socket->Destination_Port = NETWORK_SWAP_WORD(Destination_Port);
 	Pointer_Socket->IP_Protocol = Used_Protocol;
 	

@@ -1,12 +1,12 @@
-/** @file System_Screen_Write_Centered_String.c
+/** @file Libraries_Screen_Write_Centered_String.c
  * @author Adrien RICCIARDI
  */
-#include <System.h>
+#include <Libraries.h>
 
 //-------------------------------------------------------------------------------------------------
 // Public functions
 //-------------------------------------------------------------------------------------------------
-void SystemScreenWriteCenteredString(char *String)
+void LibrariesScreenWriteCenteredString(char *String)
 {
 	int Length, Column, Current_Cursor_Row, Current_Cursor_Column;
 	

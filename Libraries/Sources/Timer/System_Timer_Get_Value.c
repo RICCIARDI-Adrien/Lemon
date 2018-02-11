@@ -1,12 +1,12 @@
-/** @file System_Timer_Get_Value.c
+/** @file Libraries_Timer_Get_Value.c
  * @author Adrien RICCIARDI
  */
-#include <System.h>
+#include <Libraries.h>
 
 //-------------------------------------------------------------------------------------------------
 // Public functions
 //-------------------------------------------------------------------------------------------------
-unsigned int SystemTimerGetValue(void)
+unsigned int LibrariesTimerGetValue(void)
 {
 	return (unsigned int) LibrariesSystemCall(SYSTEM_CALL_TIMER_READ_VALUE, 0, 0, NULL, NULL);
 }

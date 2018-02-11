@@ -1,12 +1,12 @@
-/** @file System_String_Concatenate.c
+/** @file Libraries_String_Concatenate.c
  * @author Adrien RICCIARDI
  */
-#include <System.h>
+#include <Libraries.h>
 
 //-------------------------------------------------------------------------------------------------
 // Public functions
 //-------------------------------------------------------------------------------------------------
-void SystemStringConcatenate(char *String_Destination, char *String_To_Append)
+void LibrariesStringConcatenate(char *String_Destination, char *String_To_Append)
 {
 	int i, j;
 	

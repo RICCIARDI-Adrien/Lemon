@@ -1,4 +1,4 @@
-/** @file System_Configuration.h
+/** @file Libraries_Configuration.h
  * Read from and write to a specific userspace file Libraries configuration data.
  * @author Adrien RICCIARDI
  */
@@ -25,6 +25,6 @@
  * @return 3 if a read error occurred,
  * @return 4 if the key was not found.
  */
-int SystemConfigurationReadValue(char *String_Key, char *String_Value);
+int LibrariesConfigurationReadValue(char *String_Key, char *String_Value);
 
 #endif

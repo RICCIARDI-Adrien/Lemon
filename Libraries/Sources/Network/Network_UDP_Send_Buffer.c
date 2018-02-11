@@ -2,7 +2,7 @@
  * @author Adrien RICCIARDI
  */
 #include <Network_Base.h>
-#include <System.h>
+#include <Libraries.h>
 
 //-------------------------------------------------------------------------------------------------
 // Public function
@@ -25,7 +25,7 @@ int NetworkUDPSendBuffer(TNetworkSocket *Pointer_Socket, unsigned int Buffer_Siz
 	Pointer_UDP_Header->Checksum = 0; // Disable checksum validation
 	
 	// Copy UDP payload
-	SystemMemoryCopyArea(Pointer_Buffer, Packet_Buffer + sizeof(TNetworkEthernetHeader) + sizeof(TNetworkIPv4Header) + sizeof(TNetworkUDPHeader), Buffer_Size);
+	LibrariesMemoryCopyArea(Pointer_Buffer, Packet_Buffer + sizeof(TNetworkEthernetHeader) + sizeof(TNetworkIPv4Header) + sizeof(TNetworkUDPHeader), Buffer_Size);
 	
 	// Send the packet
 	return NetworkBaseIPSendPacket(Pointer_Socket, IP_Payload_Size, Packet_Buffer);

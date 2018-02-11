@@ -1,4 +1,4 @@
-/** @file System_Random.h
+/** @file Libraries_Random.h
  * Generate pseudo-random numbers.
  * @author Adrien RICCIARDI
  */
@@ -9,11 +9,11 @@
 // Functions
 //-------------------------------------------------------------------------------------------------
 /** Initialize the random generator with the current timer value. */
-void SystemRandomInitialize(void);
+void LibrariesRandomInitialize(void);
 
 /** Generate a pseudo-random number.
  * @return A pseudo-random number.
  */
-int SystemRandomGenerateNumber(void);
+int LibrariesRandomGenerateNumber(void);
 
 #endif

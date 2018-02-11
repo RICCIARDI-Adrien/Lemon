@@ -1,12 +1,12 @@
-/** @file System_String_Copy.c
+/** @file Libraries_String_Copy.c
  * @author Adrien RICCIARDI
  */
-#include <System.h>
+#include <Libraries.h>
 
 //-------------------------------------------------------------------------------------------------
 // Public functions
 //-------------------------------------------------------------------------------------------------
-void SystemStringCopy(char *String_Source, char *String_Destination)
+void LibrariesStringCopy(char *String_Source, char *String_Destination)
 {
 	while (*String_Source != 0)
 	{

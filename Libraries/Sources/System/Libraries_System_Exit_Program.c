@@ -1,7 +1,7 @@
 /** @file Libraries_System_Exit_Program.c
  * @author Adrien RICCIARDI
  */
-#include <System.h>
+#include <Libraries.h>
 
 //-------------------------------------------------------------------------------------------------
 // Public functions

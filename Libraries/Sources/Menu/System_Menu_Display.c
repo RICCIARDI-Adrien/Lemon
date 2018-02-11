@@ -1,51 +1,51 @@
-/** @file System_Menu_Display.c
+/** @file Libraries_Menu_Display.c
  * @author Adrien RICCIARDI
  */
-#include <System.h>
+#include <Libraries.h>
 
 //-------------------------------------------------------------------------------------------------
 // Public functions
 //-------------------------------------------------------------------------------------------------
-int SystemMenuDisplay(TSystemMenu *Pointer_Menu)
+int LibrariesMenuDisplay(TLibrariesMenu *Pointer_Menu)
 {
 	int i, Selected_Number;
 	
 	// Display the menu until a valid choice has been done
 	while (1)
 	{
-		SystemScreenClear();
+		LibrariesScreenClear();
 		
 		// Display the title only if it is shorter than the screen width
-		SystemScreenSetFontColor(LIBRARIES_MENU_TITLE_COLOR);
-		SystemScreenWriteCenteredString(Pointer_Menu->String_Title);
-		SystemScreenWriteString("\n\n");
+		LibrariesScreenSetFontColor(LIBRARIES_MENU_TITLE_COLOR);
+		LibrariesScreenWriteCenteredString(Pointer_Menu->String_Title);
+		LibrariesScreenWriteString("\n\n");
 		
 		// Display each item
 		for (i = 0; (Pointer_Menu->String_Items[i] != NULL) && (i < LIBRARIES_MENU_MAXIMUM_ITEMS_COUNT); i++)
 		{
-			SystemScreenWriteString("    ");
+			LibrariesScreenWriteString("    ");
 			
 			// Display the item number
-			SystemScreenSetFontColor(LIBRARIES_MENU_ITEM_NUMBER_COLOR);
-			SystemScreenWriteInteger(i + 1);
-			SystemScreenWriteString(". ");
+			LibrariesScreenSetFontColor(LIBRARIES_MENU_ITEM_NUMBER_COLOR);
+			LibrariesScreenWriteInteger(i + 1);
+			LibrariesScreenWriteString(". ");
 			
 			// Display the item text
-			SystemScreenSetFontColor(LIBRARIES_MENU_ITEM_TEXT_COLOR);
-			SystemScreenWriteString(Pointer_Menu->String_Items[i]);
-			SystemScreenWriteCharacter('\n');
+			LibrariesScreenSetFontColor(LIBRARIES_MENU_ITEM_TEXT_COLOR);
+			LibrariesScreenWriteString(Pointer_Menu->String_Items[i]);
+			LibrariesScreenWriteCharacter('\n');
 		}
 		
 		// Display the user prompt on the screen bottom
-		SystemScreenSetFontColor(LIBRARIES_SCREEN_COLOR_BLUE);
-		SystemScreenSetCursorPosition(LIBRARIES_SCREEN_ROWS_COUNT - 1, 0);
-		SystemScreenWriteString(Pointer_Menu->String_User_Prompt);
+		LibrariesScreenSetFontColor(LIBRARIES_SCREEN_COLOR_BLUE);
+		LibrariesScreenSetCursorPosition(LIBRARIES_SCREEN_ROWS_COUNT - 1, 0);
+		LibrariesScreenWriteString(Pointer_Menu->String_User_Prompt);
 		
 		// Wait for the user input
-		Selected_Number = (int) SystemKeyboardReadUnsignedInteger();
+		Selected_Number = (int) LibrariesKeyboardReadUnsignedInteger();
 		if ((Selected_Number > 0) && (Selected_Number <= i))
 		{
-			SystemScreenClear();
+			LibrariesScreenClear();
 			return Selected_Number;
 		}
 	}

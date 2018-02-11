@@ -1,12 +1,12 @@
-/** @file System_Memory_Copy_Area.c
+/** @file Libraries_Memory_Copy_Area.c
  * @author Adrien RICCIARDI
  */
-#include <System.h>
+#include <Libraries.h>
 
 //-------------------------------------------------------------------------------------------------
 // Public functions
 //-------------------------------------------------------------------------------------------------
-void SystemMemoryCopyArea(void *Pointer_Source_Area, void *Pointer_Destination_Area, unsigned int Bytes_Count)
+void LibrariesMemoryCopyArea(void *Pointer_Source_Area, void *Pointer_Destination_Area, unsigned int Bytes_Count)
 {
 	unsigned int *Pointer_Source_Area_Dword, *Pointer_Destination_Area_Dword;
 	unsigned char *Pointer_Source_Area_Byte, *Pointer_Destination_Area_Byte;

@@ -1,12 +1,12 @@
-/** @file System_File_Delete.c
+/** @file Libraries_File_Delete.c
  * @author Adrien RICCIARDI
  */
-#include <System.h>
+#include <Libraries.h>
 
 //-------------------------------------------------------------------------------------------------
 // Public functions
 //-------------------------------------------------------------------------------------------------
-int SystemFileDelete(char *String_File_Name)
+int LibrariesFileDelete(char *String_File_Name)
 {
 	return LibrariesSystemCall(SYSTEM_CALL_FILE_DELETE, 0, 0, String_File_Name, NULL);
 }

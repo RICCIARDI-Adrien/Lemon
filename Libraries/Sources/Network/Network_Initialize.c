@@ -2,7 +2,7 @@
  * @author Adrien RICCIARDI
  */
 #include <Network_Base.h>
-#include <System.h>
+#include <Libraries.h>
 
 //-------------------------------------------------------------------------------------------------
 // Public functions
@@ -19,16 +19,16 @@ int NetworkInitialize(void)
 	
 	// Get the IP addresses from the configuration file
 	// System IP address
-	if (SystemConfigurationReadValue("Network_System_IP_Address", String_Configuration_Value) != 0) return 2;
+	if (LibrariesConfigurationReadValue("Network_System_IP_Address", String_Configuration_Value) != 0) return 2;
 	if (NetworkIPConvertFromString(String_Configuration_Value, &System_IP_Address.Address) != 0) return 2;
 	// System subnet mask
-	if (SystemConfigurationReadValue("Network_System_Subnet_Mask", String_Configuration_Value) != 0) return 2;
+	if (LibrariesConfigurationReadValue("Network_System_Subnet_Mask", String_Configuration_Value) != 0) return 2;
 	if (NetworkIPConvertFromString(String_Configuration_Value, &System_IP_Address.Mask) != 0) return 2;
 	// Gateway IP address
-	if (SystemConfigurationReadValue("Network_Gateway_IP_Address", String_Configuration_Value) != 0) return 2;
+	if (LibrariesConfigurationReadValue("Network_Gateway_IP_Address", String_Configuration_Value) != 0) return 2;
 	if (NetworkIPConvertFromString(String_Configuration_Value, &Gateway_IP_Address.Address) != 0) return 2;
 	// Gateway subnet mask
-	if (SystemConfigurationReadValue("Network_Gateway_Subnet_Mask", String_Configuration_Value) != 0) return 2;
+	if (LibrariesConfigurationReadValue("Network_Gateway_Subnet_Mask", String_Configuration_Value) != 0) return 2;
 	if (NetworkIPConvertFromString(String_Configuration_Value, &Gateway_IP_Address.Mask) != 0) return 2;
 	
 	// Initialize the network stack

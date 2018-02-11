@@ -1,4 +1,4 @@
-/** @file System_File.h
+/** @file Libraries_File.h
  * Simple file manipulation functions.
  * @author Adrien RICCIARDI
  */
@@ -22,7 +22,7 @@ typedef enum
 {
 	LIBRARIES_FILE_OPENING_MODE_READ = 'r',
 	LIBRARIES_FILE_OPENING_MODE_WRITE = 'w'
-} TSystemFileOpeningMode;
+} TLibrariesFileOpeningMode;
 
 //-------------------------------------------------------------------------------------------------
 // Functions
@@ -32,22 +32,22 @@ typedef enum
  * @return 0 (false) if the file doesn't exist.
  * @return A non-zero value if the file exists.
  */
-int SystemFileExists(char *String_File_Name);
+int LibrariesFileExists(char *String_File_Name);
 
 /** Tell the size of a file.
  * @param String_File_Name Name of the file.
  * @return The file size in bytes if the file exists.
  * @return 0 if the file doesn't exist.
  */
-unsigned int SystemFileGetSize(char *String_File_Name);
+unsigned int LibrariesFileGetSize(char *String_File_Name);
 
 /** Start a file listing. */
-void SystemFileListInitialize(void);
+void LibrariesFileListInitialize(void);
 
 /** Get the next file name for file listing.
  * @param String_File_Name Pointer on a LIBRARIES_FILE_NAME_LENGTH + 1 wide string which will receive the file name.
  */
-void SystemFileListNext(char *String_File_Name);
+void LibrariesFileListNext(char *String_File_Name);
 
 /** Open a file for reading or writing.
  * @param String_File_Name The file path. The file must exist for reading mode but can be non existent for writing mode.
@@ -62,7 +62,7 @@ void SystemFileListNext(char *String_File_Name);
  * @return ERROR_CODE_BLOCKS_LIST_FULL if the file was opened in write mode an there is no more room in the Blocks List,
  * @return ERROR_CODE_NO_ERROR if the file was correctly opened.
  */
-int SystemFileOpen(char *String_File_Name, TSystemFileOpeningMode Opening_Mode, unsigned int *Pointer_File_ID);
+int LibrariesFileOpen(char *String_File_Name, TLibrariesFileOpeningMode Opening_Mode, unsigned int *Pointer_File_ID);
 
 /** Read data from a previously opened file.
  * @param File_ID The file identifier.
@@ -74,7 +74,7 @@ int SystemFileOpen(char *String_File_Name, TSystemFileOpeningMode Opening_Mode, 
  * @return ERROR_CODE_FILE_NOT_OPENED if the file is not opened,
  * @return ERROR_CODE_BAD_OPENING_MODE if the file is not opened in read mode.
  */
-int SystemFileRead(unsigned int File_ID, void *Pointer_Buffer, unsigned int Bytes_Count, unsigned int *Pointer_Bytes_Read);
+int LibrariesFileRead(unsigned int File_ID, void *Pointer_Buffer, unsigned int Bytes_Count, unsigned int *Pointer_Bytes_Read);
 
 /** Write data to an opened file.
  * @param File_ID The file identifier.
@@ -86,19 +86,19 @@ int SystemFileRead(unsigned int File_ID, void *Pointer_Buffer, unsigned int Byte
  * @return ERROR_CODE_BAD_OPENING_MODE if the file is not opened in write mode,
  * @return ERROR_CODE_BLOCKS_LIST_FULL if there no more free blocks in the Blocks List and the data could not be written.
  */
-int SystemFileWrite(unsigned int File_ID, void *Pointer_Buffer, unsigned int Bytes_Count);
+int LibrariesFileWrite(unsigned int File_ID, void *Pointer_Buffer, unsigned int Bytes_Count);
 
 /** Close a previously opened file (do nothing if the file was not opened).
  * @param File_ID Identifier of the opened file.
  */
-void SystemFileClose(unsigned int File_ID);
+void LibrariesFileClose(unsigned int File_ID);
 
 /** Delete an existing file.
  * @param String_File_Name The file to delete.
  * @return ERROR_CODE_NO_ERROR if the file has been successfully deleted,
  * @return ERROR_CODE_FILE_NOT_FOUND if the file is not existing.
  */
-int SystemFileDelete(char *String_File_Name);
+int LibrariesFileDelete(char *String_File_Name);
 
 /** Rename an existing file.
  * @param String_Current_File_Name The current file name.
@@ -108,7 +108,7 @@ int SystemFileDelete(char *String_File_Name);
  * @return ERROR_CODE_FILE_NOT_FOUND if the file was not found,
  * @return ERROR_CODE_FILE_ALREADY_EXISTS if the new name is attributed to an existing file.
  */
-int SystemFileRename(char *String_Current_File_Name, char *String_New_File_Name);
+int LibrariesFileRename(char *String_Current_File_Name, char *String_New_File_Name);
 
 /** Get the total file system size.
  * The file system can store up to Pointer_Files_Count files, and all files size must not exceed Pointer_Blocks_Count * Pointer_Block_Size bytes.

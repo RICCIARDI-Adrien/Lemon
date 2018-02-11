@@ -1,7 +1,7 @@
 /** @file Network_Initialize_IP_Address.c
  * @author Adrien RICCIARDI
  */
-#include <System.h>
+#include <Libraries.h>
 
 //-------------------------------------------------------------------------------------------------
 // Public functions

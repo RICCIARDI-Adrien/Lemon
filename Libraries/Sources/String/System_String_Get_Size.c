@@ -1,12 +1,12 @@
-/** @file System_String_Get_Size.c
+/** @file Libraries_String_Get_Size.c
  * @author Adrien RICCIARDI
  */
-#include <System.h>
+#include <Libraries.h>
 
 //-------------------------------------------------------------------------------------------------
 // Public functions
 //-------------------------------------------------------------------------------------------------
-unsigned int SystemStringGetSize(char *String)
+unsigned int LibrariesStringGetSize(char *String)
 {
 	unsigned int Size = 0;
 	

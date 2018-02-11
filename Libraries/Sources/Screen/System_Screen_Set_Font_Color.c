@@ -1,12 +1,12 @@
-/** @file System_Screen_Set_Font_Color.c
+/** @file Libraries_Screen_Set_Font_Color.c
  * @author Adrien RICCIARDI
  */
-#include <System.h>
+#include <Libraries.h>
 
 //-------------------------------------------------------------------------------------------------
 // Public functions
 //-------------------------------------------------------------------------------------------------
-void SystemScreenSetFontColor(TSystemScreenColor Color_Code)
+void LibrariesScreenSetFontColor(TLibrariesScreenColor Color_Code)
 {
 	unsigned char Color;
 	

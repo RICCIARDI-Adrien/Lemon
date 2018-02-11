@@ -9,18 +9,18 @@
 #include <Error_Codes.h> // Error codes imported directly from the system
 #include <Math.h>
 #include <Network.h>
-#include <System.h>
+#include <Libraries_Configuration.h>
+#include <Libraries_File.h>
+#include <Libraries_Keyboard.h>
+#include <Libraries_Memory.h>
+#include <Libraries_Menu.h>
+#include <Libraries_Random.h>
+#include <Libraries_Screen.h>
+#include <Libraries_String.h>
+#include <Libraries_System.h>
+#include <Libraries_Timer.h>
+#include <Libraries_UART.h>
 #include <System_Calls.h> // System calls codes imported directly from the system
-#include <System_Configuration.h>
-#include <System_File.h>
-#include <System_Keyboard.h>
-#include <System_Memory.h>
-#include <System_Menu.h>
-#include <System_Random.h>
-#include <System_Screen.h>
-#include <System_String.h>
-#include <System_Timer.h>
-#include <System_UART.h>
 
 //-------------------------------------------------------------------------------------------------
 // Constants and macros

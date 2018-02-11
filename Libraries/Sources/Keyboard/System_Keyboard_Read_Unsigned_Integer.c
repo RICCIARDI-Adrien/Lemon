@@ -1,7 +1,7 @@
-/** @file System_Keyboard_Read_Unsigned_Integer.c
+/** @file Libraries_Keyboard_Read_Unsigned_Integer.c
  * @author Adrien RICCIARDI
  */
-#include <System.h>
+#include <Libraries.h>
 
 //-------------------------------------------------------------------------------------------------
 // Private constants
@@ -12,7 +12,7 @@
 //-------------------------------------------------------------------------------------------------
 // Public functions
 //-------------------------------------------------------------------------------------------------
-unsigned int SystemKeyboardReadUnsignedInteger(void)
+unsigned int LibrariesKeyboardReadUnsignedInteger(void)
 {
 	unsigned char Character;
 	int i = 0;
@@ -41,7 +41,7 @@ unsigned int SystemKeyboardReadUnsignedInteger(void)
 			LibrariesSystemCall(SYSTEM_CALL_SCREEN_WRITE_CHARACTER, '\n', 0, NULL, NULL);
 			break;
 		}
-		else if (!SystemStringIsCharacterADigit(Character)) continue; // Allow only digits
+		else if (!LibrariesStringIsCharacterADigit(Character)) continue; // Allow only digits
 		
 		// Append the character to the string only if there is enough room to
 		if (i < LIBRARIES_KEYBOARD_READ_UNSIGNED_INTEGER_MAXIMUM_CHARACTERS_COUNT)
@@ -55,5 +55,5 @@ unsigned int SystemKeyboardReadUnsignedInteger(void)
 	}
 	
 	// Convert the number to binary
-	return SystemStringConvertStringToUnsignedInteger(String_Number);
+	return LibrariesStringConvertStringToUnsignedInteger(String_Number);
 }

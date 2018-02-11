@@ -1,4 +1,4 @@
-/** @file System_UART.h
+/** @file Libraries_UART.h
  * Read from and write to the PC serial port.
  * @author Adrien RICCIARDI
  */
@@ -43,23 +43,23 @@
  * @return ERROR_CODE_NO_ERROR if the UART was correctly initialized,
  * @return ERROR_CODE_BAD_UART_PARAMETERS if the provided parameters did not come from UART_XXX contants.
  */
-int SystemUARTInitialize(unsigned char Frame_Format, unsigned short Data_Rate_Bauds);
+int LibrariesUARTInitialize(unsigned char Frame_Format, unsigned short Data_Rate_Bauds);
 
 /** Receive a byte from the serial port.
  * @return The received byte.
  * @note This is a blocking function.
  */
-unsigned char SystemUARTReadByte(void);
+unsigned char LibrariesUARTReadByte(void);
 
 /** Send a byte via serial port.
  * @param Byte The byte to send.
  */
-void SystemUARTWriteByte(unsigned char Byte);
+void LibrariesUARTWriteByte(unsigned char Byte);
 
 /** Tell if data was received by the UART.
  * @return 1 if there is data to read, or 0 if no data was received.
  * @note This is a non-blocking function.
  */
-int SystemUARTIsDataReceived(void);
+int LibrariesUARTIsDataReceived(void);
 
 #endif

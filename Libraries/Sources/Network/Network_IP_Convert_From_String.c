@@ -1,7 +1,7 @@
 /** @file Network_IP_Convert_From_String.c
  * @author Adrien RICCIARDI
  */
-#include <System.h>
+#include <Libraries.h>
 
 //-------------------------------------------------------------------------------------------------
 // Public functions
@@ -24,7 +24,7 @@ int NetworkIPConvertFromString(char *String_IP_Address, unsigned int *Pointer_IP
 			// The string is terminated
 			if (Character == 0) break;
 			// The character is a digit
-			else if (SystemStringIsCharacterADigit(Character))
+			else if (LibrariesStringIsCharacterADigit(Character))
 			{
 				// Append the digit
 				String_Byte[Byte_String_Offset] = Character;
@@ -51,7 +51,7 @@ int NetworkIPConvertFromString(char *String_IP_Address, unsigned int *Pointer_IP
 		if (String_Byte[0] == 0) return 1;
 		
 		// Convert the number to binary
-		Byte = SystemStringConvertStringToUnsignedInteger(String_Byte);
+		Byte = LibrariesStringConvertStringToUnsignedInteger(String_Byte);
 		if (Byte > 255) return 1; // Make sure the byte value is in range [0..255]
 		
 		// Append the converted byte to the result in a big endian way

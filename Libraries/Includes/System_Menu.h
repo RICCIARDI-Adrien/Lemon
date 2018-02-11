@@ -1,11 +1,11 @@
-/** @file System_Menu.h
+/** @file Libraries_Menu.h
  * Display text-based menus.
  * @author Adrien RICCIARDI
  */
 #ifndef H_LIBRARIES_MENU_H
 #define H_LIBRARIES_MENU_H
 
-#include <System.h> // To have the colors definition
+#include <Libraries.h> // To have the colors definition
 
 //-------------------------------------------------------------------------------------------------
 // Constants
@@ -29,7 +29,7 @@ typedef struct
 	char *String_Title; //!< The menu title.
 	char *String_User_Prompt; //!< The prompt displayed to the user.
 	char *String_Items[LIBRARIES_MENU_MAXIMUM_ITEMS_COUNT]; //!< All menu items, the array must be NULL-terminated if not all items are filled.
-} TSystemMenu;
+} TLibrariesMenu;
 
 //-------------------------------------------------------------------------------------------------
 // Functions
@@ -38,6 +38,6 @@ typedef struct
  * @param Pointer_Menu The menu to display.
  * @return The selected item number (starting from 1 for the first item).
  */
-int SystemMenuDisplay(TSystemMenu *Pointer_Menu);
+int LibrariesMenuDisplay(TLibrariesMenu *Pointer_Menu);
 
 #endif

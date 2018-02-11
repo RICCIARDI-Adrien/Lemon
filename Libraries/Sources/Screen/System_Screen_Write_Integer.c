@@ -1,12 +1,12 @@
-/** @file System_Screen_Write_Integer.c
+/** @file Libraries_Screen_Write_Integer.c
  * @author Adrien RICCIARDI
  */
-#include <System.h>
+#include <Libraries.h>
 
 //-------------------------------------------------------------------------------------------------
 // Public functions
 //-------------------------------------------------------------------------------------------------
-void SystemScreenWriteInteger(int Integer)
+void LibrariesScreenWriteInteger(int Integer)
 {
 	char String_Number[12]; // The minus sign + 10 digits (the maximum digits count for a 32-bit number) + terminating zero
 	int Temp, Display_Index = 0, Is_Number_Negative = 0;
@@ -18,7 +18,7 @@ void SystemScreenWriteInteger(int Integer)
 		String_Number[1] = 0;
 	}
 	// Handle 32-bit minimum negative value as it can't be represented on a 32-bit unsigned int
-	else if (Integer == -2147483647 - 1) SystemStringCopy("-2147483648", String_Number); // Can't directly use the -2147483648 constant or the compiler will moan
+	else if (Integer == -2147483647 - 1) LibrariesStringCopy("-2147483648", String_Number); // Can't directly use the -2147483648 constant or the compiler will moan
 	else
 	{
 		// Store number sign for later use

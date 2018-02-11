@@ -1,12 +1,12 @@
-/** @file System_File_Open.c
+/** @file Libraries_File_Open.c
  * @author Adrien RICCIARDI
  */
-#include <System.h>
+#include <Libraries.h>
 
 //-------------------------------------------------------------------------------------------------
 // Public functions
 //-------------------------------------------------------------------------------------------------
-int SystemFileOpen(char *String_File_Name, TSystemFileOpeningMode Opening_Mode, unsigned int *Pointer_File_ID)
+int LibrariesFileOpen(char *String_File_Name, TLibrariesFileOpeningMode Opening_Mode, unsigned int *Pointer_File_ID)
 {
 	// Check for a NULL file name as the kernel can't be annoyed with this
 	if (String_File_Name == NULL) return ERROR_CODE_BAD_FILE_NAME;
