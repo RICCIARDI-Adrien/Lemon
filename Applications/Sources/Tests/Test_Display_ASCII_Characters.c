@@ -15,7 +15,7 @@
 //-------------------------------------------------------------------------------------------------------------------------------
 int main(void)
 {
-	unsigned char Video_Buffer[SYSTEM_SCREEN_ROWS_COUNT * SYSTEM_SCREEN_COLUMNS_COUNT * 2];
+	unsigned char Video_Buffer[LIBRARIES_SCREEN_ROWS_COUNT * LIBRARIES_SCREEN_COLUMNS_COUNT * 2];
 	unsigned int Row, Column, Index = 0;
 	unsigned char Character_Code = 0;
 	
@@ -23,7 +23,7 @@ int main(void)
 	for (Row = 0; Row < sizeof(Video_Buffer); Row += 2)
 	{
 		Video_Buffer[Row] = ' ';
-		Video_Buffer[Row + 1] = SYSTEM_SCREEN_MAKE_COLOR(SYSTEM_SCREEN_COLOR_BLACK, SYSTEM_SCREEN_COLOR_BLACK);
+		Video_Buffer[Row + 1] = LIBRARIES_SCREEN_MAKE_COLOR(LIBRARIES_SCREEN_COLOR_BLACK, LIBRARIES_SCREEN_COLOR_BLACK);
 	}
 	
 	// Display characters
@@ -32,13 +32,13 @@ int main(void)
 		for (Column = 0; Column < LINE_COLUMNS_COUNT; Column++)
 		{
 			Video_Buffer[Index] = Character_Code;
-			Video_Buffer[Index + 1] = SYSTEM_SCREEN_MAKE_COLOR(SYSTEM_SCREEN_COLOR_WHITE, SYSTEM_SCREEN_COLOR_BLACK);
+			Video_Buffer[Index + 1] = LIBRARIES_SCREEN_MAKE_COLOR(LIBRARIES_SCREEN_COLOR_WHITE, LIBRARIES_SCREEN_COLOR_BLACK);
 			Index += 2;
 			Character_Code++;
 		}
 		
 		// Go to the next line beginning
-		Index += (SYSTEM_SCREEN_COLUMNS_COUNT - LINE_COLUMNS_COUNT) * 2;
+		Index += (LIBRARIES_SCREEN_COLUMNS_COUNT - LINE_COLUMNS_COUNT) * 2;
 	}
 	
 	SystemScreenDisplayBuffer(Video_Buffer);

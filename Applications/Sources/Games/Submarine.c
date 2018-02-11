@@ -10,13 +10,13 @@
 // Private constants
 //-------------------------------------------------------------------------------------------------
 /** The player in-game color. */
-#define SUBMARINE_ALIVE_PLAYER_COLOR SYSTEM_SCREEN_MAKE_COLOR(SYSTEM_SCREEN_COLOR_LIGHT_GRAY, SYSTEM_SCREEN_COLOR_LIGHT_GRAY)
+#define SUBMARINE_ALIVE_PLAYER_COLOR LIBRARIES_SCREEN_MAKE_COLOR(LIBRARIES_SCREEN_COLOR_LIGHT_GRAY, LIBRARIES_SCREEN_COLOR_LIGHT_GRAY)
 /** The player dead color. */
-#define SUBMARINE_DEAD_PLAYER_COLOR SYSTEM_SCREEN_MAKE_COLOR(SYSTEM_SCREEN_COLOR_RED, SYSTEM_SCREEN_COLOR_RED)
+#define SUBMARINE_DEAD_PLAYER_COLOR LIBRARIES_SCREEN_MAKE_COLOR(LIBRARIES_SCREEN_COLOR_RED, LIBRARIES_SCREEN_COLOR_RED)
 /** The sea color. */
-#define SUBMARINE_SEA_COLOR SYSTEM_SCREEN_MAKE_COLOR(SYSTEM_SCREEN_COLOR_BLUE, SYSTEM_SCREEN_COLOR_BLUE)
+#define SUBMARINE_SEA_COLOR LIBRARIES_SCREEN_MAKE_COLOR(LIBRARIES_SCREEN_COLOR_BLUE, LIBRARIES_SCREEN_COLOR_BLUE)
 /** The obstacles color. */
-#define SUBMARINE_OBSTACLE_COLOR SYSTEM_SCREEN_MAKE_COLOR(SYSTEM_SCREEN_COLOR_BROWN, SYSTEM_SCREEN_COLOR_BROWN)
+#define SUBMARINE_OBSTACLE_COLOR LIBRARIES_SCREEN_MAKE_COLOR(LIBRARIES_SCREEN_COLOR_BROWN, LIBRARIES_SCREEN_COLOR_BROWN)
 
 /** The minimum amount of columns between two obstacles. */
 #define SUBMARINE_MINIMUM_COLUMNS_COUNT_BETWEEN_OBSTACLES 8
@@ -36,10 +36,10 @@
 // Private variables
 //-------------------------------------------------------------------------------------------------
 /** The screen buffer. */
-static TSystemScreenBufferCharacter Submarine_Screen_Buffer[SYSTEM_SCREEN_ROWS_COUNT][SYSTEM_SCREEN_COLUMNS_COUNT];
+static TSystemScreenBufferCharacter Submarine_Screen_Buffer[LIBRARIES_SCREEN_ROWS_COUNT][LIBRARIES_SCREEN_COLUMNS_COUNT];
 
 /** The obstacles array, covering a whole column. */
-static int Submarine_Obstacles_Bitmask[SYSTEM_SCREEN_COLUMNS_COUNT];
+static int Submarine_Obstacles_Bitmask[LIBRARIES_SCREEN_COLUMNS_COUNT];
 
 /** Generate a column of obstacles when this variables reaches SUBMARINE_OBSTACLES_GENERATION_FREQUENCY_DIVIDER. */ 
 static int Submarine_Obstacles_Generation_Counter; // This variable is not local to a function in order to be reset by the game entry point
@@ -56,7 +56,7 @@ static void SubmarineGenerateNextColumn(void)
 	// Move the scene to left
 	SystemScreenScrollBufferToLeft(Submarine_Screen_Buffer);
 	// Scroll the obstacles array too
-	for (i = 0; i < SYSTEM_SCREEN_COLUMNS_COUNT - 1; i++) Submarine_Obstacles_Bitmask[i] = Submarine_Obstacles_Bitmask[i + 1];
+	for (i = 0; i < LIBRARIES_SCREEN_COLUMNS_COUNT - 1; i++) Submarine_Obstacles_Bitmask[i] = Submarine_Obstacles_Bitmask[i + 1];
 	
 	// Should a column of obstacles be generated ?
 	if (Submarine_Obstacles_Generation_Counter == 0)
@@ -68,15 +68,15 @@ static void SubmarineGenerateNextColumn(void)
 		} while ((Obstacles_Bitmask & 0x01FFFFFF) == 0x01FFFFFF); // Avoid generating a fully-filled column (WARNING, change this value if the number of rows changes too)
 		
 		// Fill the column with the obstacles
-		for (i = 0; i < SYSTEM_SCREEN_ROWS_COUNT; i++)
+		for (i = 0; i < LIBRARIES_SCREEN_ROWS_COUNT; i++)
 		{
 			if (Obstacles_Bitmask & (1 << i)) Color = SUBMARINE_OBSTACLE_COLOR; // There is an obstacle on this row
 			else Color = SUBMARINE_SEA_COLOR;
 			
-			Submarine_Screen_Buffer[i][SYSTEM_SCREEN_COLUMNS_COUNT - 1].Color = Color;
+			Submarine_Screen_Buffer[i][LIBRARIES_SCREEN_COLUMNS_COUNT - 1].Color = Color;
 		}
 		
-		Submarine_Obstacles_Bitmask[SYSTEM_SCREEN_COLUMNS_COUNT - 1] = Obstacles_Bitmask;
+		Submarine_Obstacles_Bitmask[LIBRARIES_SCREEN_COLUMNS_COUNT - 1] = Obstacles_Bitmask;
 		
 		// Choose the next column that will contain obstacles
 		Submarine_Obstacles_Generation_Counter = (SystemRandomGenerateNumber() % (SUBMARINE_MAXIMUM_COLUMNS_COUNT_BETWEEN_OBSTACLES - SUBMARINE_MINIMUM_COLUMNS_COUNT_BETWEEN_OBSTACLES)) + SUBMARINE_MINIMUM_COLUMNS_COUNT_BETWEEN_OBSTACLES;
@@ -84,9 +84,9 @@ static void SubmarineGenerateNextColumn(void)
 	else
 	{
 		// Fill the whole column with "water"
-		for (i = 0; i < SYSTEM_SCREEN_ROWS_COUNT; i++) Submarine_Screen_Buffer[i][SYSTEM_SCREEN_COLUMNS_COUNT - 1].Color = SUBMARINE_SEA_COLOR;
+		for (i = 0; i < LIBRARIES_SCREEN_ROWS_COUNT; i++) Submarine_Screen_Buffer[i][LIBRARIES_SCREEN_COLUMNS_COUNT - 1].Color = SUBMARINE_SEA_COLOR;
 		
-		Submarine_Obstacles_Bitmask[SYSTEM_SCREEN_COLUMNS_COUNT - 1] = 0;
+		Submarine_Obstacles_Bitmask[LIBRARIES_SCREEN_COLUMNS_COUNT - 1] = 0;
 		Submarine_Obstacles_Generation_Counter--;
 	}
 }
@@ -96,7 +96,7 @@ static void SubmarineGenerateNextColumn(void)
 //-------------------------------------------------------------------------------------------------
 void Submarine(void)
 {
-	int Scene_Scrolling_Frequency_Divider = 0, Is_Player_Dead = 0, Player_Row = SYSTEM_SCREEN_ROWS_COUNT / 2; // Center the player
+	int Scene_Scrolling_Frequency_Divider = 0, Is_Player_Dead = 0, Player_Row = LIBRARIES_SCREEN_ROWS_COUNT / 2; // Center the player
 	unsigned char Player_Color = SUBMARINE_ALIVE_PLAYER_COLOR;
 	unsigned int Start_Time, End_Time, Time_To_Wait, Score = 0;
 	char String_Score[64], String_Converted_Score_Value[16];
@@ -120,15 +120,15 @@ void Submarine(void)
 		{
 			switch (SystemKeyboardReadCharacter())
 			{
-				case SYSTEM_KEYBOARD_KEY_CODE_ESCAPE:
+				case LIBRARIES_KEYBOARD_KEY_CODE_ESCAPE:
 					return;
 					
-				case SYSTEM_KEYBOARD_KEY_CODE_ARROW_UP:
+				case LIBRARIES_KEYBOARD_KEY_CODE_ARROW_UP:
 					if (Player_Row > 0) Player_Row--;
 					break;
 					
-				case SYSTEM_KEYBOARD_KEY_CODE_ARROW_DOWN:
-					if (Player_Row < SYSTEM_SCREEN_ROWS_COUNT - 1) Player_Row++;
+				case LIBRARIES_KEYBOARD_KEY_CODE_ARROW_DOWN:
+					if (Player_Row < LIBRARIES_SCREEN_ROWS_COUNT - 1) Player_Row++;
 					break;
 			}
 		}
@@ -158,22 +158,22 @@ void Submarine(void)
 		if (Is_Player_Dead)
 		{
 			// Display the string on the screen's middle
-			SystemScreenSetFontColor(SYSTEM_SCREEN_COLOR_WHITE);
-			SystemScreenSetBackgroundColor(SYSTEM_SCREEN_COLOR_RED);
-			SystemScreenSetCursorPosition(SYSTEM_SCREEN_ROWS_COUNT / 2, 0); // The column coordinate will be computed by the SystemScreenWriteCenteredString() function
+			SystemScreenSetFontColor(LIBRARIES_SCREEN_COLOR_WHITE);
+			SystemScreenSetBackgroundColor(LIBRARIES_SCREEN_COLOR_RED);
+			SystemScreenSetCursorPosition(LIBRARIES_SCREEN_ROWS_COUNT / 2, 0); // The column coordinate will be computed by the SystemScreenWriteCenteredString() function
 			SystemScreenWriteCenteredString(STRING_SUBMARINE_PLAYER_LOST);
 			
 			// Display the score string below
 			SystemStringConcatenate(String_Score, STRING_SUBMARINE_PLAYER_SCORE);
 			SystemStringConvertUnsignedIntegerToString(Score, String_Converted_Score_Value);
 			SystemStringConcatenate(String_Score, String_Converted_Score_Value);
-			SystemScreenSetCursorPosition((SYSTEM_SCREEN_ROWS_COUNT / 2) + 1, 0); // The column coordinate will be computed by the SystemScreenWriteCenteredString() function
+			SystemScreenSetCursorPosition((LIBRARIES_SCREEN_ROWS_COUNT / 2) + 1, 0); // The column coordinate will be computed by the SystemScreenWriteCenteredString() function
 			SystemScreenWriteCenteredString(String_Score);
 			
-			SystemScreenSetBackgroundColor(SYSTEM_SCREEN_COLOR_WHITE); // Restore the default background color
+			SystemScreenSetBackgroundColor(LIBRARIES_SCREEN_COLOR_WHITE); // Restore the default background color
 			
 			// Wait for the player to hit "escape" key
-			while (SystemKeyboardReadCharacter() != SYSTEM_KEYBOARD_KEY_CODE_ESCAPE);
+			while (SystemKeyboardReadCharacter() != LIBRARIES_KEYBOARD_KEY_CODE_ESCAPE);
 			return;
 		}
 		

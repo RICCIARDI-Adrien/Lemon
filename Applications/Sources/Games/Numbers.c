@@ -54,7 +54,7 @@ static int ReadUserNumber(void)
 		}
 		
 		// Escape key, return exit code
-		else if (Character == SYSTEM_KEYBOARD_KEY_CODE_ESCAPE) return NUMBERS_EXIT_CODE;
+		else if (Character == LIBRARIES_KEYBOARD_KEY_CODE_ESCAPE) return NUMBERS_EXIT_CODE;
 		
 		// Other characters, accept only digits if there is enough space in string
 		else if ((Character >= '0') && (Character <= '9') && (Digits_Count < sizeof(String) - 1))
@@ -87,9 +87,9 @@ void Numbers(void)
 	while (1)
 	{
 		// Get player's number
-		SystemScreenSetFontColor(SYSTEM_SCREEN_COLOR_LIGHT_BLUE);
+		SystemScreenSetFontColor(LIBRARIES_SCREEN_COLOR_LIGHT_BLUE);
 		SystemScreenWriteString(STRING_NUMBERS_INSERT_NUMBER);
-		SystemScreenSetFontColor(SYSTEM_SCREEN_COLOR_BLUE);
+		SystemScreenSetFontColor(LIBRARIES_SCREEN_COLOR_BLUE);
 		Player_Number = ReadUserNumber();
 				
 		// Quit game ?
@@ -98,7 +98,7 @@ void Numbers(void)
 		Attempts++;
 		if (Attempts >= ATTEMPTS_COUNT)
 		{
-			SystemScreenSetFontColor(SYSTEM_SCREEN_COLOR_RED);
+			SystemScreenSetFontColor(LIBRARIES_SCREEN_COLOR_RED);
 			SystemScreenWriteString(STRING_NUMBERS_PLAYER_LOST_1);
 			SystemScreenWriteInteger(Computer_Number);
 			SystemScreenWriteString(STRING_NUMBERS_PLAYER_LOST_2);
@@ -108,7 +108,7 @@ void Numbers(void)
 		// Compare to computer number
 		if (Player_Number == Computer_Number) // Player won
 		{
-			SystemScreenSetFontColor(SYSTEM_SCREEN_COLOR_GREEN);
+			SystemScreenSetFontColor(LIBRARIES_SCREEN_COLOR_GREEN);
 			SystemScreenWriteString(STRING_NUMBERS_PLAYER_WON_1);
 			SystemScreenWriteInteger(Attempts);
 			SystemScreenWriteString(STRING_NUMBERS_PLAYER_WON_2);
@@ -116,24 +116,24 @@ void Numbers(void)
 		}
 		else if (Player_Number < Computer_Number) // Too small
 		{
-			SystemScreenSetFontColor(SYSTEM_SCREEN_COLOR_RED);
+			SystemScreenSetFontColor(LIBRARIES_SCREEN_COLOR_RED);
 			SystemScreenWriteString(STRING_NUMBERS_NUMBER_TOO_SMALL);
 		}
 		else // Too big
 		{
-			SystemScreenSetFontColor(SYSTEM_SCREEN_COLOR_RED);
+			SystemScreenSetFontColor(LIBRARIES_SCREEN_COLOR_RED);
 			SystemScreenWriteString(STRING_NUMBERS_NUMBER_TOO_BIG);
 		}
 
 		// Show remaining attempts
-		SystemScreenSetFontColor(SYSTEM_SCREEN_COLOR_BLUE);
+		SystemScreenSetFontColor(LIBRARIES_SCREEN_COLOR_BLUE);
 		SystemScreenWriteString(STRING_NUMBERS_REMAINING_ATTEMPTS_1);
 		SystemScreenWriteInteger(ATTEMPTS_COUNT - Attempts);
 		SystemScreenWriteString(STRING_NUMBERS_REMAINING_ATTEMPTS_2);
 	}
 	
 End:
-	SystemScreenSetFontColor(SYSTEM_SCREEN_COLOR_BLUE);
+	SystemScreenSetFontColor(LIBRARIES_SCREEN_COLOR_BLUE);
 	SystemScreenWriteString(STRING_NUMBERS_END);
 	SystemKeyboardReadCharacter();
 }

@@ -86,7 +86,7 @@ int TestsStringConvertStringToUnsignedInteger(void)
 	char *String_Numbers[] = {"12345", "0", "16", "4294967295", "1000000"};
 	unsigned int i, Results[] = {12345, 0, 16, 4294967295UL, 1000000};
 	
-	for (i = 0; i < SYSTEM_GET_ARRAY_ELEMENTS_COUNT(Results); i++)
+	for (i = 0; i < LIBRARIES_GET_ARRAY_ELEMENTS_COUNT(Results); i++)
 	{
 		SystemScreenWriteString("Testing string \"");
 		SystemScreenWriteString(String_Numbers[i]);
@@ -107,7 +107,7 @@ int TestsStringConvertUnsignedIntegerToString(void)
 	char *String_Results[] = {"12345", "0", "16", "4294967295", "1000000"}, String_Result[20];
 	unsigned int i, Numbers[] = {12345, 0, 16, 4294967295UL, 1000000};
 	
-	for (i = 0; i < SYSTEM_GET_ARRAY_ELEMENTS_COUNT(Numbers); i++)
+	for (i = 0; i < LIBRARIES_GET_ARRAY_ELEMENTS_COUNT(Numbers); i++)
 	{
 		SystemScreenWriteString("Testing number ");
 		SystemScreenWriteString(String_Results[i]);
@@ -129,7 +129,7 @@ int TestsStringConvertIntegerToHexadecimal(void)
 	char *String_Results[] = {"00000000", "00000001", "FFFFFFFF", "12345678", "DEADBEEF", "42AC8F9B", "00010B57"}, String_Result[9];
 	unsigned int i, Numbers[] = {0, 1, 0xFFFFFFFF, 0x12345678, 0xDEADBEEF, 0x42AC8F9B, 0x00010B57};
 	
-	for (i = 0; i < SYSTEM_GET_ARRAY_ELEMENTS_COUNT(Numbers); i++)
+	for (i = 0; i < LIBRARIES_GET_ARRAY_ELEMENTS_COUNT(Numbers); i++)
 	{
 		SystemScreenWriteString("Testing number ");
 		SystemScreenWriteString(String_Results[i]);

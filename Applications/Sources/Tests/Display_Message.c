@@ -40,16 +40,16 @@ void DisplayMessageTestStarting(char *String_Message)
 
 void DisplayMessageTestSuccessful(void)
 {
-	SystemScreenSetFontColor(SYSTEM_SCREEN_COLOR_GREEN);
+	SystemScreenSetFontColor(LIBRARIES_SCREEN_COLOR_GREEN);
 	SystemScreenWriteString("Test successful\n\n");
-	SystemScreenSetFontColor(SYSTEM_SCREEN_COLOR_BLUE);
+	SystemScreenSetFontColor(LIBRARIES_SCREEN_COLOR_BLUE);
 }
 
 void DisplayMessageTestFailed(void)
 {
-	SystemScreenSetFontColor(SYSTEM_SCREEN_COLOR_RED);
+	SystemScreenSetFontColor(LIBRARIES_SCREEN_COLOR_RED);
 	SystemScreenWriteString("Test failed\n");
-	SystemScreenSetFontColor(SYSTEM_SCREEN_COLOR_BLUE);
+	SystemScreenSetFontColor(LIBRARIES_SCREEN_COLOR_BLUE);
 	LibrariesSystemExitProgram();
 }
 
@@ -58,26 +58,26 @@ void DisplayMessageErrorAndCode(char *String_Message, int Error_Code)
 	char *String_Unknown_Error_Code = "Unknown error code", *String_Error_Code;
 	
 	// Display the user message
-	SystemScreenSetFontColor(SYSTEM_SCREEN_COLOR_RED);
+	SystemScreenSetFontColor(LIBRARIES_SCREEN_COLOR_RED);
 	SystemScreenWriteString("Error "); // User must provide the message
 	SystemScreenWriteString(String_Message);
 	SystemScreenWriteString(" : ");
 	
 	// Select the corresponding error string (if the error code is known)
-	if ((unsigned int) Error_Code >= SYSTEM_GET_ARRAY_ELEMENTS_COUNT(String_Error_Codes)) String_Error_Code = String_Unknown_Error_Code; // SYSTEM_GET_ARRAY_ELEMENTS_COUNT() returns an unsigned value
+	if ((unsigned int) Error_Code >= LIBRARIES_GET_ARRAY_ELEMENTS_COUNT(String_Error_Codes)) String_Error_Code = String_Unknown_Error_Code; // LIBRARIES_GET_ARRAY_ELEMENTS_COUNT() returns an unsigned value
 	else String_Error_Code = String_Error_Codes[Error_Code];
 	
 	// Display the error code signification
 	SystemScreenWriteString(String_Error_Code);
 	SystemScreenWriteCharacter('\n');
-	SystemScreenSetFontColor(SYSTEM_SCREEN_COLOR_BLUE);
+	SystemScreenSetFontColor(LIBRARIES_SCREEN_COLOR_BLUE);
 }
 
 void DisplayMessageError(char *String_Message)
 {
-	SystemScreenSetFontColor(SYSTEM_SCREEN_COLOR_RED);
+	SystemScreenSetFontColor(LIBRARIES_SCREEN_COLOR_RED);
 	SystemScreenWriteString("Error : ");
 	SystemScreenWriteString(String_Message);
 	SystemScreenWriteCharacter('\n');
-	SystemScreenSetFontColor(SYSTEM_SCREEN_COLOR_BLUE);
+	SystemScreenSetFontColor(LIBRARIES_SCREEN_COLOR_BLUE);
 }

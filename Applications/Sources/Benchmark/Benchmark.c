@@ -46,17 +46,17 @@ static TBenchmarkTest Benchmark_Tests[] =
 {
 	{
 		"processor speed",
-		"Compute Fibonacci suite " SYSTEM_CONVERT_MACRO_VALUE_TO_STRING(BENCHMARK_PROCESSOR_ITERATIONS_COUNT) " times with 32768 bits integer precision",
+		"Compute Fibonacci suite " LIBRARIES_CONVERT_MACRO_VALUE_TO_STRING(BENCHMARK_PROCESSOR_ITERATIONS_COUNT) " times with 32768 bits integer precision",
 		BenchmarkProcessor
 	},
 	{
 		"file system speed",
-		"Open, write to and close a file " SYSTEM_CONVERT_MACRO_VALUE_TO_STRING(BENCHMARK_FILE_SYSTEM_ITERATIONS_COUNT) " times",
+		"Open, write to and close a file " LIBRARIES_CONVERT_MACRO_VALUE_TO_STRING(BENCHMARK_FILE_SYSTEM_ITERATIONS_COUNT) " times",
 		BenchmarkFileSystem
 	},
 	{
 		"system call interface speed",
-		"Execute a simple system call " SYSTEM_CONVERT_MACRO_VALUE_TO_STRING(BENCHMARK_SYSTEM_CALL_ITERATIONS_COUNT) " times",
+		"Execute a simple system call " LIBRARIES_CONVERT_MACRO_VALUE_TO_STRING(BENCHMARK_SYSTEM_CALL_ITERATIONS_COUNT) " times",
 		BenchmarkSystemCall
 	}
 };
@@ -151,9 +151,9 @@ int main(void)
 	{
 		// Display benchmark information
 		SystemScreenWriteString("### Evaluating ");
-		SystemScreenSetFontColor(SYSTEM_SCREEN_COLOR_GREEN);
+		SystemScreenSetFontColor(LIBRARIES_SCREEN_COLOR_GREEN);
 		SystemScreenWriteString(Benchmark_Tests[i].String_Tested_Subsystem);
-		SystemScreenSetFontColor(SYSTEM_SCREEN_COLOR_BLUE);
+		SystemScreenSetFontColor(LIBRARIES_SCREEN_COLOR_BLUE);
 		SystemScreenWriteString(" ###\n");
 		SystemScreenWriteString(Benchmark_Tests[i].String_Description);
 		SystemScreenWriteString(".\n");
@@ -163,9 +163,9 @@ int main(void)
 		
 		// Display elapsed time
 		SystemScreenWriteString("Benchmark duration : ");
-		SystemScreenSetFontColor(SYSTEM_SCREEN_COLOR_GREEN);
+		SystemScreenSetFontColor(LIBRARIES_SCREEN_COLOR_GREEN);
 		SystemScreenWriteUnsignedInteger(End_Time - Start_Time);
-		SystemScreenSetFontColor(SYSTEM_SCREEN_COLOR_BLUE);
+		SystemScreenSetFontColor(LIBRARIES_SCREEN_COLOR_BLUE);
 		SystemScreenWriteString(" milliseconds.\n\n");
 	}
 	

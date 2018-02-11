@@ -42,7 +42,7 @@ static void MainDisplayMessage(char *String_Message_Title, char *String_Message_
 	SystemScreenWriteString(String_Message_Content);
 
 	// Display the footer message
-	SystemScreenSetCursorPosition(SYSTEM_SCREEN_ROWS_COUNT - 1, 0);
+	SystemScreenSetCursorPosition(LIBRARIES_SCREEN_ROWS_COUNT - 1, 0);
 	SystemScreenWriteString(String_Message_Footer);
 }
 
@@ -50,7 +50,7 @@ static void MainDisplayMessage(char *String_Message_Title, char *String_Message_
 static inline void __attribute__((always_inline)) MainWaitForEnterKey(void)
 {
 	// Wait for the Enter key to be pressed
-	while (SystemKeyboardReadCharacter() != SYSTEM_KEYBOARD_KEY_CODE_ENTER);
+	while (SystemKeyboardReadCharacter() != LIBRARIES_KEYBOARD_KEY_CODE_ENTER);
 }
 
 /** Load a file to the internal buffer.
@@ -63,9 +63,9 @@ static int MainLoadFile(char *String_File_Name)
 	unsigned int File_ID;
 	
 	// Try to open the file
-	if (SystemFileOpen(String_File_Name, SYSTEM_FILE_OPENING_MODE_READ, &File_ID) != ERROR_CODE_NO_ERROR)
+	if (SystemFileOpen(String_File_Name, LIBRARIES_FILE_OPENING_MODE_READ, &File_ID) != ERROR_CODE_NO_ERROR)
 	{
-		MainDisplayMessage(STRING_MESSAGE_TITLE_ERROR, STRING_ERROR_CANT_OPEN_FILE, STRING_HIT_ENTER_TO_CONTINUE, SYSTEM_SCREEN_COLOR_RED);
+		MainDisplayMessage(STRING_MESSAGE_TITLE_ERROR, STRING_ERROR_CANT_OPEN_FILE, STRING_HIT_ENTER_TO_CONTINUE, LIBRARIES_SCREEN_COLOR_RED);
 		MainWaitForEnterKey();
 		return 1;
 	}
@@ -74,7 +74,7 @@ static int MainLoadFile(char *String_File_Name)
 	if (SystemFileRead(File_ID, Buffer, CONFIGURATION_BUFFER_MAXIMUM_SIZE, &Buffer_Characters_Count) != ERROR_CODE_NO_ERROR)
 	{
 		SystemFileClose(File_ID);
-		MainDisplayMessage(STRING_MESSAGE_TITLE_ERROR, STRING_ERROR_CANT_LOAD_FILE, STRING_HIT_ENTER_TO_CONTINUE, SYSTEM_SCREEN_COLOR_RED);
+		MainDisplayMessage(STRING_MESSAGE_TITLE_ERROR, STRING_ERROR_CANT_LOAD_FILE, STRING_HIT_ENTER_TO_CONTINUE, LIBRARIES_SCREEN_COLOR_RED);
 		MainWaitForEnterKey();
 		return 1;
 	}
@@ -84,7 +84,7 @@ static int MainLoadFile(char *String_File_Name)
 	// Show a message if the file is too big for the buffer
 	if (SystemFileGetSize(String_File_Name) > CONFIGURATION_BUFFER_MAXIMUM_SIZE)
 	{
-		MainDisplayMessage(STRING_MESSAGE_TITLE_WARNING, STRING_WARNING_FILE_IS_TOO_BIG, STRING_HIT_ENTER_TO_CONTINUE, SYSTEM_SCREEN_COLOR_BROWN);
+		MainDisplayMessage(STRING_MESSAGE_TITLE_WARNING, STRING_WARNING_FILE_IS_TOO_BIG, STRING_HIT_ENTER_TO_CONTINUE, LIBRARIES_SCREEN_COLOR_BROWN);
 		MainWaitForEnterKey();
 	}
 	
@@ -101,9 +101,9 @@ static int MainSaveFile(char *String_File_Name)
 	unsigned int File_ID;
 	
 	// Try to open the file
-	if (SystemFileOpen(String_File_Name, SYSTEM_FILE_OPENING_MODE_WRITE, &File_ID) != ERROR_CODE_NO_ERROR)
+	if (SystemFileOpen(String_File_Name, LIBRARIES_FILE_OPENING_MODE_WRITE, &File_ID) != ERROR_CODE_NO_ERROR)
 	{
-		MainDisplayMessage(STRING_MESSAGE_TITLE_ERROR, STRING_ERROR_CANT_OPEN_FILE, STRING_HIT_ENTER_TO_CONTINUE, SYSTEM_SCREEN_COLOR_RED);
+		MainDisplayMessage(STRING_MESSAGE_TITLE_ERROR, STRING_ERROR_CANT_OPEN_FILE, STRING_HIT_ENTER_TO_CONTINUE, LIBRARIES_SCREEN_COLOR_RED);
 		MainWaitForEnterKey();
 		DisplayRenderToScreen(); // Restore the previously displayed buffer
 		return 1;
@@ -113,7 +113,7 @@ static int MainSaveFile(char *String_File_Name)
 	if (SystemFileWrite(File_ID, Buffer, Buffer_Characters_Count) != ERROR_CODE_NO_ERROR)
 	{
 		SystemFileClose(File_ID);
-		MainDisplayMessage(STRING_MESSAGE_TITLE_ERROR, STRING_ERROR_CANT_SAVE_FILE, STRING_HIT_ENTER_TO_CONTINUE, SYSTEM_SCREEN_COLOR_RED);
+		MainDisplayMessage(STRING_MESSAGE_TITLE_ERROR, STRING_ERROR_CANT_SAVE_FILE, STRING_HIT_ENTER_TO_CONTINUE, LIBRARIES_SCREEN_COLOR_RED);
 		MainWaitForEnterKey();
 		DisplayRenderToScreen(); // Restore the previously displayed buffer
 		return 1;
@@ -197,7 +197,7 @@ static void MainDisplayTextInformation(void)
 	SystemStringConvertUnsignedIntegerToString(Buffer_Characters_Count, String_Number);
 	SystemStringConcatenate(String_Content, String_Number);
 	
-	MainDisplayMessage(STRING_MESSAGE_TEXT_INFORMATION_TITLE, String_Content, STRING_HIT_ENTER_TO_CONTINUE, SYSTEM_SCREEN_COLOR_BLUE);
+	MainDisplayMessage(STRING_MESSAGE_TEXT_INFORMATION_TITLE, String_Content, STRING_HIT_ENTER_TO_CONTINUE, LIBRARIES_SCREEN_COLOR_BLUE);
 	MainWaitForEnterKey();
 	DisplayRenderToScreen(); // Restore the previously displayed buffer
 }
@@ -317,29 +317,29 @@ int main(int argc, char *argv[])
 		switch (Character)
 		{
 			// Exit program
-			case SYSTEM_KEYBOARD_KEY_CODE_ESCAPE:
+			case LIBRARIES_KEYBOARD_KEY_CODE_ESCAPE:
 				// Ask the whether to save the document if the buffer has been modified without being saved
 				if (Is_Text_Modified)
 				{
-					MainDisplayMessage(STRING_MESSAGE_TITLE_WARNING, STRING_MESSAGE_UNSAVED_TEXT_WARNING_CONTENT, STRING_MESSAGE_UNSAVED_TEXT_WARNING_FOOTER, SYSTEM_SCREEN_COLOR_BROWN);
+					MainDisplayMessage(STRING_MESSAGE_TITLE_WARNING, STRING_MESSAGE_UNSAVED_TEXT_WARNING_CONTENT, STRING_MESSAGE_UNSAVED_TEXT_WARNING_FOOTER, LIBRARIES_SCREEN_COLOR_BROWN);
 					
 					// Wait for Enter or Escape key
 					do
 					{
 						Character = SystemKeyboardReadCharacter();
-					} while ((Character != SYSTEM_KEYBOARD_KEY_CODE_ENTER) && (Character != SYSTEM_KEYBOARD_KEY_CODE_ESCAPE));
+					} while ((Character != LIBRARIES_KEYBOARD_KEY_CODE_ENTER) && (Character != LIBRARIES_KEYBOARD_KEY_CODE_ESCAPE));
 					
 					// Save the file if requested to
-					if (Character == SYSTEM_KEYBOARD_KEY_CODE_ENTER) MainSaveFile(String_File_Name);
+					if (Character == LIBRARIES_KEYBOARD_KEY_CODE_ENTER) MainSaveFile(String_File_Name);
 				}
 				MainExitProgram();
 				break; // To make the compiler happy
 				
-			case SYSTEM_KEYBOARD_KEY_CODE_ARROW_UP:
+			case LIBRARIES_KEYBOARD_KEY_CODE_ARROW_UP:
 				if (CursorMoveToUp()) BufferDisplayPage(CursorGetBufferRow());
 				break;
 				
-			case SYSTEM_KEYBOARD_KEY_CODE_ARROW_DOWN:
+			case LIBRARIES_KEYBOARD_KEY_CODE_ARROW_DOWN:
 				if (CursorMoveToDown())
 				{
 					Temp = CursorGetBufferRow();
@@ -349,11 +349,11 @@ int main(int argc, char *argv[])
 				}
 				break;
 				
-			case SYSTEM_KEYBOARD_KEY_CODE_ARROW_LEFT:
+			case LIBRARIES_KEYBOARD_KEY_CODE_ARROW_LEFT:
 				if (CursorMoveToLeft()) BufferDisplayPage(CursorGetBufferRow());
 				break;
 				
-			case SYSTEM_KEYBOARD_KEY_CODE_ARROW_RIGHT:
+			case LIBRARIES_KEYBOARD_KEY_CODE_ARROW_RIGHT:
 				if (CursorMoveToRight())
 				{
 					Temp = CursorGetBufferRow();
@@ -363,11 +363,11 @@ int main(int argc, char *argv[])
 				}
 				break;
 				
-			case SYSTEM_KEYBOARD_KEY_CODE_ORIGIN:
+			case LIBRARIES_KEYBOARD_KEY_CODE_ORIGIN:
 				CursorGoToLineBeginning();
 				break;
 				
-			case SYSTEM_KEYBOARD_KEY_CODE_END:
+			case LIBRARIES_KEYBOARD_KEY_CODE_END:
 				CursorGoToLineEnd();
 				break;
 				
@@ -375,13 +375,13 @@ int main(int argc, char *argv[])
 			// TODO : page down
 			// TODO : insert
 				
-			case SYSTEM_KEYBOARD_KEY_CODE_BACKSPACE:
-			case SYSTEM_KEYBOARD_KEY_CODE_DELETE:
+			case LIBRARIES_KEYBOARD_KEY_CODE_BACKSPACE:
+			case LIBRARIES_KEYBOARD_KEY_CODE_DELETE:
 				if (Buffer_Characters_Count == 0) break; // Nothing to delete if the buffer is empty
 				
 				// Choose the character to remove according to the pressed key (delete removes the current character whereas backspace removes the previous character)
 				Temp = CursorGetBufferCharacterIndex();
-				if (Character == SYSTEM_KEYBOARD_KEY_CODE_BACKSPACE)
+				if (Character == LIBRARIES_KEYBOARD_KEY_CODE_BACKSPACE)
 				{
 					Temp--; // Remove the previous character
 					CursorMoveToLeft(); // Update the cursor location before changing the buffer content to avoid the cursor going to the end of the newly created upper line (which can be longer than the previous line was)
@@ -399,13 +399,13 @@ int main(int argc, char *argv[])
 				Is_Text_Modified = 1;
 				break;
 				
-			case SYSTEM_KEYBOARD_KEY_CODE_F1:
+			case LIBRARIES_KEYBOARD_KEY_CODE_F1:
 				MainDisplayTextInformation();
 				break;
 				
 			default:
 				// Handle Control+<key> shortcuts
-				if (Modifier_Keys_State & (SYSTEM_KEYBOARD_MODIFIER_KEY_BIT_MASK_LEFT_CONTROL | SYSTEM_KEYBOARD_MODIFIER_KEY_BIT_MASK_RIGHT_CONTROL))
+				if (Modifier_Keys_State & (LIBRARIES_KEYBOARD_MODIFIER_KEY_BIT_MASK_LEFT_CONTROL | LIBRARIES_KEYBOARD_MODIFIER_KEY_BIT_MASK_RIGHT_CONTROL))
 				{
 					switch (Character)
 					{
@@ -432,7 +432,7 @@ int main(int argc, char *argv[])
 				else
 				{
 					// Discard function keys
-					if ((Character >= SYSTEM_KEYBOARD_KEY_CODE_F1) && (Character <= SYSTEM_KEYBOARD_KEY_CODE_F11)) break;
+					if ((Character >= LIBRARIES_KEYBOARD_KEY_CODE_F1) && (Character <= LIBRARIES_KEYBOARD_KEY_CODE_F11)) break;
 					
 					// Append the character
 					if (BufferAppendCharacter(CursorGetBufferCharacterIndex(), (char) Character) != 0) break; // Nothing to do if the character could not be added (TODO : error message if the buffer is full)

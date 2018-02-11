@@ -10,9 +10,9 @@
 // Private constants
 //-------------------------------------------------------------------------------------------------
 /** Vertical size of the world. */
-#define WORLD_ROWS_COUNT SYSTEM_SCREEN_ROWS_COUNT
+#define WORLD_ROWS_COUNT LIBRARIES_SCREEN_ROWS_COUNT
 /** Horizontal size of the world. */
-#define WORLD_COLUMNS_COUNT SYSTEM_SCREEN_COLUMNS_COUNT
+#define WORLD_COLUMNS_COUNT LIBRARIES_SCREEN_COLUMNS_COUNT
 
 /** The cell is dead. */
 #define CELL_STATE_DEAD 0
@@ -20,7 +20,7 @@
 #define CELL_STATE_ALIVE 1
 
 /** The foreground and background colors used to display an alive cell. */
-#define CELL_DISPLAYING_COLOR SYSTEM_SCREEN_MAKE_COLOR(SYSTEM_SCREEN_COLOR_GREEN, SYSTEM_SCREEN_COLOR_BLACK)
+#define CELL_DISPLAYING_COLOR LIBRARIES_SCREEN_MAKE_COLOR(LIBRARIES_SCREEN_COLOR_GREEN, LIBRARIES_SCREEN_COLOR_BLACK)
 
 //-------------------------------------------------------------------------------------------------
 // Private variables
@@ -54,14 +54,14 @@ static void CreateNewWorld(void)
 /** Display the current world. */
 static void DisplayWorld(void)
 {
-	unsigned char Video_Buffer[SYSTEM_SCREEN_ROWS_COUNT][SYSTEM_SCREEN_COLUMNS_COUNT * 2];
+	unsigned char Video_Buffer[LIBRARIES_SCREEN_ROWS_COUNT][LIBRARIES_SCREEN_COLUMNS_COUNT * 2];
 	char Character;
 	int Row, Column, Video_Column;
 
 	// Create the raw video buffer representing the world state (yes, this is not optimized)
-	for (Row = 0; Row < SYSTEM_SCREEN_ROWS_COUNT; Row++)
+	for (Row = 0; Row < LIBRARIES_SCREEN_ROWS_COUNT; Row++)
 	{
-		for (Column = 0; Column < SYSTEM_SCREEN_COLUMNS_COUNT; Column++)
+		for (Column = 0; Column < LIBRARIES_SCREEN_COLUMNS_COUNT; Column++)
 		{
 			// Choose the right character to display according to cell state
 			if (Current_World[Row][Column] == CELL_STATE_ALIVE) Character = 'O';
@@ -174,7 +174,7 @@ void GameOfLife(void)
 			switch (SystemKeyboardReadCharacter())
 			{
 				// Exit program
-				case SYSTEM_KEYBOARD_KEY_CODE_ESCAPE:
+				case LIBRARIES_KEYBOARD_KEY_CODE_ESCAPE:
 					return;
 					
 				// Display the world faster

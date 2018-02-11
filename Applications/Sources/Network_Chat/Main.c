@@ -33,15 +33,15 @@ static int MainReadUserMessage(void)
 	switch (Key)
 	{
 		// Exit program
-		case SYSTEM_KEYBOARD_KEY_CODE_ESCAPE:
+		case LIBRARIES_KEYBOARD_KEY_CODE_ESCAPE:
 			return 3;
 			
-		case SYSTEM_KEYBOARD_KEY_CODE_ENTER:
+		case LIBRARIES_KEYBOARD_KEY_CODE_ENTER:
 			if (Main_User_Message_Length == 0) return 0; // The message must be almost one-character long to be displayed
 			return 2;
 			
 		// Remove the last typed character
-		case SYSTEM_KEYBOARD_KEY_CODE_BACKSPACE:
+		case LIBRARIES_KEYBOARD_KEY_CODE_BACKSPACE:
 			if (Main_User_Message_Length == 0) return 0; // Nothing to delete if the message is empty
 			Main_User_Message_Length--;
 			String_Main_User_Message[Main_User_Message_Length] = 0;
@@ -87,7 +87,7 @@ int main(int argc, char *argv[])
 	// IP address
 	if (NetworkInitializeIPAddress(argv[1], &Destination_IP_Address) != 0)
 	{
-		SystemScreenSetFontColor(SYSTEM_SCREEN_COLOR_RED);
+		SystemScreenSetFontColor(LIBRARIES_SCREEN_COLOR_RED);
 		SystemScreenWriteString(STRING_ERROR_INVALID_IP_ADDRESS);
 		return 1;
 	}
@@ -98,20 +98,20 @@ int main(int argc, char *argv[])
 	Result = NetworkInitialize();
 	if (Result == 1)
 	{
-		SystemScreenSetFontColor(SYSTEM_SCREEN_COLOR_RED);
+		SystemScreenSetFontColor(LIBRARIES_SCREEN_COLOR_RED);
 		SystemScreenWriteString(STRING_ERROR_NETWORK_INITIALIZATION_NO_NETWORK_SUPPORT);
 		return 1;
 	}
 	else if (Result == 2)
 	{
-		SystemScreenSetFontColor(SYSTEM_SCREEN_COLOR_RED);
+		SystemScreenSetFontColor(LIBRARIES_SCREEN_COLOR_RED);
 		SystemScreenWriteString(STRING_ERROR_NETWORK_INITIALIZATION_BAD_CONFIGURATION_PARAMETERS);
 		return 1;
 	}
 	
 	if (NetworkInitializeSocket(&Destination_IP_Address, Destination_Port, NETWORK_IP_PROTOCOL_UDP, &Socket) != 0)
 	{
-		SystemScreenSetFontColor(SYSTEM_SCREEN_COLOR_RED);
+		SystemScreenSetFontColor(LIBRARIES_SCREEN_COLOR_RED);
 		SystemScreenWriteString(STRING_ERROR_NETWORK_SOCKET_INITIALIZATION);
 		return 1;
 	}
@@ -130,7 +130,7 @@ int main(int argc, char *argv[])
 			else String_Received_Message[Received_Message_Size] = 0; // Append a terminating zero to the message end
 			
 			// Append the message to the conversation
-			InterfaceDisplayMessage(String_Received_Message, SYSTEM_SCREEN_COLOR_LIGHT_RED);
+			InterfaceDisplayMessage(String_Received_Message, LIBRARIES_SCREEN_COLOR_LIGHT_RED);
 			InterfaceDisplayUserMessage(String_Main_User_Message); // Redraw the input area
 		}
 		
@@ -147,7 +147,7 @@ int main(int argc, char *argv[])
 				// The user sent the message
 				case 2:
 					// Display the message
-					InterfaceDisplayMessage(String_Main_User_Message, SYSTEM_SCREEN_COLOR_LIGHT_BLUE);
+					InterfaceDisplayMessage(String_Main_User_Message, LIBRARIES_SCREEN_COLOR_LIGHT_BLUE);
 					
 					// Append a new line character
 					String_Main_User_Message[Main_User_Message_Length] = '\n'; // The user message buffer is one byte larger than the maximum message size to allow a terminating zero to be inserted, so the new line character appending can't overflow this buffer
@@ -172,8 +172,8 @@ int main(int argc, char *argv[])
 	
 Exit:
 	// Put the cursor at the beginning of the last screen line
-	InterfaceDisplayMessage("", SYSTEM_SCREEN_COLOR_WHITE); // Scroll the screen a last time to make the last line blank
+	InterfaceDisplayMessage("", LIBRARIES_SCREEN_COLOR_WHITE); // Scroll the screen a last time to make the last line blank
 	InterfaceDisplayUserMessage("");
-	SystemScreenSetCursorPosition(SYSTEM_SCREEN_ROWS_COUNT - 1, 0);
+	SystemScreenSetCursorPosition(LIBRARIES_SCREEN_ROWS_COUNT - 1, 0);
 	return 0;
 }

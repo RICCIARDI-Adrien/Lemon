@@ -27,7 +27,7 @@ static int DisplayNextLine(void)
 	unsigned int Read_Bytes_Count;
 	
 	// Read a whole line
-	for (i = 0; i < SYSTEM_SCREEN_COLUMNS_COUNT; i++)
+	for (i = 0; i < LIBRARIES_SCREEN_COLUMNS_COUNT; i++)
 	{
 		// Try to read a character
 		if (SystemFileRead(File_ID, &Character, 1, &Read_Bytes_Count) != ERROR_CODE_NO_ERROR)
@@ -60,7 +60,7 @@ static int DisplayNextPage(void)
 	int i, Result;
 	
 	// Display a full page of text
-	for (i = 0; i < SYSTEM_SCREEN_ROWS_COUNT - 1; i++)
+	for (i = 0; i < LIBRARIES_SCREEN_ROWS_COUNT - 1; i++)
 	{
 		// Read a line
 		Result = DisplayNextLine(); // Recycle i variable
@@ -97,7 +97,7 @@ int CommandMainMore(int argc, char *argv[])
 	String_File_Name = argv[1];
 	
 	// Try to open the provided file
-	if (SystemFileOpen(String_File_Name, SYSTEM_FILE_OPENING_MODE_READ, &File_ID) != ERROR_CODE_NO_ERROR)
+	if (SystemFileOpen(String_File_Name, LIBRARIES_FILE_OPENING_MODE_READ, &File_ID) != ERROR_CODE_NO_ERROR)
 	{
 		SystemScreenWriteString(STRING_COMMAND_MORE_FILE_NOT_FOUND_1);
 		SystemScreenWriteString(String_File_Name);

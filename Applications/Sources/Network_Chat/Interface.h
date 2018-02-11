@@ -11,7 +11,7 @@
 // Constants
 //-------------------------------------------------------------------------------------------------
 /** How long a user message can be. */
-#define INTERFACE_USER_MESSAGE_MAXIMUM_SIZE ((SYSTEM_SCREEN_COLUMNS_COUNT * 4) - 2) // -2 to take the user message prompt into account
+#define INTERFACE_USER_MESSAGE_MAXIMUM_SIZE ((LIBRARIES_SCREEN_COLUMNS_COUNT * 4) - 2) // -2 to take the user message prompt into account
 
 //-------------------------------------------------------------------------------------------------
 // Functions

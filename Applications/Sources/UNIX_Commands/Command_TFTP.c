@@ -39,14 +39,14 @@ int TFTPExecuteCommandGet(char *String_File_Name)
 	// Prepare the read request
 	Packet.Opcode = NETWORK_SWAP_WORD(NETWORK_TFTP_OPCODE_READ_REQUEST);
 	// Append the requested file name
-	SystemStringCopyUpToNumber(String_File_Name, Packet.Request.String_File_Name_And_Mode, SYSTEM_FILE_NAME_LENGTH);
+	SystemStringCopyUpToNumber(String_File_Name, Packet.Request.String_File_Name_And_Mode, LIBRARIES_FILE_NAME_LENGTH);
 	File_Name_Length = SystemStringGetSize(Packet.Request.String_File_Name_And_Mode);
 	// Append the transfer mode
 	SystemStringCopy(STRING_TFTP_TRANSFER_MODE, &Packet.Request.String_File_Name_And_Mode[File_Name_Length + 1]); // Append the string right after the file name string terminating zero
 	Transfer_Mode_Length = SystemStringGetSize(STRING_TFTP_TRANSFER_MODE);
 	
 	// Open the file to be ready to write it's content
-	if (SystemFileOpen(String_File_Name, SYSTEM_FILE_OPENING_MODE_WRITE, &File_ID) != 0)
+	if (SystemFileOpen(String_File_Name, LIBRARIES_FILE_OPENING_MODE_WRITE, &File_ID) != 0)
 	{
 		SystemScreenWriteString(STRING_COMMAND_TFTP_GET_CANT_OPEN_FILE);
 		return 1; // Do not go through Exit label path or a file with the same name than the one that would be opened could be deleted
@@ -121,11 +121,11 @@ int TFTPExecuteCommandGet(char *String_File_Name)
 	} while (Data_Size == NETWORK_TFTP_BLOCK_SIZE); // Exit if the data size is different from a block size
 	
 	// Display a success message
-	SystemScreenSetFontColor(SYSTEM_SCREEN_COLOR_GREEN);
+	SystemScreenSetFontColor(LIBRARIES_SCREEN_COLOR_GREEN);
 	SystemScreenWriteString(STRING_COMMAND_TFTP_GET_DOWNLOAD_SUCCESSFUL_1);
 	SystemScreenWriteUnsignedInteger(NETWORK_SWAP_WORD(Packet.Data.Block_Number));
 	SystemScreenWriteString(STRING_COMMAND_TFTP_GET_DOWNLOAD_SUCCESSFUL_2);
-	SystemScreenSetFontColor(SYSTEM_SCREEN_COLOR_BLUE);
+	SystemScreenSetFontColor(LIBRARIES_SCREEN_COLOR_BLUE);
 	Return_Value = 0;
 	
 Exit:
@@ -146,7 +146,7 @@ int TFTPExecuteCommandPut(char *String_File_Name)
 	int Return_Value = 1;
 	
 	// Try to open the local file
-	if (SystemFileOpen(String_File_Name, SYSTEM_FILE_OPENING_MODE_READ, &File_ID) != 0)
+	if (SystemFileOpen(String_File_Name, LIBRARIES_FILE_OPENING_MODE_READ, &File_ID) != 0)
 	{
 		SystemScreenWriteString(STRING_COMMAND_TFTP_PUT_CANT_OPEN_FILE);
 		goto Exit;
@@ -155,7 +155,7 @@ int TFTPExecuteCommandPut(char *String_File_Name)
 	// Prepare the write request
 	Packet.Opcode = NETWORK_SWAP_WORD(NETWORK_TFTP_OPCODE_WRITE_REQUEST);
 	// Append the sent file name
-	SystemStringCopyUpToNumber(String_File_Name, Packet.Request.String_File_Name_And_Mode, SYSTEM_FILE_NAME_LENGTH);
+	SystemStringCopyUpToNumber(String_File_Name, Packet.Request.String_File_Name_And_Mode, LIBRARIES_FILE_NAME_LENGTH);
 	File_Name_Length = SystemStringGetSize(Packet.Request.String_File_Name_And_Mode);
 	// Append the transfer mode
 	SystemStringCopy(STRING_TFTP_TRANSFER_MODE, &Packet.Request.String_File_Name_And_Mode[File_Name_Length + 1]); // Append the string right after the file name string terminating zero
@@ -230,11 +230,11 @@ int TFTPExecuteCommandPut(char *String_File_Name)
 	} while (Read_Bytes_Count == NETWORK_TFTP_BLOCK_SIZE); // Exit when the whole file has been sent
 	
 	// Display a success message
-	SystemScreenSetFontColor(SYSTEM_SCREEN_COLOR_GREEN);
+	SystemScreenSetFontColor(LIBRARIES_SCREEN_COLOR_GREEN);
 	SystemScreenWriteString(STRING_COMMAND_TFTP_PUT_UPLOAD_SUCCESSFUL_1);
 	SystemScreenWriteUnsignedInteger(Sent_Block_Number);
 	SystemScreenWriteString(STRING_COMMAND_TFTP_PUT_UPLOAD_SUCCESSFUL_2);
-	SystemScreenSetFontColor(SYSTEM_SCREEN_COLOR_BLUE);
+	SystemScreenSetFontColor(LIBRARIES_SCREEN_COLOR_BLUE);
 	Return_Value = 0;
 	
 Exit:
@@ -270,7 +270,7 @@ int CommandMainTFTP(int argc, char __attribute__((unused)) *argv[])
 	}
 	// File name
 	String_File_Name = argv[2];
-	if (SystemStringGetSize(String_File_Name) > SYSTEM_FILE_NAME_LENGTH)
+	if (SystemStringGetSize(String_File_Name) > LIBRARIES_FILE_NAME_LENGTH)
 	{
 		SystemScreenWriteString(STRING_COMMAND_TFTP_FILE_NAME_TOO_LONG);
 		return -1;

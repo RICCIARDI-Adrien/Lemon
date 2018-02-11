@@ -144,7 +144,7 @@ static int ReadUserNumber(void)
 		}
 		
 		// Escape key, return exit code
-		else if (Character == SYSTEM_KEYBOARD_KEY_CODE_ESCAPE) return BRAIN_CALCULATION_EXIT_CODE;
+		else if (Character == LIBRARIES_KEYBOARD_KEY_CODE_ESCAPE) return BRAIN_CALCULATION_EXIT_CODE;
 		
 		// Other characters, accept only digits if there is enough space in string
 		else if ((Character >= '0') && (Character <= '9') && (Digits_Count < sizeof(String) - 1))
@@ -191,7 +191,7 @@ void BrainCalculation(void)
 		{
 			// Show calculus
 			ChooseCalculus(&First_Number, &Operator, &Second_Number, &Result);
-			SystemScreenSetFontColor(SYSTEM_SCREEN_COLOR_LIGHT_BLUE);
+			SystemScreenSetFontColor(LIBRARIES_SCREEN_COLOR_LIGHT_BLUE);
 			SystemScreenWriteString("   ");
 			SystemScreenWriteInteger(First_Number);
 			SystemScreenWriteCharacter(' ');
@@ -199,7 +199,7 @@ void BrainCalculation(void)
 			SystemScreenWriteCharacter(' ');
 			SystemScreenWriteInteger(Second_Number);
 			SystemScreenWriteString("  =  ");
-			SystemScreenSetFontColor(SYSTEM_SCREEN_COLOR_BLUE);
+			SystemScreenSetFontColor(LIBRARIES_SCREEN_COLOR_BLUE);
 			
 			// Get user's number
 			Number = ReadUserNumber();
@@ -217,20 +217,20 @@ void BrainCalculation(void)
 			// Check if user's result is correct
 			if (Number == Result)
 			{
-				SystemScreenSetFontColor(SYSTEM_SCREEN_COLOR_GREEN);
+				SystemScreenSetFontColor(LIBRARIES_SCREEN_COLOR_GREEN);
 				SystemScreenWriteString(STRING_BRAIN_CALCULATION_GOOD_RESULT);
-				SystemScreenSetFontColor(SYSTEM_SCREEN_COLOR_BLUE);
+				SystemScreenSetFontColor(LIBRARIES_SCREEN_COLOR_BLUE);
 				
 				Correct_Results_Count++;
 			}
 			else
 			{
-				SystemScreenSetFontColor(SYSTEM_SCREEN_COLOR_RED);
+				SystemScreenSetFontColor(LIBRARIES_SCREEN_COLOR_RED);
 				SystemScreenWriteString(STRING_BRAIN_CALCULATION_BAD_RESULT_1);
 				SystemScreenWriteInteger(Result);
 				SystemScreenWriteString(STRING_BRAIN_CALCULATION_BAD_RESULT_2);
 				
-				SystemScreenSetFontColor(SYSTEM_SCREEN_COLOR_BLUE);
+				SystemScreenSetFontColor(LIBRARIES_SCREEN_COLOR_BLUE);
 				SystemScreenWriteString(STRING_BRAIN_CALCULATION_CORRECT_ANSWERS_COUNT_1);
 				SystemScreenWriteInteger(Correct_Results_Count);
 				SystemScreenWriteString(STRING_BRAIN_CALCULATION_CORRECT_ANSWERS_COUNT_2);

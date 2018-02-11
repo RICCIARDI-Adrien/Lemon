@@ -50,14 +50,14 @@ static int Wait(unsigned int Period_Counts)
 	// Check only the keyboard if there is no need to wait
 	if (Period_Counts == 0)
 	{
-		if (SystemKeyboardIsKeyAvailable() && (SystemKeyboardReadCharacter() == SYSTEM_KEYBOARD_KEY_CODE_ESCAPE)) return 1;
+		if (SystemKeyboardIsKeyAvailable() && (SystemKeyboardReadCharacter() == LIBRARIES_KEYBOARD_KEY_CODE_ESCAPE)) return 1;
 	}
 	// Or wait the required time
 	else
 	{
 		while (Period_Counts > 0)
 		{
-			if (SystemKeyboardIsKeyAvailable() && (SystemKeyboardReadCharacter() == SYSTEM_KEYBOARD_KEY_CODE_ESCAPE)) return 1;
+			if (SystemKeyboardIsKeyAvailable() && (SystemKeyboardReadCharacter() == LIBRARIES_KEYBOARD_KEY_CODE_ESCAPE)) return 1;
 		
 			SystemTimerWait(50);
 			Period_Counts--;
@@ -101,7 +101,7 @@ void Rain(void)
 	
 	while (1)
 	{
-		SystemScreenSetBackgroundColor(SYSTEM_SCREEN_COLOR_WHITE);
+		SystemScreenSetBackgroundColor(LIBRARIES_SCREEN_COLOR_WHITE);
 		SystemScreenClear();
 		Raindrops_Count = 0;
 		
@@ -110,20 +110,20 @@ void Rain(void)
 			// Choose drop location (avoiding (79, 24) because the console will scroll vertically going to next line)
 			do
 			{
-				Column = SystemRandomGenerateNumber() % SYSTEM_SCREEN_COLUMNS_COUNT;
-				Row = SystemRandomGenerateNumber() % SYSTEM_SCREEN_ROWS_COUNT;
-			} while ((Column == SYSTEM_SCREEN_COLUMNS_COUNT - 1) && (Row == SYSTEM_SCREEN_ROWS_COUNT - 1));
+				Column = SystemRandomGenerateNumber() % LIBRARIES_SCREEN_COLUMNS_COUNT;
+				Row = SystemRandomGenerateNumber() % LIBRARIES_SCREEN_ROWS_COUNT;
+			} while ((Column == LIBRARIES_SCREEN_COLUMNS_COUNT - 1) && (Row == LIBRARIES_SCREEN_ROWS_COUNT - 1));
 			
 			// Print raindrop
 			SystemScreenSetCursorPosition(Row, Column);
-			SystemScreenSetBackgroundColor(SYSTEM_SCREEN_COLOR_BLUE);
+			SystemScreenSetBackgroundColor(LIBRARIES_SCREEN_COLOR_BLUE);
 			SystemScreenWriteCharacter(' ');
 			Raindrops_Count++;
 			
 			// Print loop count
-			SystemScreenSetCursorPosition(SYSTEM_SCREEN_ROWS_COUNT - 1, 0);
-			SystemScreenSetBackgroundColor(SYSTEM_SCREEN_COLOR_WHITE);
-			SystemScreenSetFontColor(SYSTEM_SCREEN_COLOR_LIGHT_GREEN);
+			SystemScreenSetCursorPosition(LIBRARIES_SCREEN_ROWS_COUNT - 1, 0);
+			SystemScreenSetBackgroundColor(LIBRARIES_SCREEN_COLOR_WHITE);
+			SystemScreenSetFontColor(LIBRARIES_SCREEN_COLOR_LIGHT_GREEN);
 			SystemScreenWriteString(STRING_RAIN_STATISTICS_1);
 			SystemScreenWriteInteger(Raindrops_Count);
 			SystemScreenWriteString(STRING_RAIN_STATISTICS_2);

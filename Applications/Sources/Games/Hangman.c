@@ -10,7 +10,7 @@
 // Private constants and macros
 //-------------------------------------------------------------------------------------------------
 /** Compute automatically the total number of words. */
-#define WORDS_TOTAL_COUNT SYSTEM_GET_ARRAY_ELEMENTS_COUNT(String_Words)
+#define WORDS_TOTAL_COUNT LIBRARIES_GET_ARRAY_ELEMENTS_COUNT(String_Words)
 
 /** The word to find row position. */
 #define ROW_FOUND_LETTERS 2
@@ -86,7 +86,7 @@ static char ReadLetter(void)
 		if ((Letter >= 'a') && (Letter <= 'z')) Letter -= 32;
 		
 		// Is the character really a letter (or Escape) ?
-		if (((Letter >= 'A') && (Letter <= 'Z')) || (Letter == SYSTEM_KEYBOARD_KEY_CODE_ESCAPE)) return Letter;
+		if (((Letter >= 'A') && (Letter <= 'Z')) || (Letter == LIBRARIES_KEYBOARD_KEY_CODE_ESCAPE)) return Letter;
 	}
 }
 
@@ -115,10 +115,10 @@ static void DisplayRemainingAttempts(int Remaining_Attempts)
 {
 	// Display the remaining attempts
 	SystemScreenSetCursorPosition(ROW_REMAINING_ATTEMPTS, 0);
-	SystemScreenSetFontColor(SYSTEM_SCREEN_COLOR_LIGHT_BLUE);
+	SystemScreenSetFontColor(LIBRARIES_SCREEN_COLOR_LIGHT_BLUE);
 	SystemScreenWriteInteger(Remaining_Attempts);
 	SystemScreenWriteString("     "); // Clear the eventually remaining characters (as the number is decrementing)
-	SystemScreenSetFontColor(SYSTEM_SCREEN_COLOR_BLUE);
+	SystemScreenSetFontColor(LIBRARIES_SCREEN_COLOR_BLUE);
 }
 
 /** Display an invalid letter.
@@ -128,10 +128,10 @@ static void DisplayInvalidLetter(char Letter)
 {
 	// Display the letter
 	SystemScreenSetCursorPosition(ROW_INVALID_LETTERS, Invalid_Letters_Column);
-	SystemScreenSetFontColor(SYSTEM_SCREEN_COLOR_LIGHT_BLUE);
+	SystemScreenSetFontColor(LIBRARIES_SCREEN_COLOR_LIGHT_BLUE);
 	SystemScreenWriteCharacter(Letter);
 	SystemScreenWriteCharacter(' ');
-	SystemScreenSetFontColor(SYSTEM_SCREEN_COLOR_BLUE);
+	SystemScreenSetFontColor(LIBRARIES_SCREEN_COLOR_BLUE);
 	Invalid_Letters_Column += 2;
 }
 
@@ -161,7 +161,7 @@ static int Play(char *String_Word_To_Find, int Attempts_Count)
 	{
 		// Get the next letter
 		Letter = ReadLetter();
-		if (Letter == SYSTEM_KEYBOARD_KEY_CODE_ESCAPE) return 2;
+		if (Letter == LIBRARIES_KEYBOARD_KEY_CODE_ESCAPE) return 2;
 		
 		// Is this letter present in the word ?
 		if (IsLetterPresentInWord(Letter, String_Word_To_Find))
@@ -223,9 +223,9 @@ void Hangman(void)
 	{
 		// Display the title
 		SystemScreenClear();
-		SystemScreenSetFontColor(SYSTEM_SCREEN_COLOR_GREEN);
+		SystemScreenSetFontColor(LIBRARIES_SCREEN_COLOR_GREEN);
 		SystemScreenWriteCenteredString(STRING_HANGMAN_TITLE);
-		SystemScreenSetFontColor(SYSTEM_SCREEN_COLOR_BLUE);
+		SystemScreenSetFontColor(LIBRARIES_SCREEN_COLOR_BLUE);
 		SystemScreenWriteCharacter('\n');
 			
 		// Display the interface parts that will never change
@@ -239,12 +239,12 @@ void Hangman(void)
 		{
 			// The player found all words
 			SystemScreenClear();
-			SystemScreenSetFontColor(SYSTEM_SCREEN_COLOR_GREEN);
+			SystemScreenSetFontColor(LIBRARIES_SCREEN_COLOR_GREEN);
 			SystemScreenWriteString(STRING_HANGMAN_GAME_WON_1);
-			SystemScreenSetFontColor(SYSTEM_SCREEN_COLOR_BLUE);
+			SystemScreenSetFontColor(LIBRARIES_SCREEN_COLOR_BLUE);
 			SystemScreenWriteString(STRING_HANGMAN_GAME_WON_2);
 			
-			while (SystemKeyboardReadCharacter() != SYSTEM_KEYBOARD_KEY_CODE_ENTER);
+			while (SystemKeyboardReadCharacter() != LIBRARIES_KEYBOARD_KEY_CODE_ENTER);
 			SystemScreenClear();
 			return;
 		}
@@ -255,23 +255,23 @@ void Hangman(void)
 			case 0:
 				// The player successfully found the word
 				SystemScreenClear();
-				SystemScreenSetFontColor(SYSTEM_SCREEN_COLOR_GREEN);
+				SystemScreenSetFontColor(LIBRARIES_SCREEN_COLOR_GREEN);
 				SystemScreenWriteString(STRING_HANGMAN_WORD_FOUND_1);
-				SystemScreenSetFontColor(SYSTEM_SCREEN_COLOR_BLUE);
+				SystemScreenSetFontColor(LIBRARIES_SCREEN_COLOR_BLUE);
 				SystemScreenWriteString(STRING_HANGMAN_WORD_FOUND_2);
-				while (SystemKeyboardReadCharacter() != SYSTEM_KEYBOARD_KEY_CODE_ENTER);
+				while (SystemKeyboardReadCharacter() != LIBRARIES_KEYBOARD_KEY_CODE_ENTER);
 				break;
 			
 			case 1:
 				// The player did not find the word
 				SystemScreenClear();
-				SystemScreenSetFontColor(SYSTEM_SCREEN_COLOR_RED);
+				SystemScreenSetFontColor(LIBRARIES_SCREEN_COLOR_RED);
 				SystemScreenWriteString(STRING_HANGMAN_WORD_NOT_FOUND_1);
-				SystemScreenSetFontColor(SYSTEM_SCREEN_COLOR_BLUE);
+				SystemScreenSetFontColor(LIBRARIES_SCREEN_COLOR_BLUE);
 				SystemScreenWriteString(STRING_HANGMAN_WORD_NOT_FOUND_2);
 				SystemScreenWriteString(String_Current_Word);
 				SystemScreenWriteString(STRING_HANGMAN_WORD_NOT_FOUND_3);
-				while (SystemKeyboardReadCharacter() != SYSTEM_KEYBOARD_KEY_CODE_ENTER);
+				while (SystemKeyboardReadCharacter() != LIBRARIES_KEYBOARD_KEY_CODE_ENTER);
 				return;
 			
 			default:
