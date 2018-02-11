@@ -2,7 +2,7 @@
  * @see Display.h for description.
  * @author Adrien RICCIARDI
  */
-#include <System.h>
+#include <Libraries.h>
 #include "Configuration.h"
 #include "Display.h"
 
@@ -10,7 +10,7 @@
 // Private variables
 //-------------------------------------------------------------------------------------------------
 /** The buffer that will be sent verbatim to the VGA video memory. */
-static TSystemScreenBufferCharacter Display_Video_Memory[CONFIGURATION_DISPLAY_ROWS_COUNT * CONFIGURATION_DISPLAY_COLUMNS_COUNT];
+static TLibrariesScreenBufferCharacter Display_Video_Memory[CONFIGURATION_DISPLAY_ROWS_COUNT * CONFIGURATION_DISPLAY_COLUMNS_COUNT];
 
 /** The cursor row location. */
 static unsigned int Display_Cursor_Row = 0;
@@ -26,7 +26,7 @@ static unsigned char Display_Color = LIBRARIES_SCREEN_MAKE_COLOR(CONFIGURATION_T
 void DisplayClear(void)
 {
 	// Clear the screen
-	SystemScreenClearBuffer(Display_Video_Memory, LIBRARIES_SCREEN_MAKE_COLOR(CONFIGURATION_TEXT_FOREGROUND_COLOR, CONFIGURATION_TEXT_BACKGROUND_COLOR));
+	LibrariesScreenClearBuffer(Display_Video_Memory, LIBRARIES_SCREEN_MAKE_COLOR(CONFIGURATION_TEXT_FOREGROUND_COLOR, CONFIGURATION_TEXT_BACKGROUND_COLOR));
 	
 	// Put the cursor to the upper left corner
 	Display_Cursor_Row = 0;
@@ -35,7 +35,7 @@ void DisplayClear(void)
 
 void DisplayWriteCharacter(char Character)
 {
-	TSystemScreenBufferCharacter Display_Character;
+	TLibrariesScreenBufferCharacter Display_Character;
 	
 	switch (Character)
 	{
@@ -73,7 +73,7 @@ void DisplayWriteCharacter(char Character)
 	}
 }
 
-void DisplaySetBackgroundColor(TSystemScreenColor Color_Code)
+void DisplaySetBackgroundColor(TLibrariesScreenColor Color_Code)
 {
 	Display_Color &= 0x0F; // Erase the current background color
 	Display_Color |= (Color_Code & 0x0F) << 4; // Set the new one
@@ -96,5 +96,5 @@ void DisplaySetCursorPosition(unsigned int Row, unsigned int Column)
 
 void DisplayRenderToScreen(void)
 {
-	SystemScreenDisplayBuffer((unsigned char *) Display_Video_Memory);
+	LibrariesScreenDisplayBuffer((unsigned char *) Display_Video_Memory);
 }

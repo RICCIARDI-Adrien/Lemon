@@ -2,7 +2,7 @@
  * A more complete "list" command, like "ls -lh | more".
  * @author Adrien RICCIARDI
  */
-#include <System.h>
+#include <Libraries.h>
 #include "Commands.h"
 #include "Strings.h"
 
@@ -118,7 +118,7 @@ int CommandMainLs(int argc, char __attribute__((unused)) *argv[])
 	// Check parameters
 	if (argc != 1)
 	{
-		SystemScreenWriteString(STRING_COMMAND_LS_USAGE);
+		LibrariesScreenWriteString(STRING_COMMAND_LS_USAGE);
 		return -1;
 	}
 	
@@ -126,22 +126,22 @@ int CommandMainLs(int argc, char __attribute__((unused)) *argv[])
 	SystemFileSystemGetTotalSize(&Block_Size, &Total_Blocks_Count, &Total_Files_Count);
 	if (Total_Files_Count > MAXIMUM_FILES_COUNT)
 	{
-		SystemScreenSetFontColor(LIBRARIES_SCREEN_COLOR_RED);
-		SystemScreenWriteString(STRING_COMMAND_LS_NOT_ENOUGH_SPACE_TO_STORE_FILES);
-		SystemScreenSetFontColor(LIBRARIES_SCREEN_COLOR_BLUE);
+		LibrariesScreenSetFontColor(LIBRARIES_SCREEN_COLOR_RED);
+		LibrariesScreenWriteString(STRING_COMMAND_LS_NOT_ENOUGH_SPACE_TO_STORE_FILES);
+		LibrariesScreenSetFontColor(LIBRARIES_SCREEN_COLOR_BLUE);
 		return -1;
 	}
 	
 	// Get all hard disk files name and size
-	SystemFileListInitialize();
+	LibrariesFileListInitialize();
 	while (1)
 	{
 		// Get the next file name
-		SystemFileListNext(Files_Informations[Files_Count].String_File_Name);
+		LibrariesFileListNext(Files_Informations[Files_Count].String_File_Name);
 		if (Files_Informations[Files_Count].String_File_Name[0] == 0) break;
 		
 		// Get the file size
-		Files_Informations[Files_Count].Size_Bytes = SystemFileGetSize(Files_Informations[Files_Count].String_File_Name);
+		Files_Informations[Files_Count].Size_Bytes = LibrariesFileGetSize(Files_Informations[Files_Count].String_File_Name);
 		
 		// Add the file informations to the pointers array
 		Pointer_Sorted_Files_Informations[Files_Count] = &(Files_Informations[Files_Count]);
@@ -156,26 +156,26 @@ int CommandMainLs(int argc, char __attribute__((unused)) *argv[])
 	for (i = 0; i < Files_Count; i++)
 	{
 		// Display the file name
-		SystemScreenWriteString(Pointer_Sorted_Files_Informations[i]->String_File_Name);
+		LibrariesScreenWriteString(Pointer_Sorted_Files_Informations[i]->String_File_Name);
 		
 		// Fill the eventually remaining space up to the beginning of the "file size" column
-		Remaining_Characters = (LIBRARIES_FILE_NAME_LENGTH + 4) - SystemStringGetSize(Pointer_Sorted_Files_Informations[i]->String_File_Name);
-		for ( ; Remaining_Characters > 0; Remaining_Characters--) SystemScreenWriteCharacter(' ');
+		Remaining_Characters = (LIBRARIES_FILE_NAME_LENGTH + 4) - LibrariesStringGetSize(Pointer_Sorted_Files_Informations[i]->String_File_Name);
+		for ( ; Remaining_Characters > 0; Remaining_Characters--) LibrariesScreenWriteCharacter(' ');
 		
 		// Display the file size
-		SystemScreenWriteUnsignedInteger(Pointer_Sorted_Files_Informations[i]->Size_Bytes);
-		SystemScreenWriteString(STRING_COMMAND_LS_DISPLAYED_UNIT);
+		LibrariesScreenWriteUnsignedInteger(Pointer_Sorted_Files_Informations[i]->Size_Bytes);
+		LibrariesScreenWriteString(STRING_COMMAND_LS_DISPLAYED_UNIT);
 		
 		// Wait for the user to press a key if the screen is full of displayed files
 		Displayed_Files_Count++;
 		if ((Displayed_Files_Count == LIBRARIES_SCREEN_ROWS_COUNT - 1) && (i < Files_Count - 1)) // Do not display the wait prompt if there is no more file to display
 		{
-			SystemScreenSetFontColor(LIBRARIES_SCREEN_COLOR_LIGHT_BLUE);
-			SystemScreenWriteString(STRING_COMMAND_LS_WAIT_FOR_USER_INPUT);
-			SystemScreenSetFontColor(LIBRARIES_SCREEN_COLOR_BLUE);
+			LibrariesScreenSetFontColor(LIBRARIES_SCREEN_COLOR_LIGHT_BLUE);
+			LibrariesScreenWriteString(STRING_COMMAND_LS_WAIT_FOR_USER_INPUT);
+			LibrariesScreenSetFontColor(LIBRARIES_SCREEN_COLOR_BLUE);
 			
-			SystemKeyboardReadCharacter();
-			SystemScreenWriteCharacter('\n');
+			LibrariesKeyboardReadCharacter();
+			LibrariesScreenWriteCharacter('\n');
 			
 			Displayed_Files_Count = 0;
 		}

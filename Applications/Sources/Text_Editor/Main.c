@@ -2,7 +2,7 @@
  * Text editor main loop.
  * @author Adrien RICCIARDI
  */
-#include <System.h>
+#include <Libraries.h>
 #include "Buffer.h"
 #include "Configuration.h"
 #include "Cursor.h"
@@ -28,29 +28,29 @@ static unsigned int Main_Copy_Buffer_Length = 0;
  * @param String_Message_Footer What to display on the screen bottom line.
  * @param Message_Title_Color The message content color.
  */
-static void MainDisplayMessage(char *String_Message_Title, char *String_Message_Content, char *String_Message_Footer, TSystemScreenColor Message_Title_Color)
+static void MainDisplayMessage(char *String_Message_Title, char *String_Message_Content, char *String_Message_Footer, TLibrariesScreenColor Message_Title_Color)
 {
-	SystemScreenClear();
+	LibrariesScreenClear();
 	
 	// Display the title with the specified color
-	SystemScreenSetFontColor(Message_Title_Color);
-	SystemScreenWriteCenteredString(String_Message_Title);
-	SystemScreenSetFontColor(CONFIGURATION_TEXT_FOREGROUND_COLOR); // Restore the default color
-	SystemScreenWriteString("\n\n");
+	LibrariesScreenSetFontColor(Message_Title_Color);
+	LibrariesScreenWriteCenteredString(String_Message_Title);
+	LibrariesScreenSetFontColor(CONFIGURATION_TEXT_FOREGROUND_COLOR); // Restore the default color
+	LibrariesScreenWriteString("\n\n");
 	
 	// Display the message content 
-	SystemScreenWriteString(String_Message_Content);
+	LibrariesScreenWriteString(String_Message_Content);
 
 	// Display the footer message
-	SystemScreenSetCursorPosition(LIBRARIES_SCREEN_ROWS_COUNT - 1, 0);
-	SystemScreenWriteString(String_Message_Footer);
+	LibrariesScreenSetCursorPosition(LIBRARIES_SCREEN_ROWS_COUNT - 1, 0);
+	LibrariesScreenWriteString(String_Message_Footer);
 }
 
 /** Wait for the user to press the enter key. */
 static inline void __attribute__((always_inline)) MainWaitForEnterKey(void)
 {
 	// Wait for the Enter key to be pressed
-	while (SystemKeyboardReadCharacter() != LIBRARIES_KEYBOARD_KEY_CODE_ENTER);
+	while (LibrariesKeyboardReadCharacter() != LIBRARIES_KEYBOARD_KEY_CODE_ENTER);
 }
 
 /** Load a file to the internal buffer.
@@ -63,7 +63,7 @@ static int MainLoadFile(char *String_File_Name)
 	unsigned int File_ID;
 	
 	// Try to open the file
-	if (SystemFileOpen(String_File_Name, LIBRARIES_FILE_OPENING_MODE_READ, &File_ID) != ERROR_CODE_NO_ERROR)
+	if (LibrariesFileOpen(String_File_Name, LIBRARIES_FILE_OPENING_MODE_READ, &File_ID) != ERROR_CODE_NO_ERROR)
 	{
 		MainDisplayMessage(STRING_MESSAGE_TITLE_ERROR, STRING_ERROR_CANT_OPEN_FILE, STRING_HIT_ENTER_TO_CONTINUE, LIBRARIES_SCREEN_COLOR_RED);
 		MainWaitForEnterKey();
@@ -71,18 +71,18 @@ static int MainLoadFile(char *String_File_Name)
 	}
 	
 	// Load file content
-	if (SystemFileRead(File_ID, Buffer, CONFIGURATION_BUFFER_MAXIMUM_SIZE, &Buffer_Characters_Count) != ERROR_CODE_NO_ERROR)
+	if (LibrariesFileRead(File_ID, Buffer, CONFIGURATION_BUFFER_MAXIMUM_SIZE, &Buffer_Characters_Count) != ERROR_CODE_NO_ERROR)
 	{
-		SystemFileClose(File_ID);
+		LibrariesFileClose(File_ID);
 		MainDisplayMessage(STRING_MESSAGE_TITLE_ERROR, STRING_ERROR_CANT_LOAD_FILE, STRING_HIT_ENTER_TO_CONTINUE, LIBRARIES_SCREEN_COLOR_RED);
 		MainWaitForEnterKey();
 		return 1;
 	}
 	
-	SystemFileClose(File_ID);
+	LibrariesFileClose(File_ID);
 	
 	// Show a message if the file is too big for the buffer
-	if (SystemFileGetSize(String_File_Name) > CONFIGURATION_BUFFER_MAXIMUM_SIZE)
+	if (LibrariesFileGetSize(String_File_Name) > CONFIGURATION_BUFFER_MAXIMUM_SIZE)
 	{
 		MainDisplayMessage(STRING_MESSAGE_TITLE_WARNING, STRING_WARNING_FILE_IS_TOO_BIG, STRING_HIT_ENTER_TO_CONTINUE, LIBRARIES_SCREEN_COLOR_BROWN);
 		MainWaitForEnterKey();
@@ -101,7 +101,7 @@ static int MainSaveFile(char *String_File_Name)
 	unsigned int File_ID;
 	
 	// Try to open the file
-	if (SystemFileOpen(String_File_Name, LIBRARIES_FILE_OPENING_MODE_WRITE, &File_ID) != ERROR_CODE_NO_ERROR)
+	if (LibrariesFileOpen(String_File_Name, LIBRARIES_FILE_OPENING_MODE_WRITE, &File_ID) != ERROR_CODE_NO_ERROR)
 	{
 		MainDisplayMessage(STRING_MESSAGE_TITLE_ERROR, STRING_ERROR_CANT_OPEN_FILE, STRING_HIT_ENTER_TO_CONTINUE, LIBRARIES_SCREEN_COLOR_RED);
 		MainWaitForEnterKey();
@@ -110,16 +110,16 @@ static int MainSaveFile(char *String_File_Name)
 	}
 	
 	// Write file content
-	if (SystemFileWrite(File_ID, Buffer, Buffer_Characters_Count) != ERROR_CODE_NO_ERROR)
+	if (LibrariesFileWrite(File_ID, Buffer, Buffer_Characters_Count) != ERROR_CODE_NO_ERROR)
 	{
-		SystemFileClose(File_ID);
+		LibrariesFileClose(File_ID);
 		MainDisplayMessage(STRING_MESSAGE_TITLE_ERROR, STRING_ERROR_CANT_SAVE_FILE, STRING_HIT_ENTER_TO_CONTINUE, LIBRARIES_SCREEN_COLOR_RED);
 		MainWaitForEnterKey();
 		DisplayRenderToScreen(); // Restore the previously displayed buffer
 		return 1;
 	}
 	
-	SystemFileClose(File_ID);
+	LibrariesFileClose(File_ID);
 	
 	return 0;
 }
@@ -188,14 +188,14 @@ static void MainDisplayTextInformation(void)
 	char String_Content[256], String_Number[11];
 	
 	// Create the "lines count" string
-	SystemStringCopy(STRING_MESSAGE_TEXT_INFORMATION_CONTENT_1, String_Content);
-	SystemStringConvertUnsignedIntegerToString(BufferGetLinesCount(), String_Number);
-	SystemStringConcatenate(String_Content, String_Number);
+	LibrariesStringCopy(STRING_MESSAGE_TEXT_INFORMATION_CONTENT_1, String_Content);
+	LibrariesStringConvertUnsignedIntegerToString(BufferGetLinesCount(), String_Number);
+	LibrariesStringConcatenate(String_Content, String_Number);
 	
 	// Create the "characters count" string
-	SystemStringConcatenate(String_Content, STRING_MESSAGE_TEXT_INFORMATION_CONTENT_2);
-	SystemStringConvertUnsignedIntegerToString(Buffer_Characters_Count, String_Number);
-	SystemStringConcatenate(String_Content, String_Number);
+	LibrariesStringConcatenate(String_Content, STRING_MESSAGE_TEXT_INFORMATION_CONTENT_2);
+	LibrariesStringConvertUnsignedIntegerToString(Buffer_Characters_Count, String_Number);
+	LibrariesStringConcatenate(String_Content, String_Number);
 	
 	MainDisplayMessage(STRING_MESSAGE_TEXT_INFORMATION_TITLE, String_Content, STRING_HIT_ENTER_TO_CONTINUE, LIBRARIES_SCREEN_COLOR_BLUE);
 	MainWaitForEnterKey();
@@ -230,7 +230,7 @@ void MainCutCurrentLine(void)
 	if (Main_Copy_Buffer_Length + Line_Length >= CONFIGURATION_COPY_BUFFER_MAXIMUM_SIZE) return;
 	
 	// Concatenate the cut text to the buffer
-	SystemMemoryCopyArea(&Buffer[Line_Beginning], &Main_Copy_Buffer[Main_Copy_Buffer_Length], Line_Length);
+	LibrariesMemoryCopyArea(&Buffer[Line_Beginning], &Main_Copy_Buffer[Main_Copy_Buffer_Length], Line_Length);
 	Main_Copy_Buffer_Length += Line_Length;
 	
 	// Remove the string from the edition buffer (TODO optimize)
@@ -266,7 +266,7 @@ void MainPasteCopyBuffer(void)
 /** Gracefully exit to system. */
 static void MainExitProgram(void)
 {
-	SystemScreenClear();
+	LibrariesScreenClear();
 	LibrariesSystemExitProgram();
 }
 
@@ -283,16 +283,16 @@ int main(int argc, char *argv[])
 	// Check parameters
 	if (argc != 2)
 	{
-		SystemScreenWriteString(STRING_USAGE);
+		LibrariesScreenWriteString(STRING_USAGE);
 		return -1;
 	}
 	String_File_Name = argv[1];
 	
-	SystemScreenClear();
+	LibrariesScreenClear();
 	DisplayClear(); // Prepare the display with a blank screen in case it's a new file
 	
 	// Does the specified file exist ?
-	if (SystemFileExists(String_File_Name))
+	if (LibrariesFileExists(String_File_Name))
 	{
 		// Load it in the buffer
 		if (MainLoadFile(String_File_Name) != 0) MainExitProgram();
@@ -308,8 +308,8 @@ int main(int argc, char *argv[])
 	// Process the user keys
 	while (1)
 	{
-		Character = SystemKeyboardReadCharacter();
-		Modifier_Keys_State = SystemKeyboardReadModifierKeysState();
+		Character = LibrariesKeyboardReadCharacter();
+		Modifier_Keys_State = LibrariesKeyboardReadModifierKeysState();
 		
 		// Always erase the cursor trace because the display may not be cleared
 		MainCursorEraseTrace();
@@ -326,7 +326,7 @@ int main(int argc, char *argv[])
 					// Wait for Enter or Escape key
 					do
 					{
-						Character = SystemKeyboardReadCharacter();
+						Character = LibrariesKeyboardReadCharacter();
 					} while ((Character != LIBRARIES_KEYBOARD_KEY_CODE_ENTER) && (Character != LIBRARIES_KEYBOARD_KEY_CODE_ESCAPE));
 					
 					// Save the file if requested to

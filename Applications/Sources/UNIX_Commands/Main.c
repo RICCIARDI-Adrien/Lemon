@@ -2,7 +2,7 @@
  * This program gathers some useful standard UNIX/Linux commands.
  * @author Adrien RICCIARDI
  */
-#include <System.h>
+#include <Libraries.h>
 #include "Commands.h"
 #include "Strings.h"
 
@@ -63,22 +63,22 @@ static void DisplayUsage(char *String_Program_Name)
 {
 	int i;
 	
-	SystemScreenWriteString(STRING_USAGE_1);
-	SystemScreenWriteString(String_Program_Name);
-	SystemScreenWriteString(STRING_USAGE_2);
-	SystemScreenWriteString(String_Program_Name);
-	SystemScreenWriteString(STRING_USAGE_3);
+	LibrariesScreenWriteString(STRING_USAGE_1);
+	LibrariesScreenWriteString(String_Program_Name);
+	LibrariesScreenWriteString(STRING_USAGE_2);
+	LibrariesScreenWriteString(String_Program_Name);
+	LibrariesScreenWriteString(STRING_USAGE_3);
 	
-	SystemScreenWriteString(STRING_AVAILABLE_COMMANDS);
+	LibrariesScreenWriteString(STRING_AVAILABLE_COMMANDS);
 	
-	SystemScreenSetFontColor(LIBRARIES_SCREEN_COLOR_LIGHT_BLUE);
+	LibrariesScreenSetFontColor(LIBRARIES_SCREEN_COLOR_LIGHT_BLUE);
 	for (i = 0; Commands[i].String_Command_Name != NULL; i++)
 	{
-		SystemScreenWriteString(Commands[i].String_Command_Name);
-		SystemScreenWriteCharacter(' ');
+		LibrariesScreenWriteString(Commands[i].String_Command_Name);
+		LibrariesScreenWriteCharacter(' ');
 	}
-	SystemScreenSetFontColor(LIBRARIES_SCREEN_COLOR_BLUE);
-	SystemScreenWriteCharacter('\n');
+	LibrariesScreenSetFontColor(LIBRARIES_SCREEN_COLOR_BLUE);
+	LibrariesScreenWriteCharacter('\n');
 }
 
 //-------------------------------------------------------------------------------------------------
@@ -100,7 +100,7 @@ int main(int argc, char *argv[])
 	// Search for the requested command
 	for (i = 0; Commands[i].String_Command_Name != NULL; i++)
 	{
-		if (SystemStringCompare(Commands[i].String_Command_Name, String_Requested_Command))
+		if (LibrariesStringCompare(Commands[i].String_Command_Name, String_Requested_Command))
 		{
 			// Remove the UNIX program name from the parameters when calling the command
 			Commands[i].CommandMain(argc - 1, &argv[1]);
@@ -109,9 +109,9 @@ int main(int argc, char *argv[])
 	}
 	
 	// The command was not found
-	SystemScreenSetFontColor(LIBRARIES_SCREEN_COLOR_RED);
-	SystemScreenWriteString(STRING_UNKNOWN_COMMAND);
-	SystemScreenSetFontColor(LIBRARIES_SCREEN_COLOR_BLUE);
+	LibrariesScreenSetFontColor(LIBRARIES_SCREEN_COLOR_RED);
+	LibrariesScreenWriteString(STRING_UNKNOWN_COMMAND);
+	LibrariesScreenSetFontColor(LIBRARIES_SCREEN_COLOR_BLUE);
 	
 	return 0;
 }

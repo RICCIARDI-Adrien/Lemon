@@ -2,7 +2,7 @@
  * A simplified version of the "more" command.
  * @author Adrien RICCIARDI
  */
-#include <System.h>
+#include <Libraries.h>
 #include "Commands.h"
 #include "Strings.h"
 
@@ -30,9 +30,9 @@ static int DisplayNextLine(void)
 	for (i = 0; i < LIBRARIES_SCREEN_COLUMNS_COUNT; i++)
 	{
 		// Try to read a character
-		if (SystemFileRead(File_ID, &Character, 1, &Read_Bytes_Count) != ERROR_CODE_NO_ERROR)
+		if (LibrariesFileRead(File_ID, &Character, 1, &Read_Bytes_Count) != ERROR_CODE_NO_ERROR)
 		{
-			SystemScreenWriteString(STRING_COMMAND_MORE_ERROR_READING_FROM_FILE);
+			LibrariesScreenWriteString(STRING_COMMAND_MORE_ERROR_READING_FROM_FILE);
 			return -1;
 		}
 		
@@ -40,7 +40,7 @@ static int DisplayNextLine(void)
 		if (Read_Bytes_Count == 0) return 0;
 		
 		// Display the character
-		SystemScreenWriteCharacter(Character);
+		LibrariesScreenWriteCharacter(Character);
 		
 		// Exit if the character is a new line
 		if (Character == '\n') return 1;
@@ -83,25 +83,25 @@ int CommandMainMore(int argc, char *argv[])
 	// Check parameters
 	if (argc != 2)
 	{
-		SystemScreenWriteString(STRING_COMMAND_MORE_USAGE);
+		LibrariesScreenWriteString(STRING_COMMAND_MORE_USAGE);
 		goto Exit;
 	}
 	
 	// Display the help if requested
-	if (SystemStringCompare(argv[1], "-h"))
+	if (LibrariesStringCompare(argv[1], "-h"))
 	{
-		SystemScreenWriteString(STRING_COMMAND_MORE_USAGE);
+		LibrariesScreenWriteString(STRING_COMMAND_MORE_USAGE);
 		Return_Value = 0;
 		goto Exit;
 	}
 	String_File_Name = argv[1];
 	
 	// Try to open the provided file
-	if (SystemFileOpen(String_File_Name, LIBRARIES_FILE_OPENING_MODE_READ, &File_ID) != ERROR_CODE_NO_ERROR)
+	if (LibrariesFileOpen(String_File_Name, LIBRARIES_FILE_OPENING_MODE_READ, &File_ID) != ERROR_CODE_NO_ERROR)
 	{
-		SystemScreenWriteString(STRING_COMMAND_MORE_FILE_NOT_FOUND_1);
-		SystemScreenWriteString(String_File_Name);
-		SystemScreenWriteString(STRING_COMMAND_MORE_FILE_NOT_FOUND_2);
+		LibrariesScreenWriteString(STRING_COMMAND_MORE_FILE_NOT_FOUND_1);
+		LibrariesScreenWriteString(String_File_Name);
+		LibrariesScreenWriteString(STRING_COMMAND_MORE_FILE_NOT_FOUND_2);
 		goto Exit;
 	}
 	
@@ -117,7 +117,7 @@ int CommandMainMore(int argc, char *argv[])
 	// Wait for a user key
 	while (1)
 	{
-		switch (SystemKeyboardReadCharacter())
+		switch (LibrariesKeyboardReadCharacter())
 		{
 			// Display the next line
 			case '\n':
@@ -150,10 +150,10 @@ int CommandMainMore(int argc, char *argv[])
 	}
 	
 Exit:
-	SystemFileClose(File_ID);
+	LibrariesFileClose(File_ID);
 	// Append a new line character if the cursor is not at the begining of a line
-	SystemScreenGetCursorPosition(&Cursor_Row, &Cursor_Column);
-	if (Cursor_Column > 0) SystemScreenWriteCharacter('\n');
+	LibrariesScreenGetCursorPosition(&Cursor_Row, &Cursor_Column);
+	if (Cursor_Column > 0) LibrariesScreenWriteCharacter('\n');
 	
 	return Return_Value;
 }

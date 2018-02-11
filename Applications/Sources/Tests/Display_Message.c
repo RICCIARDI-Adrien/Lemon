@@ -2,7 +2,7 @@
  * @see Display_Message.h for description.
  * @author Adrien RICCIARDI
  */
-#include <System.h>
+#include <Libraries.h>
 #include "Display_Message.h"
 
 //-------------------------------------------------------------------------------------------------
@@ -33,23 +33,23 @@ static char *String_Error_Codes[] =
 //-------------------------------------------------------------------------------------------------
 void DisplayMessageTestStarting(char *String_Message)
 {
-	SystemScreenWriteString("--- Testing ");
-	SystemScreenWriteString(String_Message);
-	SystemScreenWriteString(" ---\n");
+	LibrariesScreenWriteString("--- Testing ");
+	LibrariesScreenWriteString(String_Message);
+	LibrariesScreenWriteString(" ---\n");
 }
 
 void DisplayMessageTestSuccessful(void)
 {
-	SystemScreenSetFontColor(LIBRARIES_SCREEN_COLOR_GREEN);
-	SystemScreenWriteString("Test successful\n\n");
-	SystemScreenSetFontColor(LIBRARIES_SCREEN_COLOR_BLUE);
+	LibrariesScreenSetFontColor(LIBRARIES_SCREEN_COLOR_GREEN);
+	LibrariesScreenWriteString("Test successful\n\n");
+	LibrariesScreenSetFontColor(LIBRARIES_SCREEN_COLOR_BLUE);
 }
 
 void DisplayMessageTestFailed(void)
 {
-	SystemScreenSetFontColor(LIBRARIES_SCREEN_COLOR_RED);
-	SystemScreenWriteString("Test failed\n");
-	SystemScreenSetFontColor(LIBRARIES_SCREEN_COLOR_BLUE);
+	LibrariesScreenSetFontColor(LIBRARIES_SCREEN_COLOR_RED);
+	LibrariesScreenWriteString("Test failed\n");
+	LibrariesScreenSetFontColor(LIBRARIES_SCREEN_COLOR_BLUE);
 	LibrariesSystemExitProgram();
 }
 
@@ -58,26 +58,26 @@ void DisplayMessageErrorAndCode(char *String_Message, int Error_Code)
 	char *String_Unknown_Error_Code = "Unknown error code", *String_Error_Code;
 	
 	// Display the user message
-	SystemScreenSetFontColor(LIBRARIES_SCREEN_COLOR_RED);
-	SystemScreenWriteString("Error "); // User must provide the message
-	SystemScreenWriteString(String_Message);
-	SystemScreenWriteString(" : ");
+	LibrariesScreenSetFontColor(LIBRARIES_SCREEN_COLOR_RED);
+	LibrariesScreenWriteString("Error "); // User must provide the message
+	LibrariesScreenWriteString(String_Message);
+	LibrariesScreenWriteString(" : ");
 	
 	// Select the corresponding error string (if the error code is known)
 	if ((unsigned int) Error_Code >= LIBRARIES_GET_ARRAY_ELEMENTS_COUNT(String_Error_Codes)) String_Error_Code = String_Unknown_Error_Code; // LIBRARIES_GET_ARRAY_ELEMENTS_COUNT() returns an unsigned value
 	else String_Error_Code = String_Error_Codes[Error_Code];
 	
 	// Display the error code signification
-	SystemScreenWriteString(String_Error_Code);
-	SystemScreenWriteCharacter('\n');
-	SystemScreenSetFontColor(LIBRARIES_SCREEN_COLOR_BLUE);
+	LibrariesScreenWriteString(String_Error_Code);
+	LibrariesScreenWriteCharacter('\n');
+	LibrariesScreenSetFontColor(LIBRARIES_SCREEN_COLOR_BLUE);
 }
 
 void DisplayMessageError(char *String_Message)
 {
-	SystemScreenSetFontColor(LIBRARIES_SCREEN_COLOR_RED);
-	SystemScreenWriteString("Error : ");
-	SystemScreenWriteString(String_Message);
-	SystemScreenWriteCharacter('\n');
-	SystemScreenSetFontColor(LIBRARIES_SCREEN_COLOR_BLUE);
+	LibrariesScreenSetFontColor(LIBRARIES_SCREEN_COLOR_RED);
+	LibrariesScreenWriteString("Error : ");
+	LibrariesScreenWriteString(String_Message);
+	LibrariesScreenWriteCharacter('\n');
+	LibrariesScreenSetFontColor(LIBRARIES_SCREEN_COLOR_BLUE);
 }

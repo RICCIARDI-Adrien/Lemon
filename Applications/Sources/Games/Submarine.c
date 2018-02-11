@@ -2,7 +2,7 @@
  * @see Games.h for description.
  * @author Adrien RICCIARDI
  */
-#include <System.h>
+#include <Libraries.h>
 #include "Games.h"
 #include "Strings.h"
 
@@ -36,7 +36,7 @@
 // Private variables
 //-------------------------------------------------------------------------------------------------
 /** The screen buffer. */
-static TSystemScreenBufferCharacter Submarine_Screen_Buffer[LIBRARIES_SCREEN_ROWS_COUNT][LIBRARIES_SCREEN_COLUMNS_COUNT];
+static TLibrariesScreenBufferCharacter Submarine_Screen_Buffer[LIBRARIES_SCREEN_ROWS_COUNT][LIBRARIES_SCREEN_COLUMNS_COUNT];
 
 /** The obstacles array, covering a whole column. */
 static int Submarine_Obstacles_Bitmask[LIBRARIES_SCREEN_COLUMNS_COUNT];
@@ -54,7 +54,7 @@ static void SubmarineGenerateNextColumn(void)
 	unsigned char Color;
 	
 	// Move the scene to left
-	SystemScreenScrollBufferToLeft(Submarine_Screen_Buffer);
+	LibrariesScreenScrollBufferToLeft(Submarine_Screen_Buffer);
 	// Scroll the obstacles array too
 	for (i = 0; i < LIBRARIES_SCREEN_COLUMNS_COUNT - 1; i++) Submarine_Obstacles_Bitmask[i] = Submarine_Obstacles_Bitmask[i + 1];
 	
@@ -64,7 +64,7 @@ static void SubmarineGenerateNextColumn(void)
 		// Generate the obstacles
 		do
 		{
-			Obstacles_Bitmask = SystemRandomGenerateNumber();
+			Obstacles_Bitmask = LibrariesRandomGenerateNumber();
 		} while ((Obstacles_Bitmask & 0x01FFFFFF) == 0x01FFFFFF); // Avoid generating a fully-filled column (WARNING, change this value if the number of rows changes too)
 		
 		// Fill the column with the obstacles
@@ -79,7 +79,7 @@ static void SubmarineGenerateNextColumn(void)
 		Submarine_Obstacles_Bitmask[LIBRARIES_SCREEN_COLUMNS_COUNT - 1] = Obstacles_Bitmask;
 		
 		// Choose the next column that will contain obstacles
-		Submarine_Obstacles_Generation_Counter = (SystemRandomGenerateNumber() % (SUBMARINE_MAXIMUM_COLUMNS_COUNT_BETWEEN_OBSTACLES - SUBMARINE_MINIMUM_COLUMNS_COUNT_BETWEEN_OBSTACLES)) + SUBMARINE_MINIMUM_COLUMNS_COUNT_BETWEEN_OBSTACLES;
+		Submarine_Obstacles_Generation_Counter = (LibrariesRandomGenerateNumber() % (SUBMARINE_MAXIMUM_COLUMNS_COUNT_BETWEEN_OBSTACLES - SUBMARINE_MINIMUM_COLUMNS_COUNT_BETWEEN_OBSTACLES)) + SUBMARINE_MINIMUM_COLUMNS_COUNT_BETWEEN_OBSTACLES;
 	}
 	else
 	{
@@ -101,24 +101,24 @@ void Submarine(void)
 	unsigned int Start_Time, End_Time, Time_To_Wait, Score = 0;
 	char String_Score[64], String_Converted_Score_Value[16];
 	
-	SystemRandomInitialize();
+	LibrariesRandomInitialize();
 	
 	// Reset the scene and the obstacles
-	SystemScreenClearBuffer(Submarine_Screen_Buffer, SUBMARINE_SEA_COLOR);
-	SystemMemorySetAreaValue(Submarine_Obstacles_Bitmask, sizeof(Submarine_Obstacles_Bitmask), 0);
+	LibrariesScreenClearBuffer(Submarine_Screen_Buffer, SUBMARINE_SEA_COLOR);
+	LibrariesMemorySetAreaValue(Submarine_Obstacles_Bitmask, sizeof(Submarine_Obstacles_Bitmask), 0);
 	Submarine_Obstacles_Generation_Counter = 0; // Generate immediately a column of obstacles
 	
 	while (1)
 	{
-		Start_Time = SystemTimerGetValue();
+		Start_Time = LibrariesTimerGetValue();
 		
 		// Clear player trace before the screen is scrolled or the player moved
 		Submarine_Screen_Buffer[Player_Row][SUBMARINE_PLAYER_COLUMN].Color = SUBMARINE_SEA_COLOR;
 		
 		// Handle player keys
-		if (SystemKeyboardIsKeyAvailable())
+		if (LibrariesKeyboardIsKeyAvailable())
 		{
-			switch (SystemKeyboardReadCharacter())
+			switch (LibrariesKeyboardReadCharacter())
 			{
 				case LIBRARIES_KEYBOARD_KEY_CODE_ESCAPE:
 					return;
@@ -153,33 +153,33 @@ void Submarine(void)
 		Submarine_Screen_Buffer[Player_Row][SUBMARINE_PLAYER_COLUMN].Color = Player_Color;
 		
 		// Refresh the screen every time to force the game to run at 60Hz
-		SystemScreenDisplayBuffer(Submarine_Screen_Buffer);
+		LibrariesScreenDisplayBuffer(Submarine_Screen_Buffer);
 		
 		if (Is_Player_Dead)
 		{
 			// Display the string on the screen's middle
-			SystemScreenSetFontColor(LIBRARIES_SCREEN_COLOR_WHITE);
-			SystemScreenSetBackgroundColor(LIBRARIES_SCREEN_COLOR_RED);
-			SystemScreenSetCursorPosition(LIBRARIES_SCREEN_ROWS_COUNT / 2, 0); // The column coordinate will be computed by the SystemScreenWriteCenteredString() function
-			SystemScreenWriteCenteredString(STRING_SUBMARINE_PLAYER_LOST);
+			LibrariesScreenSetFontColor(LIBRARIES_SCREEN_COLOR_WHITE);
+			LibrariesScreenSetBackgroundColor(LIBRARIES_SCREEN_COLOR_RED);
+			LibrariesScreenSetCursorPosition(LIBRARIES_SCREEN_ROWS_COUNT / 2, 0); // The column coordinate will be computed by the LibrariesScreenWriteCenteredString() function
+			LibrariesScreenWriteCenteredString(STRING_SUBMARINE_PLAYER_LOST);
 			
 			// Display the score string below
-			SystemStringConcatenate(String_Score, STRING_SUBMARINE_PLAYER_SCORE);
-			SystemStringConvertUnsignedIntegerToString(Score, String_Converted_Score_Value);
-			SystemStringConcatenate(String_Score, String_Converted_Score_Value);
-			SystemScreenSetCursorPosition((LIBRARIES_SCREEN_ROWS_COUNT / 2) + 1, 0); // The column coordinate will be computed by the SystemScreenWriteCenteredString() function
-			SystemScreenWriteCenteredString(String_Score);
+			LibrariesStringConcatenate(String_Score, STRING_SUBMARINE_PLAYER_SCORE);
+			LibrariesStringConvertUnsignedIntegerToString(Score, String_Converted_Score_Value);
+			LibrariesStringConcatenate(String_Score, String_Converted_Score_Value);
+			LibrariesScreenSetCursorPosition((LIBRARIES_SCREEN_ROWS_COUNT / 2) + 1, 0); // The column coordinate will be computed by the LibrariesScreenWriteCenteredString() function
+			LibrariesScreenWriteCenteredString(String_Score);
 			
-			SystemScreenSetBackgroundColor(LIBRARIES_SCREEN_COLOR_WHITE); // Restore the default background color
+			LibrariesScreenSetBackgroundColor(LIBRARIES_SCREEN_COLOR_WHITE); // Restore the default background color
 			
 			// Wait for the player to hit "escape" key
-			while (SystemKeyboardReadCharacter() != LIBRARIES_KEYBOARD_KEY_CODE_ESCAPE);
+			while (LibrariesKeyboardReadCharacter() != LIBRARIES_KEYBOARD_KEY_CODE_ESCAPE);
 			return;
 		}
 		
 		// Wait enough time to make the game work at the desired refresh rate
-		End_Time = SystemTimerGetValue();
+		End_Time = LibrariesTimerGetValue();
 		Time_To_Wait = SUBMARINE_FRAME_PERIOD_MILLISECONDS - (End_Time - Start_Time); // TODO Handle roll-over, even if the system needs to be booted for 49 days for it to happen
-		if (Time_To_Wait <= SUBMARINE_FRAME_PERIOD_MILLISECONDS) SystemTimerWait(Time_To_Wait); // Do not wait if the frame time has elapsed yet
+		if (Time_To_Wait <= SUBMARINE_FRAME_PERIOD_MILLISECONDS) LibrariesTimerWait(Time_To_Wait); // Do not wait if the frame time has elapsed yet
 	}
 }

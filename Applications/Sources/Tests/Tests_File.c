@@ -2,7 +2,7 @@
  * Test the Libraries File API.
  * @author Adrien RICCIARDI
  */
-#include <System.h>
+#include <Libraries.h>
 #include "crc32.h"
 #include "Display_Message.h"
 #include "Tests.h"
@@ -27,31 +27,31 @@ int TestsFileFunctionsInputParameters(void)
 	unsigned int File_ID;
 	int Result;
 	
-	// Testing SystemFileOpen()
+	// Testing FileOpen()
 	// Bad filename (empty string, checked by kernel)
-	SystemScreenWriteString("Checking SystemFileOpen()...\n");
-	Result = SystemFileOpen("\0", 'r', &File_ID);
+	LibrariesScreenWriteString("Checking FileOpen()...\n");
+	Result = LibrariesFileOpen("\0", 'r', &File_ID);
 	if (Result != ERROR_CODE_BAD_FILE_NAME)
 	{
 		DisplayMessageErrorAndCode("when given a bad file name", Result);
 		return 1;
 	}
-	// Bad filename (NULL string, checked by Libraries)
-	Result = SystemFileOpen(NULL, 'r', &File_ID);
+	// Bad filename (NULL string, checked by system)
+	Result = LibrariesFileOpen(NULL, 'r', &File_ID);
 	if (Result != ERROR_CODE_BAD_FILE_NAME)
 	{
 		DisplayMessageErrorAndCode("when given a NULL file name", Result);
 		return 1;
 	}
 	// File not found
-	Result = SystemFileOpen("_!azerty", 'r', &File_ID);
+	Result = LibrariesFileOpen("_!azerty", 'r', &File_ID);
 	if (Result != ERROR_CODE_FILE_NOT_FOUND)
 	{
 		DisplayMessageErrorAndCode("when given an unexisting file", Result);
 		return 1;
 	}
 	// Unknown opening mode
-	Result = SystemFileOpen("Ignored", 't', &File_ID);
+	Result = LibrariesFileOpen("Ignored", 't', &File_ID);
 	if (Result != ERROR_CODE_UNKNOWN_OPENING_MODE)
 	{
 		DisplayMessageErrorAndCode("when given a bad opening mode", Result);
@@ -59,11 +59,11 @@ int TestsFileFunctionsInputParameters(void)
 	}
 
 	// TODO
-	// Testing SystemFileRead()
+	// Testing FileRead()
 	// Open a file 
 	// Bad file ID
-	/*SystemScreenWriteString("Checking SystemFileRead()...\n");
-	Result = SystemFileRead(123456, );
+	/*LibrariesScreenWriteString("Checking FileRead()...\n");
+	Result = LibrariesFileRead(123456, );
 	if (Result != ERROR_CODE_FILE_NOT_FOUND)
 	{
 		DisplayMessageErrorAndCode("when given an unexisting file", Result);
@@ -80,23 +80,23 @@ int TestsFileSystemCalls(void)
 	int Result;
 
 	// Choose a random file size between 100 KB and 3 MB
-	File_Size_Bytes = ((SystemRandomGenerateNumber() % 32) + 1) * 1024 * 100;
-	SystemScreenWriteString("File size : ");
-	SystemScreenWriteUnsignedInteger(File_Size_Bytes);
-	SystemScreenWriteCharacter('\n');
+	File_Size_Bytes = ((LibrariesRandomGenerateNumber() % 32) + 1) * 1024 * 100;
+	LibrariesScreenWriteString("File size : ");
+	LibrariesScreenWriteUnsignedInteger(File_Size_Bytes);
+	LibrariesScreenWriteCharacter('\n');
  
-	SystemScreenWriteString("Creating file content... ");
-	for (i = 0; i < File_Size_Bytes; i++) Buffer[i] = (unsigned char) SystemRandomGenerateNumber();
-	SystemScreenWriteString("done\n");
+	LibrariesScreenWriteString("Creating file content... ");
+	for (i = 0; i < File_Size_Bytes; i++) Buffer[i] = (unsigned char) LibrariesRandomGenerateNumber();
+	LibrariesScreenWriteString("done\n");
 
-	SystemScreenWriteString("Computing CRC... ");
-	CRC_Seed = SystemRandomGenerateNumber();
+	LibrariesScreenWriteString("Computing CRC... ");
+	CRC_Seed = LibrariesRandomGenerateNumber();
 	Written_Data_CRC = crc32(CRC_Seed, Buffer, File_Size_Bytes);
-	SystemScreenWriteString("done (CRC = ");
-	SystemScreenWriteUnsignedInteger(Written_Data_CRC);
-	SystemScreenWriteString(")\n");
+	LibrariesScreenWriteString("done (CRC = ");
+	LibrariesScreenWriteUnsignedInteger(Written_Data_CRC);
+	LibrariesScreenWriteString(")\n");
 
-	SystemScreenWriteString("Writing data to file... ");
+	LibrariesScreenWriteString("Writing data to file... ");
 	// Open the file
 	Result = LibrariesSystemCall(SYSTEM_CALL_FILE_OPEN, 'w', 0, "_test_", &File_ID);
 	if (Result != ERROR_CODE_NO_ERROR)
@@ -113,12 +113,12 @@ int TestsFileSystemCalls(void)
 	}
 	// Close the file
 	LibrariesSystemCall(SYSTEM_CALL_FILE_CLOSE, File_ID, 0, NULL, NULL);
-	SystemScreenWriteString("done\n");
+	LibrariesScreenWriteString("done\n");
 
 	// Flush read buffer
-	SystemMemorySetAreaValue(Buffer, File_Size_Bytes, 0);
+	LibrariesMemorySetAreaValue(Buffer, File_Size_Bytes, 0);
 
-	SystemScreenWriteString("Reading data from file... ");
+	LibrariesScreenWriteString("Reading data from file... ");
 	// Open the file
 	Result = LibrariesSystemCall(SYSTEM_CALL_FILE_OPEN, 'r', 0, "_test_", &File_ID);
 	if (Result != ERROR_CODE_NO_ERROR)
@@ -135,18 +135,18 @@ int TestsFileSystemCalls(void)
 	}
 	// Close the file
 	LibrariesSystemCall(SYSTEM_CALL_FILE_CLOSE, File_ID, 0, NULL, NULL);
-	SystemScreenWriteString("done (");
-	SystemScreenWriteUnsignedInteger(Read_Bytes_Count);
-	SystemScreenWriteString(" bytes read)\n");
+	LibrariesScreenWriteString("done (");
+	LibrariesScreenWriteUnsignedInteger(Read_Bytes_Count);
+	LibrariesScreenWriteString(" bytes read)\n");
 
-	SystemScreenWriteString("Computing CRC... ");
+	LibrariesScreenWriteString("Computing CRC... ");
 	Read_Data_CRC = crc32(CRC_Seed, Buffer, File_Size_Bytes);
-	SystemScreenWriteString("done (CRC = ");
-	SystemScreenWriteUnsignedInteger(Read_Data_CRC);
-	SystemScreenWriteString(")\n");
+	LibrariesScreenWriteString("done (CRC = ");
+	LibrariesScreenWriteUnsignedInteger(Read_Data_CRC);
+	LibrariesScreenWriteString(")\n");
 
 	// Delete the file
-	Result = SystemFileDelete("_test_");
+	Result = LibrariesFileDelete("_test_");
 	if (Result != ERROR_CODE_NO_ERROR)
 	{
 		DisplayMessageErrorAndCode("when deleting the file", Result);
@@ -164,16 +164,16 @@ int TestsFileMaximumOpenedFiles(void)
 	char String_File_Name[LIBRARIES_FILE_NAME_LENGTH + 1], String_Number[11];
 	
 	// Open the maximum number of files
-	SystemScreenWriteString("Opening as many files as possible...\n");
+	LibrariesScreenWriteString("Opening as many files as possible...\n");
 	for (i = 0; i < LIBRARIES_FILE_MAXIMUM_OPENED_COUNT; i++)
 	{
 		// Create the file name
-		SystemStringConvertUnsignedIntegerToString(i, String_Number);
-		SystemStringCopy("_test_", String_File_Name);
-		SystemStringConcatenate(String_File_Name, String_Number);
+		LibrariesStringConvertUnsignedIntegerToString(i, String_Number);
+		LibrariesStringCopy("_test_", String_File_Name);
+		LibrariesStringConcatenate(String_File_Name, String_Number);
 		
 		// Open the file in write mode so the file should not exist yet
-		Result = SystemFileOpen(String_File_Name, 'w', &File_IDs[i]);
+		Result = LibrariesFileOpen(String_File_Name, 'w', &File_IDs[i]);
 		if (Result != ERROR_CODE_NO_ERROR)
 		{
 			DisplayMessageErrorAndCode("while opening the files allowed count", Result);
@@ -182,8 +182,8 @@ int TestsFileMaximumOpenedFiles(void)
 	}
 	
 	// Opening one more file
-	SystemScreenWriteString("Opening one more file...\n");
-	Result = SystemFileOpen("_test_!!!", 'w', &File_IDs[LIBRARIES_FILE_MAXIMUM_OPENED_COUNT]);
+	LibrariesScreenWriteString("Opening one more file...\n");
+	Result = LibrariesFileOpen("_test_!!!", 'w', &File_IDs[LIBRARIES_FILE_MAXIMUM_OPENED_COUNT]);
 	if (Result != ERROR_CODE_CANT_OPEN_MORE_FILES)
 	{
 		DisplayMessageErrorAndCode("while opening too much files in the same time", Result);
@@ -193,14 +193,14 @@ int TestsFileMaximumOpenedFiles(void)
 	// Close and delete all files
 	for (i = 0; i < LIBRARIES_FILE_MAXIMUM_OPENED_COUNT; i++)
 	{
-		SystemFileClose(File_IDs[i]);
+		LibrariesFileClose(File_IDs[i]);
 		
 		// Create the file name
-		SystemStringConvertUnsignedIntegerToString(i, String_Number);
-		SystemStringCopy("_test_", String_File_Name);
-		SystemStringConcatenate(String_File_Name, String_Number);
+		LibrariesStringConvertUnsignedIntegerToString(i, String_Number);
+		LibrariesStringCopy("_test_", String_File_Name);
+		LibrariesStringConcatenate(String_File_Name, String_Number);
 		
-		SystemFileDelete(String_File_Name);
+		LibrariesFileDelete(String_File_Name);
 	}
 	
 	return 0;
@@ -213,35 +213,35 @@ int TestsFileReopenSameFile(void)
 	char *String_File_Content = "This is an empty test file.";
 	
 	// Create a file
-	SystemScreenWriteString("Creating a file...\n");
-	Result = SystemFileOpen("_test_", 'w', &File_ID);
+	LibrariesScreenWriteString("Creating a file...\n");
+	Result = LibrariesFileOpen("_test_", 'w', &File_ID);
 	if (Result != ERROR_CODE_NO_ERROR)
 	{
 		DisplayMessageErrorAndCode("while opening the file in write mode", Result);
 		goto Exit;
 	}
 	// Write some data
-	Result = SystemFileWrite(File_ID, String_File_Content, sizeof(String_File_Content) - 1);
+	Result = LibrariesFileWrite(File_ID, String_File_Content, sizeof(String_File_Content) - 1);
 	if (Result != ERROR_CODE_NO_ERROR)
 	{
 		DisplayMessageErrorAndCode("while writing data to the file", Result);
 		goto Exit;
 	}
 	// Flush file content
-	SystemFileClose(File_ID);
+	LibrariesFileClose(File_ID);
 	
 	// Try to open the same file 2 times
 	// The first time must succeed
-	SystemScreenWriteString("Opening the file for the first time...\n");
-	Result = SystemFileOpen("_test_", 'r', &File_ID);
+	LibrariesScreenWriteString("Opening the file for the first time...\n");
+	Result = LibrariesFileOpen("_test_", 'r', &File_ID);
 	if (Result != ERROR_CODE_NO_ERROR)
 	{
 		DisplayMessageErrorAndCode("while opening the file in read mode", Result);
 		goto Exit;
 	}
 	// The second time must fail
-	SystemScreenWriteString("Opening the file for the second time...\n");
-	Result = SystemFileOpen("_test_", 'r', &File_ID_2);
+	LibrariesScreenWriteString("Opening the file for the second time...\n");
+	Result = LibrariesFileOpen("_test_", 'r', &File_ID_2);
 	if (Result != ERROR_CODE_FILE_OPENED_YET)
 	{
 		DisplayMessageErrorAndCode("while reopening a previously opened file", Result);
@@ -251,9 +251,9 @@ int TestsFileReopenSameFile(void)
 	Return_Value = 0;
 	
 Exit:
-	SystemScreenWriteString("Removing the file...\n");
-	SystemFileClose(File_ID);
-	SystemFileDelete("_test_"); // This function can be called even if the file is not existing
+	LibrariesScreenWriteString("Removing the file...\n");
+	LibrariesFileClose(File_ID);
+	LibrariesFileDelete("_test_"); // This function can be called even if the file is not existing
 	return Return_Value;
 }
 
@@ -264,24 +264,24 @@ int TestsFileFillFilesList(void)
 	char String_File_Name[LIBRARIES_FILE_NAME_LENGTH + 1], String_Number[11];
 	
 	// Retrieve the amount of free Files List entries
-	SystemFileSystemGetFreeSize(&i, &Free_Files_Count); // The first parameter is not relevant here
+	LibrariesFileSystemGetFreeSize(&i, &Free_Files_Count); // The first parameter is not relevant here
 	
-	SystemScreenWriteString("There are ");
-	SystemScreenWriteUnsignedInteger(Free_Files_Count);
-	SystemScreenWriteString(" free Files List entries.\n");
+	LibrariesScreenWriteString("There are ");
+	LibrariesScreenWriteUnsignedInteger(Free_Files_Count);
+	LibrariesScreenWriteString(" free Files List entries.\n");
 	
-	SystemScreenWriteString("Filling all entries...\n");
+	LibrariesScreenWriteString("Filling all entries...\n");
 	
 	// Create one more files than the free Files List entries amount
 	for (i = 0; i <= Free_Files_Count; i++)
 	{
 		// Create the file name
-		SystemStringConvertUnsignedIntegerToString(i, String_Number);
-		SystemStringCopy("_test_", String_File_Name);
-		SystemStringConcatenate(String_File_Name, String_Number);
+		LibrariesStringConvertUnsignedIntegerToString(i, String_Number);
+		LibrariesStringCopy("_test_", String_File_Name);
+		LibrariesStringConcatenate(String_File_Name, String_Number);
 		
 		// Create the file
-		Result = SystemFileOpen(String_File_Name, 'w', &File_ID);
+		Result = LibrariesFileOpen(String_File_Name, 'w', &File_ID);
 		if (i == Free_Files_Count) // The one more file
 		{
 			if (Result == ERROR_CODE_FILES_LIST_FULL) Return_Value = 0;
@@ -294,20 +294,20 @@ int TestsFileFillFilesList(void)
 			break;
 		}
 		
-		SystemFileClose(File_ID);
+		LibrariesFileClose(File_ID);
 	}
 	
-	SystemScreenWriteString("Deleting all test generated files...\n");
+	LibrariesScreenWriteString("Deleting all test generated files...\n");
 	
 	// Delete all files
 	for (i = 0; i < Free_Files_Count; i++)
 	{
 		// Create the file name
-		SystemStringConvertUnsignedIntegerToString(i, String_Number);
-		SystemStringCopy("_test_", String_File_Name);
-		SystemStringConcatenate(String_File_Name, String_Number);
+		LibrariesStringConvertUnsignedIntegerToString(i, String_Number);
+		LibrariesStringCopy("_test_", String_File_Name);
+		LibrariesStringConcatenate(String_File_Name, String_Number);
 		
-		SystemFileDelete(String_File_Name);
+		LibrariesFileDelete(String_File_Name);
 	}
 	
 	return Return_Value;
@@ -319,18 +319,18 @@ int TestsFileFillBlocksList(void)
 	int Result, Return_Value = 1;
 	
 	// Retrieve the amount of free Blocks List entries
-	SystemFileSystemGetFreeSize(&Free_Blocks_Count, &i);
+	LibrariesFileSystemGetFreeSize(&Free_Blocks_Count, &i);
 	// Retrieve a block size in bytes
-	SystemFileSystemGetTotalSize(&Block_Size_Bytes, &i, &i);
+	LibrariesFileSystemGetTotalSize(&Block_Size_Bytes, &i, &i);
 	
-	SystemScreenWriteString("There are ");
-	SystemScreenWriteUnsignedInteger(Free_Blocks_Count);
-	SystemScreenWriteString(" free Blocks List entries.\n");
+	LibrariesScreenWriteString("There are ");
+	LibrariesScreenWriteUnsignedInteger(Free_Blocks_Count);
+	LibrariesScreenWriteString(" free Blocks List entries.\n");
 	
-	SystemScreenWriteString("Creating the test file...\n");
+	LibrariesScreenWriteString("Creating the test file...\n");
 	
 	// Create a file
-	Result = SystemFileOpen("_test_", 'w', &File_ID);
+	Result = LibrariesFileOpen("_test_", 'w', &File_ID);
 	if (Result != ERROR_CODE_NO_ERROR)
 	{
 		DisplayMessageErrorAndCode("while creating the file", Result);
@@ -338,14 +338,14 @@ int TestsFileFillBlocksList(void)
 	}
 	
 	// Fill the buffer with crap data
-	for (i = 0; i < Block_Size_Bytes; i++) Buffer[i] = (unsigned char) SystemRandomGenerateNumber();
+	for (i = 0; i < Block_Size_Bytes; i++) Buffer[i] = (unsigned char) LibrariesRandomGenerateNumber();
 	
-	SystemScreenWriteString("Filling the file...\n");
+	LibrariesScreenWriteString("Filling the file...\n");
 	
 	// Fill the Blocks List with one block more than the available space
 	for (i = 0; i <= Free_Blocks_Count; i++)
 	{
-		Result = SystemFileWrite(File_ID, Buffer, Block_Size_Bytes);
+		Result = LibrariesFileWrite(File_ID, Buffer, Block_Size_Bytes);
 		
 		if (i == Free_Blocks_Count) // The offending block is reached
 		{
@@ -365,9 +365,9 @@ int TestsFileFillBlocksList(void)
 	}
 	
 Exit:
-	SystemScreenWriteString("Deleting the test file...\n");
-	SystemFileClose(File_ID);
-	SystemFileDelete("_test_");
+	LibrariesScreenWriteString("Deleting the test file...\n");
+	LibrariesFileClose(File_ID);
+	LibrariesFileDelete("_test_");
 	return Return_Value;
 }
 
@@ -378,23 +378,23 @@ int TestsFileCloseDeletedOpenedFile(void)
 	char String_Data[] = "Test data";
 	
 	// Create a file
-	Result = SystemFileOpen("_test_", 'w', &File_ID);
+	Result = LibrariesFileOpen("_test_", 'w', &File_ID);
 	if (Result != ERROR_CODE_NO_ERROR)
 	{
 		DisplayMessageErrorAndCode("while creating the file to delete", Result);
 		goto Exit;
 	}
 	// Write some data to it
-	Result = SystemFileWrite(File_ID, String_Data, sizeof(String_Data));
+	Result = LibrariesFileWrite(File_ID, String_Data, sizeof(String_Data));
 	if (Result != ERROR_CODE_NO_ERROR)
 	{
 		DisplayMessageErrorAndCode("while writing data to the file", Result);
 		goto Exit;
 	}
-	SystemFileClose(File_ID);
+	LibrariesFileClose(File_ID);
 	
 	// Open the file for reading
-	Result = SystemFileOpen("_test_", 'r', &File_ID);
+	Result = LibrariesFileOpen("_test_", 'r', &File_ID);
 	if (Result != ERROR_CODE_NO_ERROR)
 	{
 		DisplayMessageErrorAndCode("while opening the file to delete for reading", Result);
@@ -402,10 +402,10 @@ int TestsFileCloseDeletedOpenedFile(void)
 	}
 	
 	// Delete the file (the file must be automatically closed)
-	SystemFileDelete("_test_");
+	LibrariesFileDelete("_test_");
 	
 	// Try to open the file another time (this must succeed because the previous file has been closed)
-	Result = SystemFileOpen("_test_", 'w', &File_ID);
+	Result = LibrariesFileOpen("_test_", 'w', &File_ID);
 	if (Result != ERROR_CODE_NO_ERROR)
 	{
 		DisplayMessageErrorAndCode("while opening the deleted file a second time", Result);
@@ -415,8 +415,8 @@ int TestsFileCloseDeletedOpenedFile(void)
 	Return_Value = 0;
 	
 Exit:
-	SystemFileClose(File_ID);
-	SystemFileDelete("_test_");
+	LibrariesFileClose(File_ID);
+	LibrariesFileDelete("_test_");
 	return Return_Value;
 }
 
@@ -427,83 +427,83 @@ int TestsFileRename(void)
 	
 	// Create two empty files
 	// First file
-	Result = SystemFileOpen("_test1_", 'w', &File_ID);
+	Result = LibrariesFileOpen("_test1_", 'w', &File_ID);
 	if (Result != ERROR_CODE_NO_ERROR)
 	{
 		DisplayMessageErrorAndCode("while creating the first file", Result);
 		goto Exit;
 	}
-	SystemFileClose(File_ID);
+	LibrariesFileClose(File_ID);
 	// Second file
-	Result = SystemFileOpen("_test2_", 'w', &File_ID);
+	Result = LibrariesFileOpen("_test2_", 'w', &File_ID);
 	if (Result != ERROR_CODE_NO_ERROR)
 	{
 		DisplayMessageErrorAndCode("while creating the second file", Result);
 		goto Exit;
 	}
-	SystemFileClose(File_ID);
+	LibrariesFileClose(File_ID);
 	
 	// Provide two bad file names
-	Result = SystemFileRename("", "");
+	Result = LibrariesFileRename("", "");
 	if (Result != ERROR_CODE_BAD_FILE_NAME)
 	{
-		DisplayMessageErrorAndCode(": SystemFileRename(\"\", \"\") did not fail with the expected error", Result);
+		DisplayMessageErrorAndCode(": FileRename(\"\", \"\") did not fail with the expected error", Result);
 		goto Exit;
 	}
 	
 	// Provide a bad file name as first argument
-	Result = SystemFileRename("", "_test1_");
+	Result = LibrariesFileRename("", "_test1_");
 	if (Result != ERROR_CODE_BAD_FILE_NAME)
 	{
-		DisplayMessageErrorAndCode(": SystemFileRename(\"\", \"_test1_\") did not fail with the expected error", Result);
+		DisplayMessageErrorAndCode(": FileRename(\"\", \"_test1_\") did not fail with the expected error", Result);
 		goto Exit;
 	}
 	
 	// Provide a bad file name as second argument
-	Result = SystemFileRename("_test1_", "");
+	Result = LibrariesFileRename("_test1_", "");
 	if (Result != ERROR_CODE_BAD_FILE_NAME)
 	{
-		DisplayMessageErrorAndCode(": SystemFileRename(\"_test1_\", \"\") did not fail with the expected error", Result);
+		DisplayMessageErrorAndCode(": FileRename(\"_test1_\", \"\") did not fail with the expected error", Result);
 		goto Exit;
 	}
 	
 	// Provide an existing file as the new file name
-	Result = SystemFileRename("_test1_", "_test2_");
+	Result = LibrariesFileRename("_test1_", "_test2_");
 	if (Result != ERROR_CODE_FILE_ALREADY_EXISTS)
 	{
-		DisplayMessageErrorAndCode(": SystemFileRename(\"_test1_\", \"_test2_\") while _test2_ file exists did not fail with the expected error", Result);
+		DisplayMessageErrorAndCode(": FileRename(\"_test1_\", \"_test2_\") while _test2_ file exists did not fail with the expected error", Result);
 		goto Exit;
 	}
 	
 	// Provide a non-existing file as the file to rename
-	Result = SystemFileRename("_test28_", "_test3_");
+	Result = LibrariesFileRename("_test28_", "_test3_");
 	if (Result != ERROR_CODE_FILE_NOT_FOUND)
 	{
-		DisplayMessageErrorAndCode(": SystemFileRename(\"_test28_\", \"_test2_\") while _test28_ file do not exists did not fail with the expected error", Result);
+		DisplayMessageErrorAndCode(": FileRename(\"_test28_\", \"_test2_\") while _test28_ file do not exists did not fail with the expected error", Result);
 		goto Exit;
 	}
 	
 	// Do a real rename
-	Result = SystemFileRename("_test1_", "_test3_");
+	Result = LibrariesFileRename("_test1_", "_test3_");
 	if (Result != ERROR_CODE_NO_ERROR)
 	{
 		DisplayMessageErrorAndCode("while doing a normal rename operation", Result);
 		goto Exit;
 	}
 	// Make sure the file was successfully renamed
-	Result = SystemFileOpen("_test3_", 'r', &File_ID);
+	Result = LibrariesFileOpen("_test3_", 'r', &File_ID);
 	if (Result != ERROR_CODE_NO_ERROR)
 	{
 		DisplayMessageErrorAndCode("while trying to open the renamed file", Result);
 		goto Exit;
 	}
-	SystemFileClose(File_ID);
+	LibrariesFileClose(File_ID);
 	
 	Return_Value = 0;
 	
 Exit:
-	SystemFileDelete("_test1_");
-	SystemFileDelete("_test2_");
-	SystemFileDelete("_test3_");
+	LibrariesFileDelete("_test1_");
+	LibrariesFileDelete("_test2_");
+	LibrariesFileDelete("_test3_");
 	return Return_Value;
 }

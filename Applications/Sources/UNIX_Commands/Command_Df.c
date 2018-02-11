@@ -2,7 +2,7 @@
  * A UNIX-like disk free command.
  * @author Adrien RICCIARDI
  */
-#include <System.h>
+#include <Libraries.h>
 #include "Commands.h"
 #include "Strings.h"
 
@@ -16,7 +16,7 @@ int CommandMainDf(int argc, char __attribute__((unused)) *argv[])
 	// Check parameters
 	if (argc != 1)
 	{
-		SystemScreenWriteString(STRING_COMMAND_DF_USAGE);
+		LibrariesScreenWriteString(STRING_COMMAND_DF_USAGE);
 		return -1;
 	}
 	
@@ -29,25 +29,25 @@ int CommandMainDf(int argc, char __attribute__((unused)) *argv[])
 	Free_Storage *= Block_Size;
 	
 	// Display the files values
-	SystemScreenWriteString(STRING_COMMAND_DF_FILES_COUNT);
-	SystemScreenWriteUnsignedInteger(Total_Files_Count - Free_Files_Count);
-	SystemScreenWriteCharacter('/');
-	SystemScreenWriteUnsignedInteger(Total_Files_Count);
+	LibrariesScreenWriteString(STRING_COMMAND_DF_FILES_COUNT);
+	LibrariesScreenWriteUnsignedInteger(Total_Files_Count - Free_Files_Count);
+	LibrariesScreenWriteCharacter('/');
+	LibrariesScreenWriteUnsignedInteger(Total_Files_Count);
 	// Display the percentage
-	SystemScreenWriteString(" (");
-	SystemScreenWriteUnsignedInteger(100 - ((100 * Free_Files_Count) / Total_Files_Count));
-	SystemScreenWriteString("%)\n");
+	LibrariesScreenWriteString(" (");
+	LibrariesScreenWriteUnsignedInteger(100 - ((100 * Free_Files_Count) / Total_Files_Count));
+	LibrariesScreenWriteString("%)\n");
 	
 	// Display the remaining storage
-	SystemScreenWriteString(STRING_COMMAND_DF_REMAINING_STORAGE_1);
-	SystemScreenWriteUnsignedInteger(Total_Storage - Free_Storage);
-	SystemScreenWriteCharacter('/');
-	SystemScreenWriteUnsignedInteger(Total_Storage);
-	SystemScreenWriteString(STRING_COMMAND_DF_REMAINING_STORAGE_2);
+	LibrariesScreenWriteString(STRING_COMMAND_DF_REMAINING_STORAGE_1);
+	LibrariesScreenWriteUnsignedInteger(Total_Storage - Free_Storage);
+	LibrariesScreenWriteCharacter('/');
+	LibrariesScreenWriteUnsignedInteger(Total_Storage);
+	LibrariesScreenWriteString(STRING_COMMAND_DF_REMAINING_STORAGE_2);
 	// Display the percentage
-	SystemScreenWriteString(" (");
-	SystemScreenWriteUnsignedInteger(100 - ((100 * Free_Storage) / Total_Storage));
-	SystemScreenWriteString("%)\n");
+	LibrariesScreenWriteString(" (");
+	LibrariesScreenWriteUnsignedInteger(100 - ((100 * Free_Storage) / Total_Storage));
+	LibrariesScreenWriteString("%)\n");
 	
 	return 0;
 }

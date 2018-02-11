@@ -17,8 +17,8 @@ typedef int (*TTestFunction)(void);
 /** A test content. */
 typedef struct
 {
-	char String_Title[128]; //! Describe the test goal.
-	TTestFunction Function; //! The test code.
+	char String_Title[128]; //!< Describe the test goal.
+	TTestFunction Function; //!< The test code.
 } TTest;
 
 //-------------------------------------------------------------------------------------------------------------------------------
@@ -37,7 +37,7 @@ int TestsFileFunctionsInputParameters(void);
  */
 int TestsFileSystemCalls(void);
 
-/** Try to open more than the maximum allowed number of files. The SystemFileOpen() function must fail when the limit is reached.
+/** Try to open more than the maximum allowed number of files. The LibrariesFileOpen() function must fail when the limit is reached.
  * @return 0 if test was successful,
  * @return 1 if the test failed.
  */
@@ -99,11 +99,11 @@ int TestsMemorySetSmallAreaValue(void);
 int TestsMemorySetBigAreaValue(void);
 
 // String API
-/** Test the SystemStringCompare() function.
+/** Test the StringCompare() function.
  * @return 0 if all tests were successful,
  * @return 1 if a test failed.
  */
-int TestsSystemStringCompare(void);
+int TestsStringCompare(void);
 
 /** Test the StringConcatenate() function.
  * @return 0 if all tests were successful,
@@ -135,11 +135,11 @@ int TestsStringConvertUnsignedIntegerToString(void);
  */
 int TestsStringConvertIntegerToHexadecimal(void);
 
-/** Test the SystemStringCopy() function.
+/** Test the StringCopy() function.
  * @return 0 if all tests were successful,
  * @return 1 if a test failed.
  */
-int TestsSystemStringCopy(void);
+int TestsStringCopy(void);
 
 /** Test the StringGetSize() function.
  * @return 0 if all tests were successful,

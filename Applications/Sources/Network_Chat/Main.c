@@ -2,7 +2,7 @@
  * A really simple chat client communicating with UDP datagrams.
  * @author Adrien RICCIARDI
  */
-#include <System.h>
+#include <Libraries.h>
 #include "Interface.h"
 #include "Strings.h"
 
@@ -28,7 +28,7 @@ static int MainReadUserMessage(void)
 	unsigned char Key;
 	
 	// Get the last pressed key
-	Key = SystemKeyboardReadCharacter();
+	Key = LibrariesKeyboardReadCharacter();
 	
 	switch (Key)
 	{
@@ -77,9 +77,9 @@ int main(int argc, char *argv[])
 	// Check parameters
 	if (argc != 3)
 	{
-		SystemScreenWriteString(STRING_USAGE_1);
-		SystemScreenWriteString(argv[0]);
-		SystemScreenWriteString(STRING_USAGE_2);
+		LibrariesScreenWriteString(STRING_USAGE_1);
+		LibrariesScreenWriteString(argv[0]);
+		LibrariesScreenWriteString(STRING_USAGE_2);
 		return 1;
 	}
 	
@@ -87,37 +87,37 @@ int main(int argc, char *argv[])
 	// IP address
 	if (NetworkInitializeIPAddress(argv[1], &Destination_IP_Address) != 0)
 	{
-		SystemScreenSetFontColor(LIBRARIES_SCREEN_COLOR_RED);
-		SystemScreenWriteString(STRING_ERROR_INVALID_IP_ADDRESS);
+		LibrariesScreenSetFontColor(LIBRARIES_SCREEN_COLOR_RED);
+		LibrariesScreenWriteString(STRING_ERROR_INVALID_IP_ADDRESS);
 		return 1;
 	}
 	// Destination port
-	Destination_Port = SystemStringConvertStringToUnsignedInteger(argv[2]);
+	Destination_Port = LibrariesStringConvertStringToUnsignedInteger(argv[2]);
 	
 	// Initialize the network stack
 	Result = NetworkInitialize();
 	if (Result == 1)
 	{
-		SystemScreenSetFontColor(LIBRARIES_SCREEN_COLOR_RED);
-		SystemScreenWriteString(STRING_ERROR_NETWORK_INITIALIZATION_NO_NETWORK_SUPPORT);
+		LibrariesScreenSetFontColor(LIBRARIES_SCREEN_COLOR_RED);
+		LibrariesScreenWriteString(STRING_ERROR_NETWORK_INITIALIZATION_NO_NETWORK_SUPPORT);
 		return 1;
 	}
 	else if (Result == 2)
 	{
-		SystemScreenSetFontColor(LIBRARIES_SCREEN_COLOR_RED);
-		SystemScreenWriteString(STRING_ERROR_NETWORK_INITIALIZATION_BAD_CONFIGURATION_PARAMETERS);
+		LibrariesScreenSetFontColor(LIBRARIES_SCREEN_COLOR_RED);
+		LibrariesScreenWriteString(STRING_ERROR_NETWORK_INITIALIZATION_BAD_CONFIGURATION_PARAMETERS);
 		return 1;
 	}
 	
 	if (NetworkInitializeSocket(&Destination_IP_Address, Destination_Port, NETWORK_IP_PROTOCOL_UDP, &Socket) != 0)
 	{
-		SystemScreenSetFontColor(LIBRARIES_SCREEN_COLOR_RED);
-		SystemScreenWriteString(STRING_ERROR_NETWORK_SOCKET_INITIALIZATION);
+		LibrariesScreenSetFontColor(LIBRARIES_SCREEN_COLOR_RED);
+		LibrariesScreenWriteString(STRING_ERROR_NETWORK_SOCKET_INITIALIZATION);
 		return 1;
 	}
 	
 	// Prepare the screen
-	SystemScreenClear();
+	LibrariesScreenClear();
 	InterfaceDisplayUserMessage(""); // Display an empty prompt
 	
 	while (1)
@@ -135,7 +135,7 @@ int main(int argc, char *argv[])
 		}
 		
 		// Is a key pressed ?
-		if (SystemKeyboardIsKeyAvailable())
+		if (LibrariesKeyboardIsKeyAvailable())
 		{
 			switch (MainReadUserMessage())
 			{
@@ -157,7 +157,7 @@ int main(int argc, char *argv[])
 					
 					// Display an empty user message prompt
 					Main_User_Message_Length = 0;
-					SystemMemorySetAreaValue(String_Main_User_Message, sizeof(String_Main_User_Message), 0); // Clear all message bytes because if some data remain, there is a time when the current terminating zero will be overwritten and that the last character will become a previous message's one, resulting in displaying the previous message end
+					LibrariesMemorySetAreaValue(String_Main_User_Message, sizeof(String_Main_User_Message), 0); // Clear all message bytes because if some data remain, there is a time when the current terminating zero will be overwritten and that the last character will become a previous message's one, resulting in displaying the previous message end
 					InterfaceDisplayUserMessage("");
 					break;
 				
@@ -174,6 +174,6 @@ Exit:
 	// Put the cursor at the beginning of the last screen line
 	InterfaceDisplayMessage("", LIBRARIES_SCREEN_COLOR_WHITE); // Scroll the screen a last time to make the last line blank
 	InterfaceDisplayUserMessage("");
-	SystemScreenSetCursorPosition(LIBRARIES_SCREEN_ROWS_COUNT - 1, 0);
+	LibrariesScreenSetCursorPosition(LIBRARIES_SCREEN_ROWS_COUNT - 1, 0);
 	return 0;
 }

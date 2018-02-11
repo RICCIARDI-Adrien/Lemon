@@ -5,7 +5,7 @@
 #ifndef H_DISPLAY_H
 #define H_DISPLAY_H
 
-#include <System.h>
+#include <Libraries.h>
 
 //-------------------------------------------------------------------------------------------------
 // Functions
@@ -22,7 +22,7 @@ void DisplayWriteCharacter(char Character);
 /** Set the display background color.
  * @param Color_Code The color to use.
  */
-void DisplaySetBackgroundColor(TSystemScreenColor Color_Code);
+void DisplaySetBackgroundColor(TLibrariesScreenColor Color_Code);
 
 /** Get the display cursor position.
  * @param Pointer_Row On output will contain the row coordinate.

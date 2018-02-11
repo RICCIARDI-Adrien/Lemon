@@ -2,7 +2,7 @@
  * Display a menu showing all games.
  * @author Adrien RICCIARDI
  */
-#include <System.h>
+#include <Libraries.h>
 #include "Games.h"
 #include "Strings.h"
 
@@ -16,7 +16,7 @@ typedef void (*PointerGameEntryPoint)(void);
 // Private variables
 //-------------------------------------------------------------------------------------------------
 /** The main menu. */
-static TSystemMenu Menu_Main =
+static TLibrariesMenu Menu_Main =
 {
 	STRING_MAIN_MENU_TITLE,
 	STRING_MAIN_MENU_PROMPT,
@@ -54,7 +54,7 @@ int main(void)
 	
 	while (1)
 	{
-		Selected_Menu_Entry = SystemMenuDisplay(&Menu_Main) - 1; // Returned menu entry index starts from 1
+		Selected_Menu_Entry = LibrariesMenuDisplay(&Menu_Main) - 1; // Returned menu entry index starts from 1
 		
 		// Exit program ?
 		if (Selected_Menu_Entry >= sizeof(Game_Entry_Points) / sizeof(PointerGameEntryPoint)) return 0;

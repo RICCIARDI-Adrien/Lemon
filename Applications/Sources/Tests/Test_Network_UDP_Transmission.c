@@ -2,7 +2,7 @@
  * Transmit as much as possible UDP datagrams.
  * @author Adrien RICCIARDI
  */
-#include <System.h>
+#include <Libraries.h>
 
 //-------------------------------------------------------------------------------------------------
 // Private constants
@@ -24,9 +24,9 @@ int main(int argc, char *argv[])
 	// Check parameters
 	if (argc != 4)
 	{
-		SystemScreenWriteString("Usage : ");
-		SystemScreenWriteString(argv[0]);
-		SystemScreenWriteString(" IP_Address Port Payload_Size_Bytes\n");
+		LibrariesScreenWriteString("Usage : ");
+		LibrariesScreenWriteString(argv[0]);
+		LibrariesScreenWriteString(" IP_Address Port Payload_Size_Bytes\n");
 		return 1;
 	}
 	
@@ -34,45 +34,45 @@ int main(int argc, char *argv[])
 	// IP address
 	if (NetworkInitializeIPAddress(argv[1], &IP_Address) != 0)
 	{
-		SystemScreenWriteString("Error : malformed IP address.\n");
+		LibrariesScreenWriteString("Error : malformed IP address.\n");
 		return 1;
 	}
 	// Port number
-	Port = SystemStringConvertStringToUnsignedInteger(argv[2]);
+	Port = LibrariesStringConvertStringToUnsignedInteger(argv[2]);
 	// Payload size
-	Payload_Size = SystemStringConvertStringToUnsignedInteger(argv[3]);
+	Payload_Size = LibrariesStringConvertStringToUnsignedInteger(argv[3]);
 	if (Payload_Size > MAXIMUM_PAYLOAD_SIZE)
 	{
-		SystemScreenWriteString("Error : maximum allowed payload size : ");
-		SystemScreenWriteUnsignedInteger(MAXIMUM_PAYLOAD_SIZE);
-		SystemScreenWriteString(".\n");
+		LibrariesScreenWriteString("Error : maximum allowed payload size : ");
+		LibrariesScreenWriteUnsignedInteger(MAXIMUM_PAYLOAD_SIZE);
+		LibrariesScreenWriteString(".\n");
 		return 1;
 	}
 	
 	// Initialize network stack
 	if (NetworkInitialize() != 0)
 	{
-		SystemScreenWriteString("Error : failed to initialize network stack.\n");
+		LibrariesScreenWriteString("Error : failed to initialize network stack.\n");
 		return 1;
 	}
 	
 	// Create the socket used to transmit the datagrams
 	if (NetworkInitializeSocket(&IP_Address, Port, NETWORK_IP_PROTOCOL_UDP, &Socket) != 0)
 	{
-		SystemScreenWriteString("Error : failed to initialize socket.\n");
+		LibrariesScreenWriteString("Error : failed to initialize socket.\n");
 		return 1;
 	}
 	
 	// Fill the payload with a recognizable pattern
-	SystemMemorySetAreaValue(Payload_Buffer, Payload_Size, 0xCA);
+	LibrariesMemorySetAreaValue(Payload_Buffer, Payload_Size, 0xCA);
 	
 	// Transmit forever
-	SystemScreenWriteString("Transmitting at maximum speed. Hit F12 to quit.\n");
+	LibrariesScreenWriteString("Transmitting at maximum speed. Hit F12 to quit.\n");
 	while (1)
 	{
 		if (NetworkUDPSendBuffer(&Socket, Payload_Size, Payload_Buffer) != 0)
 		{
-			SystemScreenWriteString("Error : failed to transmit a packet.\n");
+			LibrariesScreenWriteString("Error : failed to transmit a packet.\n");
 			return 1;
 		}
 	}

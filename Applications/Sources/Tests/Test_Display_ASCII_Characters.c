@@ -2,7 +2,7 @@
  * Display all the ASCII characters the video card can generate.
  * @author Adrien RICCIARDI
  */
-#include <System.h>
+#include <Libraries.h>
 
 //-------------------------------------------------------------------------------------------------------------------------------
 // Private constants
@@ -41,9 +41,9 @@ int main(void)
 		Index += (LIBRARIES_SCREEN_COLUMNS_COUNT - LINE_COLUMNS_COUNT) * 2;
 	}
 	
-	SystemScreenDisplayBuffer(Video_Buffer);
-	SystemKeyboardReadCharacter();
+	LibrariesScreenDisplayBuffer(Video_Buffer);
+	LibrariesKeyboardReadCharacter();
 	
-	SystemScreenClear();
+	LibrariesScreenClear();
 	return 0;
 }

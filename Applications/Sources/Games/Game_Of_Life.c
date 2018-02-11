@@ -2,7 +2,7 @@
  * @see Games.h for description.
  * @author Adrien RICCIARDI
  */
-#include <System.h>
+#include <Libraries.h>
 #include "Games.h"
 #include "Strings.h"
 
@@ -40,7 +40,7 @@ static void CreateNewWorld(void)
 	{
 		for (Column = 0; Column < WORLD_COLUMNS_COUNT; Column++)
 		{
-			if (SystemRandomGenerateNumber() % 7 == 2) Cell_State = CELL_STATE_ALIVE;
+			if (LibrariesRandomGenerateNumber() % 7 == 2) Cell_State = CELL_STATE_ALIVE;
 			else Cell_State = CELL_STATE_DEAD;
 
 			Current_World[Row][Column] = Cell_State;
@@ -48,7 +48,7 @@ static void CreateNewWorld(void)
 	}
 	
 	// Reset previous world to avoid erroneous comparisons
-	SystemMemorySetAreaValue(Previous_World, sizeof(Previous_World), 0);
+	LibrariesMemorySetAreaValue(Previous_World, sizeof(Previous_World), 0);
 }
 
 /** Display the current world. */
@@ -76,7 +76,7 @@ static void DisplayWorld(void)
 		}
 	}
 
-	SystemScreenDisplayBuffer((unsigned char *) Video_Buffer);
+	LibrariesScreenDisplayBuffer((unsigned char *) Video_Buffer);
 }
 
 /** Retrieve the number of neighbor cells a specified cell has.
@@ -149,7 +149,7 @@ static void ComputeNextWorldGeneration(void)
 	
 	// Generate a new world if the current one is stable
 	if ((!Is_Old_Generation_Different) || (!Is_New_Generation_Different)) CreateNewWorld();
-	else SystemMemoryCopyArea(Next_World, Current_World, sizeof(Current_World)); // Update current world
+	else LibrariesMemoryCopyArea(Next_World, Current_World, sizeof(Current_World)); // Update current world
 }
 
 //-------------------------------------------------------------------------------------------------
@@ -159,7 +159,7 @@ void GameOfLife(void)
 {
 	int Wait_Time = 2; // 100 ms
 
-	SystemRandomInitialize();
+	LibrariesRandomInitialize();
 	CreateNewWorld();
 	DisplayWorld();
 
@@ -169,9 +169,9 @@ void GameOfLife(void)
 		DisplayWorld();
 
 		// Did the user hit a key
-		if (SystemKeyboardIsKeyAvailable())
+		if (LibrariesKeyboardIsKeyAvailable())
 		{
-			switch (SystemKeyboardReadCharacter())
+			switch (LibrariesKeyboardReadCharacter())
 			{
 				// Exit program
 				case LIBRARIES_KEYBOARD_KEY_CODE_ESCAPE:
@@ -198,6 +198,6 @@ void GameOfLife(void)
 		}
 
 		// Wait for 50ms steps
-		if (Wait_Time > 0) SystemTimerWait(Wait_Time * 50); // Avoid a system call if there is no need to wait
+		if (Wait_Time > 0) LibrariesTimerWait(Wait_Time * 50); // Avoid a system call if there is no need to wait
 	}
 }

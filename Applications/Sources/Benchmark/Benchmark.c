@@ -2,7 +2,7 @@
  * Execute several benchmarks to determine system speed and test its stability.
  * @author Adrien RICCIARDI
  */
-#include <System.h>
+#include <Libraries.h>
 
 //-------------------------------------------------------------------------------------------------
 // Private constants
@@ -73,7 +73,7 @@ static void BenchmarkProcessor(unsigned int *Pointer_Start_Time, unsigned int *P
 	MathIntegerInitializeFromInt(0, &Penultimate_Number);
 	MathIntegerInitializeFromInt(1, &Last_Number);
 	
-	*Pointer_Start_Time = SystemTimerGetValue();
+	*Pointer_Start_Time = LibrariesTimerGetValue();
 	
 	for (Iterations = 0; Iterations < BENCHMARK_PROCESSOR_ITERATIONS_COUNT; Iterations++)
 	{
@@ -82,7 +82,7 @@ static void BenchmarkProcessor(unsigned int *Pointer_Start_Time, unsigned int *P
 		MathIntegerCopy(&Result, &Last_Number);
 	}
 	
-	*Pointer_End_Time = SystemTimerGetValue();
+	*Pointer_End_Time = LibrariesTimerGetValue();
 }
 
 static void BenchmarkFileSystem(unsigned int *Pointer_Start_Time, unsigned int *Pointer_End_Time)
@@ -92,39 +92,39 @@ static void BenchmarkFileSystem(unsigned int *Pointer_Start_Time, unsigned int *
 	char String_Data[] = "Benchmarking...";
 	
 	// Keep benchmark starting time to compute the elapsed time at benchmark end
-	*Pointer_Start_Time = SystemTimerGetValue();
+	*Pointer_Start_Time = LibrariesTimerGetValue();
 	
 	for (i = 0; i < BENCHMARK_FILE_SYSTEM_ITERATIONS_COUNT; i++)
 	{
 		// Create the file
-		Result = SystemFileOpen("_test_", 'w', &File_ID);
+		Result = LibrariesFileOpen("_test_", 'w', &File_ID);
 		if (Result != ERROR_CODE_NO_ERROR)
 		{
-			SystemScreenWriteString("Error while opening the file for writing.\n");
+			LibrariesScreenWriteString("Error while opening the file for writing.\n");
 			goto Exit_Error;
 		}
 		
 		// Write some random bytes
-		Result = SystemFileWrite(File_ID, String_Data, sizeof(String_Data));
+		Result = LibrariesFileWrite(File_ID, String_Data, sizeof(String_Data));
 		if (Result != ERROR_CODE_NO_ERROR)
 		{
-			SystemScreenWriteString("Error while writing to the file.\n");
+			LibrariesScreenWriteString("Error while writing to the file.\n");
 			goto Exit_Error;
 		}
 
-		SystemFileClose(File_ID);
+		LibrariesFileClose(File_ID);
 	}
 	
-	*Pointer_End_Time = SystemTimerGetValue();
-	SystemFileDelete("_test_");
+	*Pointer_End_Time = LibrariesTimerGetValue();
+	LibrariesFileDelete("_test_");
 	return;
 	
 Exit_Error:
-	SystemScreenWriteString("Error on file ");
-	SystemScreenWriteInteger(i);
-	SystemScreenWriteString(".\n");
-	SystemFileClose(File_ID);
-	SystemFileDelete("_test_");
+	LibrariesScreenWriteString("Error on file ");
+	LibrariesScreenWriteInteger(i);
+	LibrariesScreenWriteString(".\n");
+	LibrariesFileClose(File_ID);
+	LibrariesFileDelete("_test_");
 }
 
 static void BenchmarkSystemCall(unsigned int *Pointer_Start_Time, unsigned int *Pointer_End_Time)
@@ -132,11 +132,11 @@ static void BenchmarkSystemCall(unsigned int *Pointer_Start_Time, unsigned int *
 	unsigned int i;
 	
 	// Keep benchmark starting time to compute the elapsed time at benchmark end
-	*Pointer_Start_Time = SystemTimerGetValue();
+	*Pointer_Start_Time = LibrariesTimerGetValue();
 	
 	for (i = 0; i < BENCHMARK_SYSTEM_CALL_ITERATIONS_COUNT; i++) LibrariesSystemCall(SYSTEM_CALL_SCREEN_GET_COLOR, 0, 0, NULL, NULL);
 	
-	*Pointer_End_Time = SystemTimerGetValue();
+	*Pointer_End_Time = LibrariesTimerGetValue();
 }
 
 //-------------------------------------------------------------------------------------------------
@@ -150,23 +150,23 @@ int main(void)
 	for (i = 0; i < sizeof(Benchmark_Tests) / sizeof(TBenchmarkTest); i++)
 	{
 		// Display benchmark information
-		SystemScreenWriteString("### Evaluating ");
-		SystemScreenSetFontColor(LIBRARIES_SCREEN_COLOR_GREEN);
-		SystemScreenWriteString(Benchmark_Tests[i].String_Tested_Subsystem);
-		SystemScreenSetFontColor(LIBRARIES_SCREEN_COLOR_BLUE);
-		SystemScreenWriteString(" ###\n");
-		SystemScreenWriteString(Benchmark_Tests[i].String_Description);
-		SystemScreenWriteString(".\n");
+		LibrariesScreenWriteString("### Evaluating ");
+		LibrariesScreenSetFontColor(LIBRARIES_SCREEN_COLOR_GREEN);
+		LibrariesScreenWriteString(Benchmark_Tests[i].String_Tested_Subsystem);
+		LibrariesScreenSetFontColor(LIBRARIES_SCREEN_COLOR_BLUE);
+		LibrariesScreenWriteString(" ###\n");
+		LibrariesScreenWriteString(Benchmark_Tests[i].String_Description);
+		LibrariesScreenWriteString(".\n");
 		
 		// Execute it
 		Benchmark_Tests[i].Function(&Start_Time, &End_Time);
 		
 		// Display elapsed time
-		SystemScreenWriteString("Benchmark duration : ");
-		SystemScreenSetFontColor(LIBRARIES_SCREEN_COLOR_GREEN);
-		SystemScreenWriteUnsignedInteger(End_Time - Start_Time);
-		SystemScreenSetFontColor(LIBRARIES_SCREEN_COLOR_BLUE);
-		SystemScreenWriteString(" milliseconds.\n\n");
+		LibrariesScreenWriteString("Benchmark duration : ");
+		LibrariesScreenSetFontColor(LIBRARIES_SCREEN_COLOR_GREEN);
+		LibrariesScreenWriteUnsignedInteger(End_Time - Start_Time);
+		LibrariesScreenSetFontColor(LIBRARIES_SCREEN_COLOR_BLUE);
+		LibrariesScreenWriteString(" milliseconds.\n\n");
 	}
 	
 	return 0;

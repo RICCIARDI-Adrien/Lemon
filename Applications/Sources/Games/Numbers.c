@@ -2,7 +2,7 @@
  * @see Games.h for description.
  * @author Adrien RICCIARDI
  */
-#include <System.h>
+#include <Libraries.h>
 #include "Games.h"
 #include "Strings.h"
 
@@ -31,7 +31,7 @@ static int ReadUserNumber(void)
 	
 	while (1)
 	{
-		Character = SystemKeyboardReadCharacter();
+		Character = LibrariesKeyboardReadCharacter();
 		
 		// Backspace, delete last digit if possible
 		if (Character == '\b')
@@ -39,7 +39,7 @@ static int ReadUserNumber(void)
 			if (Digits_Count <= 0) continue;
 			Digits_Count--;
 			String[Digits_Count] = 0;
-			SystemScreenWriteCharacter('\b');
+			LibrariesScreenWriteCharacter('\b');
 		}
 		
 		// Enter, convert and return number only if user entered almost one digit
@@ -49,8 +49,8 @@ static int ReadUserNumber(void)
 			if (Digits_Count == 0) continue;
 			
 			String[Digits_Count] = 0;
-			SystemScreenWriteCharacter('\n');
-			return (int) SystemStringConvertStringToUnsignedInteger(String);
+			LibrariesScreenWriteCharacter('\n');
+			return (int) LibrariesStringConvertStringToUnsignedInteger(String);
 		}
 		
 		// Escape key, return exit code
@@ -61,7 +61,7 @@ static int ReadUserNumber(void)
 		{
 			String[Digits_Count] = Character;
 			Digits_Count++;
-			SystemScreenWriteCharacter(Character);
+			LibrariesScreenWriteCharacter(Character);
 		}
 	}
 }
@@ -74,22 +74,22 @@ void Numbers(void)
 	int Computer_Number, Player_Number, Attempts = 0;
 	
 	// Choose number
-	SystemRandomInitialize();
-	Computer_Number = SystemRandomGenerateNumber() % MAXIMUM_NUMBER_VALUE + 1;
+	LibrariesRandomInitialize();
+	Computer_Number = LibrariesRandomGenerateNumber() % MAXIMUM_NUMBER_VALUE + 1;
 	
 	// Show instructions
-	SystemScreenWriteString(STRING_NUMBERS_INSTRUCTIONS_1);
-	SystemScreenWriteInteger(MAXIMUM_NUMBER_VALUE);
-	SystemScreenWriteString(STRING_NUMBERS_INSTRUCTIONS_2);
-	SystemScreenWriteInteger(ATTEMPTS_COUNT);
-	SystemScreenWriteString(STRING_NUMBERS_INSTRUCTIONS_3);
+	LibrariesScreenWriteString(STRING_NUMBERS_INSTRUCTIONS_1);
+	LibrariesScreenWriteInteger(MAXIMUM_NUMBER_VALUE);
+	LibrariesScreenWriteString(STRING_NUMBERS_INSTRUCTIONS_2);
+	LibrariesScreenWriteInteger(ATTEMPTS_COUNT);
+	LibrariesScreenWriteString(STRING_NUMBERS_INSTRUCTIONS_3);
 			
 	while (1)
 	{
 		// Get player's number
-		SystemScreenSetFontColor(LIBRARIES_SCREEN_COLOR_LIGHT_BLUE);
-		SystemScreenWriteString(STRING_NUMBERS_INSERT_NUMBER);
-		SystemScreenSetFontColor(LIBRARIES_SCREEN_COLOR_BLUE);
+		LibrariesScreenSetFontColor(LIBRARIES_SCREEN_COLOR_LIGHT_BLUE);
+		LibrariesScreenWriteString(STRING_NUMBERS_INSERT_NUMBER);
+		LibrariesScreenSetFontColor(LIBRARIES_SCREEN_COLOR_BLUE);
 		Player_Number = ReadUserNumber();
 				
 		// Quit game ?
@@ -98,42 +98,42 @@ void Numbers(void)
 		Attempts++;
 		if (Attempts >= ATTEMPTS_COUNT)
 		{
-			SystemScreenSetFontColor(LIBRARIES_SCREEN_COLOR_RED);
-			SystemScreenWriteString(STRING_NUMBERS_PLAYER_LOST_1);
-			SystemScreenWriteInteger(Computer_Number);
-			SystemScreenWriteString(STRING_NUMBERS_PLAYER_LOST_2);
+			LibrariesScreenSetFontColor(LIBRARIES_SCREEN_COLOR_RED);
+			LibrariesScreenWriteString(STRING_NUMBERS_PLAYER_LOST_1);
+			LibrariesScreenWriteInteger(Computer_Number);
+			LibrariesScreenWriteString(STRING_NUMBERS_PLAYER_LOST_2);
 			goto End;
 		}
 		
 		// Compare to computer number
 		if (Player_Number == Computer_Number) // Player won
 		{
-			SystemScreenSetFontColor(LIBRARIES_SCREEN_COLOR_GREEN);
-			SystemScreenWriteString(STRING_NUMBERS_PLAYER_WON_1);
-			SystemScreenWriteInteger(Attempts);
-			SystemScreenWriteString(STRING_NUMBERS_PLAYER_WON_2);
+			LibrariesScreenSetFontColor(LIBRARIES_SCREEN_COLOR_GREEN);
+			LibrariesScreenWriteString(STRING_NUMBERS_PLAYER_WON_1);
+			LibrariesScreenWriteInteger(Attempts);
+			LibrariesScreenWriteString(STRING_NUMBERS_PLAYER_WON_2);
 			goto End;
 		}
 		else if (Player_Number < Computer_Number) // Too small
 		{
-			SystemScreenSetFontColor(LIBRARIES_SCREEN_COLOR_RED);
-			SystemScreenWriteString(STRING_NUMBERS_NUMBER_TOO_SMALL);
+			LibrariesScreenSetFontColor(LIBRARIES_SCREEN_COLOR_RED);
+			LibrariesScreenWriteString(STRING_NUMBERS_NUMBER_TOO_SMALL);
 		}
 		else // Too big
 		{
-			SystemScreenSetFontColor(LIBRARIES_SCREEN_COLOR_RED);
-			SystemScreenWriteString(STRING_NUMBERS_NUMBER_TOO_BIG);
+			LibrariesScreenSetFontColor(LIBRARIES_SCREEN_COLOR_RED);
+			LibrariesScreenWriteString(STRING_NUMBERS_NUMBER_TOO_BIG);
 		}
 
 		// Show remaining attempts
-		SystemScreenSetFontColor(LIBRARIES_SCREEN_COLOR_BLUE);
-		SystemScreenWriteString(STRING_NUMBERS_REMAINING_ATTEMPTS_1);
-		SystemScreenWriteInteger(ATTEMPTS_COUNT - Attempts);
-		SystemScreenWriteString(STRING_NUMBERS_REMAINING_ATTEMPTS_2);
+		LibrariesScreenSetFontColor(LIBRARIES_SCREEN_COLOR_BLUE);
+		LibrariesScreenWriteString(STRING_NUMBERS_REMAINING_ATTEMPTS_1);
+		LibrariesScreenWriteInteger(ATTEMPTS_COUNT - Attempts);
+		LibrariesScreenWriteString(STRING_NUMBERS_REMAINING_ATTEMPTS_2);
 	}
 	
 End:
-	SystemScreenSetFontColor(LIBRARIES_SCREEN_COLOR_BLUE);
-	SystemScreenWriteString(STRING_NUMBERS_END);
-	SystemKeyboardReadCharacter();
+	LibrariesScreenSetFontColor(LIBRARIES_SCREEN_COLOR_BLUE);
+	LibrariesScreenWriteString(STRING_NUMBERS_END);
+	LibrariesKeyboardReadCharacter();
 }

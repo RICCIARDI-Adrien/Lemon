@@ -5,7 +5,7 @@
 #ifndef H_CONFIGURATION_H
 #define H_CONFIGURATION_H
 
-#include <System.h>
+#include <Libraries.h>
 
 //-------------------------------------------------------------------------------------------------
 // Constants

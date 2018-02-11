@@ -2,7 +2,7 @@
  * @see Games.h for description.
  * @author Adrien RICCIARDI
  */
-#include <System.h>
+#include <Libraries.h>
 #include "Games.h"
 #include "Strings.h"
 
@@ -27,7 +27,7 @@ typedef enum
 // Private variables
 //-------------------------------------------------------------------------------------------------
 /** Difficulty-level selection menu. */
-static TSystemMenu Menu_Difficulty_Level =
+static TLibrariesMenu Menu_Difficulty_Level =
 {
 	STRING_BRAIN_CALCULATION_MENU_TITLE,
 	STRING_BRAIN_CALCULATION_MENU_PROMPT,
@@ -55,7 +55,7 @@ static int RandomNumberRange(int Minimum, int Maximum)
 {
 	int Number;
 	
-	Number = SystemRandomGenerateNumber() % (Maximum - Minimum);
+	Number = LibrariesRandomGenerateNumber() % (Maximum - Minimum);
 	Number += Minimum;
 	
 	return Number;
@@ -93,7 +93,7 @@ static void ChooseCalculus(int *Pointer_First_Number, char *Pointer_Operator, in
 		*Pointer_Second_Number = RandomNumberRange(Minimum_Value, Maximum_Value);
 		
 		// Choose operator and compute calculus
-		switch (SystemRandomGenerateNumber() % 3)
+		switch (LibrariesRandomGenerateNumber() % 3)
 		{
 			case 0:
 				*Pointer_Operator = '+';
@@ -121,7 +121,7 @@ static int ReadUserNumber(void)
 	
 	while (1)
 	{
-		Character = SystemKeyboardReadCharacter();
+		Character = LibrariesKeyboardReadCharacter();
 		
 		// Backspace, delete last digit if possible
 		if (Character == '\b')
@@ -129,7 +129,7 @@ static int ReadUserNumber(void)
 			if (Digits_Count <= 0) continue;
 			Digits_Count--;
 			String[Digits_Count] = 0;
-			SystemScreenWriteCharacter('\b');
+			LibrariesScreenWriteCharacter('\b');
 		}
 		
 		// Enter, convert and return number only if user entered almost one digit
@@ -139,8 +139,8 @@ static int ReadUserNumber(void)
 			if (Digits_Count == 0) continue;
 			
 			String[Digits_Count] = 0;
-			SystemScreenWriteCharacter('\n');
-			return (int) SystemStringConvertStringToUnsignedInteger(String);
+			LibrariesScreenWriteCharacter('\n');
+			return (int) LibrariesStringConvertStringToUnsignedInteger(String);
 		}
 		
 		// Escape key, return exit code
@@ -151,7 +151,7 @@ static int ReadUserNumber(void)
 		{
 			String[Digits_Count] = Character;
 			Digits_Count++;
-			SystemScreenWriteCharacter(Character);
+			LibrariesScreenWriteCharacter(Character);
 		}
 	}
 }
@@ -167,7 +167,7 @@ void BrainCalculation(void)
 	while (1)
 	{
 		// Let the player select the game difficulty
-		switch (SystemMenuDisplay(&Menu_Difficulty_Level))
+		switch (LibrariesMenuDisplay(&Menu_Difficulty_Level))
 		{
 			case 1:
 				Difficulty_Level = BRAIN_CALCULATION_DIFFICULTY_LEVEL_EASY;
@@ -182,24 +182,24 @@ void BrainCalculation(void)
 				return;
 		}
 		
-		SystemRandomInitialize();
+		LibrariesRandomInitialize();
 		
 		// Show instructions
-		SystemScreenWriteString(STRING_BRAIN_CALCULATION_INSTRUCTIONS);
+		LibrariesScreenWriteString(STRING_BRAIN_CALCULATION_INSTRUCTIONS);
 		
 		while (1)
 		{
 			// Show calculus
 			ChooseCalculus(&First_Number, &Operator, &Second_Number, &Result);
-			SystemScreenSetFontColor(LIBRARIES_SCREEN_COLOR_LIGHT_BLUE);
-			SystemScreenWriteString("   ");
-			SystemScreenWriteInteger(First_Number);
-			SystemScreenWriteCharacter(' ');
-			SystemScreenWriteCharacter(Operator);
-			SystemScreenWriteCharacter(' ');
-			SystemScreenWriteInteger(Second_Number);
-			SystemScreenWriteString("  =  ");
-			SystemScreenSetFontColor(LIBRARIES_SCREEN_COLOR_BLUE);
+			LibrariesScreenSetFontColor(LIBRARIES_SCREEN_COLOR_LIGHT_BLUE);
+			LibrariesScreenWriteString("   ");
+			LibrariesScreenWriteInteger(First_Number);
+			LibrariesScreenWriteCharacter(' ');
+			LibrariesScreenWriteCharacter(Operator);
+			LibrariesScreenWriteCharacter(' ');
+			LibrariesScreenWriteInteger(Second_Number);
+			LibrariesScreenWriteString("  =  ");
+			LibrariesScreenSetFontColor(LIBRARIES_SCREEN_COLOR_BLUE);
 			
 			// Get user's number
 			Number = ReadUserNumber();
@@ -207,35 +207,35 @@ void BrainCalculation(void)
 			// Does the user want to exit program ?
 			if (Number == BRAIN_CALCULATION_EXIT_CODE)
 			{
-				SystemScreenWriteCharacter('\n');
-				SystemScreenWriteString(STRING_BRAIN_CALCULATION_CORRECT_ANSWERS_COUNT_1);
-				SystemScreenWriteInteger(Correct_Results_Count);
-				SystemScreenWriteString(STRING_BRAIN_CALCULATION_CORRECT_ANSWERS_COUNT_2);
+				LibrariesScreenWriteCharacter('\n');
+				LibrariesScreenWriteString(STRING_BRAIN_CALCULATION_CORRECT_ANSWERS_COUNT_1);
+				LibrariesScreenWriteInteger(Correct_Results_Count);
+				LibrariesScreenWriteString(STRING_BRAIN_CALCULATION_CORRECT_ANSWERS_COUNT_2);
 				return;
 			}
 			
 			// Check if user's result is correct
 			if (Number == Result)
 			{
-				SystemScreenSetFontColor(LIBRARIES_SCREEN_COLOR_GREEN);
-				SystemScreenWriteString(STRING_BRAIN_CALCULATION_GOOD_RESULT);
-				SystemScreenSetFontColor(LIBRARIES_SCREEN_COLOR_BLUE);
+				LibrariesScreenSetFontColor(LIBRARIES_SCREEN_COLOR_GREEN);
+				LibrariesScreenWriteString(STRING_BRAIN_CALCULATION_GOOD_RESULT);
+				LibrariesScreenSetFontColor(LIBRARIES_SCREEN_COLOR_BLUE);
 				
 				Correct_Results_Count++;
 			}
 			else
 			{
-				SystemScreenSetFontColor(LIBRARIES_SCREEN_COLOR_RED);
-				SystemScreenWriteString(STRING_BRAIN_CALCULATION_BAD_RESULT_1);
-				SystemScreenWriteInteger(Result);
-				SystemScreenWriteString(STRING_BRAIN_CALCULATION_BAD_RESULT_2);
+				LibrariesScreenSetFontColor(LIBRARIES_SCREEN_COLOR_RED);
+				LibrariesScreenWriteString(STRING_BRAIN_CALCULATION_BAD_RESULT_1);
+				LibrariesScreenWriteInteger(Result);
+				LibrariesScreenWriteString(STRING_BRAIN_CALCULATION_BAD_RESULT_2);
 				
-				SystemScreenSetFontColor(LIBRARIES_SCREEN_COLOR_BLUE);
-				SystemScreenWriteString(STRING_BRAIN_CALCULATION_CORRECT_ANSWERS_COUNT_1);
-				SystemScreenWriteInteger(Correct_Results_Count);
-				SystemScreenWriteString(STRING_BRAIN_CALCULATION_CORRECT_ANSWERS_COUNT_2);
+				LibrariesScreenSetFontColor(LIBRARIES_SCREEN_COLOR_BLUE);
+				LibrariesScreenWriteString(STRING_BRAIN_CALCULATION_CORRECT_ANSWERS_COUNT_1);
+				LibrariesScreenWriteInteger(Correct_Results_Count);
+				LibrariesScreenWriteString(STRING_BRAIN_CALCULATION_CORRECT_ANSWERS_COUNT_2);
 				
-				SystemKeyboardReadCharacter();
+				LibrariesKeyboardReadCharacter();
 				break;
 			}
 		}

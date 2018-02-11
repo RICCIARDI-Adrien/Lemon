@@ -2,7 +2,7 @@
  * Contain all automated tests that can be done on the system.
  * @author Adrien RICCIARDI
  */
-#include <System.h>
+#include <Libraries.h>
 #include "Display_Message.h"
 #include "Tests.h"
 
@@ -47,25 +47,25 @@ static TTest Tests[] =
 	},
 	// Memory API tests
 	{
-		"SystemMemoryCopyArea() with a small area size",
+		"MemoryCopyArea() with a small area size",
 		TestsMemoryCopySmallArea
 	},
 	{
-		"SystemMemoryCopyArea() with a big area size",
+		"MemoryCopyArea() with a big area size",
 		TestsMemoryCopyBigArea
 	},
 	{
-		"SystemMemorySetAreaValue() with a small area size",
+		"MemorySetAreaValue() with a small area size",
 		TestsMemorySetSmallAreaValue
 	},
 	{
-		"SystemMemorySetAreaValue() with a big area size",
+		"MemorySetAreaValue() with a big area size",
 		TestsMemorySetBigAreaValue
 	},
 	// String API tests
 	{
-		"SystemStringCompare()",
-		TestsSystemStringCompare
+		"StringCompare()",
+		TestsStringCompare
 	},
 	{
 		"StringConcatenate()",
@@ -88,8 +88,8 @@ static TTest Tests[] =
 		TestsStringConvertIntegerToHexadecimal
 	},
 	{
-		"SystemStringCopy()",
-		TestsSystemStringCopy
+		"StringCopy()",
+		TestsStringCopy
 	},
 	{
 		"StringGetSize()",
@@ -104,9 +104,9 @@ int main(void)
 {
 	unsigned int i;
 	
-	SystemRandomInitialize();
+	LibrariesRandomInitialize();
 	
-	SystemScreenWriteString("### Automated tests ###\n\n");
+	LibrariesScreenWriteString("### Automated tests ###\n\n");
 	
 	for (i = 0; i < sizeof(Tests) / sizeof(TTest); i++)
 	{

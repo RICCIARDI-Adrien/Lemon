@@ -2,7 +2,7 @@
  * @see Games.h for description.
  * @author Adrien RICCIARDI
  */
-#include <System.h>
+#include <Libraries.h>
 #include "Games.h"
 #include "Strings.h"
 
@@ -23,7 +23,7 @@
 // Private variables
 //-------------------------------------------------------------------------------------------------
 /** Allow to select the rain speed. */
-static TSystemMenu Menu_Rain_Speed =
+static TLibrariesMenu Menu_Rain_Speed =
 {
 	STRING_RAIN_MENU_TITLE,
 	STRING_RAIN_MENU_PROMPT,
@@ -50,16 +50,16 @@ static int Wait(unsigned int Period_Counts)
 	// Check only the keyboard if there is no need to wait
 	if (Period_Counts == 0)
 	{
-		if (SystemKeyboardIsKeyAvailable() && (SystemKeyboardReadCharacter() == LIBRARIES_KEYBOARD_KEY_CODE_ESCAPE)) return 1;
+		if (LibrariesKeyboardIsKeyAvailable() && (LibrariesKeyboardReadCharacter() == LIBRARIES_KEYBOARD_KEY_CODE_ESCAPE)) return 1;
 	}
 	// Or wait the required time
 	else
 	{
 		while (Period_Counts > 0)
 		{
-			if (SystemKeyboardIsKeyAvailable() && (SystemKeyboardReadCharacter() == LIBRARIES_KEYBOARD_KEY_CODE_ESCAPE)) return 1;
+			if (LibrariesKeyboardIsKeyAvailable() && (LibrariesKeyboardReadCharacter() == LIBRARIES_KEYBOARD_KEY_CODE_ESCAPE)) return 1;
 		
-			SystemTimerWait(50);
+			LibrariesTimerWait(50);
 			Period_Counts--;
 		}
 	}
@@ -75,7 +75,7 @@ void Rain(void)
 	int Row, Column, i, Raining_Speed, Loops_Count = 1, Raindrops_Count;
 	
 	// Ask the user for the rain speed
-	switch (SystemMenuDisplay(&Menu_Rain_Speed))
+	switch (LibrariesMenuDisplay(&Menu_Rain_Speed))
 	{
 		case 1:
 			Raining_Speed = RAINING_SPEED_SLOW;
@@ -97,12 +97,12 @@ void Rain(void)
 			return;
 	}
 	
-	SystemRandomInitialize();
+	LibrariesRandomInitialize();
 	
 	while (1)
 	{
-		SystemScreenSetBackgroundColor(LIBRARIES_SCREEN_COLOR_WHITE);
-		SystemScreenClear();
+		LibrariesScreenSetBackgroundColor(LIBRARIES_SCREEN_COLOR_WHITE);
+		LibrariesScreenClear();
 		Raindrops_Count = 0;
 		
 		for (i = 0; i < 200; i++)
@@ -110,29 +110,29 @@ void Rain(void)
 			// Choose drop location (avoiding (79, 24) because the console will scroll vertically going to next line)
 			do
 			{
-				Column = SystemRandomGenerateNumber() % LIBRARIES_SCREEN_COLUMNS_COUNT;
-				Row = SystemRandomGenerateNumber() % LIBRARIES_SCREEN_ROWS_COUNT;
+				Column = LibrariesRandomGenerateNumber() % LIBRARIES_SCREEN_COLUMNS_COUNT;
+				Row = LibrariesRandomGenerateNumber() % LIBRARIES_SCREEN_ROWS_COUNT;
 			} while ((Column == LIBRARIES_SCREEN_COLUMNS_COUNT - 1) && (Row == LIBRARIES_SCREEN_ROWS_COUNT - 1));
 			
 			// Print raindrop
-			SystemScreenSetCursorPosition(Row, Column);
-			SystemScreenSetBackgroundColor(LIBRARIES_SCREEN_COLOR_BLUE);
-			SystemScreenWriteCharacter(' ');
+			LibrariesScreenSetCursorPosition(Row, Column);
+			LibrariesScreenSetBackgroundColor(LIBRARIES_SCREEN_COLOR_BLUE);
+			LibrariesScreenWriteCharacter(' ');
 			Raindrops_Count++;
 			
 			// Print loop count
-			SystemScreenSetCursorPosition(LIBRARIES_SCREEN_ROWS_COUNT - 1, 0);
-			SystemScreenSetBackgroundColor(LIBRARIES_SCREEN_COLOR_WHITE);
-			SystemScreenSetFontColor(LIBRARIES_SCREEN_COLOR_LIGHT_GREEN);
-			SystemScreenWriteString(STRING_RAIN_STATISTICS_1);
-			SystemScreenWriteInteger(Raindrops_Count);
-			SystemScreenWriteString(STRING_RAIN_STATISTICS_2);
-			SystemScreenWriteInteger(Loops_Count);
+			LibrariesScreenSetCursorPosition(LIBRARIES_SCREEN_ROWS_COUNT - 1, 0);
+			LibrariesScreenSetBackgroundColor(LIBRARIES_SCREEN_COLOR_WHITE);
+			LibrariesScreenSetFontColor(LIBRARIES_SCREEN_COLOR_LIGHT_GREEN);
+			LibrariesScreenWriteString(STRING_RAIN_STATISTICS_1);
+			LibrariesScreenWriteInteger(Raindrops_Count);
+			LibrariesScreenWriteString(STRING_RAIN_STATISTICS_2);
+			LibrariesScreenWriteInteger(Loops_Count);
 			
 			// Wait required time
 			if (Wait(Raining_Speed)) // Exit program if the player hit Escape key
 			{
-				SystemScreenClear();
+				LibrariesScreenClear();
 				return;
 			}
 		}

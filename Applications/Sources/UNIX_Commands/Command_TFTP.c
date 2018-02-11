@@ -2,7 +2,7 @@
  * A simple TFTP client with no command line and a small amount of commands. Only "octet" transfer mode is supported. Implementation is based on RFC 1350.
  * @author Adrien RICCIARDI
  */
-#include <System.h>
+#include <Libraries.h>
 #include "Commands.h"
 #include "Strings.h"
 
@@ -39,27 +39,27 @@ int TFTPExecuteCommandGet(char *String_File_Name)
 	// Prepare the read request
 	Packet.Opcode = NETWORK_SWAP_WORD(NETWORK_TFTP_OPCODE_READ_REQUEST);
 	// Append the requested file name
-	SystemStringCopyUpToNumber(String_File_Name, Packet.Request.String_File_Name_And_Mode, LIBRARIES_FILE_NAME_LENGTH);
-	File_Name_Length = SystemStringGetSize(Packet.Request.String_File_Name_And_Mode);
+	LibrariesStringCopyUpToNumber(String_File_Name, Packet.Request.String_File_Name_And_Mode, LIBRARIES_FILE_NAME_LENGTH);
+	File_Name_Length = LibrariesStringGetSize(Packet.Request.String_File_Name_And_Mode);
 	// Append the transfer mode
-	SystemStringCopy(STRING_TFTP_TRANSFER_MODE, &Packet.Request.String_File_Name_And_Mode[File_Name_Length + 1]); // Append the string right after the file name string terminating zero
-	Transfer_Mode_Length = SystemStringGetSize(STRING_TFTP_TRANSFER_MODE);
+	LibrariesStringCopy(STRING_TFTP_TRANSFER_MODE, &Packet.Request.String_File_Name_And_Mode[File_Name_Length + 1]); // Append the string right after the file name string terminating zero
+	Transfer_Mode_Length = LibrariesStringGetSize(STRING_TFTP_TRANSFER_MODE);
 	
 	// Open the file to be ready to write it's content
-	if (SystemFileOpen(String_File_Name, LIBRARIES_FILE_OPENING_MODE_WRITE, &File_ID) != 0)
+	if (LibrariesFileOpen(String_File_Name, LIBRARIES_FILE_OPENING_MODE_WRITE, &File_ID) != 0)
 	{
-		SystemScreenWriteString(STRING_COMMAND_TFTP_GET_CANT_OPEN_FILE);
+		LibrariesScreenWriteString(STRING_COMMAND_TFTP_GET_CANT_OPEN_FILE);
 		return 1; // Do not go through Exit label path or a file with the same name than the one that would be opened could be deleted
 	}
 	
 	// Send the read request
 	if (NetworkUDPSendBuffer(&Socket_Server, sizeof(Packet.Opcode) + File_Name_Length + 1 + Transfer_Mode_Length + 1, &Packet) != 0) // +2 bytes for both strings terminating zeroes
 	{
-		SystemScreenWriteString(STRING_COMMAND_TFTP_GENERIC_NETWORK_TRANSMISSION_FAILED);
+		LibrariesScreenWriteString(STRING_COMMAND_TFTP_GENERIC_NETWORK_TRANSMISSION_FAILED);
 		goto Exit;
 	}
 	
-	SystemScreenWriteString(STRING_COMMAND_TFTP_GET_STARTING_DOWNLOAD);
+	LibrariesScreenWriteString(STRING_COMMAND_TFTP_GET_STARTING_DOWNLOAD);
 	
 	// Receive the file
 	do
@@ -67,7 +67,7 @@ int TFTPExecuteCommandGet(char *String_File_Name)
 		// Get a packet
 		if (NetworkTFTPReceivePacket(&Socket_Server, TFTP_PACKET_RECEPTION_TIMEOUT, &Data_Size, &Packet) != 0) // Data_Size contains for now the raw TFTP packet size
 		{
-			SystemScreenWriteString(STRING_COMMAND_TFTP_GENERIC_NETWORK_RECEPTION_FAILED);
+			LibrariesScreenWriteString(STRING_COMMAND_TFTP_GENERIC_NETWORK_RECEPTION_FAILED);
 			goto Exit;
 		}
 		Packet.Opcode = NETWORK_SWAP_WORD(Packet.Opcode);
@@ -75,16 +75,16 @@ int TFTPExecuteCommandGet(char *String_File_Name)
 		// Did an error occurred ?
 		if (Packet.Opcode == NETWORK_TFTP_OPCODE_ERROR)
 		{
-			SystemScreenWriteString(STRING_COMMAND_TFTP_GENERIC_SERVER_ERROR_1);
-			SystemScreenWriteString(Packet.Error.String_Error_Message);
-			SystemScreenWriteString(STRING_COMMAND_TFTP_GENERIC_SERVER_ERROR_2);
+			LibrariesScreenWriteString(STRING_COMMAND_TFTP_GENERIC_SERVER_ERROR_1);
+			LibrariesScreenWriteString(Packet.Error.String_Error_Message);
+			LibrariesScreenWriteString(STRING_COMMAND_TFTP_GENERIC_SERVER_ERROR_2);
 			goto Exit;
 		}
 		
 		// Is it a data packet ?
 		if (Packet.Opcode != NETWORK_TFTP_OPCODE_DATA)
 		{
-			SystemScreenWriteString(STRING_COMMAND_TFTP_GENERIC_BAD_NETWORK_PACKET_RECEIVED);
+			LibrariesScreenWriteString(STRING_COMMAND_TFTP_GENERIC_BAD_NETWORK_PACKET_RECEIVED);
 			goto Exit;
 		}
 		
@@ -92,11 +92,11 @@ int TFTPExecuteCommandGet(char *String_File_Name)
 		Received_Block_Number = NETWORK_SWAP_WORD(Packet.Data.Block_Number);
 		if (Received_Block_Number != Expected_Block_Number)
 		{
-			SystemScreenWriteString(STRING_COMMAND_TFTP_GET_BAD_BLOCK_NUMBER_1);
-			SystemScreenWriteUnsignedInteger(Received_Block_Number);
-			SystemScreenWriteString(STRING_COMMAND_TFTP_GET_BAD_BLOCK_NUMBER_2);
-			SystemScreenWriteUnsignedInteger(Expected_Block_Number);
-			SystemScreenWriteString(STRING_COMMAND_TFTP_GET_BAD_BLOCK_NUMBER_3);
+			LibrariesScreenWriteString(STRING_COMMAND_TFTP_GET_BAD_BLOCK_NUMBER_1);
+			LibrariesScreenWriteUnsignedInteger(Received_Block_Number);
+			LibrariesScreenWriteString(STRING_COMMAND_TFTP_GET_BAD_BLOCK_NUMBER_2);
+			LibrariesScreenWriteUnsignedInteger(Expected_Block_Number);
+			LibrariesScreenWriteString(STRING_COMMAND_TFTP_GET_BAD_BLOCK_NUMBER_3);
 			goto Exit;
 		}
 		Expected_Block_Number++;
@@ -105,9 +105,9 @@ int TFTPExecuteCommandGet(char *String_File_Name)
 		Data_Size -= sizeof(Packet.Opcode) + sizeof(Packet.Data.Block_Number);
 		
 		// Store data in the file
-		if (SystemFileWrite(File_ID, Packet.Data.Buffer, Data_Size) != 0)
+		if (LibrariesFileWrite(File_ID, Packet.Data.Buffer, Data_Size) != 0)
 		{
-			SystemScreenWriteString(STRING_COMMAND_TFTP_GET_CANT_WRITE_TO_FILE);
+			LibrariesScreenWriteString(STRING_COMMAND_TFTP_GET_CANT_WRITE_TO_FILE);
 			goto Exit;
 		}
 		
@@ -115,22 +115,22 @@ int TFTPExecuteCommandGet(char *String_File_Name)
 		Packet.Opcode = NETWORK_SWAP_WORD(NETWORK_TFTP_OPCODE_ACKNOWLEDGMENT); // No need to set the block number as it is at the same place than the one received (and it must have the same value)
 		if (NetworkUDPSendBuffer(&Socket_Server, sizeof(Packet.Opcode) + sizeof(Packet.Data.Block_Number), &Packet) != 0)
 		{
-			SystemScreenWriteString(STRING_COMMAND_TFTP_GENERIC_NETWORK_TRANSMISSION_FAILED);
+			LibrariesScreenWriteString(STRING_COMMAND_TFTP_GENERIC_NETWORK_TRANSMISSION_FAILED);
 			goto Exit;
 		}
 	} while (Data_Size == NETWORK_TFTP_BLOCK_SIZE); // Exit if the data size is different from a block size
 	
 	// Display a success message
-	SystemScreenSetFontColor(LIBRARIES_SCREEN_COLOR_GREEN);
-	SystemScreenWriteString(STRING_COMMAND_TFTP_GET_DOWNLOAD_SUCCESSFUL_1);
-	SystemScreenWriteUnsignedInteger(NETWORK_SWAP_WORD(Packet.Data.Block_Number));
-	SystemScreenWriteString(STRING_COMMAND_TFTP_GET_DOWNLOAD_SUCCESSFUL_2);
-	SystemScreenSetFontColor(LIBRARIES_SCREEN_COLOR_BLUE);
+	LibrariesScreenSetFontColor(LIBRARIES_SCREEN_COLOR_GREEN);
+	LibrariesScreenWriteString(STRING_COMMAND_TFTP_GET_DOWNLOAD_SUCCESSFUL_1);
+	LibrariesScreenWriteUnsignedInteger(NETWORK_SWAP_WORD(Packet.Data.Block_Number));
+	LibrariesScreenWriteString(STRING_COMMAND_TFTP_GET_DOWNLOAD_SUCCESSFUL_2);
+	LibrariesScreenSetFontColor(LIBRARIES_SCREEN_COLOR_BLUE);
 	Return_Value = 0;
 	
 Exit:
-	SystemFileClose(File_ID);
-	if (Return_Value != 0) SystemFileDelete(String_File_Name); // Remove the partial file
+	LibrariesFileClose(File_ID);
+	if (Return_Value != 0) LibrariesFileDelete(String_File_Name); // Remove the partial file
 	return Return_Value;
 }
 
@@ -146,29 +146,29 @@ int TFTPExecuteCommandPut(char *String_File_Name)
 	int Return_Value = 1;
 	
 	// Try to open the local file
-	if (SystemFileOpen(String_File_Name, LIBRARIES_FILE_OPENING_MODE_READ, &File_ID) != 0)
+	if (LibrariesFileOpen(String_File_Name, LIBRARIES_FILE_OPENING_MODE_READ, &File_ID) != 0)
 	{
-		SystemScreenWriteString(STRING_COMMAND_TFTP_PUT_CANT_OPEN_FILE);
+		LibrariesScreenWriteString(STRING_COMMAND_TFTP_PUT_CANT_OPEN_FILE);
 		goto Exit;
 	}
 	
 	// Prepare the write request
 	Packet.Opcode = NETWORK_SWAP_WORD(NETWORK_TFTP_OPCODE_WRITE_REQUEST);
 	// Append the sent file name
-	SystemStringCopyUpToNumber(String_File_Name, Packet.Request.String_File_Name_And_Mode, LIBRARIES_FILE_NAME_LENGTH);
-	File_Name_Length = SystemStringGetSize(Packet.Request.String_File_Name_And_Mode);
+	LibrariesStringCopyUpToNumber(String_File_Name, Packet.Request.String_File_Name_And_Mode, LIBRARIES_FILE_NAME_LENGTH);
+	File_Name_Length = LibrariesStringGetSize(Packet.Request.String_File_Name_And_Mode);
 	// Append the transfer mode
-	SystemStringCopy(STRING_TFTP_TRANSFER_MODE, &Packet.Request.String_File_Name_And_Mode[File_Name_Length + 1]); // Append the string right after the file name string terminating zero
-	Transfer_Mode_Length = SystemStringGetSize(STRING_TFTP_TRANSFER_MODE);
+	LibrariesStringCopy(STRING_TFTP_TRANSFER_MODE, &Packet.Request.String_File_Name_And_Mode[File_Name_Length + 1]); // Append the string right after the file name string terminating zero
+	Transfer_Mode_Length = LibrariesStringGetSize(STRING_TFTP_TRANSFER_MODE);
 	
 	// Send the write request
 	if (NetworkUDPSendBuffer(&Socket_Server, sizeof(Packet.Opcode) + File_Name_Length + 1 + Transfer_Mode_Length + 1, &Packet) != 0) // +2 bytes for both strings terminating zeroes
 	{
-		SystemScreenWriteString(STRING_COMMAND_TFTP_GENERIC_NETWORK_TRANSMISSION_FAILED);
+		LibrariesScreenWriteString(STRING_COMMAND_TFTP_GENERIC_NETWORK_TRANSMISSION_FAILED);
 		goto Exit;
 	}
 	
-	SystemScreenWriteString(STRING_COMMAND_TFTP_PUT_STARTING_UPLOAD);
+	LibrariesScreenWriteString(STRING_COMMAND_TFTP_PUT_STARTING_UPLOAD);
 	
 	// Receive the file
 	do
@@ -176,7 +176,7 @@ int TFTPExecuteCommandPut(char *String_File_Name)
 		// Get a packet
 		if (NetworkTFTPReceivePacket(&Socket_Server, TFTP_PACKET_RECEPTION_TIMEOUT, &Size, &Packet) != 0)
 		{
-			SystemScreenWriteString(STRING_COMMAND_TFTP_GENERIC_NETWORK_RECEPTION_FAILED);
+			LibrariesScreenWriteString(STRING_COMMAND_TFTP_GENERIC_NETWORK_RECEPTION_FAILED);
 			goto Exit;
 		}
 		Packet.Opcode = NETWORK_SWAP_WORD(Packet.Opcode);
@@ -184,16 +184,16 @@ int TFTPExecuteCommandPut(char *String_File_Name)
 		// Did an error occurred ?
 		if (Packet.Opcode == NETWORK_TFTP_OPCODE_ERROR)
 		{
-			SystemScreenWriteString(STRING_COMMAND_TFTP_GENERIC_SERVER_ERROR_1);
-			SystemScreenWriteString(Packet.Error.String_Error_Message);
-			SystemScreenWriteString(STRING_COMMAND_TFTP_GENERIC_SERVER_ERROR_2);
+			LibrariesScreenWriteString(STRING_COMMAND_TFTP_GENERIC_SERVER_ERROR_1);
+			LibrariesScreenWriteString(Packet.Error.String_Error_Message);
+			LibrariesScreenWriteString(STRING_COMMAND_TFTP_GENERIC_SERVER_ERROR_2);
 			goto Exit;
 		}
 		
 		// Is it an ACK packet ?
 		if (Packet.Opcode != NETWORK_TFTP_OPCODE_ACKNOWLEDGMENT)
 		{
-			SystemScreenWriteString(STRING_COMMAND_TFTP_GENERIC_BAD_NETWORK_PACKET_RECEIVED);
+			LibrariesScreenWriteString(STRING_COMMAND_TFTP_GENERIC_BAD_NETWORK_PACKET_RECEIVED);
 			goto Exit;
 		}
 		
@@ -201,19 +201,19 @@ int TFTPExecuteCommandPut(char *String_File_Name)
 		Received_Block_Number = NETWORK_SWAP_WORD(Packet.Acknowledgment.Block_Number);
 		if (Received_Block_Number != Sent_Block_Number)
 		{
-			SystemScreenWriteString(STRING_COMMAND_TFTP_PUT_BAD_BLOCK_NUMBER_1);
-			SystemScreenWriteUnsignedInteger(Received_Block_Number);
-			SystemScreenWriteString(STRING_COMMAND_TFTP_PUT_BAD_BLOCK_NUMBER_2);
-			SystemScreenWriteUnsignedInteger(Sent_Block_Number);
-			SystemScreenWriteString(STRING_COMMAND_TFTP_PUT_BAD_BLOCK_NUMBER_3);
+			LibrariesScreenWriteString(STRING_COMMAND_TFTP_PUT_BAD_BLOCK_NUMBER_1);
+			LibrariesScreenWriteUnsignedInteger(Received_Block_Number);
+			LibrariesScreenWriteString(STRING_COMMAND_TFTP_PUT_BAD_BLOCK_NUMBER_2);
+			LibrariesScreenWriteUnsignedInteger(Sent_Block_Number);
+			LibrariesScreenWriteString(STRING_COMMAND_TFTP_PUT_BAD_BLOCK_NUMBER_3);
 			goto Exit;
 		}
 		Sent_Block_Number++;
 		
 		// Read the next block from the file
-		if (SystemFileRead(File_ID, Packet.Data.Buffer, NETWORK_TFTP_BLOCK_SIZE, &Read_Bytes_Count) != 0)
+		if (LibrariesFileRead(File_ID, Packet.Data.Buffer, NETWORK_TFTP_BLOCK_SIZE, &Read_Bytes_Count) != 0)
 		{
-			SystemScreenWriteString(STRING_COMMAND_TFTP_PUT_CANT_READ_FROM_FILE);
+			LibrariesScreenWriteString(STRING_COMMAND_TFTP_PUT_CANT_READ_FROM_FILE);
 			goto Exit;
 		}
 		
@@ -224,21 +224,21 @@ int TFTPExecuteCommandPut(char *String_File_Name)
 		// Send the packet (even if the read data was 0 byte, which will tell the server that the transfer is terminated)
 		if (NetworkUDPSendBuffer(&Socket_Server, sizeof(Packet.Opcode) + sizeof(Packet.Data.Block_Number) + Read_Bytes_Count, &Packet) != 0)
 		{
-			SystemScreenWriteString(STRING_COMMAND_TFTP_GENERIC_NETWORK_TRANSMISSION_FAILED);
+			LibrariesScreenWriteString(STRING_COMMAND_TFTP_GENERIC_NETWORK_TRANSMISSION_FAILED);
 			goto Exit;
 		}
 	} while (Read_Bytes_Count == NETWORK_TFTP_BLOCK_SIZE); // Exit when the whole file has been sent
 	
 	// Display a success message
-	SystemScreenSetFontColor(LIBRARIES_SCREEN_COLOR_GREEN);
-	SystemScreenWriteString(STRING_COMMAND_TFTP_PUT_UPLOAD_SUCCESSFUL_1);
-	SystemScreenWriteUnsignedInteger(Sent_Block_Number);
-	SystemScreenWriteString(STRING_COMMAND_TFTP_PUT_UPLOAD_SUCCESSFUL_2);
-	SystemScreenSetFontColor(LIBRARIES_SCREEN_COLOR_BLUE);
+	LibrariesScreenSetFontColor(LIBRARIES_SCREEN_COLOR_GREEN);
+	LibrariesScreenWriteString(STRING_COMMAND_TFTP_PUT_UPLOAD_SUCCESSFUL_1);
+	LibrariesScreenWriteUnsignedInteger(Sent_Block_Number);
+	LibrariesScreenWriteString(STRING_COMMAND_TFTP_PUT_UPLOAD_SUCCESSFUL_2);
+	LibrariesScreenSetFontColor(LIBRARIES_SCREEN_COLOR_BLUE);
 	Return_Value = 0;
 	
 Exit:
-	SystemFileClose(File_ID);
+	LibrariesFileClose(File_ID);
 	return Return_Value;
 }
 
@@ -255,57 +255,57 @@ int CommandMainTFTP(int argc, char __attribute__((unused)) *argv[])
 	// Check parameters
 	if (argc != 3)
 	{
-		SystemScreenWriteString(STRING_COMMAND_TFTP_USAGE);
+		LibrariesScreenWriteString(STRING_COMMAND_TFTP_USAGE);
 		return -1;
 	}
 	
 	// Get parameters
 	// Command
-	if (SystemStringCompare(argv[1], "get") == 1) Is_Get_Command = 1;
-	else if (SystemStringCompare(argv[1], "put") == 1) Is_Get_Command = 0;
+	if (LibrariesStringCompare(argv[1], "get") == 1) Is_Get_Command = 1;
+	else if (LibrariesStringCompare(argv[1], "put") == 1) Is_Get_Command = 0;
 	else
 	{
-		SystemScreenWriteString(STRING_COMMAND_TFTP_INVALID_COMMAND);
+		LibrariesScreenWriteString(STRING_COMMAND_TFTP_INVALID_COMMAND);
 		return -1;
 	}
 	// File name
 	String_File_Name = argv[2];
-	if (SystemStringGetSize(String_File_Name) > LIBRARIES_FILE_NAME_LENGTH)
+	if (LibrariesStringGetSize(String_File_Name) > LIBRARIES_FILE_NAME_LENGTH)
 	{
-		SystemScreenWriteString(STRING_COMMAND_TFTP_FILE_NAME_TOO_LONG);
+		LibrariesScreenWriteString(STRING_COMMAND_TFTP_FILE_NAME_TOO_LONG);
 		return -1;
 	}
 	
 	// Retrieve server parameters from the configuration file
 	// IP address
-	if (SystemConfigurationReadValue("Network_TFTP_Server_IP_Address", String_Temp) != 0)
+	if (LibrariesConfigurationReadValue("Network_TFTP_Server_IP_Address", String_Temp) != 0)
 	{
-		SystemScreenWriteString(STRING_COMMAND_TFTP_CAN_RETRIEVE_SERVER_IP_ADDRESS);
+		LibrariesScreenWriteString(STRING_COMMAND_TFTP_CAN_RETRIEVE_SERVER_IP_ADDRESS);
 		return -1;
 	}
 	if (NetworkInitializeIPAddress(String_Temp, &IP_Address) != 0) // TODO initialize subnet mask too
 	{
-		SystemScreenWriteString(STRING_COMMAND_TFTP_INVALID_IP_ADDRESS);
+		LibrariesScreenWriteString(STRING_COMMAND_TFTP_INVALID_IP_ADDRESS);
 		return -1;
 	}
 	// Port
-	if (SystemConfigurationReadValue("Network_TFTP_Server_Port", String_Temp) != 0)
+	if (LibrariesConfigurationReadValue("Network_TFTP_Server_Port", String_Temp) != 0)
 	{
-		SystemScreenWriteString(STRING_COMMAND_TFTP_CAN_RETRIEVE_SERVER_PORT);
+		LibrariesScreenWriteString(STRING_COMMAND_TFTP_CAN_RETRIEVE_SERVER_PORT);
 		return -1;
 	}
-	Port = SystemStringConvertStringToUnsignedInteger(String_Temp);
+	Port = LibrariesStringConvertStringToUnsignedInteger(String_Temp);
 	
 	// Try to connect to the server
 	if (NetworkInitialize() != 0)
 	{
-		SystemScreenWriteString(STRING_COMMAND_TFTP_NETWORK_INITIALIZATION_FAILED);
+		LibrariesScreenWriteString(STRING_COMMAND_TFTP_NETWORK_INITIALIZATION_FAILED);
 		return -1;
 	}
 	// Try to create the socket
 	if (NetworkInitializeSocket(&IP_Address, Port, NETWORK_IP_PROTOCOL_UDP, &Socket_Server) != 0)
 	{
-		SystemScreenWriteString(STRING_COMMAND_TFTP_NETWORK_SOCKET_INITIALIZATION_FAILED);
+		LibrariesScreenWriteString(STRING_COMMAND_TFTP_NETWORK_SOCKET_INITIALIZATION_FAILED);
 		return -1;
 	}
 	

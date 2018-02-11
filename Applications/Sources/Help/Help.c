@@ -2,7 +2,7 @@
  * System commands help.
  * @author Adrien RICCIARDI
  */
-#include <System.h>
+#include <Libraries.h>
 #include "Strings.h"
 
 //-------------------------------------------------------------------------------------------------
@@ -108,26 +108,26 @@ static void DisplayCommandsList(void)
 {
 	int i, Spaces_Count;
 	
-	SystemScreenWriteString(STRING_AVAILABLE_COMMANDS);
+	LibrariesScreenWriteString(STRING_AVAILABLE_COMMANDS);
 	
 	for (i = 0; Commands[i].String_Name != NULL; i++)
 	{
 		// Display the command
-		SystemScreenSetFontColor(LIBRARIES_SCREEN_COLOR_LIGHT_BLUE);
-		SystemScreenWriteString(Commands[i].String_Name);
-		SystemScreenSetFontColor(LIBRARIES_SCREEN_COLOR_BLUE);
+		LibrariesScreenSetFontColor(LIBRARIES_SCREEN_COLOR_LIGHT_BLUE);
+		LibrariesScreenWriteString(Commands[i].String_Name);
+		LibrariesScreenSetFontColor(LIBRARIES_SCREEN_COLOR_BLUE);
 		
 		// Display as many spaces as needed to align the command description on the requested column
-		Spaces_Count = HELP_SHORT_DESCRIPTION_STARTING_COLUMN - SystemStringGetSize(Commands[i].String_Name);
+		Spaces_Count = HELP_SHORT_DESCRIPTION_STARTING_COLUMN - LibrariesStringGetSize(Commands[i].String_Name);
 		while (Spaces_Count > 0)
 		{
-			SystemScreenWriteCharacter(' ');
+			LibrariesScreenWriteCharacter(' ');
 			Spaces_Count--;
 		}
 		
 		// Display the command description
-		SystemScreenWriteString(Commands[i].String_Short_Description);
-		SystemScreenWriteCharacter('\n');
+		LibrariesScreenWriteString(Commands[i].String_Short_Description);
+		LibrariesScreenWriteCharacter('\n');
 	}
 }
 
@@ -139,14 +139,14 @@ static void DisplayTitle(char *String_Title)
 	char String_Embellished_Title[128];
 	
 	// Embellish the title
-	SystemStringCopy("--- ", String_Embellished_Title);
-	SystemStringConcatenate(String_Embellished_Title, String_Title);
-	SystemStringConcatenate(String_Embellished_Title, " ---\n\n");
+	LibrariesStringCopy("--- ", String_Embellished_Title);
+	LibrariesStringConcatenate(String_Embellished_Title, String_Title);
+	LibrariesStringConcatenate(String_Embellished_Title, " ---\n\n");
 	
 	// Display it
-	SystemScreenSetFontColor(LIBRARIES_SCREEN_COLOR_GREEN);
-	SystemScreenWriteCenteredString(String_Embellished_Title);
-	SystemScreenSetFontColor(LIBRARIES_SCREEN_COLOR_BLUE);
+	LibrariesScreenSetFontColor(LIBRARIES_SCREEN_COLOR_GREEN);
+	LibrariesScreenWriteCenteredString(String_Embellished_Title);
+	LibrariesScreenSetFontColor(LIBRARIES_SCREEN_COLOR_BLUE);
 }
 
 //-------------------------------------------------------------------------------------------------
@@ -160,9 +160,9 @@ int main(int argc, char *argv[])
 	// Display the generic help if no argument is provided
 	if (argc < 2)
 	{
-		SystemScreenWriteString(STRING_USAGE_1);
-		SystemScreenWriteString(argv[0]);
-		SystemScreenWriteString(STRING_USAGE_2);
+		LibrariesScreenWriteString(STRING_USAGE_1);
+		LibrariesScreenWriteString(argv[0]);
+		LibrariesScreenWriteString(STRING_USAGE_2);
 		
 		DisplayCommandsList();
 		return -1;
@@ -173,18 +173,18 @@ int main(int argc, char *argv[])
 	for (i = 0; Commands[i].String_Name != NULL; i++)
 	{
 		// Display the command help if the command exists
-		if (SystemStringCompare(String_Requested_Command, Commands[i].String_Name))
+		if (LibrariesStringCompare(String_Requested_Command, Commands[i].String_Name))
 		{
 			DisplayTitle(String_Requested_Command);
-			SystemScreenWriteString(Commands[i].String_Full_Description);
-			SystemScreenWriteCharacter('\n');
+			LibrariesScreenWriteString(Commands[i].String_Full_Description);
+			LibrariesScreenWriteCharacter('\n');
 			return 0;
 		}
 	}
 	
 	// Unknown command
-	SystemScreenWriteString(STRING_UNKNOWN_COMMAND_1);
-	SystemScreenWriteString(String_Requested_Command);
-	SystemScreenWriteString(STRING_UNKNOWN_COMMAND_2);
+	LibrariesScreenWriteString(STRING_UNKNOWN_COMMAND_1);
+	LibrariesScreenWriteString(String_Requested_Command);
+	LibrariesScreenWriteString(STRING_UNKNOWN_COMMAND_2);
 	return 0;
 }

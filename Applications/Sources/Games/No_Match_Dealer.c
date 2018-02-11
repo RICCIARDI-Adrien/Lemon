@@ -2,7 +2,7 @@
  * @see Games.h for description.
  * @author Adrien RICCIARDI
  */
-#include <System.h>
+#include <Libraries.h>
 #include "Games.h"
 #include "Strings.h"
 
@@ -21,28 +21,28 @@ void NoMatchDealer(void)
 	char Character;
 	
 	// Show instructions
-	SystemScreenWriteString(STRING_NO_MATCH_DEALER_INSTRUCTIONS);
+	LibrariesScreenWriteString(STRING_NO_MATCH_DEALER_INSTRUCTIONS);
 	
 	while (1)
 	{
 		// Generate numbers
-		SystemRandomInitialize();
-		for (i = 0; i < NUMBERS_COUNT; i++) Numbers[i] = SystemRandomGenerateNumber() % 100;
+		LibrariesRandomInitialize();
+		for (i = 0; i < NUMBERS_COUNT; i++) Numbers[i] = LibrariesRandomGenerateNumber() % 100;
 
 		// Show numbers on 2 rows
-		SystemScreenSetFontColor(LIBRARIES_SCREEN_COLOR_LIGHT_BLUE);
+		LibrariesScreenSetFontColor(LIBRARIES_SCREEN_COLOR_LIGHT_BLUE);
 		for (i = 0; i < NUMBERS_COUNT; i++)
 		{
 			// Pad number with a space character to keep alignment when drawing to screen
-			if (Numbers[i] < 10) SystemScreenWriteCharacter(' ');
-			SystemScreenWriteInteger(Numbers[i]);
-			SystemScreenWriteCharacter(' ');
+			if (Numbers[i] < 10) LibrariesScreenWriteCharacter(' ');
+			LibrariesScreenWriteInteger(Numbers[i]);
+			LibrariesScreenWriteCharacter(' ');
 			
 			// Go to next line if needed
-			if (i % (NUMBERS_COUNT / 2) == 7) SystemScreenWriteCharacter('\n');
+			if (i % (NUMBERS_COUNT / 2) == 7) LibrariesScreenWriteCharacter('\n');
 		}
-		SystemScreenWriteCharacter('\n');
-		SystemScreenSetFontColor(LIBRARIES_SCREEN_COLOR_BLUE);
+		LibrariesScreenWriteCharacter('\n');
+		LibrariesScreenSetFontColor(LIBRARIES_SCREEN_COLOR_BLUE);
 
 		// Check for matches
 		for (i = 0; i < NUMBERS_COUNT; i++)
@@ -51,25 +51,25 @@ void NoMatchDealer(void)
 			{
 				if ((i != j) && (Numbers[i] == Numbers[j]))
 				{
-					SystemScreenSetFontColor(LIBRARIES_SCREEN_COLOR_RED);
-					SystemScreenWriteString(STRING_NO_MATCH_DEALER_GAME_LOST);
+					LibrariesScreenSetFontColor(LIBRARIES_SCREEN_COLOR_RED);
+					LibrariesScreenWriteString(STRING_NO_MATCH_DEALER_GAME_LOST);
 					goto End;
 				}
 			}
 		}
 
-		SystemScreenSetFontColor(LIBRARIES_SCREEN_COLOR_GREEN);
-		SystemScreenWriteString(STRING_NO_MATCH_DEALER_GAME_WON);
+		LibrariesScreenSetFontColor(LIBRARIES_SCREEN_COLOR_GREEN);
+		LibrariesScreenWriteString(STRING_NO_MATCH_DEALER_GAME_WON);
 
 	End:
 		// Ask the player to retry or not
-		SystemScreenSetFontColor(LIBRARIES_SCREEN_COLOR_BLUE);
-		SystemScreenWriteString(STRING_NO_MATCH_DEALER_ASK_FOR_RETRY);
+		LibrariesScreenSetFontColor(LIBRARIES_SCREEN_COLOR_BLUE);
+		LibrariesScreenWriteString(STRING_NO_MATCH_DEALER_ASK_FOR_RETRY);
 		
 		// Wait for Enter or Escape
 		do
 		{
-			Character = SystemKeyboardReadCharacter();
+			Character = LibrariesKeyboardReadCharacter();
 		} while ((Character != '\n') && (Character != LIBRARIES_KEYBOARD_KEY_CODE_ESCAPE));
 		if (Character == LIBRARIES_KEYBOARD_KEY_CODE_ESCAPE) return;
 	}

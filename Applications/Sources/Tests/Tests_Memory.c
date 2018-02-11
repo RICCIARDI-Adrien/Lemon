@@ -2,7 +2,7 @@
  * Automatic tests on the Memory functions of the Libraries.
  * @author Adrien RICCIARDI
  */
-#include <System.h>
+#include <Libraries.h>
 #include "Display_Message.h"
 #include "Tests.h"
 
@@ -35,9 +35,9 @@ static int TestsMemoryAreAreasEqual(unsigned char *Pointer_Memory_Area_1, unsign
 	{
 		if (Pointer_Memory_Area_1[Offset] != Pointer_Memory_Area_2[Offset])
 		{
-			SystemScreenWriteString("Error : the two area are different at offset ");
-			SystemScreenWriteUnsignedInteger(Offset);
-			SystemScreenWriteString(".\n");
+			LibrariesScreenWriteString("Error : the two area are different at offset ");
+			LibrariesScreenWriteUnsignedInteger(Offset);
+			LibrariesScreenWriteString(".\n");
 			return 0;
 		}
 	}
@@ -59,15 +59,15 @@ static int TestsMemoryCheckAreaValue(unsigned char *Pointer_Memory_Area, unsigne
 	{
 		if (Pointer_Memory_Area[Offset] != Value)
 		{
-			SystemScreenWriteString("Error : the byte at offset ");
-			SystemScreenWriteUnsignedInteger(Offset);
-			SystemScreenWriteString(" has a bad value.\n");
+			LibrariesScreenWriteString("Error : the byte at offset ");
+			LibrariesScreenWriteUnsignedInteger(Offset);
+			LibrariesScreenWriteString(" has a bad value.\n");
 			
-			SystemScreenWriteString("Read value : ");
-			SystemScreenWriteUnsignedInteger(Pointer_Memory_Area[Offset]);
-			SystemScreenWriteString("\nExpected value : ");
-			SystemScreenWriteUnsignedInteger(Value);
-			SystemScreenWriteCharacter('\n');
+			LibrariesScreenWriteString("Read value : ");
+			LibrariesScreenWriteUnsignedInteger(Pointer_Memory_Area[Offset]);
+			LibrariesScreenWriteString("\nExpected value : ");
+			LibrariesScreenWriteUnsignedInteger(Value);
+			LibrariesScreenWriteCharacter('\n');
 			return 0;
 		}
 	}
@@ -82,8 +82,8 @@ int TestsMemoryCopySmallArea(void)
 	int i;
 
 	// Use a small area (< 4 bytes) to bypass the "copy by 4 bytes" part of the function
-	for (i = 0; i < 3; i++) Tests_Memory_Source_Buffer[i] = (unsigned char) SystemRandomGenerateNumber(); // Fill the buffer with random data
-	SystemMemoryCopyArea(Tests_Memory_Source_Buffer, Tests_Memory_Destination_Buffer, 3);
+	for (i = 0; i < 3; i++) Tests_Memory_Source_Buffer[i] = (unsigned char) LibrariesRandomGenerateNumber(); // Fill the buffer with random data
+	LibrariesMemoryCopyArea(Tests_Memory_Source_Buffer, Tests_Memory_Destination_Buffer, 3);
 	
 	if (!TestsMemoryAreAreasEqual(Tests_Memory_Source_Buffer, Tests_Memory_Destination_Buffer, 3)) return 1;
 	return 0;
@@ -94,8 +94,8 @@ int TestsMemoryCopyBigArea(void)
 	int i;
 	
 	// Use a big area to test all parts of the function
-	for (i = 0; i < TESTS_MEMORY_BUFFER_SIZE; i++) Tests_Memory_Source_Buffer[i] = (unsigned char) SystemRandomGenerateNumber(); // Fill the buffer with random data
-	SystemMemoryCopyArea(Tests_Memory_Source_Buffer, Tests_Memory_Destination_Buffer, TESTS_MEMORY_BUFFER_SIZE);
+	for (i = 0; i < TESTS_MEMORY_BUFFER_SIZE; i++) Tests_Memory_Source_Buffer[i] = (unsigned char) LibrariesRandomGenerateNumber(); // Fill the buffer with random data
+	LibrariesMemoryCopyArea(Tests_Memory_Source_Buffer, Tests_Memory_Destination_Buffer, TESTS_MEMORY_BUFFER_SIZE);
 	
 	if (!TestsMemoryAreAreasEqual(Tests_Memory_Source_Buffer, Tests_Memory_Destination_Buffer, TESTS_MEMORY_BUFFER_SIZE)) return 1;
 	return 0;
@@ -106,8 +106,8 @@ int TestsMemorySetSmallAreaValue(void)
 	unsigned char Value;
 	
 	// Use a small area (< 4 bytes) to bypass the "copy by 4 bytes" part of the function
-	Value = (unsigned char) SystemRandomGenerateNumber(); // Get a random value
-	SystemMemorySetAreaValue(Tests_Memory_Source_Buffer, 3, Value);
+	Value = (unsigned char) LibrariesRandomGenerateNumber(); // Get a random value
+	LibrariesMemorySetAreaValue(Tests_Memory_Source_Buffer, 3, Value);
 	
 	if (!TestsMemoryCheckAreaValue(Tests_Memory_Source_Buffer, Value, 3)) return 1;
 	return 0;
@@ -118,8 +118,8 @@ int TestsMemorySetBigAreaValue(void)
 	unsigned char Value;
 	
 	// Use a big area to test all parts of the function
-	Value = (unsigned char) SystemRandomGenerateNumber(); // Get a random value
-	SystemMemorySetAreaValue(Tests_Memory_Source_Buffer, TESTS_MEMORY_BUFFER_SIZE, Value);
+	Value = (unsigned char) LibrariesRandomGenerateNumber(); // Get a random value
+	LibrariesMemorySetAreaValue(Tests_Memory_Source_Buffer, TESTS_MEMORY_BUFFER_SIZE, Value);
 	
 	if (!TestsMemoryCheckAreaValue(Tests_Memory_Source_Buffer, Value, TESTS_MEMORY_BUFFER_SIZE)) return 1;
 	return 0;
