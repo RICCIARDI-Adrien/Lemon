@@ -10,6 +10,7 @@
 #include <Math.h>
 #include <Network.h>
 #include <System_Calls.h> // System calls codes imported directly from the system
+#include <System_Configuration.h>
 #include <System_File.h>
 #include <System_Keyboard.h>
 #include <System_Memory.h>
@@ -36,11 +37,6 @@
 /** Convert the macro value to a C string. The preprocessor needs two passes to do the conversion, so the SYSTEM_CONVERT_MACRO_NAME_TO_STRING() is needed. */
 #define SYSTEM_CONVERT_MACRO_VALUE_TO_STRING(X) SYSTEM_CONVERT_MACRO_NAME_TO_STRING(X)
 
-/** The configuration file name. */
-#define SYSTEM_CONFIGURATION_FILE_NAME "System.cfg"
-/** The maximum length in characters of a value string. */
-#define SYSTEM_CONFIGURATION_FILE_MAXIMUM_VALUE_SIZE 128
-
 //-------------------------------------------------------------------------------------------------
 // Functions
 //-------------------------------------------------------------------------------------------------
@@ -57,16 +53,5 @@ int SystemCall(TSystemCall Request_Code, int Integer_1, int Integer_2, void *Poi
 
 /** Abort the current program and return to the system. */
 void SystemExitProgram(void);
-
-/** Read a configuration value from the configuration file.
- * @param String_Key The value key (the string that identifies the value).
- * @param String_Value On output, contain the requested value. This buffer must be large enough to hold the whole value.
- * @return 0 if the value was successfully retrieved,
- * @return 1 if the configuration file was not found,
- * @return 2 if the provided key is empty,
- * @return 3 if a read error occurred,
- * @return 4 if the key was not found.
- */
-int SystemConfigurationReadValue(char *String_Key, char *String_Value);
 
 #endif
