@@ -21,8 +21,8 @@ int CommandMainDf(int argc, char __attribute__((unused)) *argv[])
 	}
 	
 	// Get the file system properties
-	SystemFileSystemGetTotalSize(&Block_Size, &Total_Storage, &Total_Files_Count);
-	SystemFileSystemGetFreeSize(&Free_Storage, &Free_Files_Count);
+	LibrariesFileSystemGetTotalSize(&Block_Size, &Total_Storage, &Total_Files_Count);
+	LibrariesFileSystemGetFreeSize(&Free_Storage, &Free_Files_Count);
 	
 	// Convert the blocks unit to bytes
 	Total_Storage *= Block_Size;

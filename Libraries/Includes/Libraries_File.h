@@ -116,12 +116,12 @@ int LibrariesFileRename(char *String_Current_File_Name, char *String_New_File_Na
  * @param Pointer_Blocks_Count How many blocks in the file system.
  * @param Pointer_Files_Count How many different files can be handled by the file system.
  */
-void SystemFileSystemGetTotalSize(unsigned int *Pointer_Block_Size, unsigned int *Pointer_Blocks_Count, unsigned int *Pointer_Files_Count);
+void LibrariesFileSystemGetTotalSize(unsigned int *Pointer_Block_Size, unsigned int *Pointer_Blocks_Count, unsigned int *Pointer_Files_Count);
 
 /** Get the file system free space.
  * @param Pointer_Blocks_Count On output, contain the amount of available blocks.
  * @param Pointer_Files_Count On output, contain the amount of available Files List entries.
  */
-void SystemFileSystemGetFreeSize(unsigned int *Pointer_Blocks_Count, unsigned int *Pointer_Files_Count);
+void LibrariesFileSystemGetFreeSize(unsigned int *Pointer_Blocks_Count, unsigned int *Pointer_Files_Count);
 
 #endif
