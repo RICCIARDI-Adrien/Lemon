@@ -1,8 +1,8 @@
 ; Ask the operating system for a service.
 ; Author : Adrien RICCIARDI
-GLOBAL SystemCall
+GLOBAL LibrariesSystemCall
 
-SystemCall:
+LibrariesSystemCall:
 	push ebx
 	push ecx
 	push edx
