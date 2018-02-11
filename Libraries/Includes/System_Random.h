@@ -2,8 +2,8 @@
  * Generate pseudo-random numbers.
  * @author Adrien RICCIARDI
  */
-#ifndef H_SYSTEM_RANDOM_H
-#define H_SYSTEM_RANDOM_H
+#ifndef H_LIBRARIES_RANDOM_H
+#define H_LIBRARIES_RANDOM_H
 
 //-------------------------------------------------------------------------------------------------
 // Functions

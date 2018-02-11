@@ -2,8 +2,8 @@
  * Provide time-based utilities.
  * @author Adrien RICCIARDI
  */
-#ifndef H_SYSTEM_TIMER_H
-#define H_SYSTEM_TIMER_H
+#ifndef H_LIBRARIES_TIMER_H
+#define H_LIBRARIES_TIMER_H
 
 //-------------------------------------------------------------------------------------------------
 // Functions

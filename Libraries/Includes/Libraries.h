@@ -31,11 +31,11 @@
 #endif
 
 /** Give the number of elements in an array. */
-#define SYSTEM_GET_ARRAY_ELEMENTS_COUNT(Array) (sizeof(Array) / sizeof(Array[0]))
+#define LIBRARIES_GET_ARRAY_ELEMENTS_COUNT(Array) (sizeof(Array) / sizeof(Array[0]))
 
 /** Convert the macro identifier to a C string. */
-#define SYSTEM_CONVERT_MACRO_NAME_TO_STRING(X) #X
-/** Convert the macro value to a C string. The preprocessor needs two passes to do the conversion, so the SYSTEM_CONVERT_MACRO_NAME_TO_STRING() is needed. */
-#define SYSTEM_CONVERT_MACRO_VALUE_TO_STRING(X) SYSTEM_CONVERT_MACRO_NAME_TO_STRING(X)
+#define LIBRARIES_CONVERT_MACRO_NAME_TO_STRING(X) #X
+/** Convert the macro value to a C string. The preprocessor needs two passes to do the conversion, so the LIBRARIES_CONVERT_MACRO_NAME_TO_STRING() is needed. */
+#define LIBRARIES_CONVERT_MACRO_VALUE_TO_STRING(X) LIBRARIES_CONVERT_MACRO_NAME_TO_STRING(X)
 
 #endif

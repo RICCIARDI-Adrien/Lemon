@@ -2,17 +2,17 @@
  * Simple file manipulation functions.
  * @author Adrien RICCIARDI
  */
-#ifndef H_SYSTEM_FILE_H
-#define H_SYSTEM_FILE_H
+#ifndef H_LIBRARIES_FILE_H
+#define H_LIBRARIES_FILE_H
 
 //-------------------------------------------------------------------------------------------------
 // Constants
 //-------------------------------------------------------------------------------------------------
 /** Length of a file name string (it does not include the terminating zero). */
-#define SYSTEM_FILE_NAME_LENGTH 12
+#define LIBRARIES_FILE_NAME_LENGTH 12
 
 /** How many files can be opened in the same time. */
-#define SYSTEM_FILE_MAXIMUM_OPENED_COUNT 8
+#define LIBRARIES_FILE_MAXIMUM_OPENED_COUNT 8
 
 //-------------------------------------------------------------------------------------------------
 // Types
@@ -20,8 +20,8 @@
 /** The allowed file opening modes. */
 typedef enum
 {
-	SYSTEM_FILE_OPENING_MODE_READ = 'r',
-	SYSTEM_FILE_OPENING_MODE_WRITE = 'w'
+	LIBRARIES_FILE_OPENING_MODE_READ = 'r',
+	LIBRARIES_FILE_OPENING_MODE_WRITE = 'w'
 } TSystemFileOpeningMode;
 
 //-------------------------------------------------------------------------------------------------
@@ -45,7 +45,7 @@ unsigned int SystemFileGetSize(char *String_File_Name);
 void SystemFileListInitialize(void);
 
 /** Get the next file name for file listing.
- * @param String_File_Name Pointer on a SYSTEM_FILE_NAME_LENGTH + 1 wide string which will receive the file name.
+ * @param String_File_Name Pointer on a LIBRARIES_FILE_NAME_LENGTH + 1 wide string which will receive the file name.
  */
 void SystemFileListNext(char *String_File_Name);
 

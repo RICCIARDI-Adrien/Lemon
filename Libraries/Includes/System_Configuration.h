@@ -2,16 +2,16 @@
  * Read from and write to a specific userspace file Libraries configuration data.
  * @author Adrien RICCIARDI
  */
-#ifndef H_SYSTEM_CONFIGURATION_H
-#define H_SYSTEM_CONFIGURATION_H
+#ifndef H_LIBRARIES_CONFIGURATION_H
+#define H_LIBRARIES_CONFIGURATION_H
 
 //-------------------------------------------------------------------------------------------------
 // Constants
 //-------------------------------------------------------------------------------------------------
 /** The configuration file name. */
-#define SYSTEM_CONFIGURATION_FILE_NAME "System.cfg"
+#define LIBRARIES_CONFIGURATION_FILE_NAME "System.cfg"
 /** The maximum length in characters of a value string. */
-#define SYSTEM_CONFIGURATION_FILE_MAXIMUM_VALUE_SIZE 128
+#define LIBRARIES_CONFIGURATION_FILE_MAXIMUM_VALUE_SIZE 128
 
 //-------------------------------------------------------------------------------------------------
 // Functions

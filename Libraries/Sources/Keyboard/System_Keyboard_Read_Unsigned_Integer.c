@@ -7,7 +7,7 @@
 // Private constants
 //-------------------------------------------------------------------------------------------------
 /** How many characters are needed to represent the maximum allowed number (i.e. 2^32). */
-#define SYSTEM_KEYBOARD_READ_UNSIGNED_INTEGER_MAXIMUM_CHARACTERS_COUNT 10
+#define LIBRARIES_KEYBOARD_READ_UNSIGNED_INTEGER_MAXIMUM_CHARACTERS_COUNT 10
 
 //-------------------------------------------------------------------------------------------------
 // Public functions
@@ -16,7 +16,7 @@ unsigned int SystemKeyboardReadUnsignedInteger(void)
 {
 	unsigned char Character;
 	int i = 0;
-	char String_Number[SYSTEM_KEYBOARD_READ_UNSIGNED_INTEGER_MAXIMUM_CHARACTERS_COUNT + 1]; // +1 for the terminating zero
+	char String_Number[LIBRARIES_KEYBOARD_READ_UNSIGNED_INTEGER_MAXIMUM_CHARACTERS_COUNT + 1]; // +1 for the terminating zero
 	
 	// Read the number string
 	while (1)
@@ -44,7 +44,7 @@ unsigned int SystemKeyboardReadUnsignedInteger(void)
 		else if (!SystemStringIsCharacterADigit(Character)) continue; // Allow only digits
 		
 		// Append the character to the string only if there is enough room to
-		if (i < SYSTEM_KEYBOARD_READ_UNSIGNED_INTEGER_MAXIMUM_CHARACTERS_COUNT)
+		if (i < LIBRARIES_KEYBOARD_READ_UNSIGNED_INTEGER_MAXIMUM_CHARACTERS_COUNT)
 		{
 			String_Number[i] = Character;
 			i++;

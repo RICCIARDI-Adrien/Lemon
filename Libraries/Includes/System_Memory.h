@@ -2,8 +2,8 @@
  * Various memory manipulation functions.
  * @author Adrien RICCIARDI
  */
-#ifndef H_SYSTEM_MEMORY_H
-#define H_SYSTEM_MEMORY_H
+#ifndef H_LIBRARIES_MEMORY_H
+#define H_LIBRARIES_MEMORY_H
 
 //-------------------------------------------------------------------------------------------------
 // Functions

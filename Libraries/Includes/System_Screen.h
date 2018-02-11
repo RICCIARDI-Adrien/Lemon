@@ -2,22 +2,22 @@
  * Display data on the screen, modify cursor location and provide a direct access to the video memory for games.
  * @author Adrien RICCIARDI
  */
-#ifndef H_SYSTEM_SCREEN_H
-#define H_SYSTEM_SCREEN_H
+#ifndef H_LIBRARIES_SCREEN_H
+#define H_LIBRARIES_SCREEN_H
 
 //-------------------------------------------------------------------------------------------------
 // Constants and macros
 //-------------------------------------------------------------------------------------------------
 /** Screen rows number. */
-#define SYSTEM_SCREEN_ROWS_COUNT 25
+#define LIBRARIES_SCREEN_ROWS_COUNT 25
 /** Screen columns number. */
-#define SYSTEM_SCREEN_COLUMNS_COUNT 80
+#define LIBRARIES_SCREEN_COLUMNS_COUNT 80
 
 /** Create a complete color using a foreground and a background colors.
  * @param Foreground_Color The text color.
  * @param Background_Color The background color.
  */
-#define SYSTEM_SCREEN_MAKE_COLOR(Foreground_Color, Background_Color) ((Background_Color << 4) | Foreground_Color)
+#define LIBRARIES_SCREEN_MAKE_COLOR(Foreground_Color, Background_Color) ((Background_Color << 4) | Foreground_Color)
 
 //-------------------------------------------------------------------------------------------------
 // Types
@@ -25,22 +25,22 @@
 /** All available colors. */
 typedef enum
 {
-	SYSTEM_SCREEN_COLOR_BLACK,
-	SYSTEM_SCREEN_COLOR_BLUE,
-	SYSTEM_SCREEN_COLOR_GREEN,
-	SYSTEM_SCREEN_COLOR_CYAN,
-	SYSTEM_SCREEN_COLOR_RED,
-	SYSTEM_SCREEN_COLOR_MAGENTA,
-	SYSTEM_SCREEN_COLOR_BROWN,
-	SYSTEM_SCREEN_COLOR_LIGHT_GRAY,
-	SYSTEM_SCREEN_COLOR_GRAY,
-	SYSTEM_SCREEN_COLOR_LIGHT_BLUE,
-	SYSTEM_SCREEN_COLOR_LIGHT_GREEN,
-	SYSTEM_SCREEN_COLOR_LIGHT_CYAN,
-	SYSTEM_SCREEN_COLOR_LIGHT_RED,
-	SYSTEM_SCREEN_COLOR_LIGHT_MAGENTA,
-	SYSTEM_SCREEN_COLOR_YELLOW,
-	SYSTEM_SCREEN_COLOR_WHITE
+	LIBRARIES_SCREEN_COLOR_BLACK,
+	LIBRARIES_SCREEN_COLOR_BLUE,
+	LIBRARIES_SCREEN_COLOR_GREEN,
+	LIBRARIES_SCREEN_COLOR_CYAN,
+	LIBRARIES_SCREEN_COLOR_RED,
+	LIBRARIES_SCREEN_COLOR_MAGENTA,
+	LIBRARIES_SCREEN_COLOR_BROWN,
+	LIBRARIES_SCREEN_COLOR_LIGHT_GRAY,
+	LIBRARIES_SCREEN_COLOR_GRAY,
+	LIBRARIES_SCREEN_COLOR_LIGHT_BLUE,
+	LIBRARIES_SCREEN_COLOR_LIGHT_GREEN,
+	LIBRARIES_SCREEN_COLOR_LIGHT_CYAN,
+	LIBRARIES_SCREEN_COLOR_LIGHT_RED,
+	LIBRARIES_SCREEN_COLOR_LIGHT_MAGENTA,
+	LIBRARIES_SCREEN_COLOR_YELLOW,
+	LIBRARIES_SCREEN_COLOR_WHITE
 } TSystemScreenColor;
 
 /** A character representation in the VGA mode 3 video memory. */
@@ -73,8 +73,8 @@ void SystemScreenSetBackgroundColor(TSystemScreenColor Color_Code);
 void SystemScreenGetCursorPosition(unsigned int *Pointer_Row, unsigned int *Pointer_Column);
 
 /** Set the screen cursor position.
- * @param Row Row coordinate in range [0, SYSTEM_SCREEN_ROWS_COUNT - 1].
- * @param Column Column coordinate in range [0, SYSTEM_SCREEN_COLUMNS_COUNT - 1].
+ * @param Row Row coordinate in range [0, LIBRARIES_SCREEN_ROWS_COUNT - 1].
+ * @param Column Column coordinate in range [0, LIBRARIES_SCREEN_COLUMNS_COUNT - 1].
  * @note The function does nothing if the specified coordinates are out of the screen bounds.
  */
 void SystemScreenSetCursorPosition(unsigned int Row, unsigned int Column);
@@ -112,19 +112,19 @@ void SystemScreenWriteHexadecimalInteger(int Integer);
 // "Rendering" functions
 /** Display a buffer representing the raw video memory data on the screen.
  * @param Pointer_Buffer The buffer.
- * @note The buffer must be (SYSTEM_SCREEN_ROWS_COUNT * SYSTEM_SCREEN_COLUMNS_COUNT * 2) bytes large. Even byte is character ASCII code and odd byte is character color attributes.
+ * @note The buffer must be (LIBRARIES_SCREEN_ROWS_COUNT * LIBRARIES_SCREEN_COLUMNS_COUNT * 2) bytes large. Even byte is character ASCII code and odd byte is character color attributes.
  * @see IBM BIOS text mode 3 for more informations.
  */
 void SystemScreenDisplayBuffer(void *Pointer_Buffer);
 
-/** Scroll a SYSTEM_SCREEN_ROWS_COUNT*SYSTEM_SCREEN_COLUMNS_COUNT bytes buffer to one column on the left. The rightmost column is left as-is.
+/** Scroll a LIBRARIES_SCREEN_ROWS_COUNT*LIBRARIES_SCREEN_COLUMNS_COUNT bytes buffer to one column on the left. The rightmost column is left as-is.
  * @param Pointer_Buffer The buffer to scroll.
  */
 void SystemScreenScrollBufferToLeft(void *Pointer_Buffer);
 
 /** Clear the buffer with 'space' characters and the specified color.
  * @param Pointer_Buffer The buffer to clear.
- * @param Color The clearing color (use SYSTEM_SCREEN_MAKE_COLOR() to specify it).
+ * @param Color The clearing color (use LIBRARIES_SCREEN_MAKE_COLOR() to specify it).
  */
 void SystemScreenClearBuffer(void *Pointer_Buffer, unsigned char Color);
 

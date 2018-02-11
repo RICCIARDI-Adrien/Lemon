@@ -16,7 +16,7 @@ int SystemConfigurationReadValue(char *String_Key, char *String_Value)
 	if (String_Key[0] == 0) return 2;
 	
 	// Try to open the configuration file
-	if (SystemFileOpen(SYSTEM_CONFIGURATION_FILE_NAME, SYSTEM_FILE_OPENING_MODE_READ, &File_ID) != 0) return 1;
+	if (SystemFileOpen(LIBRARIES_CONFIGURATION_FILE_NAME, LIBRARIES_FILE_OPENING_MODE_READ, &File_ID) != 0) return 1;
 
 	// Browse the file until the key is found
 	do
@@ -57,7 +57,7 @@ int SystemConfigurationReadValue(char *String_Key, char *String_Value)
 	} while (!Is_Key_Found);
 	
 	// The key was found, get its value
-	for (i = 0; i < SYSTEM_CONFIGURATION_FILE_MAXIMUM_VALUE_SIZE; i++)
+	for (i = 0; i < LIBRARIES_CONFIGURATION_FILE_MAXIMUM_VALUE_SIZE; i++)
 	{
 		// Read a single character
 		if (SystemFileRead(File_ID, &Character, 1, &Read_Bytes_Count) != 0) return 3;

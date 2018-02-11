@@ -2,85 +2,85 @@
  * Get and format data from the keyboard.
  * @author Adrien RICCIARDI
  */
-#ifndef H_SYSTEM_KEYBOARD_H
-#define H_SYSTEM_KEYBOARD_H
+#ifndef H_LIBRARIES_KEYBOARD_H
+#define H_LIBRARIES_KEYBOARD_H
 
 //-------------------------------------------------------------------------------------------------
 // Constants
 //-------------------------------------------------------------------------------------------------
 /** Backspace key. */
-#define SYSTEM_KEYBOARD_KEY_CODE_BACKSPACE '\b'
+#define LIBRARIES_KEYBOARD_KEY_CODE_BACKSPACE '\b'
 /** Keyboard enter key. */
-#define SYSTEM_KEYBOARD_KEY_CODE_ENTER '\n'
+#define LIBRARIES_KEYBOARD_KEY_CODE_ENTER '\n'
 /** Keyboard escape key. */
-#define SYSTEM_KEYBOARD_KEY_CODE_ESCAPE 27
+#define LIBRARIES_KEYBOARD_KEY_CODE_ESCAPE 27
 /** Keyboard up arrow key. */
-#define SYSTEM_KEYBOARD_KEY_CODE_ARROW_UP 224
+#define LIBRARIES_KEYBOARD_KEY_CODE_ARROW_UP 224
 /** Keyboard down arrow key. */
-#define SYSTEM_KEYBOARD_KEY_CODE_ARROW_DOWN 225
+#define LIBRARIES_KEYBOARD_KEY_CODE_ARROW_DOWN 225
 /** Keyboard left arrow key. */
-#define SYSTEM_KEYBOARD_KEY_CODE_ARROW_LEFT 226
+#define LIBRARIES_KEYBOARD_KEY_CODE_ARROW_LEFT 226
 /** Keyboard right arrow key. */
-#define SYSTEM_KEYBOARD_KEY_CODE_ARROW_RIGHT 227
+#define LIBRARIES_KEYBOARD_KEY_CODE_ARROW_RIGHT 227
 /** Keyboard page up key. */
-#define SYSTEM_KEYBOARD_KEY_CODE_PAGE_UP 228
+#define LIBRARIES_KEYBOARD_KEY_CODE_PAGE_UP 228
 /** Keyboard page down key. */
-#define SYSTEM_KEYBOARD_KEY_CODE_PAGE_DOWN 229
+#define LIBRARIES_KEYBOARD_KEY_CODE_PAGE_DOWN 229
 /** Keyboard Origin key. */
-#define SYSTEM_KEYBOARD_KEY_CODE_ORIGIN 230
+#define LIBRARIES_KEYBOARD_KEY_CODE_ORIGIN 230
 /** Keyboard end key. */
-#define SYSTEM_KEYBOARD_KEY_CODE_END 231
+#define LIBRARIES_KEYBOARD_KEY_CODE_END 231
 /** Keyboard insert key. */
-#define SYSTEM_KEYBOARD_KEY_CODE_INSERT 232
+#define LIBRARIES_KEYBOARD_KEY_CODE_INSERT 232
 /** Keyboard delete key. */
-#define SYSTEM_KEYBOARD_KEY_CODE_DELETE 233
+#define LIBRARIES_KEYBOARD_KEY_CODE_DELETE 233
 /** Keyboard Windows left key. */
-#define SYSTEM_KEYBOARD_KEY_CODE_WINDOWS_LEFT 234
+#define LIBRARIES_KEYBOARD_KEY_CODE_WINDOWS_LEFT 234
 /** Keyboard Windows right key. */
-#define SYSTEM_KEYBOARD_KEY_CODE_WINDOWS_RIGHT 235
+#define LIBRARIES_KEYBOARD_KEY_CODE_WINDOWS_RIGHT 235
 /** Keyboard right mouse menu click key. */
-#define SYSTEM_KEYBOARD_KEY_CODE_RIGHT_MENU 236
+#define LIBRARIES_KEYBOARD_KEY_CODE_RIGHT_MENU 236
 /** Keyboard left control. */
-#define SYSTEM_KEYBOARD_KEY_CODE_CONTROL_LEFT 237
+#define LIBRARIES_KEYBOARD_KEY_CODE_CONTROL_LEFT 237
 /** Keyboard alt. */
-#define SYSTEM_KEYBOARD_KEY_CODE_ALT 238
+#define LIBRARIES_KEYBOARD_KEY_CODE_ALT 238
 /** Keyboard right control. */
-#define SYSTEM_KEYBOARD_KEY_CODE_CONTROL_RIGHT 239
+#define LIBRARIES_KEYBOARD_KEY_CODE_CONTROL_RIGHT 239
 /** Keyboard F1 key. */
-#define SYSTEM_KEYBOARD_KEY_CODE_F1 240
+#define LIBRARIES_KEYBOARD_KEY_CODE_F1 240
 /** Keyboard F2 key. */
-#define SYSTEM_KEYBOARD_KEY_CODE_F2 241
+#define LIBRARIES_KEYBOARD_KEY_CODE_F2 241
 /** Keyboard F3 key. */
-#define SYSTEM_KEYBOARD_KEY_CODE_F3 242
+#define LIBRARIES_KEYBOARD_KEY_CODE_F3 242
 /** Keyboard F4 key. */
-#define SYSTEM_KEYBOARD_KEY_CODE_F4 243
+#define LIBRARIES_KEYBOARD_KEY_CODE_F4 243
 /** Keyboard F5 key. */
-#define SYSTEM_KEYBOARD_KEY_CODE_F5 244
+#define LIBRARIES_KEYBOARD_KEY_CODE_F5 244
 /** Keyboard F6 key. */
-#define SYSTEM_KEYBOARD_KEY_CODE_F6 245
+#define LIBRARIES_KEYBOARD_KEY_CODE_F6 245
 /** Keyboard F7 key. */
-#define SYSTEM_KEYBOARD_KEY_CODE_F7 246
+#define LIBRARIES_KEYBOARD_KEY_CODE_F7 246
 /** Keyboard F8 key. */
-#define SYSTEM_KEYBOARD_KEY_CODE_F8 247
+#define LIBRARIES_KEYBOARD_KEY_CODE_F8 247
 /** Keyboard F9 key. */
-#define SYSTEM_KEYBOARD_KEY_CODE_F9 248
+#define LIBRARIES_KEYBOARD_KEY_CODE_F9 248
 /** Keyboard F10 key. */
-#define SYSTEM_KEYBOARD_KEY_CODE_F10 249
+#define LIBRARIES_KEYBOARD_KEY_CODE_F10 249
 /** Keyboard F11 key. */
-#define SYSTEM_KEYBOARD_KEY_CODE_F11 250
+#define LIBRARIES_KEYBOARD_KEY_CODE_F11 250
 
 /** Left shift modifier keys state bit mask. */
-#define SYSTEM_KEYBOARD_MODIFIER_KEY_BIT_MASK_LEFT_SHIFT 1
+#define LIBRARIES_KEYBOARD_MODIFIER_KEY_BIT_MASK_LEFT_SHIFT 1
 /** Left control modifier keys state bit mask. */
-#define SYSTEM_KEYBOARD_MODIFIER_KEY_BIT_MASK_LEFT_CONTROL (1 << 1)
+#define LIBRARIES_KEYBOARD_MODIFIER_KEY_BIT_MASK_LEFT_CONTROL (1 << 1)
 /** Left alt modifier keys state bit mask. */
-#define SYSTEM_KEYBOARD_MODIFIER_KEY_BIT_MASK_LEFT_ALT (1 << 2)
+#define LIBRARIES_KEYBOARD_MODIFIER_KEY_BIT_MASK_LEFT_ALT (1 << 2)
 /** Right shift modifier keys state bit mask. */
-#define SYSTEM_KEYBOARD_MODIFIER_KEY_BIT_MASK_RIGHT_SHIFT (1 << 3)
+#define LIBRARIES_KEYBOARD_MODIFIER_KEY_BIT_MASK_RIGHT_SHIFT (1 << 3)
 /** Right control modifier keys state bit mask. */
-#define SYSTEM_KEYBOARD_MODIFIER_KEY_BIT_MASK_RIGHT_CONTROL (1 << 4)
+#define LIBRARIES_KEYBOARD_MODIFIER_KEY_BIT_MASK_RIGHT_CONTROL (1 << 4)
 /** Right alt modifier keys state bit mask. */
-#define SYSTEM_KEYBOARD_MODIFIER_KEY_BIT_MASK_RIGHT_ALT (1 << 5)
+#define LIBRARIES_KEYBOARD_MODIFIER_KEY_BIT_MASK_RIGHT_ALT (1 << 5)
 
 //-------------------------------------------------------------------------------------------------
 // Functions
