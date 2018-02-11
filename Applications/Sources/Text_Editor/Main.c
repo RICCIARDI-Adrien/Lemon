@@ -267,7 +267,7 @@ void MainPasteCopyBuffer(void)
 static void MainExitProgram(void)
 {
 	SystemScreenClear();
-	SystemExitProgram();
+	LibrariesSystemExitProgram();
 }
 
 //-------------------------------------------------------------------------------------------------

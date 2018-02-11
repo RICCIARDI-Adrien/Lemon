@@ -50,7 +50,7 @@ void DisplayMessageTestFailed(void)
 	SystemScreenSetFontColor(SYSTEM_SCREEN_COLOR_RED);
 	SystemScreenWriteString("Test failed\n");
 	SystemScreenSetFontColor(SYSTEM_SCREEN_COLOR_BLUE);
-	SystemExitProgram();
+	LibrariesSystemExitProgram();
 }
 
 void DisplayMessageErrorAndCode(char *String_Message, int Error_Code)

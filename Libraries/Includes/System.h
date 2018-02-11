@@ -52,6 +52,6 @@
 int LibrariesSystemCall(TSystemCall Request_Code, int Integer_1, int Integer_2, void *Pointer_1, void *Pointer_2);
 
 /** Abort the current program and return to the system. */
-void SystemExitProgram(void);
+void LibrariesSystemExitProgram(void);
 
 #endif
