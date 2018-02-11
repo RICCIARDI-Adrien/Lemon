@@ -17,7 +17,7 @@ int main(void)
 	while (1)
 	{
 		// Wait for a packet to be received
-		SystemCall(SYSTEM_CALL_ETHERNET_RECEIVE_PACKET, 0, 0, &Packet_Size, Packet_Buffer);
+		LibrariesSystemCall(SYSTEM_CALL_ETHERNET_RECEIVE_PACKET, 0, 0, &Packet_Size, Packet_Buffer);
 		
 		// Display initial bytes
 		if (Packet_Size > 64) Packet_Size = 64;

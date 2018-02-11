@@ -20,10 +20,10 @@ void SystemScreenWriteCenteredString(char *String)
 		Column = (SYSTEM_SCREEN_COLUMNS_COUNT - Length) / 2;
 	
 		// Set the cursor at the right location
-		SystemCall(SYSTEM_CALL_SCREEN_GET_CURSOR_POSITION, 0, 0, &Current_Cursor_Row, &Current_Cursor_Column);
-		SystemCall(SYSTEM_CALL_SCREEN_SET_CURSOR_POSITION, Current_Cursor_Row, Column, NULL, NULL);
+		LibrariesSystemCall(SYSTEM_CALL_SCREEN_GET_CURSOR_POSITION, 0, 0, &Current_Cursor_Row, &Current_Cursor_Column);
+		LibrariesSystemCall(SYSTEM_CALL_SCREEN_SET_CURSOR_POSITION, Current_Cursor_Row, Column, NULL, NULL);
 	}
 	
 	// Display the string
-	SystemCall(SYSTEM_CALL_SCREEN_WRITE_STRING, 0, 0, String, NULL);
+	LibrariesSystemCall(SYSTEM_CALL_SCREEN_WRITE_STRING, 0, 0, String, NULL);
 }

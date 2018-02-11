@@ -8,5 +8,5 @@
 //-------------------------------------------------------------------------------------------------
 unsigned int SystemKeyboardReadModifierKeysState(void)
 {
-	return SystemCall(SYSTEM_CALL_KEYBOARD_READ_MODIFIER_KEYS_STATE, 0, 0, NULL, NULL);
+	return LibrariesSystemCall(SYSTEM_CALL_KEYBOARD_READ_MODIFIER_KEYS_STATE, 0, 0, NULL, NULL);
 }

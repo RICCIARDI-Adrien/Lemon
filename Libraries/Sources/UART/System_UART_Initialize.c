@@ -8,5 +8,5 @@
 //-------------------------------------------------------------------------------------------------
 int SystemUARTInitialize(unsigned char Frame_Format, unsigned short Data_Rate_Bauds)
 {
-	return SystemCall(SYSTEM_CALL_UART_INITIALIZE, Frame_Format, Data_Rate_Bauds, NULL, NULL);
+	return LibrariesSystemCall(SYSTEM_CALL_UART_INITIALIZE, Frame_Format, Data_Rate_Bauds, NULL, NULL);
 }

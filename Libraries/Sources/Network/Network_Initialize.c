@@ -14,7 +14,7 @@ int NetworkInitialize(void)
 	char String_Configuration_Value[SYSTEM_CONFIGURATION_FILE_MAXIMUM_VALUE_SIZE + 1]; // +1 for the terminating zero
 	
 	// Is the ethernet controller available ?
-	SystemCall(SYSTEM_CALL_SYSTEM_GET_PARAMETER, SYSTEM_CALL_SYSTEM_PARAMETER_ID_ETHERNET_CONTROLLER_IS_ENABLED, 0, &Is_Network_Controller_Enabled, NULL);
+	LibrariesSystemCall(SYSTEM_CALL_SYSTEM_GET_PARAMETER, SYSTEM_CALL_SYSTEM_PARAMETER_ID_ETHERNET_CONTROLLER_IS_ENABLED, 0, &Is_Network_Controller_Enabled, NULL);
 	if (!Is_Network_Controller_Enabled) return 1;
 	
 	// Get the IP addresses from the configuration file

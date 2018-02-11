@@ -10,5 +10,5 @@ int SystemFileRead(unsigned int File_ID, void *Pointer_Buffer, unsigned int Byte
 {
 	*Pointer_Bytes_Read = 0; // Force to 0 to return 0 in case of error
 	
-	return SystemCall(SYSTEM_CALL_FILE_READ, File_ID, Bytes_Count, Pointer_Buffer, Pointer_Bytes_Read);
+	return LibrariesSystemCall(SYSTEM_CALL_FILE_READ, File_ID, Bytes_Count, Pointer_Buffer, Pointer_Bytes_Read);
 }

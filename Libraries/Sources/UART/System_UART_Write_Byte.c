@@ -8,5 +8,5 @@
 //-------------------------------------------------------------------------------------------------
 void SystemUARTWriteByte(unsigned char Byte)
 {
-	SystemCall(SYSTEM_CALL_UART_WRITE_BYTE, Byte, 0, NULL, NULL);
+	LibrariesSystemCall(SYSTEM_CALL_UART_WRITE_BYTE, Byte, 0, NULL, NULL);
 }

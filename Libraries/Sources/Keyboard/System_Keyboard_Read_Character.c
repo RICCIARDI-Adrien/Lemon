@@ -8,5 +8,5 @@
 //-------------------------------------------------------------------------------------------------
 int SystemKeyboardReadCharacter(void)
 {
-	return SystemCall(SYSTEM_CALL_KEYBOARD_READ_CHARACTER, 0, 0, NULL, NULL);
+	return LibrariesSystemCall(SYSTEM_CALL_KEYBOARD_READ_CHARACTER, 0, 0, NULL, NULL);
 }

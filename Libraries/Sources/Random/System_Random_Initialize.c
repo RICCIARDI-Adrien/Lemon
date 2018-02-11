@@ -13,5 +13,5 @@ extern unsigned int System_Random_Libraries_Seed;
 //-------------------------------------------------------------------------------------------------
 void SystemRandomInitialize(void)
 {
-	System_Random_Libraries_Seed = SystemCall(SYSTEM_CALL_TIMER_READ_VALUE, 0, 0, NULL, NULL);
+	System_Random_Libraries_Seed = LibrariesSystemCall(SYSTEM_CALL_TIMER_READ_VALUE, 0, 0, NULL, NULL);
 }

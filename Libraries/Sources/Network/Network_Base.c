@@ -93,7 +93,7 @@ static int Network_Base_ARP_Table_Used_Entries_Count;
  */
 static inline void NetworkBaseEthernetReceivePacket(unsigned int *Pointer_Packet_Size, void *Pointer_Buffer)
 {
-	SystemCall(SYSTEM_CALL_ETHERNET_RECEIVE_PACKET, 0, 0, Pointer_Packet_Size, Pointer_Buffer);
+	LibrariesSystemCall(SYSTEM_CALL_ETHERNET_RECEIVE_PACKET, 0, 0, Pointer_Packet_Size, Pointer_Buffer);
 }
 
 /** Send an ethernet frame.
@@ -102,7 +102,7 @@ static inline void NetworkBaseEthernetReceivePacket(unsigned int *Pointer_Packet
  */
 static inline void NetworkBaseEthernetSendPacket(unsigned int Packet_Size, void *Pointer_Buffer)
 {
-	SystemCall(SYSTEM_CALL_ETHERNET_SEND_PACKET, Packet_Size, 0, Pointer_Buffer, NULL);
+	LibrariesSystemCall(SYSTEM_CALL_ETHERNET_SEND_PACKET, Packet_Size, 0, Pointer_Buffer, NULL);
 }
 
 /** Tell in a non-blocking way if a packet has been received or not.
@@ -111,7 +111,7 @@ static inline void NetworkBaseEthernetSendPacket(unsigned int Packet_Size, void 
  */
 static inline int NetworkBaseEthernetIsPacketReceived(void)
 {
-	return SystemCall(SYSTEM_CALL_ETHERNET_IS_PACKET_RECEIVED, 0, 0, NULL, NULL);
+	return LibrariesSystemCall(SYSTEM_CALL_ETHERNET_IS_PACKET_RECEIVED, 0, 0, NULL, NULL);
 }
 
 /** Retrieve the board MAC address.
@@ -119,7 +119,7 @@ static inline int NetworkBaseEthernetIsPacketReceived(void)
  */
 static inline void NetworkBaseGetEthernetControllerMACAddress(unsigned char *Pointer_MAC_Address)
 {
-	SystemCall(SYSTEM_CALL_SYSTEM_GET_PARAMETER, SYSTEM_CALL_SYSTEM_PARAMETER_ID_ETHERNET_CONTROLLER_MAC_ADDRESS, 0, Pointer_MAC_Address, NULL);
+	LibrariesSystemCall(SYSTEM_CALL_SYSTEM_GET_PARAMETER, SYSTEM_CALL_SYSTEM_PARAMETER_ID_ETHERNET_CONTROLLER_MAC_ADDRESS, 0, Pointer_MAC_Address, NULL);
 }
 
 /** Send an ARP request to find the MAC address corresponding to the provided IP address.
@@ -303,7 +303,7 @@ int NetworkBaseInitialize(TNetworkIPAddress *Pointer_System_IP_Address, TNetwork
 	Network_Base_ARP_Table_Used_Entries_Count = 0;
 	
 	// Set the network stack source MAC address
-	SystemCall(SYSTEM_CALL_SYSTEM_GET_PARAMETER, SYSTEM_CALL_SYSTEM_PARAMETER_ID_ETHERNET_CONTROLLER_MAC_ADDRESS, 0, Network_Base_System_MAC_Address, NULL);
+	LibrariesSystemCall(SYSTEM_CALL_SYSTEM_GET_PARAMETER, SYSTEM_CALL_SYSTEM_PARAMETER_ID_ETHERNET_CONTROLLER_MAC_ADDRESS, 0, Network_Base_System_MAC_Address, NULL);
 	
 	// Set IP addresses
 	SystemMemoryCopyArea(Pointer_System_IP_Address, &Network_Base_System_IP_Address, sizeof(TNetworkIPAddress));

@@ -8,5 +8,5 @@
 //-------------------------------------------------------------------------------------------------
 void SystemScreenWriteCharacter(char Character)
 {
-	SystemCall(SYSTEM_CALL_SCREEN_WRITE_CHARACTER, Character, 0, NULL, NULL);
+	LibrariesSystemCall(SYSTEM_CALL_SCREEN_WRITE_CHARACTER, Character, 0, NULL, NULL);
 }

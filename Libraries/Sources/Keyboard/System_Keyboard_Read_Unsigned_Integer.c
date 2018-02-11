@@ -22,7 +22,7 @@ unsigned int SystemKeyboardReadUnsignedInteger(void)
 	while (1)
 	{
 		// Get a character
-		Character = SystemCall(SYSTEM_CALL_KEYBOARD_READ_CHARACTER, 0, 0, NULL, NULL);
+		Character = LibrariesSystemCall(SYSTEM_CALL_KEYBOARD_READ_CHARACTER, 0, 0, NULL, NULL);
 		
 		// Process the character
 		if (Character == '\b') // Backspace
@@ -31,14 +31,14 @@ unsigned int SystemKeyboardReadUnsignedInteger(void)
 			{
 				i--;
 				String_Number[i] = 0;
-				SystemCall(SYSTEM_CALL_SCREEN_WRITE_CHARACTER, '\b', 0, NULL, NULL);
+				LibrariesSystemCall(SYSTEM_CALL_SCREEN_WRITE_CHARACTER, '\b', 0, NULL, NULL);
 			}
 			continue;
 		}
 		else if ((Character == '\n') && (i > 0)) // Enter (does not allow an empty string)
 		{
 			String_Number[i] = 0;
-			SystemCall(SYSTEM_CALL_SCREEN_WRITE_CHARACTER, '\n', 0, NULL, NULL);
+			LibrariesSystemCall(SYSTEM_CALL_SCREEN_WRITE_CHARACTER, '\n', 0, NULL, NULL);
 			break;
 		}
 		else if (!SystemStringIsCharacterADigit(Character)) continue; // Allow only digits
@@ -50,7 +50,7 @@ unsigned int SystemKeyboardReadUnsignedInteger(void)
 			i++;
 		
 			// Display the character
-			SystemCall(SYSTEM_CALL_SCREEN_WRITE_CHARACTER, Character, 0, NULL, NULL);
+			LibrariesSystemCall(SYSTEM_CALL_SCREEN_WRITE_CHARACTER, Character, 0, NULL, NULL);
 		}
 	}
 	

@@ -8,5 +8,5 @@
 //-------------------------------------------------------------------------------------------------
 int SystemKeyboardIsKeyAvailable(void)
 {
-	return SystemCall(SYSTEM_CALL_KEYBOARD_IS_KEY_AVAILABLE, 0, 0, NULL, NULL);
+	return LibrariesSystemCall(SYSTEM_CALL_KEYBOARD_IS_KEY_AVAILABLE, 0, 0, NULL, NULL);
 }

@@ -8,5 +8,5 @@
 //-------------------------------------------------------------------------------------------------
 void SystemFileListInitialize(void)
 {
-	SystemCall(SYSTEM_CALL_FILE_LIST_INITIALIZE, 0, 0, NULL, NULL);
+	LibrariesSystemCall(SYSTEM_CALL_FILE_LIST_INITIALIZE, 0, 0, NULL, NULL);
 }

@@ -8,5 +8,5 @@
 //-------------------------------------------------------------------------------------------------
 unsigned int SystemTimerGetValue(void)
 {
-	return (unsigned int) SystemCall(SYSTEM_CALL_TIMER_READ_VALUE, 0, 0, NULL, NULL);
+	return (unsigned int) LibrariesSystemCall(SYSTEM_CALL_TIMER_READ_VALUE, 0, 0, NULL, NULL);
 }

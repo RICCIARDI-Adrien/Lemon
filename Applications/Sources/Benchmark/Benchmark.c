@@ -134,7 +134,7 @@ static void BenchmarkSystemCall(unsigned int *Pointer_Start_Time, unsigned int *
 	// Keep benchmark starting time to compute the elapsed time at benchmark end
 	*Pointer_Start_Time = SystemTimerGetValue();
 	
-	for (i = 0; i < BENCHMARK_SYSTEM_CALL_ITERATIONS_COUNT; i++) SystemCall(SYSTEM_CALL_SCREEN_GET_COLOR, 0, 0, NULL, NULL);
+	for (i = 0; i < BENCHMARK_SYSTEM_CALL_ITERATIONS_COUNT; i++) LibrariesSystemCall(SYSTEM_CALL_SCREEN_GET_COLOR, 0, 0, NULL, NULL);
 	
 	*Pointer_End_Time = SystemTimerGetValue();
 }

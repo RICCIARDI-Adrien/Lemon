@@ -8,5 +8,5 @@
 //-------------------------------------------------------------------------------------------------
 int SystemUARTIsDataReceived(void)
 {
-	return SystemCall(SYSTEM_CALL_UART_IS_DATA_RECEIVED, 0, 0, NULL, NULL);
+	return LibrariesSystemCall(SYSTEM_CALL_UART_IS_DATA_RECEIVED, 0, 0, NULL, NULL);
 }

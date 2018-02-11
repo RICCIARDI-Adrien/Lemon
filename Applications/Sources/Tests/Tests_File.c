@@ -98,21 +98,21 @@ int TestsFileSystemCalls(void)
 
 	SystemScreenWriteString("Writing data to file... ");
 	// Open the file
-	Result = SystemCall(SYSTEM_CALL_FILE_OPEN, 'w', 0, "_test_", &File_ID);
+	Result = LibrariesSystemCall(SYSTEM_CALL_FILE_OPEN, 'w', 0, "_test_", &File_ID);
 	if (Result != ERROR_CODE_NO_ERROR)
 	{
 		DisplayMessageErrorAndCode("when opening the file in write mode", Result);
 		return 1;
 	}
 	// Write data
-	Result = SystemCall(SYSTEM_CALL_FILE_WRITE, File_ID, File_Size_Bytes, Buffer, NULL);
+	Result = LibrariesSystemCall(SYSTEM_CALL_FILE_WRITE, File_ID, File_Size_Bytes, Buffer, NULL);
 	if (Result != ERROR_CODE_NO_ERROR)
 	{
 		DisplayMessageErrorAndCode("when writing to the file", Result);
 		return 1;
 	}
 	// Close the file
-	SystemCall(SYSTEM_CALL_FILE_CLOSE, File_ID, 0, NULL, NULL);
+	LibrariesSystemCall(SYSTEM_CALL_FILE_CLOSE, File_ID, 0, NULL, NULL);
 	SystemScreenWriteString("done\n");
 
 	// Flush read buffer
@@ -120,21 +120,21 @@ int TestsFileSystemCalls(void)
 
 	SystemScreenWriteString("Reading data from file... ");
 	// Open the file
-	Result = SystemCall(SYSTEM_CALL_FILE_OPEN, 'r', 0, "_test_", &File_ID);
+	Result = LibrariesSystemCall(SYSTEM_CALL_FILE_OPEN, 'r', 0, "_test_", &File_ID);
 	if (Result != ERROR_CODE_NO_ERROR)
 	{
 		DisplayMessageErrorAndCode("when opening the file in read mode", Result);
 		return 1;
 	}
 	// Read data
-	Result = SystemCall(SYSTEM_CALL_FILE_READ, File_ID, File_Size_Bytes, Buffer, &Read_Bytes_Count);
+	Result = LibrariesSystemCall(SYSTEM_CALL_FILE_READ, File_ID, File_Size_Bytes, Buffer, &Read_Bytes_Count);
 	if (Result != ERROR_CODE_NO_ERROR)
 	{
 		DisplayMessageErrorAndCode("when reading from the file", Result);
 		return 1;
 	}
 	// Close the file
-	SystemCall(SYSTEM_CALL_FILE_CLOSE, File_ID, 0, NULL, NULL);
+	LibrariesSystemCall(SYSTEM_CALL_FILE_CLOSE, File_ID, 0, NULL, NULL);
 	SystemScreenWriteString("done (");
 	SystemScreenWriteUnsignedInteger(Read_Bytes_Count);
 	SystemScreenWriteString(" bytes read)\n");

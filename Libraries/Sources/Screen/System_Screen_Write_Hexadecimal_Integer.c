@@ -11,5 +11,5 @@ void SystemScreenWriteHexadecimalInteger(int Integer)
 	char String_Hexadecimal[9]; // 8 digits + terminating zero
 	
 	SystemStringConvertIntegerToHexadecimal(Integer, String_Hexadecimal);
-	SystemCall(SYSTEM_CALL_SCREEN_WRITE_STRING, 0, 0, String_Hexadecimal, NULL);
+	LibrariesSystemCall(SYSTEM_CALL_SCREEN_WRITE_STRING, 0, 0, String_Hexadecimal, NULL);
 }

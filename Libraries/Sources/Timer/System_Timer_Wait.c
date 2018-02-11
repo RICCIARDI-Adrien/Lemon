@@ -8,5 +8,5 @@
 //-------------------------------------------------------------------------------------------------
 void SystemTimerWait(unsigned int Milliseconds_Count)
 {
-	SystemCall(SYSTEM_CALL_TIMER_WAIT, Milliseconds_Count, 0, NULL, NULL);
+	LibrariesSystemCall(SYSTEM_CALL_TIMER_WAIT, Milliseconds_Count, 0, NULL, NULL);
 }

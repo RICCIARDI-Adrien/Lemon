@@ -69,5 +69,5 @@ void __attribute__((section(".init"))) __attribute__((optimize(0))) _start(void)
 	Return_Value = main(Pointer_Command_Line_Arguments->Arguments_Count, Pointer_Command_Line_Arguments->Pointer_Arguments); 
 	
 	// Return main() return value to the operating system
-	SystemCall(SYSTEM_CALL_SYSTEM_EXIT_PROGRAM, Return_Value, 0, NULL, NULL);
+	LibrariesSystemCall(SYSTEM_CALL_SYSTEM_EXIT_PROGRAM, Return_Value, 0, NULL, NULL);
 }

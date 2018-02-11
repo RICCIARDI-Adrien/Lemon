@@ -8,5 +8,5 @@
 //-------------------------------------------------------------------------------------------------
 void SystemScreenClear(void)
 {
-	SystemCall(SYSTEM_CALL_SCREEN_CLEAR, 0, 0, NULL, NULL);
+	LibrariesSystemCall(SYSTEM_CALL_SCREEN_CLEAR, 0, 0, NULL, NULL);
 }

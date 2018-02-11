@@ -8,5 +8,5 @@
 //-------------------------------------------------------------------------------------------------
 int SystemFileDelete(char *String_File_Name)
 {
-	return SystemCall(SYSTEM_CALL_FILE_DELETE, 0, 0, String_File_Name, NULL);
+	return LibrariesSystemCall(SYSTEM_CALL_FILE_DELETE, 0, 0, String_File_Name, NULL);
 }
