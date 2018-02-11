@@ -137,21 +137,21 @@
 			The only difference with C's main() is that the function return value is ignored by Lemon. You can return whatever value you want.
 		</p>
 		<p>
-			There is no standard C library in Lemon, you have to use the provided Libraries functions. They are documented in the <b>Documentation/Documentation_Libraries</b> directory. The <b>System.h</b> header file gathers all the needed includes and is the only one to include when using the Libraries.
+			There is no standard C library in Lemon, you have to use the provided Libraries functions. They are documented in the <b>Documentation/Documentation_Libraries</b> directory. The <b>Libraries.h</b> header file gathers all the needed includes and is the only one to include when using the Libraries.
 		</p>
 		<p>
 			Here is the source code of the Hello World program :
 		</p>
 		<p>
 			<code>
-				#include &lt;System.h&gt;<br />
+				#include &lt;Libraries.h&gt;<br />
 				<br />
 				int main(void)<br />
 				{<br />
-					&nbsp;&nbsp;&nbsp;&nbsp;ScreenSetFontColor(SCREEN_COLOR_GREEN);<br />
-					&nbsp;&nbsp;&nbsp;&nbsp;ScreenWriteString("Hello ");<br />
-					&nbsp;&nbsp;&nbsp;&nbsp;ScreenSetFontColor(SCREEN_COLOR_RED);<br />
-					&nbsp;&nbsp;&nbsp;&nbsp;ScreenWriteString("world !\n");<br />
+					&nbsp;&nbsp;&nbsp;&nbsp;LibrariesScreenSetFontColor(SCREEN_COLOR_GREEN);<br />
+					&nbsp;&nbsp;&nbsp;&nbsp;LibrariesScreenWriteString("Hello ");<br />
+					&nbsp;&nbsp;&nbsp;&nbsp;LibrariesScreenSetFontColor(SCREEN_COLOR_RED);<br />
+					&nbsp;&nbsp;&nbsp;&nbsp;LibrariesScreenWriteString("world !\n");<br />
 					&nbsp;&nbsp;&nbsp;&nbsp;return 0;<br />
 				}
 			</code>
