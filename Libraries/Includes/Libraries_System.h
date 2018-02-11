@@ -1,9 +1,9 @@
-/** @file System.h
+/** @file Libraries_System.h
  * System-specific functions that do not belong to any other categories.
  * @author Adrien RICCIARDI
  */
-#ifndef H_SYSTEM_H
-#define H_SYSTEM_H
+#ifndef H_LIBRARIES_SYSTEM_H
+#define H_LIBRARIES_SYSTEM_H
 
 //-------------------------------------------------------------------------------------------------
 // Functions
