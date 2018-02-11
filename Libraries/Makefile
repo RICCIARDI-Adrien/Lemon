@@ -26,7 +26,7 @@ SOURCES = $(subst $(PATH_SOURCES)/,,$(FOUND_SOURCES))
 # Create the objects list based on the sources list
 OBJECTS = $(patsubst %.c,$(PATH_OBJECTS)/%.o,$(SOURCES))
 # Append special files
-OBJECTS += $(PATH_OBJECTS)/System/Libraries_System_Call.o
+OBJECTS += $(PATH_OBJECTS)/System/System_Call.o
 
 all: $(OBJECTS)
 	ar -rvsc $(PATH_BINARIES)/$(ARCHIVE_NAME) $(OBJECTS)
@@ -38,8 +38,8 @@ clean:
 #--------------------------------------------------------------------------------------------------
 # Special rules
 #--------------------------------------------------------------------------------------------------
-$(PATH_OBJECTS)/System/Libraries_System_Call.o: $(PATH_SOURCES)/System/Libraries_System_Call.asm
-	$(GLOBAL_TOOL_ASSEMBLER) -f elf32 $(PATH_SOURCES)/System/Libraries_System_Call.asm -o $(PATH_OBJECTS)/System/Libraries_System_Call.o
+$(PATH_OBJECTS)/System/System_Call.o: $(PATH_SOURCES)/System/System_Call.asm
+	$(GLOBAL_TOOL_ASSEMBLER) -f elf32 $(PATH_SOURCES)/System/System_Call.asm -o $(PATH_OBJECTS)/System/System_Call.o
 
 #--------------------------------------------------------------------------------------------------
 # Generic rules

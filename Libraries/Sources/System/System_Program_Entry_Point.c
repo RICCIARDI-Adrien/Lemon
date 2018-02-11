@@ -1,4 +1,4 @@
-/** @file Libraries_System_Program_Entry_Point.c
+/** @file System_Program_Entry_Point.c
  * This code is executed before the program main() function.
  * @author Adrien RICCIARDI
  */
