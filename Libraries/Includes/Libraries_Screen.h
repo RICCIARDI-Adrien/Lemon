@@ -46,8 +46,8 @@ typedef enum
 /** A character representation in the VGA mode 3 video memory. */
 typedef struct __attribute__((packed))
 {
-	char ASCII_Code; //! The character ASCII code.
-	unsigned char Color; //! The character color.
+	char ASCII_Code; //!< The character ASCII code.
+	unsigned char Color; //!< The character color.
 } TLibrariesScreenBufferCharacter;
 
 //-------------------------------------------------------------------------------------------------

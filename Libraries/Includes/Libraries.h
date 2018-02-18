@@ -1,6 +1,9 @@
 /** @file Libraries.h
  * Gather all header files. Only this header should be included in an application.
  * @author Adrien RICCIARDI
+ * @mainpage
+ * There is no standard C library in Lemon, you have to use the provided Libraries functions. They are all documented in this document.<br>
+ * The Libraries.h header file gathers all the needed includes and is the only one to include when using the Libraries.
  */
 #ifndef H_LIBRARIES_H
 #define H_LIBRARIES_H

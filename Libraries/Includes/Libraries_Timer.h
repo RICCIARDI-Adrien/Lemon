@@ -14,7 +14,7 @@
 unsigned int LibrariesTimerGetValue(void);
 
 /** Wait for the specified number of milliseconds.
- * @param Periods_Count How many milliseconds to wait.
+ * @param Milliseconds_Count How many milliseconds to wait.
  */
 void LibrariesTimerWait(unsigned int Milliseconds_Count);
 

@@ -1,4 +1,4 @@
-/** @file String_Write_String.c
+/** @file Screen_Write_String.c
  * @author Adrien RICCIARDI
  */
 #include <Libraries.h>

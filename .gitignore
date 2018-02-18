@@ -6,5 +6,7 @@
 *.o
 *.out
 Applications/Binaries/*
+Documentation/Documentation_Libraries/*
+!Documentation/Documentation_Libraries/Doxyfile_Libraries
 Documentation/Documentation_System/html
 Installer_Embedded_Files_Data.h
