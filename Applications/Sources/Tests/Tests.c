@@ -30,7 +30,7 @@ static TTest Tests[] =
 		TestsFileReopenSameFile
 	},
 	{
-		"Automatic closing of an deleted opened file",
+		"Automatic closing of a deleted opened file",
 		TestsFileCloseDeletedOpenedFile
 	},
 	{
