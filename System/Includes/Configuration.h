@@ -32,7 +32,7 @@
 /** Amount of RAM allowed for user space. */
 #define CONFIGURATION_USER_SPACE_SIZE ((CONFIGURATION_SYSTEM_TOTAL_RAM_SIZE_MEGA_BYTES - 1) * 1024UL * 1024) // Keep the first megabyte for the kernel; force an unsigned int cast
 /** User space base address. This reserves the first MB of RAM for the kernel. */
-#define CONFIGURATION_USER_SPACE_ADDRESS 0x100000
+#define CONFIGURATION_USER_SPACE_ADDRESS ((unsigned int) &Configuration_Memory_Userspace_Start_Address)
 /** A program header size. */
 #define CONFIGURATION_USER_SPACE_PROGRAM_HEADER_SIZE 4
 /** Instruction pointer start address for user program. */
@@ -59,5 +59,7 @@
 extern unsigned int Configuration_Memory_BSS_Start_Address;
 /** The BSS section end (4-byte aligned). */
 extern unsigned int Configuration_Memory_BSS_End_Address;
+/** The userspace memory area start address. */
+extern unsigned int Configuration_Memory_Userspace_Start_Address;
 
 #endif

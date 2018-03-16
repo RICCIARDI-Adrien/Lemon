@@ -29,4 +29,6 @@ SECTIONS
 		. = ALIGN(4);
 		Configuration_Memory_BSS_End_Address = .;
 	}
+	. = 0x100000;
+	Configuration_Memory_Userspace_Start_Address = .;
 }
