@@ -9,10 +9,6 @@
 // Constants
 //-------------------------------------------------------------------------------------------------
 // File system
-/** How many file names can be stored in the Files List. */
-#define CONFIGURATION_FILE_SYSTEM_MAXIMUM_FILES_LIST_ENTRIES 128
-/** How many blocks the file system can address. */
-#define CONFIGURATION_FILE_SYSTEM_MAXIMUM_BLOCKS_LIST_ENTRIES 2048
 /** The size of a file system block in bytes (must be a multiple of 512). */
 #define CONFIGURATION_FILE_SYSTEM_BLOCK_SIZE_BYTES 4096
 /** The file system is stored just behind the kernel on the hard disk. This value is in LBA addressing mode. */
