@@ -245,6 +245,8 @@ static void ArchitectureMemoryProtectionAddInterruptDescriptor(unsigned int Inde
 /** Initialize the GDT. */
 static inline __attribute__((always_inline)) void ArchitectureInitializeGlobalDescriptorTable(void)
 {
+	unsigned int User_Space_Size_Pages;
+	
 	// Create the dummy descriptor (descriptor 0 filled with 0 to show that the table is valid)
 	memset((void *) Architecture_Global_Descriptor_Table, 0, sizeof(TArchitectureSegmentDescriptor)); // Explicit cast to avoid warning due to pointer volatile attribute
 	
@@ -253,9 +255,11 @@ static inline __attribute__((always_inline)) void ArchitectureInitializeGlobalDe
 	ArchitectureMemoryProtectionAddSegmentDescriptor(ARCHITECTURE_MEMORY_PROTECTION_SEGMENT_INDEX_KERNEL_DATA, 0, 0xFFFFF, ARCHITECTURE_MEMORY_PROTECTION_SEGMENT_TYPE_KERNEL_DATA, 0x0C);
 	ArchitectureMemoryProtectionAddSegmentDescriptor(ARCHITECTURE_MEMORY_PROTECTION_SEGMENT_INDEX_KERNEL_STACK, 0, 0, ARCHITECTURE_MEMORY_PROTECTION_SEGMENT_TYPE_KERNEL_STACK, 0x0C);
 	
-	// Add user's task segments
-	ArchitectureMemoryProtectionAddSegmentDescriptor(ARCHITECTURE_MEMORY_PROTECTION_SEGMENT_INDEX_USER_CODE, CONFIGURATION_USER_SPACE_ADDRESS, CONFIGURATION_USER_SPACE_SIZE >> 12, ARCHITECTURE_MEMORY_PROTECTION_SEGMENT_TYPE_USER_CODE, 0x0C); // The limit size must be expressed in 4096-byte pages, 0x0C is for 32-bit instructions and to enable 4KB granularity
-	ArchitectureMemoryProtectionAddSegmentDescriptor(ARCHITECTURE_MEMORY_PROTECTION_SEGMENT_INDEX_USER_DATA, CONFIGURATION_USER_SPACE_ADDRESS, CONFIGURATION_USER_SPACE_SIZE >> 12, ARCHITECTURE_MEMORY_PROTECTION_SEGMENT_TYPE_USER_DATA, 0x0C);
+	// Add user task segments
+	User_Space_Size_Pages = CONFIGURATION_USER_SPACE_SIZE >> 12; // Compute the userspace size in 4096-byte tables
+	if (CONFIGURATION_USER_SPACE_SIZE % 4096 != 0) User_Space_Size_Pages++; // Add one more page if the user space size is not a multiple of the page size
+	ArchitectureMemoryProtectionAddSegmentDescriptor(ARCHITECTURE_MEMORY_PROTECTION_SEGMENT_INDEX_USER_CODE, CONFIGURATION_USER_SPACE_ADDRESS, User_Space_Size_Pages, ARCHITECTURE_MEMORY_PROTECTION_SEGMENT_TYPE_USER_CODE, 0x0C); // The limit size must be expressed in 4096-byte pages, 0x0C is for 32-bit instructions and to enable 4KB granularity
+	ArchitectureMemoryProtectionAddSegmentDescriptor(ARCHITECTURE_MEMORY_PROTECTION_SEGMENT_INDEX_USER_DATA, CONFIGURATION_USER_SPACE_ADDRESS, User_Space_Size_Pages, ARCHITECTURE_MEMORY_PROTECTION_SEGMENT_TYPE_USER_DATA, 0x0C);
 	
 	// Add kernel TSS descriptor
 	ArchitectureMemoryProtectionAddSegmentDescriptor(ARCHITECTURE_MEMORY_PROTECTION_SEGMENT_INDEX_TASK_STATE_SEGMENT, (unsigned int) &Architecture_Kernel_Task_State_Segment, sizeof(TArchitectureTaskStateSegment) - 1, ARCHITECTURE_MEMORY_PROTECTION_SEGMENT_TYPE_TASK_STATE_SEGMENT, 0);
@@ -425,7 +429,7 @@ void ArchitectureSwitchToUserSpace(void)
 		"mov gs, ax\n"
 		"iret" // Go to user space (automatically re-enable interrupts)
 		: // No output parameters
-		: "i" ((ARCHITECTURE_MEMORY_PROTECTION_SEGMENT_INDEX_USER_DATA << 3) | 3), "i" (CONFIGURATION_USER_SPACE_SIZE), "i" ((ARCHITECTURE_MEMORY_PROTECTION_SEGMENT_INDEX_USER_CODE << 3) | 3), "i" (CONFIGURATION_USER_SPACE_PROGRAM_ENTRY_POINT), "i" ((ARCHITECTURE_MEMORY_PROTECTION_SEGMENT_INDEX_USER_DATA << 3) | 3)
+		: "i" ((ARCHITECTURE_MEMORY_PROTECTION_SEGMENT_INDEX_USER_DATA << 3) | 3), "X" (CONFIGURATION_USER_SPACE_SIZE), "i" ((ARCHITECTURE_MEMORY_PROTECTION_SEGMENT_INDEX_USER_CODE << 3) | 3), "i" (CONFIGURATION_USER_SPACE_PROGRAM_ENTRY_POINT), "i" ((ARCHITECTURE_MEMORY_PROTECTION_SEGMENT_INDEX_USER_DATA << 3) | 3)
 		: "eax"
 	);
 }

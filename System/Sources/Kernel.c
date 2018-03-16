@@ -4,6 +4,7 @@
  */
 #include <Architecture.h>
 #include <Configuration.h>
+#include <Debug.h>
 #include <Drivers/Driver_Ethernet.h>
 #include <Drivers/Driver_Hard_Disk.h>
 #include <Drivers/Driver_Keyboard.h>
@@ -56,6 +57,9 @@ void __attribute__((section(".init"))) KernelEntryPoint(void)
 		unsigned int Partition_Starting_Sector;
 	#endif
 	
+	// Enable access to the whole memory before anything else, as BSS section resides after the first 1MB RAM
+	KeyboardEnableA20Gate();
+	
 	// Clear the BSS section as the compiler expects
 	for (Pointer_Double_Word = &Configuration_Memory_BSS_Start_Address; Pointer_Double_Word < &Configuration_Memory_BSS_End_Address; Pointer_Double_Word++) *Pointer_Double_Word = 0;
 	
@@ -64,9 +68,6 @@ void __attribute__((section(".init"))) KernelEntryPoint(void)
 	
 	// Configure the interrupt controller
 	PICInitialize();
-	
-	// Enable access to the whole memory
-	KeyboardEnableA20Gate();
 	
 	// Others standard peripherals configuration
 	outb(0x3F2, 0x0C); // Floppy disk (for now it only disables the motor)
@@ -81,6 +82,22 @@ void __attribute__((section(".init"))) KernelEntryPoint(void)
 	#if CONFIGURATION_IS_DEBUG_ENABLED
 		ARCHITECTURE_INTERRUPTS_ENABLE();
 	#endif
+	
+	DEBUG_SECTION_START
+		DEBUG_DISPLAY_CURRENT_FUNCTION_NAME();
+		ScreenWriteString("BSS section start address : 0x");
+		DebugWriteHexadecimalInteger((unsigned int) &Configuration_Memory_BSS_Start_Address);
+		ScreenWriteString(", BSS section end address : 0x");
+		DebugWriteHexadecimalInteger((unsigned int) &Configuration_Memory_BSS_End_Address);
+		ScreenWriteString(", user space start address : 0x");
+		DebugWriteHexadecimalInteger(CONFIGURATION_USER_SPACE_ADDRESS);
+		ScreenWriteString(", BSS section size : ");
+		ScreenWriteString(itoa((unsigned int) &Configuration_Memory_BSS_End_Address - (unsigned int) &Configuration_Memory_BSS_Start_Address));
+		ScreenWriteString(" bytes, user space size : ");
+		ScreenWriteString(itoa(CONFIGURATION_USER_SPACE_SIZE));
+		ScreenWriteString(" bytes.\n");
+		KeyboardReadCharacter();
+	DEBUG_SECTION_END
 	
 	// Initialize the compilation-selected hard disk driver
 	Result = HardDiskInitialize();
