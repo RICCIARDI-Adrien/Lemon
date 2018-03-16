@@ -3,7 +3,10 @@
  * @author Adrien RICCIARDI
  */
 #include <Configuration.h>
+#include <Debug.h>
 #include <Drivers/Driver_Hard_Disk.h>
+#include <Drivers/Driver_Keyboard.h>
+#include <Drivers/Driver_Screen.h>
 #include <Error_Codes.h>
 #include <File_System/File.h>
 #include <File_System/File_System.h>
@@ -268,6 +271,13 @@ unsigned int FileSystemAllocateBlock(void)
 		Required_Disk_Size = FileSystemComputeSizeSectors(Blocks_Count, Files_Count);
 		// Add the partition starting offset
 		Required_Disk_Size += Starting_Sector;
+		DEBUG_SECTION_START
+			DEBUG_DISPLAY_CURRENT_FUNCTION_NAME();
+			ScreenWriteString("File system required size in sectors : ");
+			ScreenWriteString(itoa(Required_Disk_Size));
+			ScreenWriteString(".\n");
+			KeyboardReadCharacter();
+		DEBUG_SECTION_END
 		if (Required_Disk_Size > HardDiskGetDriveSizeSectors()) return 2;
 		
 		// Create empty file system
