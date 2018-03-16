@@ -24,9 +24,9 @@ SECTIONS
 	.bss :
 	{
 		. = ALIGN(4);  /* Make sure that the BSS section size is a multiple of 4 bytes */
-		_bss_start = .; /* Allow a program startup code to clear the section starting from this address */
+		Configuration_Memory_BSS_Start_Address = .; /* Allow a program startup code to clear the section starting from this address */
 		*(.bss)
 		. = ALIGN(4);
-		_bss_end = .;
+		Configuration_Memory_BSS_End_Address = .;
 	}
 }

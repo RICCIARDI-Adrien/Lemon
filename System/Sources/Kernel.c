@@ -3,6 +3,7 @@
  * @author Adrien RICCIARDI
  */
 #include <Architecture.h>
+#include <Configuration.h>
 #include <Drivers/Driver_Ethernet.h>
 #include <Drivers/Driver_Hard_Disk.h>
 #include <Drivers/Driver_Keyboard.h>
@@ -33,15 +34,6 @@
 	)
 
 //-------------------------------------------------------------------------------------------------
-// Public variables
-//-------------------------------------------------------------------------------------------------
-// These symbols come from the linker script. Their address must be used, not their value
-/** The BSS (variables that value will default to zero) section start (4-byte aligned). */
-extern unsigned int *_bss_start;
-/** The BSS section end (4-byte aligned). */
-extern unsigned int *_bss_end;
-
-//-------------------------------------------------------------------------------------------------
 // Private functions
 //-------------------------------------------------------------------------------------------------
 /** Wait for the user to hit the Enter key. */
@@ -57,7 +49,7 @@ static inline __attribute__((always_inline)) void KernelWaitForEnterKey(void)
 /** The MBR directly calls this function. */
 void __attribute__((section(".init"))) KernelEntryPoint(void)
 {
-	unsigned int *Pointer_Dword;
+	unsigned int *Pointer_Double_Word;
 	int Result;
 	char *String_Error_Message;
 	#if (!CONFIGURATION_BUILD_INSTALLER) && (!CONFIGURATION_BUILD_RAM_DISK)
@@ -65,7 +57,7 @@ void __attribute__((section(".init"))) KernelEntryPoint(void)
 	#endif
 	
 	// Clear the BSS section as the compiler expects
-	for (Pointer_Dword = (unsigned int *) &_bss_start; Pointer_Dword < (unsigned int *) &_bss_end; Pointer_Dword++) *Pointer_Dword = 0;
+	for (Pointer_Double_Word = &Configuration_Memory_BSS_Start_Address; Pointer_Double_Word < &Configuration_Memory_BSS_End_Address; Pointer_Double_Word++) *Pointer_Double_Word = 0;
 	
 	// Initialize Intel memory protection mechanisms
 	ArchitectureInitializeMemoryProtection();

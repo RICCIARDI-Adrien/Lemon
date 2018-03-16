@@ -51,4 +51,13 @@
 /** Ethernet receive and transmit buffers size in byte (Intel 82540EM available values are 256 bytes, 512 bytes, 1024 bytes and 2048 bytes as jumbo frames are not enabled). As the equipements default MTU is 1500 bytes, 2048 bytes should be fine). */
 #define CONFIGURATION_ETHERNET_BUFFER_SIZE 2048 // TODO this value does not change the controller value
 
+//-------------------------------------------------------------------------------------------------
+// Variables
+//-------------------------------------------------------------------------------------------------
+// These symbols come from the linker script. Their address must be used, not their value
+/** The BSS (variables that value will default to zero) section start (4-byte aligned). */
+extern unsigned int Configuration_Memory_BSS_Start_Address;
+/** The BSS section end (4-byte aligned). */
+extern unsigned int Configuration_Memory_BSS_End_Address;
+
 #endif
