@@ -43,15 +43,9 @@ export GLOBAL_TOOL_COMPILER
 export GLOBAL_TOOL_LINKER
 export GLOBAL_TOOL_ISO_GENERATOR
 export GLOBAL_PROCESSOR_TYPE
-export SYSTEM_IS_DEBUG_ENABLED
-export SYSTEM_HARD_DISK_LOGICAL_BLOCK_ADDRESSING_MODE
 export SYSTEM_HARD_DISK_DRIVER
 export SYSTEM_ETHERNET_CONTROLLER_DRIVER
-export SYSTEM_RAM_SIZE
-export STRING_BUILD_CONFIGURATION_VARIABLES
 export SYSTEM_INSTALLER_FILES_LIST
-export SYSTEM_FILE_SYSTEM_MAXIMUM_FILES_LIST_ENTRIES
-export SYSTEM_FILE_SYSTEM_MAXIMUM_BLOCKS_LIST_ENTRIES
 
 # Choose the whole system and applications language
 ifeq ($(GLOBAL_SYSTEM_LANGUAGE),english)
@@ -63,7 +57,7 @@ endif
 # Default gcc flags
 # Option -fno-asynchronous-unwind-tables avoid generating the .eh_frame section, which is heavy and useless here
 # Option -fno-pic is needed since gcc 6.2 to avoid gcc generate Position Independant Code like a classic ELF file (this won't work as Lemon uses static binaries)
-CCFLAGS = -fno-pic -nostdlib -fno-builtin -nostartfiles -finline-functions-called-once -fno-asynchronous-unwind-tables -masm=intel -m32 -Werror -march=$(GLOBAL_PROCESSOR_TYPE) -mtune=$(GLOBAL_PROCESSOR_TYPE) $(LANGUAGE_DEFINE)
+CCFLAGS = -fno-pic -nostdlib -fno-builtin -nostartfiles -finline-functions-called-once -fno-asynchronous-unwind-tables -masm=intel -m32 -Werror -march=$(GLOBAL_PROCESSOR_TYPE) -mtune=$(GLOBAL_PROCESSOR_TYPE) $(LANGUAGE_DEFINE) -DCONFIGURATION_IS_DEBUG_ENABLED=$(SYSTEM_IS_DEBUG_ENABLED) -DCONFIGURATION_SYSTEM_TOTAL_RAM_SIZE_MEGA_BYTES=$(SYSTEM_RAM_SIZE) -DCONFIGURATION_HARD_DISK_LOGICAL_BLOCK_ADDRESSING_MODE=$(SYSTEM_HARD_DISK_LOGICAL_BLOCK_ADDRESSING_MODE) -DSTRING_BUILD_CONFIGURATION_VARIABLES=$(STRING_BUILD_CONFIGURATION_VARIABLES) -DCONFIGURATION_FILE_SYSTEM_MAXIMUM_FILES_LIST_ENTRIES=$(SYSTEM_FILE_SYSTEM_MAXIMUM_FILES_LIST_ENTRIES) -DCONFIGURATION_FILE_SYSTEM_MAXIMUM_BLOCKS_LIST_ENTRIES=$(SYSTEM_FILE_SYSTEM_MAXIMUM_BLOCKS_LIST_ENTRIES)
 export CCFLAGS
 
 #--------------------------------------------------------------------------------------------------
