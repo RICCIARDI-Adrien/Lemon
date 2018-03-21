@@ -32,6 +32,7 @@
  * @version 2.5.0 : 02/12/2016, added RAM disk support.
  * @version 2.5.1 : 19/12/2016, gathered Installer code into System code to avoid code and makefiles duplication.
  * @version 2.5.2 : 21/04/2017, improved "download" command communication protocol to allow files of any size to be downloaded.
+ * @version 2.5.3 : 17/03/2018, added automatic computation of file system needed RAM and remaining user space RAM.
  */
 #ifndef H_KERNEL_H
 #define H_KERNEL_H
