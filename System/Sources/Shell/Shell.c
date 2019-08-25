@@ -1,5 +1,5 @@
 /** @file Shell.c
- * @see Shell.h for description.
+ * See Shell.h for description.
  * @author Adrien RICCIARDI
  */
 #include <Configuration.h>
@@ -156,75 +156,13 @@ static inline void ShellSplitCommandLine(char *Pointer_Buffer)
 	} while ((*Pointer_Buffer != 0) && (Command_Line_Arguments.Arguments_Count < SHELL_MAXIMUM_ARGUMENTS_COUNT));
 }
 
-/** Load a program file into memory and execute it.
- * @param String_Program_Name The program name in the file system.
- * @note The function returns if an error occurs, or never return if the program was successfully started.
- */
-static inline void ShellLoadAndStartProgram(char *String_Program_Name)
-{
-	unsigned int File_Descriptor, Program_Size, Temp_Double_Word, Program_Header; // The program header can evolve to a structure when needed
-	TCommandLineArguments *Pointer_Command_Line_Arguments = (TCommandLineArguments *) CONFIGURATION_USER_SPACE_ADDRESS;
-	int i, Offset;
-	
-	// Set error color only one time
-	ScreenSetColor(SCREEN_COLOR_RED);
-	
-	// Is the file existing ?
-	if (FileOpen(String_Program_Name, 'r', &File_Descriptor) != ERROR_CODE_NO_ERROR)
-	{
-		ScreenWriteString(STRING_SHELL_ERROR_UNKNOWN_COMMAND);
-		return;
-	}
-	
-	// Check the program size
-	Program_Size = FileSize(String_Program_Name);
-	if (Program_Size > CONFIGURATION_USER_SPACE_SIZE - CONFIGURATION_USER_SPACE_PROGRAM_LOAD_ADDRESS)
-	{
-		ScreenWriteString(STRING_SHELL_ERROR_FILE_TO_LOAD_LARGER_THAN_RAM);
-		goto Exit_Close_File;
-	}
-	
-	// Load the file header
-	if (FileRead(File_Descriptor, &Program_Header, sizeof(Program_Header), &Temp_Double_Word) != ERROR_CODE_NO_ERROR)
-	{
-		ScreenWriteString(STRING_SHELL_ERROR_CANT_READ_PROGRAM_HEADER);
-		goto Exit_Close_File;
-	}
-	// Is the file header indicating the file is a program ?
-	if ((Temp_Double_Word != sizeof(Program_Header)) || (Program_Header != CONFIGURATION_USER_SPACE_PROGRAM_MAGIC_NUMBER))
-	{
-		ScreenWriteString(STRING_SHELL_ERROR_FILE_NOT_EXECUTABLE);
-		goto Exit_Close_File;
-	}
-	
-	// Load the program code
-	if (FileRead(File_Descriptor, (void *) CONFIGURATION_USER_SPACE_PROGRAM_LOAD_ADDRESS, Program_Size - sizeof(Program_Header), &Temp_Double_Word) != ERROR_CODE_NO_ERROR)
-	{
-		ScreenWriteString(STRING_SHELL_ERROR_CANT_LOAD_PROGRAM);
-		goto Exit_Close_File;
-	}
-	FileClose(File_Descriptor);
-	
-	// Copy command line arguments to user space
-	memcpy(Pointer_Command_Line_Arguments, &Command_Line_Arguments, sizeof(Command_Line_Arguments));
-	// Compute the offset between user space argv[] pointers and kernel space ones
-	Offset = (unsigned int) Command_Line_Arguments.Arguments_Value - ARGUMENTS_VALUE_OFFSET;
-	// Adjust argv[] pointers to fit into user space
-	for (i = 0; i < Command_Line_Arguments.Arguments_Count; i++) Pointer_Command_Line_Arguments->Pointer_Arguments[i] -= Offset;
-	
-	// Start the program
-	KernelStartProgram();
-	
-Exit_Close_File:
-	FileClose(File_Descriptor);
-}
-
 //-------------------------------------------------------------------------------------------------
 // Public functions
 //-------------------------------------------------------------------------------------------------
 void Shell(void)
 {
 	char String_Buffer[SHELL_MAXIMUM_LINE_LENGTH + 1]; // Length of a console line + 1
+	int Result;
 	
 	// Main loop
 	while (1)
@@ -314,6 +252,88 @@ void Shell(void)
 		//====================================================================================================================
 		// Execute a program or tell the user that the command is unknown
 		//====================================================================================================================
-		else ShellLoadAndStartProgram(Command_Line_Arguments.Pointer_Arguments[0]);
+		else
+		{
+			// Try to start the program. This function does not return if the program was successfully started
+			Result = ShellLoadAndStartProgram(Command_Line_Arguments.Pointer_Arguments[0]);
+			
+			// An error occurred when this code is reached
+			ScreenSetColor(SCREEN_COLOR_RED);
+			switch (Result)
+			{
+				case ERROR_CODE_FILE_NOT_FOUND:
+					ScreenWriteString(STRING_SHELL_ERROR_UNKNOWN_COMMAND);
+					break;
+					
+				case ERROR_CODE_FILE_LARGER_THAN_RAM:
+					ScreenWriteString(STRING_SHELL_ERROR_FILE_TO_LOAD_LARGER_THAN_RAM);
+					break;
+					
+				case ERROR_CODE_FILE_READING_FAILED:
+					ScreenWriteString(STRING_SHELL_ERROR_CANT_LOAD_PROGRAM);
+					break;
+					
+				case ERROR_CODE_FILE_NOT_EXECUTABLE:
+					ScreenWriteString(STRING_SHELL_ERROR_FILE_NOT_EXECUTABLE);
+					break;
+					
+				// Should be never reached
+				default:
+					break;
+			}
+		}
 	}
+}
+
+int ShellLoadAndStartProgram(char *Pointer_String_Program_Name)
+{
+	unsigned int File_Descriptor, Program_Size, Temp_Double_Word, Program_Header; // The program header can evolve to a structure when needed
+	TCommandLineArguments *Pointer_Command_Line_Arguments = (TCommandLineArguments *) CONFIGURATION_USER_SPACE_ADDRESS;
+	int i, Offset, Return_Value;
+	
+	// Is the file existing ?
+	if (FileOpen(Pointer_String_Program_Name, 'r', &File_Descriptor) != ERROR_CODE_NO_ERROR) return ERROR_CODE_FILE_NOT_FOUND;
+	
+	// Check the program size
+	Program_Size = FileSize(Pointer_String_Program_Name);
+	if (Program_Size > CONFIGURATION_USER_SPACE_SIZE - CONFIGURATION_USER_SPACE_PROGRAM_LOAD_ADDRESS)
+	{
+		Return_Value = ERROR_CODE_FILE_LARGER_THAN_RAM;
+		goto Exit_Close_File;
+	}
+	
+	// Load the file header
+	if (FileRead(File_Descriptor, &Program_Header, sizeof(Program_Header), &Temp_Double_Word) != ERROR_CODE_NO_ERROR)
+	{
+		Return_Value = ERROR_CODE_FILE_READING_FAILED;
+		goto Exit_Close_File;
+	}
+	// Is the file header indicating that the file is a program ?
+	if ((Temp_Double_Word != sizeof(Program_Header)) || (Program_Header != CONFIGURATION_USER_SPACE_PROGRAM_MAGIC_NUMBER))
+	{
+		Return_Value = ERROR_CODE_FILE_NOT_EXECUTABLE;
+		goto Exit_Close_File;
+	}
+	
+	// Load the program code
+	if (FileRead(File_Descriptor, (void *) CONFIGURATION_USER_SPACE_PROGRAM_LOAD_ADDRESS, Program_Size - sizeof(Program_Header), &Temp_Double_Word) != ERROR_CODE_NO_ERROR)
+	{
+		Return_Value = ERROR_CODE_FILE_READING_FAILED;
+		goto Exit_Close_File;
+	}
+	FileClose(File_Descriptor);
+	
+	// Copy command line arguments to user space
+	memcpy(Pointer_Command_Line_Arguments, &Command_Line_Arguments, sizeof(Command_Line_Arguments));
+	// Compute the offset between user space argv[] pointers and kernel space ones
+	Offset = (unsigned int) Command_Line_Arguments.Arguments_Value - ARGUMENTS_VALUE_OFFSET;
+	// Adjust argv[] pointers to fit into user space
+	for (i = 0; i < Command_Line_Arguments.Arguments_Count; i++) Pointer_Command_Line_Arguments->Pointer_Arguments[i] -= Offset;
+	
+	// Start the program
+	KernelStartProgram();
+	
+Exit_Close_File:
+	FileClose(File_Descriptor);
+	return Return_Value;
 }

@@ -25,7 +25,8 @@ typedef enum
 	ERROR_CODE_BAD_FILE_DESCRIPTOR, //!< A bad file descriptor was provided to a file function.
 	ERROR_CODE_BAD_UART_PARAMETERS, //!< Bad parameters were provided to UART during initialization.
 	ERROR_CODE_FILE_LARGER_THAN_RAM, //!< There is not enough room in RAM to load the file.
-	ERROR_CODE_FILE_NOT_EXECUTABLE //!< The file is not an executable program.
+	ERROR_CODE_FILE_NOT_EXECUTABLE, //!< The file is not an executable program.
+	ERROR_CODE_FILE_READING_FAILED //!< Failed to read a file content from the disk.
 } TErrorCode;
 
 #endif

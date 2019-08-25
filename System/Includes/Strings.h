@@ -37,6 +37,9 @@
 	#define STRING_KERNEL_ERROR_FAILED_TO_POPULATE_RAM_DISK "Erreur : impossible d'installer les fichiers dans le disque RAM.\n"
 	#define STRING_KERNEL_ERROR_ETHERNET_CONTROLLER_NOT_FOUND "Erreur : aucun contr\223leur ethernet n'a \202t\202 d\202tect\202.\n"
 	#define STRING_KERNEL_ERROR_ETHERNET_CONTROLLER_BAD_DRIVER "Erreur : le contr\223leur ethernet n'est pas compatible avec le pilote.\n"
+	#define STRING_KERNEL_ERROR_FILE_STARTED_ON_BOOT_NOT_EXECUTABLE "Erreur : le programme lanc\202 automatiquement au d\202marrage dy syst\212me n'est pas unprogramme valide.\n"
+	#define STRING_KERNEL_ERROR_FILE_STARTED_ON_BOOT_LARGER_THAN_RAM "Erreur : le syst\212me ne dispose pas d'assez de m\202moire pour ex\202cuter le programmelanc\202 automatiquement au d\202marrage.\n"
+	#define STRING_KERNEL_ERROR_FILE_STARTED_ON_BOOT_READ_FAILURE "Erreur : impossible de lire le fichier contenant le programme lanc\202\nautomatiquement au d\202marrage.\n"
 	
 	// SATA hard disk driver
 	#define STRING_DRIVER_HARD_DISK_SATA_ERROR_INPUT_OUTPUT "Erreur : impossible d'acc\202der au disque dur SATA.\nAppuyez sur Entr\202e pour continuer.\n"
@@ -95,14 +98,13 @@
 
 	// Shell version command
 	#define STRING_SHELL_VERSION "Copyright (C) Adrien Ricciardi\n" \
-		"Version du syst\212me : 2.5.3 (" __DATE__ ", " __TIME__ ")\n" \
+		"Version du syst\212me : 2.5.4 (" __DATE__ ", " __TIME__ ")\n" \
 		"Version des sources : " STRING_GIT_COMMIT_HASH "\n\n" \
 		"Configuration :\n" \
 		STRING_BUILD_CONFIGURATION_VARIABLES
 
 	// Shell error strings
 	#define STRING_SHELL_ERROR_UNKNOWN_COMMAND "Ce programme est introuvable !\n"
-	#define STRING_SHELL_ERROR_CANT_READ_PROGRAM_HEADER "Impossible de lire l'en-t\210te du fichier.\n"
 	#define STRING_SHELL_ERROR_FILE_NOT_EXECUTABLE "Ce fichier n'est pas un programme !\n"
 	#define STRING_SHELL_ERROR_CANT_LOAD_PROGRAM "Impossible de charger le programme en m\202moire.\n"
 	#define STRING_SHELL_ERROR_FILE_TO_LOAD_LARGER_THAN_RAM "Le syst\212me ne dispose pas d'assez de m\202moire pour lancer ce programme.\n"

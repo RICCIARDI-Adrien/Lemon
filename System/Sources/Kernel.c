@@ -1,5 +1,5 @@
 /** @file Kernel.c
- * @see Kernel.h for description.
+ * See Kernel.h for description.
  * @author Adrien RICCIARDI
  */
 #include <Architecture.h>
@@ -182,6 +182,32 @@ void __attribute__((section(".init"))) KernelEntryPoint(void)
 	ScreenSetColor(SCREEN_COLOR_LIGHT_BLUE);
 	ScreenClear(); // Clear eventual debug messages
 	ScreenWriteString(STRING_SHELL_WELCOME);
+	
+	// Execute automatic starting program if present
+	#if !CONFIGURATION_BUILD_INSTALLER
+		Result = ShellLoadAndStartProgram(CONFIGURATION_FILE_STARTED_ON_BOOT_NAME);
+		
+		// An error occurred when this code is reached
+		ScreenSetColor(SCREEN_COLOR_RED);
+		switch (Result)
+		{
+			case ERROR_CODE_FILE_LARGER_THAN_RAM:
+				ScreenWriteString(STRING_KERNEL_ERROR_FILE_STARTED_ON_BOOT_LARGER_THAN_RAM);
+				break;
+				
+			case ERROR_CODE_FILE_READING_FAILED:
+				ScreenWriteString(STRING_KERNEL_ERROR_FILE_STARTED_ON_BOOT_READ_FAILURE);
+				break;
+				
+			case ERROR_CODE_FILE_NOT_EXECUTABLE:
+				ScreenWriteString(STRING_KERNEL_ERROR_FILE_STARTED_ON_BOOT_NOT_EXECUTABLE);
+				break;
+				
+			// Shouldn't be reached
+			default:
+				break;
+		}
+	#endif
 	
 	// Jump to shell
 	KernelStartShell();

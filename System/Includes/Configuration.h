@@ -17,6 +17,8 @@
 #define CONFIGURATION_FILE_SYSTEM_MAXIMUM_OPENED_FILES_COUNT 8
 /** Maximum length of a file name in characters. */
 #define CONFIGURATION_FILE_NAME_LENGTH 12
+/** Name of the program that is automatically started on system boot. */
+#define CONFIGURATION_FILE_STARTED_ON_BOOT_NAME "Autostart"
 
 // RAM management
 /** The address the MBR is loaded to by the BIOS. */

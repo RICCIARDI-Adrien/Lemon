@@ -39,6 +39,16 @@
 /** Shell entry point. */
 void Shell(void);
 
+/** Load a program file into memory and execute it.
+ * @param Pointer_String_Program_Name The program name in the file system.
+ * @return ERROR_CODE_FILE_NOT_FOUND if the program file was not found,
+ * @return ERROR_CODE_FILE_LARGER_THAN_RAM if the file is too big,
+ * @return ERROR_CODE_FILE_READING_FAILED if file data could not be read from disk,
+ * @return ERROR_CODE_FILE_NOT_EXECUTABLE if the loaded file can't be executed,
+ * @note The function never return if the program was successfully started.
+ */
+int ShellLoadAndStartProgram(char *Pointer_String_Program_Name);
+
 /** List existing files. */
 void ShellCommandList(void);
 
