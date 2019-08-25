@@ -14,7 +14,11 @@
 // French strings
 #else
 	#define STRING_USAGE_1 "Utilisation : "
-	#define STRING_USAGE_2 " Commande\n\n"
+	#define STRING_USAGE_2 " Commande\n" \
+		"\n" \
+		"Tapez '"
+	#define STRING_USAGE_3 "help System"
+	#define STRING_USAGE_4 "' pour plus d'informations sur le fonctionnement du syst\212me.\n\n"
 	
 	#define STRING_AVAILABLE_COMMANDS "Liste des commandes disponibles :\n"
 	
@@ -33,6 +37,7 @@
 	#define STRING_COMMAND_SHORT_DESCRIPTION_LIST "Liste les fichiers pr\202sents sur le disque dur."
 	#define STRING_COMMAND_SHORT_DESCRIPTION_RENAME "Renomme un fichier existant."
 	#define STRING_COMMAND_SHORT_DESCRIPTION_SIZE "Affiche la taille d'un fichier en octets."
+	#define STRING_COMMAND_SHORT_DESCRIPTION_SYSTEM "Description du syst\212me lui-m\210me."
 	#define STRING_COMMAND_SHORT_DESCRIPTION_U "Rassemble des commandes du monde UNIX."
 	#define STRING_COMMAND_SHORT_DESCRIPTION_VERSION "Affiche la version et la date de compilation du syst\212me."
 	
@@ -61,6 +66,10 @@
 		"    Echap : quitter"
 	#define STRING_COMMAND_FULL_DESCRIPTION_HELP "Appel\202e sans argument, la commande 'help' affiche une liste et une br\212ve\ndescription de toutes les commandes disponibles.\n" \
 		"Lorsque le nom d'une commande est sp\202cifi\202 comme argument, 'help' affiche une\ndescription d\202taill\202e des possibilit\202s de la commande."
+	#define STRING_COMMAND_FULL_DESCRIPTION_SYSTEM "Voici quelques informations sur Lemon :\n" \
+		"- Appuyez sur la touche F12 \205 tout moment pour quitter le programme en cours et revenir au syst\212me.\n" \
+		"- Un programme portant le nom 'Autostart' sera automatiquement lanc\202 au\nd\202marrage du syst\212me.\n" \
+		"- Le syst\212me de fichiers est sensible \205 la casse des caract\212res."
 	#define STRING_COMMAND_FULL_DESCRIPTION_U "Rassemble des versions simplifi\202es de plusieurs commandes UNIX.\n" \
 		"Taper 'u' affiche la liste de toutes les commandes disponibles.\n" \
 		"Il suffit de taper 'u <Commande>' pour lancer la commande souhait\202e.\n" \

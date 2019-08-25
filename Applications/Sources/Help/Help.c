@@ -84,6 +84,11 @@ static THelpCommand Commands[] =
 		STRING_COMMAND_SHORT_DESCRIPTION_SIZE
 	},
 	{
+		"System",
+		STRING_COMMAND_SHORT_DESCRIPTION_SYSTEM,
+		STRING_COMMAND_FULL_DESCRIPTION_SYSTEM
+	},
+	{
 		"u",
 		STRING_COMMAND_SHORT_DESCRIPTION_U,
 		STRING_COMMAND_FULL_DESCRIPTION_U
@@ -163,6 +168,10 @@ int main(int argc, char *argv[])
 		LibrariesScreenWriteString(STRING_USAGE_1);
 		LibrariesScreenWriteString(argv[0]);
 		LibrariesScreenWriteString(STRING_USAGE_2);
+		LibrariesScreenSetFontColor(LIBRARIES_SCREEN_COLOR_LIGHT_BLUE);
+		LibrariesScreenWriteString(STRING_USAGE_3);
+		LibrariesScreenSetFontColor(LIBRARIES_SCREEN_COLOR_BLUE);
+		LibrariesScreenWriteString(STRING_USAGE_4);
 		
 		DisplayCommandsList();
 		return -1;
