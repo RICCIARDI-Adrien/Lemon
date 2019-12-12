@@ -294,7 +294,6 @@ static int NetworkBaseIPIsReceivedPacketValid(TNetworkSocket *Pointer_Socket, vo
 int NetworkBaseInitialize(TNetworkIPAddress *Pointer_System_IP_Address, TNetworkIPAddress *Pointer_Gateway_IP_Address)
 {
 	int i;
-	unsigned char Gateway_MAC_Address[NETWORK_MAC_ADDRESS_SIZE];
 	unsigned char Packet_Buffer[NETWORK_MAXIMUM_PACKET_SIZE];
 	unsigned int Packet_Size;
 	
@@ -317,7 +316,7 @@ int NetworkBaseInitialize(TNetworkIPAddress *Pointer_System_IP_Address, TNetwork
 
 int NetworkBaseGetMACAddressFromARPTable(TNetworkIPAddress *Pointer_IP_Address, unsigned char *Pointer_MAC_Address)
 {
-	int i, Return_Value = 1;
+	int i;
 	
 	// Search in the table if it not empty
 	if (Network_Base_ARP_Table_Used_Entries_Count > 0)
@@ -364,7 +363,6 @@ int NetworkBaseGetMACAddressFromARPTable(TNetworkIPAddress *Pointer_IP_Address, 
 int NetworkBaseIPReceivePacket(TNetworkSocket *Pointer_Socket, int Is_Call_Blocking, unsigned int *Pointer_Packet_Size, void *Pointer_Packet_Buffer)
 {
 	TNetworkEthernetHeader *Pointer_Ethernet_Header = (TNetworkEthernetHeader *) Pointer_Packet_Buffer;
-	TNetworkIPv4Header *Pointer_IP_Header = (TNetworkIPv4Header *) (Pointer_Packet_Buffer + sizeof(TNetworkEthernetHeader));
 	
 	if (Is_Call_Blocking)
 	{
