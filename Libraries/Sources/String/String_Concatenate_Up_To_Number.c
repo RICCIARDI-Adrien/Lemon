@@ -8,16 +8,16 @@
 //-------------------------------------------------------------------------------------------------
 void LibrariesStringConcatenateUpToNumber(char *String_Destination, char *String_To_Append, unsigned int Characters_Count)
 {
-	int i, j;
-	
 	// Go to the destination string end
-	for (i = 0; String_Destination[i] != 0; i++);
+	while (*String_Destination != 0) String_Destination++;
 	
 	// Copy the string to append at the end of the destination string
-	for (j = 0; (String_To_Append[j] != 0) && (j < Characters_Count); j++)
+	while ((*String_To_Append != 0) && (Characters_Count > 0))
 	{
-		String_Destination[i] = String_To_Append[j];
-		i++;
+		*String_Destination = *String_To_Append;
+		String_Destination++;
+		String_To_Append++;
+		Characters_Count--;
 	}
-	String_Destination[i] = 0; // Append terminating zero
+	*String_Destination = 0; // Append terminating zero
 }
