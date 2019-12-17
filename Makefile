@@ -155,4 +155,7 @@ QEMU_Hard_Disk.img:
 
 qemu: QEMU_Hard_Disk.img
 	@# Emulated PC configuration : 16 MB of RAM, Intel 82540EM PCI network card, IDE hard disk
-	qemu-system-i386 -m 16M -device e1000 -name Lemon -hda QEMU_Hard_Disk.img
+	qemu-system-i386 -m 16M -device e1000 -name Lemon -drive file=QEMU_Hard_Disk.img,media=disk,format=raw $(QEMU_OPTIONS)
+
+qemu-install: QEMU_OPTIONS += -cdrom Lemon_Installer_CD_Image.iso
+qemu-install: qemu
