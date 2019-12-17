@@ -148,3 +148,11 @@ application/%:
 libraries:
 	@$(call DisplayTitle,Compiling libraries)
 	@cd Libraries && $(MAKE)
+
+# Create hard disk image if not present
+QEMU_Hard_Disk.img:
+	dd if=/dev/zero of=QEMU_Hard_Disk.img bs=1M count=512
+
+qemu: QEMU_Hard_Disk.img
+	@# Emulated PC configuration : 16 MB of RAM, Intel 82540EM PCI network card, IDE hard disk
+	qemu-system-i386 -m 16M -device e1000 -name Lemon -hda QEMU_Hard_Disk.img
