@@ -1,5 +1,5 @@
 /** @file Standard_Functions.c
- * @see Standard_Functions.h for description.
+ * See Standard_Functions.h for description.
  * @author Adrien RICCIARDI
  */
 #include <Standard_Functions.h>

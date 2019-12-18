@@ -1,5 +1,5 @@
 /** @file File.c
- * @see File.h for description.
+ * See File.h for description.
  * @author Adrien RICCIARDI
  */
 #include <Configuration.h>

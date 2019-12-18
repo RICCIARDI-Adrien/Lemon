@@ -1,5 +1,5 @@
 /** @file Driver_Screen.c
- * @see Driver_Screen.h for description.
+ * See Driver_Screen.h for description.
  * @author Adrien RICCIARDI
  */
 #include <Drivers/Driver_Screen.h>

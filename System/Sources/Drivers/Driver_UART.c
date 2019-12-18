@@ -1,5 +1,5 @@
 /** @file Driver_UART.c
- * @see Driver_UART.h for description.
+ * See Driver_UART.h for description.
  * @author Adrien RICCIARDI
  */
 #include <Architecture.h>

@@ -1,5 +1,5 @@
 /** @file Driver_Keyboard.c
- * @see Driver_Keyboard.h for description.
+ * See Driver_Keyboard.h for description.
  * @author Adrien RICCIARDI
  */
 #include <Drivers/Driver_Keyboard.h>

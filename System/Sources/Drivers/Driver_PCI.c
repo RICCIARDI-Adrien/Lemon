@@ -1,5 +1,5 @@
 /** @file Driver_PCI.c
- * @see Driver_PCI.h for description.
+ * See Driver_PCI.h for description.
  * @author Adrien RICCIARDI
  */
 #include <Configuration.h>

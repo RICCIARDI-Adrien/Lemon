@@ -1,5 +1,5 @@
 /** @file Driver_Timer.c
- * @see Driver_Timer.h for description.
+ * See Driver_Timer.h for description.
  * @author Adrien RICCIARDI
  */
 #include <Architecture.h>

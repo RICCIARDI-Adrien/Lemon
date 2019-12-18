@@ -1,5 +1,5 @@
 /** @file File_System.c
- * @see File_System.h for description.
+ * See File_System.h for description.
  * @author Adrien RICCIARDI
  */
 #include <Configuration.h>

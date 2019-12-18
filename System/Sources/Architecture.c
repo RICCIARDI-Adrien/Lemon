@@ -1,5 +1,5 @@
 /** @file Architecture.c
- * @see Architecture.h for description.
+ * See Architecture.h for description.
  * @author Adrien RICCIARDI
  */
 #include <Architecture.h>

@@ -1,5 +1,5 @@
 /** @file Debug.c
- * @see Debug.h for description.
+ * See Debug.h for description.
  * @author Adrien RICCIARDI
  */
 #include <Configuration.h>

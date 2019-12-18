@@ -1,5 +1,5 @@
 /** @file Driver_PIC.c
- * @see Driver_PIC.h for description.
+ * See Driver_PIC.h for description.
  * @author Adrien RICCIARDI
  */
 #include <Architecture.h>

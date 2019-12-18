@@ -1,5 +1,5 @@
 /** @file Shell_Installer_Partition_Menu.c
- * @see Shell_Partition_Menu.h for description.
+ * See Shell_Partition_Menu.h for description.
  * @author Adrien RICCIARDI
  */
 #include <Drivers/Driver_Hard_Disk.h> // For HardDiskWriteSector() and others

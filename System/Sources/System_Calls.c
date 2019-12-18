@@ -1,5 +1,5 @@
 /** @file System_Calls.c
- * @see System_Calls.h for description.
+ * See System_Calls.h for description.
  * @author Adrien RICCIARDI
  */
 #include <Architecture.h>
