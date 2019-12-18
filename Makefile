@@ -14,6 +14,9 @@ endif
 # Initialize configuration variables from a build configuration file
 include $(CONFIGURATION)
 
+# Determine host machine processors count
+HOST_PROCESSORS_COUNT = $(shell cat /proc/cpuinfo | grep processor | wc -l)
+
 #--------------------------------------------------------------------------------------------------
 # Set default configuration variables value if variables are not defined
 #--------------------------------------------------------------------------------------------------
@@ -147,7 +150,7 @@ application/%:
 
 libraries:
 	@$(call DisplayTitle,Compiling libraries)
-	@cd Libraries && $(MAKE)
+	@cd Libraries && $(MAKE) -j $(HOST_PROCESSORS_COUNT)
 
 # Create hard disk image if not present
 QEMU_Hard_Disk.img:
