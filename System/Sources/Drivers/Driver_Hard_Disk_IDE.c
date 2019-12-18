@@ -41,6 +41,23 @@
 }
 
 //-------------------------------------------------------------------------------------------------
+// Private types
+//-------------------------------------------------------------------------------------------------
+/** Useful fields of ATA "IDENTIFY DEVICE" command answer. */
+typedef struct __attribute__((packed))
+{
+	unsigned short Padding_0[27];
+	char String_Model_Number[40]; //!< Words 27..46 in ATA specification. Warning : this string is padded with spaces but not zero-terminated.
+	unsigned short Padding_1[2];
+	unsigned int Capabilities; //!< Words 49..50 in ATA specification.
+	unsigned short Padding_2[9];
+	unsigned int LBA_28_Maximum_Addressable_Logical_Sectors_Count; //!< Words 60..61 in ATA specification.
+	unsigned short Padding_3[38];
+	unsigned long long LBA_48_Maximum_Addressable_Logical_Sectors_Count; //!< Words 100..103 in ATA specification, available only when drive supports LBA-48 mode.
+	unsigned short Padding_4[152];
+} THardDiskIdentifyDeviceAnswer;
+
+//-------------------------------------------------------------------------------------------------
 // Private variables
 //-------------------------------------------------------------------------------------------------
 /** Keep the hard disk total LBA sectors count. */
@@ -52,7 +69,7 @@ static unsigned long long Hard_Disk_LBA_Sectors_Count;
 /** Send the IDENTIFY DEVICE command to the hard disk.
  * @param Pointer_Buffer On output, contain the device parameters. The buffer must be HARD_DISK_SECTOR_SIZE large.
  */
-static inline __attribute__((always_inline)) void HardDiskSendIdentifyDeviceCommand(void *Pointer_Buffer)
+static inline __attribute__((always_inline)) void HardDiskSendIdentifyDeviceCommand(THardDiskIdentifyDeviceAnswer *Pointer_Identify_Device_Answer)
 {
 	// Wait for the controller to be ready
 	ARCHITECTURE_INTERRUPTS_DISABLE();
@@ -80,7 +97,7 @@ static inline __attribute__((always_inline)) void HardDiskSendIdentifyDeviceComm
 		"pop ecx\n"
 		"pop edi"
 		: // No output
-		: "g" (HARD_DISK_SECTOR_SIZE / 2), "g" (Pointer_Buffer), "g" (HARD_DISK_PORT_DATA)
+		: "g" (HARD_DISK_SECTOR_SIZE / 2), "g" (Pointer_Identify_Device_Answer), "g" (HARD_DISK_PORT_DATA)
 		: "ecx", "edx", "edi"
 	);
 	
@@ -93,26 +110,41 @@ static inline __attribute__((always_inline)) void HardDiskSendIdentifyDeviceComm
 // This function is based on the ATA-ATAPI 6 specs
 int HardDiskInitialize(void)
 {
-	unsigned int Buffer[HARD_DISK_SECTOR_SIZE / sizeof(unsigned int)]; // Most parameters are accessed as DWORDs
+	THardDiskIdentifyDeviceAnswer Identify_Device_Answer;
 	
 	// Get the device parameters
-	HardDiskSendIdentifyDeviceCommand(Buffer);
+	HardDiskSendIdentifyDeviceCommand(&Identify_Device_Answer);
 	
 	// Does the device handle LBA ?
-	if (!(Buffer[24] & 0x02000000)) return 1;
+	if (!(Identify_Device_Answer.Capabilities & 0x0000200)) return 1;
 	
 	#if CONFIGURATION_HARD_DISK_LOGICAL_BLOCK_ADDRESSING_MODE == 28
-		Hard_Disk_LBA_Sectors_Count = Buffer[30];
+		Hard_Disk_LBA_Sectors_Count = Identify_Device_Answer.LBA_28_Maximum_Addressable_Logical_Sectors_Count;
 	#elif CONFIGURATION_HARD_DISK_LOGICAL_BLOCK_ADDRESSING_MODE == 48
-		Hard_Disk_LBA_Sectors_Count = ((unsigned long long) Buffer[51] << 32) | Buffer[50];
+		Hard_Disk_LBA_Sectors_Count = Identify_Device_Answer.LBA_48_Maximum_Addressable_Logical_Sectors_Count;
 	#endif
 	
 	DEBUG_SECTION_START
+	{
+		unsigned int i;
+		
 		DEBUG_DISPLAY_CURRENT_FUNCTION_NAME();
-		ScreenWriteString("Total sectors count : ");
+		
+		// Display model number
+		ScreenWriteString("Hard disk model : ");
+		for (i = 0; i < sizeof(Identify_Device_Answer.String_Model_Number); i += 2) // String characters are swapped due to little-endian words storage
+		{
+			ScreenWriteCharacter(Identify_Device_Answer.String_Model_Number[i + 1]);
+			ScreenWriteCharacter(Identify_Device_Answer.String_Model_Number[i]);
+		}
+		
+		// Display sectors count
+		ScreenWriteString("\nTotal sectors count : ");
 		ScreenWriteString(itoa((unsigned int) Hard_Disk_LBA_Sectors_Count)); // TODO : display the whole sectors count
 		ScreenWriteString(".\n");
+		
 		KeyboardReadCharacter();
+	}
 	DEBUG_SECTION_END
 	
 	return 0;
