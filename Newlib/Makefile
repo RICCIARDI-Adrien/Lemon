@@ -44,7 +44,7 @@ configure:
 	../newlib-cygwin/configure --target=$(BUILD_TARGET) --with-newlib --disable-shared --disable-newlib-multithread --disable-multilib --prefix=$(PATH_OBJECTS)
 
 compile:
-	cd $(PATH_OBJECTS) && make
+	cd $(PATH_OBJECTS) && make -j $(HOST_PROCESSORS_COUNT)
 
 install:
 	cd $(PATH_OBJECTS) && make install
