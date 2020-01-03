@@ -3,7 +3,7 @@
  * @author Adrien RICCIARDI
  */
 #include <errno.h>
-#include <System.h>
+#include <Libraries.h>
 #include <unistd.h>
 
 // Errno definition, as specified by newlib documentation
@@ -31,7 +31,7 @@ int write(int File_Descriptor, const void *Pointer_Buffer, size_t Bytes_Count)
 		// Display the string
 		for (i = 0; i < Bytes_Count; i++)
 		{
-			SystemCall(SYSTEM_CALL_SCREEN_WRITE_CHARACTER, *Pointer_Buffer_Bytes, 0, NULL, NULL);
+			LibrariesSystemCall(SYSTEM_CALL_SCREEN_WRITE_CHARACTER, *Pointer_Buffer_Bytes, 0, NULL, NULL);
 			Pointer_Buffer_Bytes++;
 		}
 		
@@ -40,7 +40,7 @@ int write(int File_Descriptor, const void *Pointer_Buffer, size_t Bytes_Count)
 	
 	// Greater file descriptors correspond to files
 	File_Descriptor -= 3; // Lemon file descriptors start from 0, so bypass stdin, stdout and stderr
-	switch (SystemCall(SYSTEM_CALL_FILE_WRITE, File_Descriptor, Bytes_Count, (void *) Pointer_Buffer, NULL))
+	switch (LibrariesSystemCall(SYSTEM_CALL_FILE_WRITE, File_Descriptor, Bytes_Count, (void *) Pointer_Buffer, NULL))
 	{
 		case ERROR_CODE_NO_ERROR:
 			return Bytes_Count;
