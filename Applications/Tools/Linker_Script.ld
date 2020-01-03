@@ -28,8 +28,14 @@ SECTIONS
 		*(.bss)
 		. = ALIGN(4);
 		_bss_end = .;
-	}	
+	}
 	
 	/* Allow to know the program end from the binary */
 	_end = .;
+	
+	/* Remove some undesired sections that only add weight to generated executable */
+	/DISCARD/ :
+	{
+		*(.note*)
+	}
 }
