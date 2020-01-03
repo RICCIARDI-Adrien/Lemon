@@ -172,7 +172,3 @@ qemu: QEMU_Hard_Disk.img
 
 qemu-install: QEMU_OPTIONS += -cdrom Lemon_Installer_CD_Image.iso -boot order=d
 qemu-install: qemu
-
-system:
-	@$(call DisplayTitle,Compiling system)
-	@cd System && $(MAKE) CONFIGURATION_BUILD_INSTALLER=0
