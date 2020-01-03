@@ -41,7 +41,7 @@ void DisplayMessageTestStarting(char *String_Message)
 void DisplayMessageTestSuccessful(void)
 {
 	LibrariesScreenSetFontColor(LIBRARIES_SCREEN_COLOR_GREEN);
-	LibrariesScreenWriteString("Test successful\n\n");
+	LibrariesScreenWriteString("Test successful\n");
 	LibrariesScreenSetFontColor(LIBRARIES_SCREEN_COLOR_BLUE);
 }
 

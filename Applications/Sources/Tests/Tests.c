@@ -100,9 +100,24 @@ static TTest Tests[] =
 //-------------------------------------------------------------------------------------------------
 // Entry point
 //-------------------------------------------------------------------------------------------------
-int main(void)
+int main(int argc, char *argv[])
 {
 	unsigned int i;
+	int Is_Pause_Requested = 0;
+	
+	// Check parameters
+	if (argc > 1)
+	{
+		if (LibrariesStringCompare(argv[1], "-pause") == 1) Is_Pause_Requested = 1;
+		else
+		{
+			LibrariesScreenWriteString("Usage : ");
+			LibrariesScreenWriteString(argv[0]);
+			LibrariesScreenWriteString(" [-pause]\n");
+			LibrariesScreenWriteString("Specify -pause to wait for a key press after each successful test.\n");
+			return 0;
+		}
+	}
 	
 	LibrariesRandomInitialize();
 	
@@ -120,6 +135,16 @@ int main(void)
 		}
 		
 		DisplayMessageTestSuccessful();
+		
+		// Wait a key to be pressed if such option is enabled
+		if (Is_Pause_Requested)
+		{
+			LibrariesScreenSetFontColor(LIBRARIES_SCREEN_COLOR_LIGHT_BLUE);
+			LibrariesScreenWriteString("Press any key to continue...\n\n");
+			LibrariesScreenSetFontColor(LIBRARIES_SCREEN_COLOR_BLUE);
+			LibrariesKeyboardReadCharacter();
+		}
+		else LibrariesScreenWriteCharacter('\n');
 	}
 
 	return 0;
