@@ -9,7 +9,7 @@
 // Constants
 //-------------------------------------------------------------------------------------------------
 // English strings
-#ifdef CONFIGURATION_LANGUAGE_ENGLISH
+#ifdef CONFIGURATION_GLOBAL_LANGUAGE_ENGLISH
 	#error "TODO"
 // French strings
 #else

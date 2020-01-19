@@ -6,10 +6,13 @@ menu "Global configuration"
 		default GLOBAL_LANGUAGE_FRENCH
 
 		config GLOBAL_LANGUAGE_ENGLISH
-			bool "English"
+			bool "English (not yet available)"
 
 		config GLOBAL_LANGUAGE_FRENCH
 			bool "French"
+
+		config GLOBAL_LANGUAGE_ITALIAN
+			bool "Italian (not yet available)"
 	endchoice
 endmenu
 

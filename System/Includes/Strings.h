@@ -16,11 +16,11 @@
 #define STRING_CONVERT_MACRO_VALUE_TO_STRING(X) STRING_CONVERT_MACRO_NAME_TO_STRING(X)
 
 // English
-#if defined(CONFIGURATION_LANGUAGE_ENGLISH)
+#if defined(CONFIGURATION_GLOBAL_LANGUAGE_ENGLISH)
 	// TODO
 	#error "Not done yet..."
 // Italian
-#elif defined(CONFIGURATION_LANGUAGE_ITALIAN)
+#elif defined(CONFIGURATION_GLOBAL_LANGUAGE_ITALIAN)
 	// TODO
 	#error "Non è stato fatto per il momento..."
 // French (default language)
