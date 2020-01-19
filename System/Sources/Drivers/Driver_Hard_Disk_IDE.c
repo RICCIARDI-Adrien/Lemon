@@ -127,9 +127,9 @@ int HardDiskInitialize(void)
 	// Does the device handle LBA ?
 	if (!(Identify_Device_Answer.Capabilities & 0x0000200)) return 1;
 	
-	#if CONFIGURATION_HARD_DISK_LOGICAL_BLOCK_ADDRESSING_MODE == 28
+	#ifdef CONFIGURATION_SYSTEM_HARD_DISK_LOGICAL_BLOCK_ADDRESSING_MODE_28
 		Hard_Disk_LBA_Sectors_Count = Identify_Device_Answer.LBA_28_Maximum_Addressable_Logical_Sectors_Count;
-	#elif CONFIGURATION_HARD_DISK_LOGICAL_BLOCK_ADDRESSING_MODE == 48
+	#else
 		Hard_Disk_LBA_Sectors_Count = Identify_Device_Answer.LBA_48_Maximum_Addressable_Logical_Sectors_Count;
 	#endif
 	
@@ -167,7 +167,7 @@ void HardDiskReadSector(unsigned int Logical_Sector_Number, void *Pointer_Buffer
 	ARCHITECTURE_INTERRUPTS_DISABLE();
 	WAIT_BUSY_CONTROLLER();
 	
-	#if CONFIGURATION_HARD_DISK_LOGICAL_BLOCK_ADDRESSING_MODE == 28
+	#ifdef CONFIGURATION_SYSTEM_HARD_DISK_LOGICAL_BLOCK_ADDRESSING_MODE_28
 		// Select master device and send high LBA address nibble
 		outb(HARD_DISK_PORT_DEVICE_HEAD, 0xE0 | (HARD_DISK_IDE_DRIVE_INDEX << 4) | ((Logical_Sector_Number >> 24) & 0x0F));
 		
@@ -178,7 +178,7 @@ void HardDiskReadSector(unsigned int Logical_Sector_Number, void *Pointer_Buffer
 		
 		// Send the sectors count to read (always 1 to avoid issues with the 400 ns delay between sectors)
 		outb(HARD_DISK_PORT_SECTOR_COUNT, 1);
-	#elif CONFIGURATION_HARD_DISK_LOGICAL_BLOCK_ADDRESSING_MODE == 48
+	#else
 		// Select master device and configure for 48-LBA
 		outb(HARD_DISK_PORT_DEVICE_HEAD, 0x40 | (HARD_DISK_IDE_DRIVE_INDEX << 4));
 		
@@ -229,7 +229,7 @@ void HardDiskWriteSector(unsigned int Logical_Sector_Number, void *Pointer_Buffe
 	ARCHITECTURE_INTERRUPTS_DISABLE();
 	WAIT_BUSY_CONTROLLER();
 	
-	#if CONFIGURATION_HARD_DISK_LOGICAL_BLOCK_ADDRESSING_MODE == 28
+	#ifdef CONFIGURATION_SYSTEM_HARD_DISK_LOGICAL_BLOCK_ADDRESSING_MODE_28
 		// Select master device and send high LBA address nibble
 		outb(HARD_DISK_PORT_DEVICE_HEAD, 0xE0 | (HARD_DISK_IDE_DRIVE_INDEX << 4) | ((Logical_Sector_Number >> 24) & 0x0F));
 		
@@ -240,7 +240,7 @@ void HardDiskWriteSector(unsigned int Logical_Sector_Number, void *Pointer_Buffe
 		
 		// Send the sectors count to write (always 1 to avoid issues with the 400 ns delay between sectors)
 		outb(HARD_DISK_PORT_SECTOR_COUNT, 1);
-	#elif CONFIGURATION_HARD_DISK_LOGICAL_BLOCK_ADDRESSING_MODE == 48
+	#else
 		// Select master device and configure for 48-LBA
 		outb(HARD_DISK_PORT_DEVICE_HEAD, 0x40 | (HARD_DISK_IDE_DRIVE_INDEX << 4));
 		

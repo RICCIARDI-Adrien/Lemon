@@ -59,4 +59,16 @@ menu "System"
 		config SYSTEM_HARD_DISK_DRIVER_IDE_DRIVE_SLAVE
 			bool "Slave"
 	endchoice
+
+	choice
+		prompt "Logical Block Addressing (LBA) mode"
+		default SYSTEM_HARD_DISK_LOGICAL_BLOCK_ADDRESSING_MODE_28
+		depends on SYSTEM_HARD_DISK_DRIVER_IDE || SYSTEM_HARD_DISK_DRIVER_SATA
+
+		config SYSTEM_HARD_DISK_LOGICAL_BLOCK_ADDRESSING_MODE_28
+			bool "LBA-28"
+
+		config SYSTEM_HARD_DISK_LOGICAL_BLOCK_ADDRESSING_MODE_48
+			bool "LBA-48"
+	endchoice
 endmenu
