@@ -10,6 +10,15 @@
 //-------------------------------------------------------------------------------------------------
 // Private constants and macros
 //-------------------------------------------------------------------------------------------------
+// Make sure specified IDE hard disk index is valid
+#ifdef CONFIGURATION_SYSTEM_HARD_DISK_DRIVER_IDE_DRIVE_MASTER
+	#define HARD_DISK_IDE_DRIVE_INDEX 0
+#elif defined(CONFIGURATION_SYSTEM_HARD_DISK_DRIVER_IDE_DRIVE_SLAVE)
+	#define HARD_DISK_IDE_DRIVE_INDEX 1
+#else
+	#error "IDE hard disk drive index must be 0 (master) or 1 (slave)."
+#endif
+
 /** The port used to read or to write data to the hard disk controller. */
 #define HARD_DISK_PORT_DATA 0x01F0
 /** Hold the number of sectors to read or to write. */
@@ -76,7 +85,7 @@ static inline __attribute__((always_inline)) void HardDiskSendIdentifyDeviceComm
 	WAIT_BUSY_CONTROLLER();
 	
 	// Select the master device
-	outb(HARD_DISK_PORT_DEVICE_HEAD, 0);
+	outb(HARD_DISK_PORT_DEVICE_HEAD, HARD_DISK_IDE_DRIVE_INDEX << 4);
 	
 	// Send the Identify command
 	outb(HARD_DISK_PORT_COMMAND, HARD_DISK_COMMAND_IDENTIFY_DEVICE);
@@ -160,7 +169,7 @@ void HardDiskReadSector(unsigned int Logical_Sector_Number, void *Pointer_Buffer
 	
 	#if CONFIGURATION_HARD_DISK_LOGICAL_BLOCK_ADDRESSING_MODE == 28
 		// Select master device and send high LBA address nibble
-		outb(HARD_DISK_PORT_DEVICE_HEAD, 0xE0 | ((Logical_Sector_Number >> 24) & 0x0F));
+		outb(HARD_DISK_PORT_DEVICE_HEAD, 0xE0 | (HARD_DISK_IDE_DRIVE_INDEX << 4) | ((Logical_Sector_Number >> 24) & 0x0F));
 		
 		// Send LBA address remaining bytes
 		outb(HARD_DISK_PORT_LBA_ADDRESS_HIGH, Logical_Sector_Number >> 16);
@@ -171,7 +180,7 @@ void HardDiskReadSector(unsigned int Logical_Sector_Number, void *Pointer_Buffer
 		outb(HARD_DISK_PORT_SECTOR_COUNT, 1);
 	#elif CONFIGURATION_HARD_DISK_LOGICAL_BLOCK_ADDRESSING_MODE == 48
 		// Select master device and configure for 48-LBA
-		outb(HARD_DISK_PORT_DEVICE_HEAD, 0x40);
+		outb(HARD_DISK_PORT_DEVICE_HEAD, 0x40 | (HARD_DISK_IDE_DRIVE_INDEX << 4));
 		
 		// Send the sectors to read count (always 1 to avoid issues with the 400 ns delay between sectors)
 		outb(HARD_DISK_PORT_SECTOR_COUNT, 0); // High byte
@@ -222,7 +231,7 @@ void HardDiskWriteSector(unsigned int Logical_Sector_Number, void *Pointer_Buffe
 	
 	#if CONFIGURATION_HARD_DISK_LOGICAL_BLOCK_ADDRESSING_MODE == 28
 		// Select master device and send high LBA address nibble
-		outb(HARD_DISK_PORT_DEVICE_HEAD, 0xE0 | ((Logical_Sector_Number >> 24) & 0x0F));
+		outb(HARD_DISK_PORT_DEVICE_HEAD, 0xE0 | (HARD_DISK_IDE_DRIVE_INDEX << 4) | ((Logical_Sector_Number >> 24) & 0x0F));
 		
 		// Send LBA address remaining bytes
 		outb(HARD_DISK_PORT_LBA_ADDRESS_HIGH, Logical_Sector_Number >> 16);
@@ -233,7 +242,7 @@ void HardDiskWriteSector(unsigned int Logical_Sector_Number, void *Pointer_Buffe
 		outb(HARD_DISK_PORT_SECTOR_COUNT, 1);
 	#elif CONFIGURATION_HARD_DISK_LOGICAL_BLOCK_ADDRESSING_MODE == 48
 		// Select master device and configure for 48-LBA
-		outb(HARD_DISK_PORT_DEVICE_HEAD, 0x40);
+		outb(HARD_DISK_PORT_DEVICE_HEAD, 0x40 | (HARD_DISK_IDE_DRIVE_INDEX << 4));
 		
 		// Send the sectors to write count (always 1 to avoid issues with the 400 ns delay between sectors)
 		outb(HARD_DISK_PORT_SECTOR_COUNT, 0); // High byte
