@@ -19,7 +19,7 @@ KCONFIG_VARIABLES = $(shell cat .config | sed '/\#/d' | sed '/^$$/d' | sed 's/CO
 
 # Make sure Kconfig configuration file is present (if not, KCONFIG_VARIABLES variable is empty)
 ifeq ($(KCONFIG_VARIABLES),)
-$(error No configuration file present. Please run 'make menuconfig' or TODO for default configurations)
+    $(error No configuration file present. Please run 'make menuconfig' or TODO for default configurations)
 endif
 
 # Determine host machine processors count
@@ -38,7 +38,6 @@ GLOBAL_TOOL_ISO_GENERATOR ?= genisoimage
 GLOBAL_SYSTEM_LANGUAGE ?= french
 GLOBAL_PROCESSOR_TYPE ?= pentium
 SYSTEM_HARD_DISK_LOGICAL_BLOCK_ADDRESSING_MODE ?= 28
-SYSTEM_HARD_DISK_DRIVER ?= ide
 SYSTEM_ETHERNET_CONTROLLER_DRIVER ?= none
 SYSTEM_INSTALLER_FILES_LIST ?= "Applications/Binaries/edit Applications/Binaries/games Applications/Binaries/help Applications/Binaries/u"
 SYSTEM_FILE_SYSTEM_MAXIMUM_FILES_LIST_ENTRIES ?= 128
@@ -53,9 +52,9 @@ export GLOBAL_TOOL_COMPILER
 export GLOBAL_TOOL_LINKER
 export GLOBAL_TOOL_ISO_GENERATOR
 export GLOBAL_PROCESSOR_TYPE
-export SYSTEM_HARD_DISK_DRIVER
 export SYSTEM_ETHERNET_CONTROLLER_DRIVER
 export SYSTEM_INSTALLER_FILES_LIST
+export KCONFIG_VARIABLES
 
 # Choose the whole system and applications language
 ifeq ($(GLOBAL_SYSTEM_LANGUAGE),english)

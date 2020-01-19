@@ -21,4 +21,18 @@ menu "System"
 	config SYSTEM_IS_DEBUG_ENABLED
 		bool "Enable debugging messages"
 		default false
+
+	choice
+		prompt "Hard disk driver"
+		default SYSTEM_HARD_DISK_DRIVER_IDE
+
+		config SYSTEM_HARD_DISK_DRIVER_IDE
+			bool "IDE"
+
+		config SYSTEM_HARD_DISK_DRIVER_SATA
+			bool "SATA"
+
+		config SYSTEM_HARD_DISK_DRIVER_RAM
+			bool "RAM device"
+	endchoice
 endmenu
