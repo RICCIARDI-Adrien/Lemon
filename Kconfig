@@ -1,8 +1,9 @@
 mainmenu "Lemon build configuration"
 
 menu "Global configuration"
-	choice GLOBAL_LANGUAGE
+	choice
 		prompt "System and applications language"
+		default GLOBAL_LANGUAGE_FRENCH
 
 		config GLOBAL_LANGUAGE_ENGLISH
 			bool "English"
