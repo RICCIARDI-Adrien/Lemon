@@ -16,4 +16,8 @@ menu "System"
 	config SYSTEM_TOTAL_RAM_SIZE_MEGA_BYTES
 		int "Allowed RAM amount in megabytes"
 		default 16
+
+	config SYSTEM_IS_DEBUG_ENABLED
+		bool "Enable debugging messages"
+		default false
 endmenu

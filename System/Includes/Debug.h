@@ -14,7 +14,7 @@
 //-------------------------------------------------------------------------------------------------
 // Constants and macros
 //-------------------------------------------------------------------------------------------------
-#if CONFIGURATION_IS_DEBUG_ENABLED
+#ifdef CONFIGURATION_SYSTEM_IS_DEBUG_ENABLED
 	/** Begin debugging informations. */
 	#define DEBUG_SECTION_START
 	/** Terminate debugging informations. */

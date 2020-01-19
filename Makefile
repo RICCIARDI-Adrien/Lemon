@@ -37,7 +37,6 @@ GLOBAL_TOOL_ISO_GENERATOR ?= genisoimage
 # Configuration variables
 GLOBAL_SYSTEM_LANGUAGE ?= french
 GLOBAL_PROCESSOR_TYPE ?= pentium
-SYSTEM_IS_DEBUG_ENABLED ?= 0
 SYSTEM_HARD_DISK_LOGICAL_BLOCK_ADDRESSING_MODE ?= 28
 SYSTEM_HARD_DISK_DRIVER ?= ide
 SYSTEM_ETHERNET_CONTROLLER_DRIVER ?= none
@@ -69,7 +68,7 @@ endif
 # Option -fno-asynchronous-unwind-tables avoid generating the .eh_frame section, which is heavy and useless here
 # Option -fno-pic is needed since gcc 6.2 to avoid gcc generate Position Independant Code like a classic ELF file (this won't work as Lemon uses static binaries)
 # Option -Wno-address-of-packed-member is needed since gcc 9.2, otherwise multiple "taking address of packed member of ‘struct <anonymous>’ may result in an unaligned pointer value" warnings will be triggered
-CCFLAGS = -W -Wall -fno-pic -nostdlib -fno-builtin -nostartfiles -finline-functions-called-once -fno-asynchronous-unwind-tables -masm=intel -m32 -Werror -Wno-address-of-packed-member -march=$(GLOBAL_PROCESSOR_TYPE) -mtune=$(GLOBAL_PROCESSOR_TYPE) $(LANGUAGE_DEFINE) -DCONFIGURATION_IS_DEBUG_ENABLED=$(SYSTEM_IS_DEBUG_ENABLED) -DCONFIGURATION_HARD_DISK_LOGICAL_BLOCK_ADDRESSING_MODE=$(SYSTEM_HARD_DISK_LOGICAL_BLOCK_ADDRESSING_MODE) -DSTRING_BUILD_CONFIGURATION_VARIABLES=$(STRING_BUILD_CONFIGURATION_VARIABLES) -DCONFIGURATION_FILE_SYSTEM_MAXIMUM_FILES_LIST_ENTRIES=$(SYSTEM_FILE_SYSTEM_MAXIMUM_FILES_LIST_ENTRIES) -DCONFIGURATION_FILE_SYSTEM_MAXIMUM_BLOCKS_LIST_ENTRIES=$(SYSTEM_FILE_SYSTEM_MAXIMUM_BLOCKS_LIST_ENTRIES) -DSTRING_GIT_COMMIT_HASH="\"$(STRING_GIT_COMMIT_HASH)\"" $(subst CONFIGURATION_,-DCONFIGURATION_,$(KCONFIG_VARIABLES))
+CCFLAGS = -W -Wall -fno-pic -nostdlib -fno-builtin -nostartfiles -finline-functions-called-once -fno-asynchronous-unwind-tables -masm=intel -m32 -Werror -Wno-address-of-packed-member -march=$(GLOBAL_PROCESSOR_TYPE) -mtune=$(GLOBAL_PROCESSOR_TYPE) $(LANGUAGE_DEFINE) -DCONFIGURATION_HARD_DISK_LOGICAL_BLOCK_ADDRESSING_MODE=$(SYSTEM_HARD_DISK_LOGICAL_BLOCK_ADDRESSING_MODE) -DSTRING_BUILD_CONFIGURATION_VARIABLES=$(STRING_BUILD_CONFIGURATION_VARIABLES) -DCONFIGURATION_FILE_SYSTEM_MAXIMUM_FILES_LIST_ENTRIES=$(SYSTEM_FILE_SYSTEM_MAXIMUM_FILES_LIST_ENTRIES) -DCONFIGURATION_FILE_SYSTEM_MAXIMUM_BLOCKS_LIST_ENTRIES=$(SYSTEM_FILE_SYSTEM_MAXIMUM_BLOCKS_LIST_ENTRIES) -DSTRING_GIT_COMMIT_HASH="\"$(STRING_GIT_COMMIT_HASH)\"" $(subst CONFIGURATION_,-DCONFIGURATION_,$(KCONFIG_VARIABLES))
 export CCFLAGS
 
 #--------------------------------------------------------------------------------------------------
