@@ -14,6 +14,14 @@ endif
 # Initialize configuration variables from a build configuration file
 include $(CONFIGURATION)
 
+# Retrieve Kconfig-generated variables and import the ones that are set in a makefile variables list
+KCONFIG_VARIABLES = $(shell cat .config | sed '/\#/d' | sed '/^$$/d' | sed 's/CONFIG_/CONFIGURATION_/g')
+
+# Make sure Kconfig configuration file is present (if not, KCONFIG_VARIABLES variable is empty)
+ifeq ($(KCONFIG_VARIABLES),)
+$(error No configuration file present. Please run 'make menuconfig' or TODO for default configurations)
+endif
+
 # Determine host machine processors count
 HOST_PROCESSORS_COUNT = $(shell cat /proc/cpuinfo | grep processor | wc -l)
 
@@ -62,7 +70,7 @@ endif
 # Option -fno-asynchronous-unwind-tables avoid generating the .eh_frame section, which is heavy and useless here
 # Option -fno-pic is needed since gcc 6.2 to avoid gcc generate Position Independant Code like a classic ELF file (this won't work as Lemon uses static binaries)
 # Option -Wno-address-of-packed-member is needed since gcc 9.2, otherwise multiple "taking address of packed member of ‘struct <anonymous>’ may result in an unaligned pointer value" warnings will be triggered
-CCFLAGS = -W -Wall -fno-pic -nostdlib -fno-builtin -nostartfiles -finline-functions-called-once -fno-asynchronous-unwind-tables -masm=intel -m32 -Werror -Wno-address-of-packed-member -march=$(GLOBAL_PROCESSOR_TYPE) -mtune=$(GLOBAL_PROCESSOR_TYPE) $(LANGUAGE_DEFINE) -DCONFIGURATION_IS_DEBUG_ENABLED=$(SYSTEM_IS_DEBUG_ENABLED) -DCONFIGURATION_SYSTEM_TOTAL_RAM_SIZE_MEGA_BYTES=$(SYSTEM_RAM_SIZE) -DCONFIGURATION_HARD_DISK_LOGICAL_BLOCK_ADDRESSING_MODE=$(SYSTEM_HARD_DISK_LOGICAL_BLOCK_ADDRESSING_MODE) -DSTRING_BUILD_CONFIGURATION_VARIABLES=$(STRING_BUILD_CONFIGURATION_VARIABLES) -DCONFIGURATION_FILE_SYSTEM_MAXIMUM_FILES_LIST_ENTRIES=$(SYSTEM_FILE_SYSTEM_MAXIMUM_FILES_LIST_ENTRIES) -DCONFIGURATION_FILE_SYSTEM_MAXIMUM_BLOCKS_LIST_ENTRIES=$(SYSTEM_FILE_SYSTEM_MAXIMUM_BLOCKS_LIST_ENTRIES) -DSTRING_GIT_COMMIT_HASH="\"$(STRING_GIT_COMMIT_HASH)\""
+CCFLAGS = -W -Wall -fno-pic -nostdlib -fno-builtin -nostartfiles -finline-functions-called-once -fno-asynchronous-unwind-tables -masm=intel -m32 -Werror -Wno-address-of-packed-member -march=$(GLOBAL_PROCESSOR_TYPE) -mtune=$(GLOBAL_PROCESSOR_TYPE) $(LANGUAGE_DEFINE) -DCONFIGURATION_IS_DEBUG_ENABLED=$(SYSTEM_IS_DEBUG_ENABLED) -DCONFIGURATION_SYSTEM_TOTAL_RAM_SIZE_MEGA_BYTES=$(SYSTEM_RAM_SIZE) -DCONFIGURATION_HARD_DISK_LOGICAL_BLOCK_ADDRESSING_MODE=$(SYSTEM_HARD_DISK_LOGICAL_BLOCK_ADDRESSING_MODE) -DSTRING_BUILD_CONFIGURATION_VARIABLES=$(STRING_BUILD_CONFIGURATION_VARIABLES) -DCONFIGURATION_FILE_SYSTEM_MAXIMUM_FILES_LIST_ENTRIES=$(SYSTEM_FILE_SYSTEM_MAXIMUM_FILES_LIST_ENTRIES) -DCONFIGURATION_FILE_SYSTEM_MAXIMUM_BLOCKS_LIST_ENTRIES=$(SYSTEM_FILE_SYSTEM_MAXIMUM_BLOCKS_LIST_ENTRIES) -DSTRING_GIT_COMMIT_HASH="\"$(STRING_GIT_COMMIT_HASH)\"" $(subst CONFIGURATION_,-DCONFIGURATION_,$(KCONFIG_VARIABLES))
 export CCFLAGS
 
 #--------------------------------------------------------------------------------------------------
@@ -162,3 +170,7 @@ qemu: QEMU_Hard_Disk.img
 
 qemu-install: QEMU_OPTIONS += -cdrom Lemon_Installer_CD_Image.iso -boot order=d
 qemu-install: qemu
+
+# Install "kconfig-frontends" Debian package to get "kconfig-mconf" program
+menuconfig:
+	kconfig-mconf Kconfig

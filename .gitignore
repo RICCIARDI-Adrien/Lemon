@@ -5,6 +5,7 @@
 *.iso
 *.o
 *.out
+.config*
 Applications/Binaries/*
 Documentation/Documentation_Libraries/*
 !Documentation/Documentation_Libraries/Doxyfile_Libraries

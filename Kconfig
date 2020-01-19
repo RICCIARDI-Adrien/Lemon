@@ -1,0 +1,13 @@
+mainmenu "Lemon build configuration"
+
+menu "Global configuration"
+	choice GLOBAL_LANGUAGE
+		prompt "System and applications language"
+
+		config GLOBAL_LANGUAGE_ENGLISH
+			bool "English"
+
+		config GLOBAL_LANGUAGE_FRENCH
+			bool "French"
+	endchoice
+endmenu
