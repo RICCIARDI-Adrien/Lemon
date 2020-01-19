@@ -35,4 +35,28 @@ menu "System"
 		config SYSTEM_HARD_DISK_DRIVER_RAM
 			bool "RAM device"
 	endchoice
+
+	choice
+		prompt "IDE bus"
+		default SYSTEM_HARD_DISK_DRIVER_IDE_BUS_PRIMARY
+		depends on SYSTEM_HARD_DISK_DRIVER_IDE
+
+		config SYSTEM_HARD_DISK_DRIVER_IDE_BUS_PRIMARY
+			bool "Primary"
+
+		config SYSTEM_HARD_DISK_DRIVER_IDE_BUS_SECONDARY
+			bool "Secondary"
+	endchoice
+
+	choice
+		prompt "IDE drive"
+		default SYSTEM_HARD_DISK_DRIVER_IDE_DRIVE_MASTER
+		depends on SYSTEM_HARD_DISK_DRIVER_IDE
+
+		config SYSTEM_HARD_DISK_DRIVER_IDE_DRIVE_MASTER
+			bool "Master"
+
+		config SYSTEM_HARD_DISK_DRIVER_IDE_DRIVE_SLAVE
+			bool "Slave"
+	endchoice
 endmenu
