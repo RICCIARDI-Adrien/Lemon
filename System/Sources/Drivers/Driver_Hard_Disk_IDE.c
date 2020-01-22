@@ -18,49 +18,49 @@
 #endif
 
 /** The port used to read or to write data to the hard disk controller. */
-#ifdef SYSTEM_HARD_DISK_DRIVER_IDE_BUS_PRIMARY
+#ifdef CONFIGURATION_SYSTEM_HARD_DISK_DRIVER_IDE_BUS_PRIMARY
 	#define HARD_DISK_PORT_DATA 0x01F0
 #else
 	#define HARD_DISK_PORT_DATA 0x0170
 #endif
 /** Hold the number of sectors to read or to write. */
-#ifdef SYSTEM_HARD_DISK_DRIVER_IDE_BUS_PRIMARY
+#ifdef CONFIGURATION_SYSTEM_HARD_DISK_DRIVER_IDE_BUS_PRIMARY
 	#define HARD_DISK_PORT_SECTOR_COUNT 0x01F2
 #else
 	#define HARD_DISK_PORT_SECTOR_COUNT 0x0172
 #endif
 /** Low byte of the LBA sector address. */
-#ifdef SYSTEM_HARD_DISK_DRIVER_IDE_BUS_PRIMARY
+#ifdef CONFIGURATION_SYSTEM_HARD_DISK_DRIVER_IDE_BUS_PRIMARY
 	#define HARD_DISK_PORT_LBA_ADDRESS_LOW 0x01F3
 #else
 	#define HARD_DISK_PORT_LBA_ADDRESS_LOW 0x0173
 #endif
 /** Middle byte of the LBA sector address. */
-#ifdef SYSTEM_HARD_DISK_DRIVER_IDE_BUS_PRIMARY
+#ifdef CONFIGURATION_SYSTEM_HARD_DISK_DRIVER_IDE_BUS_PRIMARY
 	#define HARD_DISK_PORT_LBA_ADDRESS_MIDDLE 0x01F4
 #else
 	#define HARD_DISK_PORT_LBA_ADDRESS_MIDDLE 0x0174
 #endif
 /** High byte of the LBA sector address. */
-#ifdef SYSTEM_HARD_DISK_DRIVER_IDE_BUS_PRIMARY
+#ifdef CONFIGURATION_SYSTEM_HARD_DISK_DRIVER_IDE_BUS_PRIMARY
 	#define HARD_DISK_PORT_LBA_ADDRESS_HIGH 0x01F5
 #else
 	#define HARD_DISK_PORT_LBA_ADDRESS_HIGH 0x0175
 #endif
 /** Control head and device IDs, and also 4 upper bits of the LBA address. */
-#ifdef SYSTEM_HARD_DISK_DRIVER_IDE_BUS_PRIMARY
+#ifdef CONFIGURATION_SYSTEM_HARD_DISK_DRIVER_IDE_BUS_PRIMARY
 	#define HARD_DISK_PORT_DEVICE_HEAD 0x01F6
 #else
 	#define HARD_DISK_PORT_DEVICE_HEAD 0x0176
 #endif
 /** Send a command to the hard disk controller. */
-#ifdef SYSTEM_HARD_DISK_DRIVER_IDE_BUS_PRIMARY
+#ifdef CONFIGURATION_SYSTEM_HARD_DISK_DRIVER_IDE_BUS_PRIMARY
 	#define HARD_DISK_PORT_COMMAND 0x01F7
 #else
 	#define HARD_DISK_PORT_COMMAND 0x0177
 #endif
 /** Read the hard disk controller status without sending an interrupt acknowledge. */
-#ifdef SYSTEM_HARD_DISK_DRIVER_IDE_BUS_PRIMARY
+#ifdef CONFIGURATION_SYSTEM_HARD_DISK_DRIVER_IDE_BUS_PRIMARY
 	#define HARD_DISK_PORT_STATUS 0x03F6
 #else
 	#define HARD_DISK_PORT_STATUS 0x0376
