@@ -60,7 +60,7 @@ static int HardDiskRAMDiskInstallFiles(void)
 int HardDiskInitialize(void)
 {
 	// Compute the file system size in blocks (Files List size + Blocks list size + data blocks size)
-	Hard_Disk_RAM_Disk_File_System_Total_Size_Sectors = FileSystemComputeSizeSectors(CONFIGURATION_FILE_SYSTEM_MAXIMUM_BLOCKS_LIST_ENTRIES, CONFIGURATION_FILE_SYSTEM_MAXIMUM_FILES_LIST_ENTRIES);
+	Hard_Disk_RAM_Disk_File_System_Total_Size_Sectors = FileSystemComputeSizeSectors(CONFIGURATION_FILE_SYSTEM_MAXIMUM_BLOCKS_LIST_ENTRIES, CONFIGURATION_SYSTEM_FILE_SYSTEM_MAXIMUM_FILES_LIST_ENTRIES);
 	
 	DEBUG_SECTION_START
 		DEBUG_DISPLAY_CURRENT_FUNCTION_NAME();
@@ -73,7 +73,7 @@ int HardDiskInitialize(void)
 	DEBUG_SECTION_END
 	
 	// Create the file system in RAM
-	if (FileSystemCreate(CONFIGURATION_FILE_SYSTEM_MAXIMUM_BLOCKS_LIST_ENTRIES, CONFIGURATION_FILE_SYSTEM_MAXIMUM_FILES_LIST_ENTRIES, 0) != ERROR_CODE_NO_ERROR) return 3;
+	if (FileSystemCreate(CONFIGURATION_FILE_SYSTEM_MAXIMUM_BLOCKS_LIST_ENTRIES, CONFIGURATION_SYSTEM_FILE_SYSTEM_MAXIMUM_FILES_LIST_ENTRIES, 0) != ERROR_CODE_NO_ERROR) return 3;
 	
 	// Load file system
 	if (!FileSystemInitialize(0)) return 4;

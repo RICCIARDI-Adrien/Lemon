@@ -10,7 +10,7 @@
 // Private constants
 //-------------------------------------------------------------------------------------------------
 /** How many files can be stored at all. */
-#define MAXIMUM_FILES_COUNT CONFIGURATION_FILE_SYSTEM_MAXIMUM_FILES_LIST_ENTRIES
+#define MAXIMUM_FILES_COUNT CONFIGURATION_SYSTEM_FILE_SYSTEM_MAXIMUM_FILES_LIST_ENTRIES
 
 //-------------------------------------------------------------------------------------------------
 // Private types

@@ -74,4 +74,8 @@ menu "System"
 		config SYSTEM_HARD_DISK_LOGICAL_BLOCK_ADDRESSING_MODE_48
 			bool "LBA-48"
 	endchoice
+
+	config SYSTEM_FILE_SYSTEM_MAXIMUM_FILES_LIST_ENTRIES
+		int "File system maximum files count"
+		default 128
 endmenu
