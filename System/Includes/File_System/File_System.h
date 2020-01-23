@@ -52,8 +52,8 @@ typedef struct __attribute__((packed))
 typedef struct __attribute__((packed))
 {
 	TFileSystemInformations File_System_Informations; //!< Contain the file system parameters.
-	unsigned int Blocks_List[CONFIGURATION_FILE_SYSTEM_MAXIMUM_BLOCKS_LIST_ENTRIES]; //!< All the possible blocks.
-	unsigned char Padding_1[FILE_SYSTEM_SECTOR_SIZE_BYTES]; //!< Provide one more sector to allow the blocks list to "overflow". Indeed, if the CONFIGURATION_FILE_SYSTEM_MAXIMUM_BLOCKS_LIST_ENTRIES value is not a multiple of FILE_SYSTEM_SECTOR_SIZE_BYTES, one more sector will be required to store the data.
+	unsigned int Blocks_List[CONFIGURATION_SYSTEM_FILE_SYSTEM_MAXIMUM_BLOCKS_LIST_ENTRIES]; //!< All the possible blocks.
+	unsigned char Padding_1[FILE_SYSTEM_SECTOR_SIZE_BYTES]; //!< Provide one more sector to allow the blocks list to "overflow". Indeed, if the CONFIGURATION_SYSTEM_FILE_SYSTEM_MAXIMUM_BLOCKS_LIST_ENTRIES value is not a multiple of FILE_SYSTEM_SECTOR_SIZE_BYTES, one more sector will be required to store the data.
 	TFilesListEntry Files_List[CONFIGURATION_SYSTEM_FILE_SYSTEM_MAXIMUM_FILES_LIST_ENTRIES]; //!< All the possible files.
 	unsigned char Padding_2[FILE_SYSTEM_SECTOR_SIZE_BYTES]; //!< Provide one more sector for the same reason than the previous padding.
 } TFileSystem;

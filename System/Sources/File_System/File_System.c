@@ -87,7 +87,7 @@ int FileSystemInitialize(unsigned int Starting_Sector)
 	// Check if there is a valid file system on the device
 	if (File_System.File_System_Informations.Magic_Number != FILE_SYSTEM_MAGIC_NUMBER) return 0;
 	// Check if the file system is small enough to fit into the kernel reserved memory space
-	if ((File_System.File_System_Informations.Total_Blocks_Count > CONFIGURATION_FILE_SYSTEM_MAXIMUM_BLOCKS_LIST_ENTRIES) || (File_System.File_System_Informations.Total_Files_Count > CONFIGURATION_SYSTEM_FILE_SYSTEM_MAXIMUM_FILES_LIST_ENTRIES)) return 0;
+	if ((File_System.File_System_Informations.Total_Blocks_Count > CONFIGURATION_SYSTEM_FILE_SYSTEM_MAXIMUM_BLOCKS_LIST_ENTRIES) || (File_System.File_System_Informations.Total_Files_Count > CONFIGURATION_SYSTEM_FILE_SYSTEM_MAXIMUM_FILES_LIST_ENTRIES)) return 0;
 	
 	// Compute Blocks List size in sectors
 	Temp = File_System.File_System_Informations.Total_Blocks_Count * sizeof(unsigned int) + sizeof(TFileSystemInformations); // Take into account the file system informations to ease their handling
@@ -265,7 +265,7 @@ unsigned int FileSystemAllocateBlock(void)
 		if (Blocks_Count < Files_Count) return 1;
 		
 		// Check if the file system is not too big to be mounted by the kernel
-		if ((Blocks_Count > CONFIGURATION_FILE_SYSTEM_MAXIMUM_BLOCKS_LIST_ENTRIES) || (Files_Count > CONFIGURATION_SYSTEM_FILE_SYSTEM_MAXIMUM_FILES_LIST_ENTRIES)) return 1;
+		if ((Blocks_Count > CONFIGURATION_SYSTEM_FILE_SYSTEM_MAXIMUM_BLOCKS_LIST_ENTRIES) || (Files_Count > CONFIGURATION_SYSTEM_FILE_SYSTEM_MAXIMUM_FILES_LIST_ENTRIES)) return 1;
 		
 		// Check if the file system can fit on the hard disk
 		Required_Disk_Size = FileSystemComputeSizeSectors(Blocks_Count, Files_Count);

@@ -174,7 +174,7 @@ void Shell(void)
 		Default_Lemon_Partition_Table.Status = 0x80; // Tell that the partition is bootable
 		Default_Lemon_Partition_Table.Type = FILE_SYSTEM_MASTER_BOOT_LOADER_PARTITION_TABLE_PARTITION_TYPE_LEMON;
 		Default_Lemon_Partition_Table.First_Sector_LBA = 0; // Start from the disk beginning
-		Default_Lemon_Partition_Table.Sectors_Count = FileSystemComputeSizeSectors(CONFIGURATION_FILE_SYSTEM_MAXIMUM_BLOCKS_LIST_ENTRIES, CONFIGURATION_SYSTEM_FILE_SYSTEM_MAXIMUM_FILES_LIST_ENTRIES);
+		Default_Lemon_Partition_Table.Sectors_Count = FileSystemComputeSizeSectors(CONFIGURATION_SYSTEM_FILE_SYSTEM_MAXIMUM_BLOCKS_LIST_ENTRIES, CONFIGURATION_SYSTEM_FILE_SYSTEM_MAXIMUM_FILES_LIST_ENTRIES);
 		Pointer_Lemon_Partition_Table = &Default_Lemon_Partition_Table;
 	}
 	else Pointer_Lemon_Partition_Table = ShellInstallerPartitionMenu(); // Select the installation partition
@@ -188,7 +188,7 @@ void Shell(void)
 	
 	// Create file system
 	ScreenWriteString(STRING_SHELL_INSTALLER_CREATING_FILE_SYSTEM);
-	switch (FileSystemCreate(CONFIGURATION_FILE_SYSTEM_MAXIMUM_BLOCKS_LIST_ENTRIES, CONFIGURATION_SYSTEM_FILE_SYSTEM_MAXIMUM_FILES_LIST_ENTRIES, File_System_Starting_Sector))
+	switch (FileSystemCreate(CONFIGURATION_SYSTEM_FILE_SYSTEM_MAXIMUM_BLOCKS_LIST_ENTRIES, CONFIGURATION_SYSTEM_FILE_SYSTEM_MAXIMUM_FILES_LIST_ENTRIES, File_System_Starting_Sector))
 	{
 		case 1:
 			ScreenSetColor(SCREEN_COLOR_RED);

@@ -78,4 +78,8 @@ menu "System"
 	config SYSTEM_FILE_SYSTEM_MAXIMUM_FILES_LIST_ENTRIES
 		int "File system maximum files count"
 		default 128
+
+	config SYSTEM_FILE_SYSTEM_MAXIMUM_BLOCKS_LIST_ENTRIES
+		int "File system maximum 4096-byte storage blocks"
+		default 2048
 endmenu
