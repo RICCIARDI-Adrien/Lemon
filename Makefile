@@ -35,7 +35,7 @@ GLOBAL_TOOL_LINKER ?= ld
 GLOBAL_TOOL_ISO_GENERATOR ?= genisoimage
 
 # Configuration variables
-GLOBAL_PROCESSOR_TYPE ?= pentium
+GLOBAL_PROCESSOR_CODE_NAME = $(patsubst CONFIGURATION_GLOBAL_PROCESSOR_CODE_NAME="%",%,$(filter CONFIGURATION_GLOBAL_PROCESSOR_CODE_NAME=%,$(KCONFIG_VARIABLES)))
 SYSTEM_ETHERNET_CONTROLLER_DRIVER ?= none
 SYSTEM_INSTALLER_FILES_LIST ?= "Applications/Binaries/edit Applications/Binaries/games Applications/Binaries/help Applications/Binaries/u"
 
@@ -47,7 +47,6 @@ export GLOBAL_TOOL_ASSEMBLER
 export GLOBAL_TOOL_COMPILER
 export GLOBAL_TOOL_LINKER
 export GLOBAL_TOOL_ISO_GENERATOR
-export GLOBAL_PROCESSOR_TYPE
 export SYSTEM_ETHERNET_CONTROLLER_DRIVER
 export SYSTEM_INSTALLER_FILES_LIST
 export KCONFIG_VARIABLES
@@ -56,7 +55,7 @@ export KCONFIG_VARIABLES
 # Option -fno-asynchronous-unwind-tables avoid generating the .eh_frame section, which is heavy and useless here
 # Option -fno-pic is needed since gcc 6.2 to avoid gcc generate Position Independant Code like a classic ELF file (this won't work as Lemon uses static binaries)
 # Option -Wno-address-of-packed-member is needed since gcc 9.2, otherwise multiple "taking address of packed member of ‘struct <anonymous>’ may result in an unaligned pointer value" warnings will be triggered
-CCFLAGS = -W -Wall -fno-pic -nostdlib -fno-builtin -nostartfiles -finline-functions-called-once -fno-asynchronous-unwind-tables -masm=intel -m32 -Werror -Wno-address-of-packed-member -march=$(GLOBAL_PROCESSOR_TYPE) -mtune=$(GLOBAL_PROCESSOR_TYPE) -DSTRING_BUILD_CONFIGURATION_VARIABLES=$(STRING_BUILD_CONFIGURATION_VARIABLES) -DSTRING_GIT_COMMIT_HASH="\"$(STRING_GIT_COMMIT_HASH)\"" $(subst CONFIGURATION_,-DCONFIGURATION_,$(KCONFIG_VARIABLES))
+CCFLAGS = -W -Wall -fno-pic -nostdlib -fno-builtin -nostartfiles -finline-functions-called-once -fno-asynchronous-unwind-tables -masm=intel -m32 -Werror -Wno-address-of-packed-member -march=$(GLOBAL_PROCESSOR_CODE_NAME) -mtune=$(GLOBAL_PROCESSOR_CODE_NAME) -DSTRING_BUILD_CONFIGURATION_VARIABLES=$(STRING_BUILD_CONFIGURATION_VARIABLES) -DSTRING_GIT_COMMIT_HASH="\"$(STRING_GIT_COMMIT_HASH)\"" $(subst CONFIGURATION_,-DCONFIGURATION_,$(KCONFIG_VARIABLES))
 export CCFLAGS
 
 #--------------------------------------------------------------------------------------------------

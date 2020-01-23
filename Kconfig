@@ -14,6 +14,13 @@ menu "Global configuration"
 		config GLOBAL_LANGUAGE_ITALIAN
 			bool "Italian (not yet available)"
 	endchoice
+
+	config GLOBAL_PROCESSOR_CODE_NAME
+		string "Target processor GCC code name"
+		default "pentium"
+		help
+			See GCC "-march" help for x86 architecture for a full list of supported processor code names.
+			
 endmenu
 
 menu "System"
