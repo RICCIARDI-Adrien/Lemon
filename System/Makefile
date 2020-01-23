@@ -38,14 +38,14 @@ else
 endif
 
 # Choose which hard disk driver to compile
-ifeq ($(findstring SYSTEM_HARD_DISK_DRIVER_SATA=y,$(KCONFIG_VARIABLES)),SYSTEM_HARD_DISK_DRIVER_SATA=y)
+ifeq ($(findstring CONFIGURATION_SYSTEM_HARD_DISK_DRIVER_SATA=y,$(KCONFIG_VARIABLES)),CONFIGURATION_SYSTEM_HARD_DISK_DRIVER_SATA=y)
 	OBJECTS_DRIVERS += $(PATH_OBJECTS)/Driver_Hard_Disk_SATA.o
 	DEPENDENCIES_INCLUDE_PCI = 1
 	CCFLAGS += -DCONFIGURATION_BUILD_RAM_DISK=0
-else ifeq ($(findstring SYSTEM_HARD_DISK_DRIVER_RAM=y,$(KCONFIG_VARIABLES)),SYSTEM_HARD_DISK_DRIVER_RAM=y)
+else ifeq ($(findstring CONFIGURATION_SYSTEM_HARD_DISK_DRIVER_RAM=y,$(KCONFIG_VARIABLES)),CONFIGURATION_SYSTEM_HARD_DISK_DRIVER_RAM=y)
 	OBJECTS_DRIVERS += $(PATH_OBJECTS)/Driver_Hard_Disk_RAM_Disk.o
 	CCFLAGS += -DCONFIGURATION_BUILD_RAM_DISK=1
-else ifeq ($(findstring SYSTEM_HARD_DISK_DRIVER_IDE=y,$(KCONFIG_VARIABLES)),SYSTEM_HARD_DISK_DRIVER_IDE=y)
+else ifeq ($(findstring CONFIGURATION_SYSTEM_HARD_DISK_DRIVER_IDE=y,$(KCONFIG_VARIABLES)),CONFIGURATION_SYSTEM_HARD_DISK_DRIVER_IDE=y)
 	OBJECTS_DRIVERS += $(PATH_OBJECTS)/Driver_Hard_Disk_IDE.o
 	CCFLAGS += -DCONFIGURATION_BUILD_RAM_DISK=0
 else
@@ -62,7 +62,7 @@ endif
 #------------------------------------------------------------------------------------------------------------------------------
 ifeq ($(CONFIGURATION_BUILD_INSTALLER),1)
     # Select the system shell instead of the installer one as it is a RAM disk build
-    ifeq ($(findstring SYSTEM_HARD_DISK_DRIVER_RAM=y,$(KCONFIG_VARIABLES)),SYSTEM_HARD_DISK_DRIVER_RAM=y)
+    ifeq ($(findstring CONFIGURATION_SYSTEM_HARD_DISK_DRIVER_RAM=y,$(KCONFIG_VARIABLES)),CONFIGURATION_SYSTEM_HARD_DISK_DRIVER_RAM=y)
 	OBJECTS_SHELL = $(OBJECTS_SHELL_SYSTEM)
     # This is a regular system build, use the installer shell
     else
@@ -70,7 +70,7 @@ ifeq ($(CONFIGURATION_BUILD_INSTALLER),1)
     endif
 else
     # Do not compile anything when building the system with RAM disk support, the installer will compile the needed stuff (only the MBR will be compiled, but this is fast)
-    ifeq ($(findstring SYSTEM_HARD_DISK_DRIVER_RAM=y,$(KCONFIG_VARIABLES)),SYSTEM_HARD_DISK_DRIVER_RAM=y)
+    ifeq ($(findstring CONFIGURATION_SYSTEM_HARD_DISK_DRIVER_RAM=y,$(KCONFIG_VARIABLES)),CONFIGURATION_SYSTEM_HARD_DISK_DRIVER_RAM=y)
 	OBJECTS_CORE =
 	OBJECTS_DRIVERS =
 	OBJECTS_FILE_SYSTEM =
@@ -110,7 +110,7 @@ ifeq ($(CONFIGURATION_BUILD_INSTALLER),1)
 	######## Build successful ########
 	@ls -l $(PATH_OBJECTS)/Kernel.bin | awk '{print "Installer size : " $$5 + 512 " bytes"}'
 else
-    ifneq ($(findstring SYSTEM_HARD_DISK_DRIVER_RAM=y,$(KCONFIG_VARIABLES)),SYSTEM_HARD_DISK_DRIVER_RAM=y)
+    ifneq ($(findstring CONFIGURATION_SYSTEM_HARD_DISK_DRIVER_RAM=y,$(KCONFIG_VARIABLES)),CONFIGURATION_SYSTEM_HARD_DISK_DRIVER_RAM=y)
 	######## Linking kernel ########
 	$(GLOBAL_TOOL_LINKER) $(LDFLAGS) $(OBJECTS) -o $(PATH_OBJECTS)/Kernel.bin
 	######## Build successful ########
@@ -121,7 +121,7 @@ endif
 convert_files:
 	######## Embed applications data into image ########
 	@# Create fake MBR and kernel binaries for the RAM disk installer build to embed them on the image (this way installer code is left untouched)
-ifeq ($(findstring SYSTEM_HARD_DISK_DRIVER_RAM=y,$(KCONFIG_VARIABLES)),SYSTEM_HARD_DISK_DRIVER_RAM=y)
+ifeq ($(findstring CONFIGURATION_SYSTEM_HARD_DISK_DRIVER_RAM=y,$(KCONFIG_VARIABLES)),CONFIGURATION_SYSTEM_HARD_DISK_DRIVER_RAM=y)
 	@touch $(PATH_OBJECTS)/System_MBR.bin
 	@touch $(PATH_OBJECTS)/System_Kernel.bin
 endif
