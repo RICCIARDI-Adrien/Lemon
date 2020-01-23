@@ -89,4 +89,18 @@ menu "System"
 	config SYSTEM_FILE_SYSTEM_MAXIMUM_BLOCKS_LIST_ENTRIES
 		int "File system maximum 4096-byte storage blocks"
 		default 2048
+
+	choice
+		prompt "Ethernet controller"
+		default SYSTEM_ETHERNET_CONTROLLER_DRIVER_NONE
+
+		config SYSTEM_ETHERNET_CONTROLLER_DRIVER_NONE
+			bool "Disabled"
+
+		config SYSTEM_ETHERNET_CONTROLLER_DRIVER_82540EM
+			bool "Intel 82540EM"
+
+		config SYSTEM_ETHERNET_CONTROLLER_DRIVER_RTL8111
+			bool "Realtek RTL8111 (not ready yet)"
+	endchoice
 endmenu
