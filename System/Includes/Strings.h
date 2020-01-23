@@ -99,9 +99,7 @@
 	// Shell version command
 	#define STRING_SHELL_VERSION "Copyright (C) Adrien Ricciardi\n" \
 		"Version du syst\212me : 2.5.4 (" __DATE__ ", " __TIME__ ")\n" \
-		"Version des sources : " STRING_GIT_COMMIT_HASH "\n\n" \
-		"Configuration :\n" \
-		STRING_BUILD_CONFIGURATION_VARIABLES
+		"Version des sources : " STRING_GIT_COMMIT_HASH "\n"
 
 	// Shell error strings
 	#define STRING_SHELL_ERROR_UNKNOWN_COMMAND "Ce programme est introuvable !\n"
