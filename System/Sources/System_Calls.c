@@ -87,7 +87,7 @@ static void SystemCallSystemGetParameter(void)
 			break;
 			
 		case SYSTEM_CALL_SYSTEM_PARAMETER_ID_ETHERNET_CONTROLLER_IS_ENABLED:
-			#if CONFIGURATION_IS_ETHERNET_CONTROLLER_ENABLED
+			#ifndef CONFIGURATION_SYSTEM_ETHERNET_CONTROLLER_DRIVER_NONE
 				*Pointer_Result = 1;
 			#else
 				*Pointer_Result = 0;
@@ -95,7 +95,7 @@ static void SystemCallSystemGetParameter(void)
 			break;
 			
 		case SYSTEM_CALL_SYSTEM_PARAMETER_ID_ETHERNET_CONTROLLER_MAC_ADDRESS:
-			#if CONFIGURATION_IS_ETHERNET_CONTROLLER_ENABLED
+			#ifndef CONFIGURATION_SYSTEM_ETHERNET_CONTROLLER_DRIVER_NONE
 				memcpy(Pointer_Result, Ethernet_Controller_MAC_Address, ETHERNET_CONTROLLER_MAC_ADDRESS_SIZE);
 			#else
 				memset(Pointer_Result, 0, ETHERNET_CONTROLLER_MAC_ADDRESS_SIZE);
@@ -201,7 +201,7 @@ static void SystemCallKeyboardReadModifierKeysState(void)
 //====================================================================================================================
 static void SystemCallEthernetReceivePacket(void)
 {
-	#if CONFIGURATION_IS_ETHERNET_CONTROLLER_ENABLED
+	#ifndef CONFIGURATION_SYSTEM_ETHERNET_CONTROLLER_DRIVER_NONE
 		ARCHITECTURE_INTERRUPTS_ENABLE(); // Allow F12 key to work
 		EthernetReceivePacket(Pointer_1, Pointer_2);
 	#endif
@@ -209,7 +209,7 @@ static void SystemCallEthernetReceivePacket(void)
 
 static void SystemCallEthernetSendPacket(void)
 {
-	#if CONFIGURATION_IS_ETHERNET_CONTROLLER_ENABLED
+	#ifndef CONFIGURATION_SYSTEM_ETHERNET_CONTROLLER_DRIVER_NONE
 		ARCHITECTURE_INTERRUPTS_ENABLE(); // Allow F12 key to work
 		EthernetSendPacket(Integer_1, Pointer_1);
 	#endif
@@ -217,7 +217,7 @@ static void SystemCallEthernetSendPacket(void)
 
 static void SystemCallEthernetIsPacketReceived(void)
 {
-	#if CONFIGURATION_IS_ETHERNET_CONTROLLER_ENABLED
+	#ifndef CONFIGURATION_SYSTEM_ETHERNET_CONTROLLER_DRIVER_NONE
 		Return_Value = EthernetIsPacketReceived();
 	#else
 		Return_Value = 0;

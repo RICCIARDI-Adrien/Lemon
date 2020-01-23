@@ -136,7 +136,7 @@ void __attribute__((section(".init"))) KernelEntryPoint(void)
 	}
 	
 	// Allow ethernet support to RAM disk build or to system build, do not include it for a normal installer build
-	#if CONFIGURATION_IS_ETHERNET_CONTROLLER_ENABLED && ((!CONFIGURATION_BUILD_INSTALLER) || (CONFIGURATION_BUILD_INSTALLER && CONFIGURATION_BUILD_RAM_DISK))
+	#if !defined(CONFIGURATION_SYSTEM_ETHERNET_CONTROLLER_DRIVER_NONE) && ((!CONFIGURATION_BUILD_INSTALLER) || (CONFIGURATION_BUILD_INSTALLER && CONFIGURATION_BUILD_RAM_DISK))
 		Result = EthernetInitialize();
 		if (Result != 0)
 		{
