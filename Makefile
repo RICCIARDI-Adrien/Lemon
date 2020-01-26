@@ -5,15 +5,6 @@ SDK_PATH = ../Lemon_SDK
 LEMON_PATH_CONFIGURATIONS = Configurations
 export LEMON_PATH_CONFIGURATIONS
 
-# Make sure the configuration file is specified
-ifeq ($(CONFIGURATION),)
-error_missing_configuration_file:
-	$(error No configuration file specified. Use 'make CONFIGURATION=<path/to/configuration/file>' to build the system)
-endif
-
-# Initialize configuration variables from a build configuration file
-include $(CONFIGURATION)
-
 # Retrieve Kconfig-generated variables and import the ones that are set in a makefile variables list
 KCONFIG_VARIABLES = $(shell cat .config | sed '/\#/d' | sed '/^$$/d' | sed 's/CONFIG_/CONFIGURATION_/g')
 
