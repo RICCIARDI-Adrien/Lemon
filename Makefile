@@ -36,14 +36,12 @@ GLOBAL_TOOL_ISO_GENERATOR ?= genisoimage
 
 # Configuration variables
 GLOBAL_PROCESSOR_CODE_NAME = $(patsubst CONFIGURATION_GLOBAL_PROCESSOR_CODE_NAME="%",%,$(filter CONFIGURATION_GLOBAL_PROCESSOR_CODE_NAME=%,$(KCONFIG_VARIABLES)))
-SYSTEM_INSTALLER_FILES_LIST ?= "Applications/Binaries/edit Applications/Binaries/games Applications/Binaries/help Applications/Binaries/u"
 STRING_GIT_COMMIT_HASH = $(shell git log --format=%H -1)
 
 export GLOBAL_TOOL_ASSEMBLER
 export GLOBAL_TOOL_COMPILER
 export GLOBAL_TOOL_LINKER
 export GLOBAL_TOOL_ISO_GENERATOR
-export SYSTEM_INSTALLER_FILES_LIST
 export KCONFIG_VARIABLES
 
 # Default gcc flags

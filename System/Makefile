@@ -121,7 +121,7 @@ ifeq ($(findstring CONFIGURATION_SYSTEM_HARD_DISK_DRIVER_RAM=y,$(KCONFIG_VARIABL
 	@touch $(PATH_OBJECTS)/System_MBR.bin
 	@touch $(PATH_OBJECTS)/System_Kernel.bin
 endif
-	$(PATH_TOOLS)/Files_To_Header_Converter.sh $(SYSTEM_INSTALLER_FILES_LIST)
+	$(PATH_TOOLS)/Files_To_Header_Converter.sh $(patsubst CONFIGURATION_INSTALLER_FILES_LIST=%,%,$(filter CONFIGURATION_INSTALLER_FILES_LIST=%,$(KCONFIG_VARIABLES)))
 
 clean:
 	rm -rf $(PATH_OBJECTS)/ISO_Image_Content

@@ -30,8 +30,11 @@ echo "//------------------------------------------------------------------------
 echo "// Variables" >> $OUTPUT_FILE
 echo "//-------------------------------------------------------------------------------------------------------------------------------" >> $OUTPUT_FILE
 
+# Command-line provided file names are separated by semicolon character instead of space character because GNU make program is unable to handle space character, so convert semicolons to spaces to create a classic shell-compatible list
+Command_Line_Provided_Files_List=$(echo $1 | sed 's/;/ /g')
+
 # Append the MBR and the kernel to the files to embed into the installer list
-Files_List="System/Objects/System_MBR.bin System/Objects/System_Kernel.bin $1"
+Files_List="System/Objects/System_MBR.bin System/Objects/System_Kernel.bin ${Command_Line_Provided_Files_List}"
 
 # Dump all files data to specific arrays
 File_Index=0
@@ -64,7 +67,7 @@ echo "TEmbeddedFile Embedded_Files[] =" >> $OUTPUT_FILE
 echo "{" >> $OUTPUT_FILE
 
 # Force MBR and kernel file names because the real file names are too long
-Files_List="MBR Kernel $1"
+Files_List="MBR Kernel ${Command_Line_Provided_Files_List}"
 
 # Associate a file name to a file data
 File_Index=0
