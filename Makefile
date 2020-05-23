@@ -6,12 +6,7 @@ LEMON_PATH_CONFIGURATIONS = Configurations
 export LEMON_PATH_CONFIGURATIONS
 
 # Retrieve Kconfig-generated variables and import the ones that are set in a makefile variables list
-KCONFIG_VARIABLES = $(shell cat .config | sed '/\#/d' | sed '/^$$/d' | sed 's/CONFIG_/CONFIGURATION_/g')
-
-# Make sure Kconfig configuration file is present (if not, KCONFIG_VARIABLES variable is empty)
-ifeq ($(KCONFIG_VARIABLES),)
-    $(error No configuration file present. Please run 'make menuconfig' or TODO for default configurations)
-endif
+KCONFIG_VARIABLES = $(shell if [ -e .config ]; then cat .config | sed '/\#/d' | sed '/^$$/d' | sed 's/CONFIG_/CONFIGURATION_/g'; fi)
 
 # Determine host machine processors count
 HOST_PROCESSORS_COUNT = $(shell cat /proc/cpuinfo | grep processor | wc -l)
@@ -54,14 +49,23 @@ endef
 #--------------------------------------------------------------------------------------------------
 # Rules
 #--------------------------------------------------------------------------------------------------
+.PHONY: all cd check_configuration clean floppy menuconfig sdk qemu qemu-install
+
 # Applications must be built before system to allow them to be embedded in a RAM disk
-all: clean libraries applications
+all: check_configuration clean libraries applications
 	@# Build system
 	@$(call DisplayTitle,Compiling system)
 	@cd System && $(MAKE) CONFIGURATION_BUILD_INSTALLER=0
 	@# Build installation image
 	@$(call DisplayTitle,Creating installation image)
 	@cd System && $(MAKE) CONFIGURATION_BUILD_INSTALLER=1
+
+# Check for configuration file presence
+check_configuration:
+ifeq ($(KCONFIG_VARIABLES),)
+	@printf "\033[31mNo configuration file present. Please run 'make menuconfig' or TODO for default configurations.\033[0m\n"
+	@false
+endif
 
 clean:
 	@cd System && $(MAKE) CONFIGURATION_BUILD_INSTALLER=1 clean
@@ -117,15 +121,15 @@ cd:
 	@-umount /media/ar/CDROM
 	@wodim dev=/dev/sr0 blank=fast Lemon_Installer_CD_Image.iso gracetime=2
 
-applications:
+applications: check_configuration
 	@$(call DisplayTitle,Compiling applications)
 	@cd Applications && $(MAKE)
 
 # Access to a specific application rules (compile, clean and download)
-application/%:
+application/%: check_configuration
 	cd Applications && $(MAKE) $*
 
-libraries:
+libraries: check_configuration
 	@$(call DisplayTitle,Compiling libraries)
 	@cd Libraries && $(MAKE) -j $(HOST_PROCESSORS_COUNT)
 
