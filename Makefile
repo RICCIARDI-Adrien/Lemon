@@ -46,6 +46,12 @@ define DisplayTitle
 	@printf "################################################################################\033[0m\n"
 endef
 
+define GenerateConfigurationTemplate =
+.PHONY: Configuration/$(1)
+Configuration/$(1):
+	cp Configurations/$(1) $(PWD)/.config
+endef
+
 #--------------------------------------------------------------------------------------------------
 # Rules
 #--------------------------------------------------------------------------------------------------
@@ -147,3 +153,7 @@ qemu-install: qemu
 # Install "kconfig-frontends" Debian package to get "kconfig-mconf" program
 menuconfig:
 	kconfig-mconf Kconfig
+
+# Generate all configuration rules
+CONFIGURATIONS_LIST = $(notdir $(shell find Configurations -name "*.config"))
+$(foreach CONFIGURATION_NAME,$(CONFIGURATIONS_LIST),$(eval $(call GenerateConfigurationTemplate,$(CONFIGURATION_NAME))))
