@@ -53,9 +53,6 @@ void __attribute__((section(".init"))) KernelEntryPoint(void)
 	unsigned int *Pointer_Double_Word;
 	int Result;
 	char *String_Error_Message;
-	#if (!CONFIGURATION_BUILD_INSTALLER) && (!CONFIGURATION_BUILD_RAM_DISK)
-		unsigned int Partition_Starting_Sector;
-	#endif
 	
 	// Enable access to the whole memory before anything else, as BSS section resides after the first 1MB RAM
 	KeyboardEnableA20Gate();
@@ -163,8 +160,9 @@ void __attribute__((section(".init"))) KernelEntryPoint(void)
 	
 	// Load file system (can't do that in the Installer program nor when a RAM disk is used because the RAM disk already loaded the file system)
 	#if (!CONFIGURATION_BUILD_INSTALLER) && (!CONFIGURATION_BUILD_RAM_DISK)
+	{
 		// Retrieve the partition starting sector from the partition table located in the MBR
-		Partition_Starting_Sector = *((unsigned int *) (CONFIGURATION_SYSTEM_MBR_LOAD_ADDRESS + 446 + 8)); // The partition table is located at offset 446, and the first partition starting LBA sector is located at offset 8 of the beginning of the partition table
+		unsigned int Partition_Starting_Sector = *((unsigned int *) (CONFIGURATION_SYSTEM_MBR_LOAD_ADDRESS + 446 + 8)); // The partition table is located at offset 446, and the first partition starting LBA sector is located at offset 8 of the beginning of the partition table
 		
 		if (!FileSystemInitialize(Partition_Starting_Sector + CONFIGURATION_FILE_SYSTEM_STARTING_SECTOR_OFFSET))
 		{
@@ -176,6 +174,7 @@ void __attribute__((section(".init"))) KernelEntryPoint(void)
 			KernelWaitForEnterKey();
 			KeyboardRebootSystem();
 		}
+	}
 	#endif
 	
 	// Show the welcoming message once at the system boot
