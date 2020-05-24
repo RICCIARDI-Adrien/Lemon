@@ -9,10 +9,9 @@
 // Types
 //-------------------------------------------------------------------------------------------------
 /** Date values. They all are binary. */
-typedef struct
+typedef struct __attribute__((packed)) // This structure is duplicated in user space, so make really sure that no padding can be done
 {
 	int Day; //!< From 1 to 31, depending on month.
-	int Day_Of_Week; //!< 1 = Sunday, 7 = Monday.
 	int Month; //!< 1 = January, 12 = December.
 	int Year; //!< Full year value, like "2019".
 } TRTCDate;

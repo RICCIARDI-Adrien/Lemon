@@ -14,6 +14,12 @@
 #define RTC_REGISTER_ADDRESS_MINUTES 2
 /** Hours register address. */
 #define RTC_REGISTER_ADDRESS_HOURS 4
+/** Day of month register address. */
+#define RTC_REGISTER_ADDRESS_DAY_OF_MONTH 7
+/** Month register address. */
+#define RTC_REGISTER_ADDRESS_MONTH 8
+/** Year register address. */
+#define RTC_REGISTER_ADDRESS_YEAR 9
 /** Status A register address. */
 #define RTC_REGISTER_ADDRESS_STATUS_A 0x0A
 
@@ -49,6 +55,36 @@ static unsigned char RTCConvertBCDToBinary(unsigned char BCD_Value)
 //-------------------------------------------------------------------------------------------------
 // Public functions
 //-------------------------------------------------------------------------------------------------
+void RTCGetDate(TRTCDate *Pointer_Date)
+{
+	TRTCDate Date_2;
+	
+	// Make sure that read values are good (because they can be altered in the middle of reading by a time update) by reading two times the value and comparing them, if they are the same no update occurred
+	do
+	{
+		// Wait for "update" flag to become clear, telling that time and date are not being currently updated
+		while (RTCReadRegister(RTC_REGISTER_ADDRESS_STATUS_A) & 0x80);
+		
+		// Read all needed values once
+		Pointer_Date->Day = RTCReadRegister(RTC_REGISTER_ADDRESS_DAY_OF_MONTH);
+		Pointer_Date->Month = RTCReadRegister(RTC_REGISTER_ADDRESS_MONTH);
+		Pointer_Date->Year = RTCReadRegister(RTC_REGISTER_ADDRESS_YEAR);
+		
+		// Make sure "update" flag is still clear
+		while (RTCReadRegister(RTC_REGISTER_ADDRESS_STATUS_A) & 0x80);
+		
+		// Read all needed values a second time, in case values were updated during previous read
+		Date_2.Day = RTCReadRegister(RTC_REGISTER_ADDRESS_DAY_OF_MONTH);
+		Date_2.Month = RTCReadRegister(RTC_REGISTER_ADDRESS_MONTH);
+		Date_2.Year = RTCReadRegister(RTC_REGISTER_ADDRESS_YEAR);
+	} while ((Pointer_Date->Day != Date_2.Day) || (Pointer_Date->Month != Date_2.Month) || (Pointer_Date->Year != Date_2.Year));
+	
+	// Convert read data to binary
+	Pointer_Date->Day = RTCConvertBCDToBinary(Pointer_Date->Day);
+	Pointer_Date->Month = RTCConvertBCDToBinary(Pointer_Date->Month);
+	Pointer_Date->Year = RTCConvertBCDToBinary(Pointer_Date->Year) + 2000; // Assume year always starts from 2000
+}
+
 void RTCGetTime(TRTCTime *Pointer_Time)
 {
 	TRTCTime Time_2;
