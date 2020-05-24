@@ -23,6 +23,10 @@ typedef struct
 static TCommand Commands[] =
 {
 	{
+		"date",
+		CommandMainDate
+	},
+	{
 		"df",
 		CommandMainDf
 	},

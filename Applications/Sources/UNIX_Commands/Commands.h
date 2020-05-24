@@ -8,6 +8,14 @@
 //-------------------------------------------------------------------------------------------------
 // Functions
 //-------------------------------------------------------------------------------------------------
+/** The "date" command.
+ * @param argc Parameters count.
+ * @param argv Parameters value.
+ * @return 0 in case of success,
+ * @return a negative value if an error happened.
+ */
+int CommandMainDate(int argc, char *argv[]);
+
 /** The "disk free" command.
  * @param argc Parameters count.
  * @param argv Parameters value.
