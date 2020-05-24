@@ -276,6 +276,11 @@ static void SystemCallFileClose(void)
 //====================================================================================================================
 // RTC calls
 //====================================================================================================================
+static void SystemCallRTCGetDate(void)
+{
+	RTCGetDate(Pointer_1);
+}
+
 static void SystemCallRTCGetTime(void)
 {
 	RTCGetTime(Pointer_1);
@@ -319,6 +324,7 @@ TSystemCallHandler System_Calls_Handlers[] =
 	SystemCallFileRead, // SYSTEM_CALL_FILE_READ
 	SystemCallFileWrite, // SYSTEM_CALL_FILE_WRITE
 	SystemCallFileClose, // SYSTEM_CALL_FILE_CLOSE
+	SystemCallRTCGetDate, // SYSTEM_CALL_RTC_GET_DATE
 	SystemCallRTCGetTime // SYSTEM_CALL_RTC_GET_TIME
 };
 

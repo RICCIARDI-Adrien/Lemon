@@ -347,6 +347,15 @@ typedef enum
 	 */
 	SYSTEM_CALL_FILE_CLOSE,
 
+	/** Read date from RTC.
+	 * @param ebx = don't care
+	 * @param ecx = don't care
+	 * @param edx = Pointer on a TRTCDate structure.
+	 * @param esi = don't care
+	 * @return Nothing.
+	 */
+	SYSTEM_CALL_RTC_GET_DATE,
+
 	/** Read time from RTC.
 	 * @param ebx = don't care
 	 * @param ecx = don't care
