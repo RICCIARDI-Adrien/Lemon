@@ -22,6 +22,21 @@
 	
 	#define STRING_UNKNOWN_COMMAND "Commande inconnue.\n"
 	
+	// "date" command
+	// TODO
+	#define STRING_COMMAND_DATE_MONTH_JANUARY "janvier"
+	#define STRING_COMMAND_DATE_MONTH_FEBRUARY "f\202vrier"
+	#define STRING_COMMAND_DATE_MONTH_MARCH "mars"
+	#define STRING_COMMAND_DATE_MONTH_APRIL "avril"
+	#define STRING_COMMAND_DATE_MONTH_MAY "mai"
+	#define STRING_COMMAND_DATE_MONTH_JUNE "juin"
+	#define STRING_COMMAND_DATE_MONTH_JULY "juillet"
+	#define STRING_COMMAND_DATE_MONTH_AUGUST "ao\226t"
+	#define STRING_COMMAND_DATE_MONTH_SEPTEMBER "septembre"
+	#define STRING_COMMAND_DATE_MONTH_OCTOBER "octobre"
+	#define STRING_COMMAND_DATE_MONTH_NOVEMBER "novembre"
+	#define STRING_COMMAND_DATE_MONTH_DECEMBER "d\202cembre"
+	
 	// "df" command
 	#define STRING_COMMAND_DF_USAGE "Affiche l'espace libre restant sur le disque dur.\n" \
 		"Cette commande n'a pas de param\212tre.\n"
