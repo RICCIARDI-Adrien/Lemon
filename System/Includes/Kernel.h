@@ -34,6 +34,7 @@
  * @version 2.5.2 : 21/04/2017, improved "download" command communication protocol to allow files of any size to be downloaded.
  * @version 2.5.3 : 17/03/2018, added automatic computation of file system needed RAM and remaining user space RAM.
  * @version 2.5.4 : 25/08/2019, added support for "Autostart" automatic program launching on system boot.
+ * @version 2.5.5 : 24/05/2020, added RTC read support.
  */
 #ifndef H_KERNEL_H
 #define H_KERNEL_H

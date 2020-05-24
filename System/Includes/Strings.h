@@ -98,7 +98,7 @@
 
 	// Shell version command
 	#define STRING_SHELL_VERSION "Copyright (C) Adrien Ricciardi\n" \
-		"Version du syst\212me : 2.5.4 (" __DATE__ ", " __TIME__ ")\n" \
+		"Version du syst\212me : 2.5.5 (" __DATE__ ", " __TIME__ ")\n" \
 		"Version des sources : " STRING_GIT_COMMIT_HASH "\n"
 
 	// Shell error strings

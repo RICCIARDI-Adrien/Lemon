@@ -37,6 +37,4 @@ void RTCGetDate(TRTCDate *Pointer_Date);
  */
 void RTCGetTime(TRTCTime *Pointer_Time);
 
-int RTCIsDataValid(void);
-
 #endif
