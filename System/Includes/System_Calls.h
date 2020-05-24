@@ -347,6 +347,15 @@ typedef enum
 	 */
 	SYSTEM_CALL_FILE_CLOSE,
 
+	/** Read time from RTC.
+	 * @param ebx = don't care
+	 * @param ecx = don't care
+	 * @param edx = Pointer on a TRTCTime structure.
+	 * @param esi = don't care
+	 * @return Nothing.
+	 */
+	SYSTEM_CALL_RTC_GET_TIME,
+
 	/** How many system calls are available. */
 	SYSTEM_CALLS_COUNT
 } TSystemCall;

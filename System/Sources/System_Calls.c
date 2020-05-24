@@ -6,6 +6,7 @@
 #include <Configuration.h>
 #include <Drivers/Driver_Ethernet.h>
 #include <Drivers/Driver_Keyboard.h>
+#include <Drivers/Driver_RTC.h>
 #include <Drivers/Driver_Screen.h>
 #include <Drivers/Driver_Timer.h>
 #include <Drivers/Driver_UART.h>
@@ -273,6 +274,14 @@ static void SystemCallFileClose(void)
 }
 
 //====================================================================================================================
+// RTC calls
+//====================================================================================================================
+static void SystemCallRTCGetTime(void)
+{
+	RTCGetTime(Pointer_1);
+}
+
+//====================================================================================================================
 // Jump table
 //====================================================================================================================
 /** All available system calls. */
@@ -310,6 +319,7 @@ TSystemCallHandler System_Calls_Handlers[] =
 	SystemCallFileRead, // SYSTEM_CALL_FILE_READ
 	SystemCallFileWrite, // SYSTEM_CALL_FILE_WRITE
 	SystemCallFileClose, // SYSTEM_CALL_FILE_CLOSE
+	SystemCallRTCGetTime // SYSTEM_CALL_RTC_GET_TIME
 };
 
 //-------------------------------------------------------------------------------------------------

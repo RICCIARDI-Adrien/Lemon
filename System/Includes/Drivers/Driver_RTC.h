@@ -18,7 +18,7 @@ typedef struct
 } TRTCDate;
 
 /** Time values. They all are binary. */
-typedef struct
+typedef struct __attribute__((packed)) // This structure is duplicated in user space, so make really sure that no padding can be done
 {
 	int Hours; //!< From 0 to 23.
 	int Minutes; //!< From 0 to 59.
