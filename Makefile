@@ -2,9 +2,6 @@
 # Author : Adrien RICCIARDI
 SDK_PATH = ../Lemon_SDK
 
-LEMON_PATH_CONFIGURATIONS = Configurations
-export LEMON_PATH_CONFIGURATIONS
-
 # Retrieve Kconfig-generated variables and import the ones that are set in a makefile variables list
 KCONFIG_VARIABLES = $(shell if [ -e .config ]; then cat .config | sed '/\#/d' | sed '/^$$/d' | sed 's/CONFIG_/CONFIGURATION_/g'; fi)
 
