@@ -66,41 +66,44 @@ int CommandMainDate(int argc, char __attribute__((unused)) *argv[])
 	TLibrariesRTCTime Time;
 	int Day_Of_Week;
 	
-	// Display date and time if no argument is provided
-	if (argc == 1)
+	// This command takes no parameter
+	if (argc > 1)
 	{
-		// Display current date
-		LibrariesRTCGetDate(&Date);
-		Day_Of_Week = CommandDateComputeDayOfWeek(&Date);
-		#ifdef CONFIGURATION_GLOBAL_LANGUAGE_FRENCH
-			// Day of week
-			LibrariesScreenWriteString(Pointer_Command_Date_String_Day_Name[Day_Of_Week]);
-			LibrariesScreenWriteCharacter(' ');
-			// Day
-			LibrariesScreenWriteInteger(Date.Day);
-			LibrariesScreenWriteCharacter(' ');
-			// Month
-			LibrariesScreenWriteString(Pointer_Command_Date_String_Month_Name[Date.Month - 1]); // Array starts from zero
-			LibrariesScreenWriteCharacter(' ');
-			// Year
-			LibrariesScreenWriteInteger(Date.Year);
-			LibrariesScreenWriteCharacter(' ');
-		#endif
-		
-		// Display current time
-		LibrariesRTCGetTime(&Time);
-		// Hours
-		LibrariesScreenWriteInteger(Time.Hours);
-		LibrariesScreenWriteCharacter(':');
-		// Minutes
-		if (Time.Minutes < 10) LibrariesScreenWriteCharacter('0'); // Add leading zero if needed
-		LibrariesScreenWriteInteger(Time.Minutes);
-		LibrariesScreenWriteCharacter(':');
-		// Seconds
-		if (Time.Seconds < 10) LibrariesScreenWriteCharacter('0'); // Add leading zero if needed
-		LibrariesScreenWriteInteger(Time.Seconds);
-		LibrariesScreenWriteCharacter('\n');
+		LibrariesScreenWriteString(STRING_COMMAND_DATE_USAGE);
+		return -1;
 	}
+	
+	// Display current date
+	LibrariesRTCGetDate(&Date);
+	Day_Of_Week = CommandDateComputeDayOfWeek(&Date);
+	#ifdef CONFIGURATION_GLOBAL_LANGUAGE_FRENCH
+		// Day of week
+		LibrariesScreenWriteString(Pointer_Command_Date_String_Day_Name[Day_Of_Week]);
+		LibrariesScreenWriteCharacter(' ');
+		// Day
+		LibrariesScreenWriteInteger(Date.Day);
+		LibrariesScreenWriteCharacter(' ');
+		// Month
+		LibrariesScreenWriteString(Pointer_Command_Date_String_Month_Name[Date.Month - 1]); // Array starts from zero
+		LibrariesScreenWriteCharacter(' ');
+		// Year
+		LibrariesScreenWriteInteger(Date.Year);
+		LibrariesScreenWriteCharacter(' ');
+	#endif
+	
+	// Display current time
+	LibrariesRTCGetTime(&Time);
+	// Hours
+	LibrariesScreenWriteInteger(Time.Hours);
+	LibrariesScreenWriteCharacter(':');
+	// Minutes
+	if (Time.Minutes < 10) LibrariesScreenWriteCharacter('0'); // Add leading zero if needed
+	LibrariesScreenWriteInteger(Time.Minutes);
+	LibrariesScreenWriteCharacter(':');
+	// Seconds
+	if (Time.Seconds < 10) LibrariesScreenWriteCharacter('0'); // Add leading zero if needed
+	LibrariesScreenWriteInteger(Time.Seconds);
+	LibrariesScreenWriteCharacter('\n');
 	
 	return 0;
 }

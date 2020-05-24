@@ -23,6 +23,9 @@
 	#define STRING_UNKNOWN_COMMAND "Commande inconnue.\n"
 	
 	// "date" command
+	#define STRING_COMMAND_DATE_USAGE "Affiche la date et l'heure courantes.\n" \
+		"Utilisez les fonctionnalit\202s de votre BIOS pour les r\202gler.\n" \
+		"Cette commande n'a pas de param\212tre.\n"
 	#define STRING_COMMAND_DATE_DAY_SUNDAY "Dimanche"
 	#define STRING_COMMAND_DATE_DAY_MONDAY "Lundi"
 	#define STRING_COMMAND_DATE_DAY_TUESDAY "Mardi"
