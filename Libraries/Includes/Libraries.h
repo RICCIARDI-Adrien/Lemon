@@ -18,6 +18,7 @@
 #include <Libraries_Memory.h>
 #include <Libraries_Menu.h>
 #include <Libraries_Random.h>
+#include <Libraries_RTC.h>
 #include <Libraries_Screen.h>
 #include <Libraries_String.h>
 #include <Libraries_System.h>
