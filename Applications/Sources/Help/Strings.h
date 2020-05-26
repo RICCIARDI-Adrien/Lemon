@@ -67,9 +67,11 @@
 	#define STRING_COMMAND_FULL_DESCRIPTION_HELP "Appel\202e sans argument, la commande 'help' affiche une liste et une br\212ve\ndescription de toutes les commandes disponibles.\n" \
 		"Lorsque le nom d'une commande est sp\202cifi\202 comme argument, 'help' affiche une\ndescription d\202taill\202e des possibilit\202s de la commande."
 	#define STRING_COMMAND_FULL_DESCRIPTION_SYSTEM "Voici quelques informations sur Lemon :\n" \
-		"- Appuyez sur la touche F12 \205 tout moment pour quitter le programme en cours et revenir au syst\212me.\n" \
-		"- Un programme portant le nom 'Autostart' sera automatiquement lanc\202 au\nd\202marrage du syst\212me.\n" \
-		"- Le syst\212me de fichiers est sensible \205 la casse des caract\212res."
+		"- Appuyez sur la touche F12 \205 tout moment pour quitter le programme en cours et\n  revenir au syst\212me.\n" \
+		"- Un programme portant le nom 'Autostart' sera automatiquement lanc\202 au\n  d\202marrage du syst\212me.\n" \
+		"- Le syst\212me de fichiers est sensible \205 la casse des caract\212res.\n" \
+		"- Appuyer sur la touche 'fl\212che haut' dans la console du syst\212me pour afficher\n  la derni\212re commande tap\202e.\n" \
+		"- Appuyer sur la touche 'fl\212che bas' dans la console du syst\212me pour effacer le\n  texte saisi dans l'invite de commande."
 	#define STRING_COMMAND_FULL_DESCRIPTION_U "Rassemble des versions simplifi\202es de plusieurs commandes UNIX.\n" \
 		"Taper 'u' affiche la liste de toutes les commandes disponibles.\n" \
 		"Il suffit de taper 'u <Commande>' pour lancer la commande souhait\202e.\n" \
