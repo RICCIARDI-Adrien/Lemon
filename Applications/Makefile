@@ -18,11 +18,9 @@ CCFLAGS += -I$(LIBRARIES_PATH)/Includes -I$(SYSTEM_PATH)/Includes
 LDFLAGS = -T $(TOOLS_PATH)/Linker_Script.ld --strip-all -s -L$(LIBRARIES_PATH)/Binaries -l:Libraries.a -L$(GCC_LIBRARY_PATH) -l:libgcc.a
 
 # Find all available applications (-mindepth 1 allows to remove the '.' entry)
-FOUND_APPLICATION_DIRECTORIES_1 = $(shell cd $(SOURCES_PATH) && find . -mindepth 1 -maxdepth 1 -type d)
-# Remove the "./" preceding each name
-FOUND_APPLICATION_DIRECTORIES_2 = $(subst ./,,$(FOUND_APPLICATION_DIRECTORIES_1))
+APPLICATION_DIRECTORIES = $(notdir $(shell cd $(SOURCES_PATH) && find . -mindepth 1 -maxdepth 1 -type d))
 # Sort the names to build in order
-APPLICATIONS = $(sort $(FOUND_APPLICATION_DIRECTORIES_2))
+APPLICATIONS = $(sort $(APPLICATION_DIRECTORIES))
 
 # The following variables are shared by all sub-makefiles
 export BINARIES_PATH
