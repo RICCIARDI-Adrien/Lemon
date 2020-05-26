@@ -28,10 +28,11 @@ export GLOBAL_TOOL_ISO_GENERATOR
 export KCONFIG_VARIABLES
 
 # Default gcc flags
-# Option -fno-asynchronous-unwind-tables avoid generating the .eh_frame section, which is heavy and useless here
+# Option -fno-asynchronous-unwind-tables avoids generating the .eh_frame section, which is heavy and useless here
 # Option -fno-pic is needed since gcc 6.2 to avoid gcc generate Position Independant Code like a classic ELF file (this won't work as Lemon uses static binaries)
 # Option -Wno-address-of-packed-member is needed since gcc 9.2, otherwise multiple "taking address of packed member of ‘struct <anonymous>’ may result in an unaligned pointer value" warnings will be triggered
-CCFLAGS = -W -Wall -fno-pic -nostdlib -fno-builtin -nostartfiles -finline-functions-called-once -fno-asynchronous-unwind-tables -masm=intel -m32 -Werror -Wno-address-of-packed-member -march=$(GLOBAL_PROCESSOR_CODE_NAME) -mtune=$(GLOBAL_PROCESSOR_CODE_NAME) -DSTRING_GIT_COMMIT_HASH="\"$(STRING_GIT_COMMIT_HASH)\"" $(subst CONFIGURATION_,-DCONFIGURATION_,$(KCONFIG_VARIABLES))
+# Option -fcf-protection=none removes Intel CET ENDBR32 instructions added by default by gcc 9.3 at functions beginning
+CCFLAGS = -W -Wall -fno-pic -nostdlib -fno-builtin -nostartfiles -finline-functions-called-once -fno-asynchronous-unwind-tables -masm=intel -m32 -Werror -Wno-address-of-packed-member -fcf-protection=none -march=$(GLOBAL_PROCESSOR_CODE_NAME) -mtune=$(GLOBAL_PROCESSOR_CODE_NAME) -DSTRING_GIT_COMMIT_HASH="\"$(STRING_GIT_COMMIT_HASH)\"" $(subst CONFIGURATION_,-DCONFIGURATION_,$(KCONFIG_VARIABLES))
 export CCFLAGS
 
 #--------------------------------------------------------------------------------------------------
