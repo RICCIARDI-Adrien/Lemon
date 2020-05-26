@@ -50,6 +50,18 @@ Configuration/$(1):
 	cp Configurations/$(1) $(PWD)/.config
 endef
 
+define GenerateApplicationTemplate =
+.PHONY: Applications/$(1)/compile Applications/$(1)/clean Applications/$(1)/download
+Applications/$(1)/compile: check_configuration
+	cd Applications && $(MAKE) $(1)/compile
+
+Applications/$(1)/clean:
+	cd Applications && $(MAKE) $(1)/clean
+
+Applications/$(1)/download:
+	cd Applications && $(MAKE) $(1)/download
+endef
+
 #--------------------------------------------------------------------------------------------------
 # Rules
 #--------------------------------------------------------------------------------------------------
@@ -129,10 +141,6 @@ applications: check_configuration
 	@$(call DisplayTitle,Compiling applications)
 	@cd Applications && $(MAKE)
 
-# Access to a specific application rules (compile, clean and download)
-application/%: check_configuration
-	cd Applications && $(MAKE) $*
-
 libraries: check_configuration
 	@$(call DisplayTitle,Compiling libraries)
 	@cd Libraries && $(MAKE) -j $(HOST_PROCESSORS_COUNT)
@@ -155,3 +163,7 @@ menuconfig:
 # Generate all configuration rules
 CONFIGURATIONS_LIST = $(notdir $(shell find Configurations -name "*.config"))
 $(foreach CONFIGURATION_NAME,$(CONFIGURATIONS_LIST),$(eval $(call GenerateConfigurationTemplate,$(CONFIGURATION_NAME))))
+
+# Generate all applications rules
+APPLICATIONS_LIST = $(notdir $(shell cd Applications/Sources && find . -mindepth 1 -maxdepth 1 -type d))
+$(foreach APPLICATION_NAME,$(APPLICATIONS_LIST),$(eval $(call GenerateApplicationTemplate,$(APPLICATION_NAME))))
