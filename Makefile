@@ -65,7 +65,7 @@ endef
 #--------------------------------------------------------------------------------------------------
 # Rules
 #--------------------------------------------------------------------------------------------------
-.PHONY: all cd check_configuration clean floppy menuconfig sdk qemu qemu-install
+.PHONY: all cd check_configuration clean floppy sdk qemu qemu-install
 
 # Applications must be built before system to allow them to be embedded in a RAM disk
 all: check_configuration clean libraries applications
@@ -157,8 +157,14 @@ qemu-install: QEMU_OPTIONS += -cdrom Lemon_Installer_CD_Image.iso -boot order=d
 qemu-install: qemu
 
 # Install "kconfig-frontends" Debian package to get "kconfig-mconf" program
+.PHONY: menuconfig
 menuconfig:
 	kconfig-mconf Kconfig
+
+.PHONY: savedefconfig
+savedefconfig:
+	@if [ ! -e .config ]; then printf "\033[31mNo configuration file found. Please run 'make menuconfig' or 'make Configuration/xxx'.\033[0m\n"; fi
+	kconfig-conf --savedefconfig Default_Configuration.config Kconfig
 
 # Generate all configuration rules
 CONFIGURATIONS_LIST = $(notdir $(shell find Configurations -name "*.config"))
