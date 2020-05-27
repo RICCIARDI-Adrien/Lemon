@@ -1,5 +1,8 @@
 mainmenu "Lemon build configuration"
 
+#--------------------------------------------------------------------------------------------------
+# Global configuration
+#--------------------------------------------------------------------------------------------------
 menu "Global configuration"
 	choice
 		prompt "System and applications language"
@@ -23,6 +26,9 @@ menu "Global configuration"
 			
 endmenu
 
+#--------------------------------------------------------------------------------------------------
+# System
+#--------------------------------------------------------------------------------------------------
 menu "System"
 	config SYSTEM_TOTAL_RAM_SIZE_MEGA_BYTES
 		int "Allowed RAM amount in megabytes"
@@ -32,6 +38,33 @@ menu "System"
 		bool "Enable debugging messages"
 		default false
 
+	config SYSTEM_FILE_SYSTEM_MAXIMUM_FILES_LIST_ENTRIES
+		int "File system maximum files count"
+		default 128
+
+	config SYSTEM_FILE_SYSTEM_MAXIMUM_BLOCKS_LIST_ENTRIES
+		int "File system maximum 4096-byte storage blocks"
+		default 2048
+
+	choice
+		prompt "Ethernet controller"
+		default SYSTEM_ETHERNET_CONTROLLER_DRIVER_NONE
+
+		config SYSTEM_ETHERNET_CONTROLLER_DRIVER_NONE
+			bool "Disabled"
+
+		config SYSTEM_ETHERNET_CONTROLLER_DRIVER_82540EM
+			bool "Intel 82540EM"
+
+		config SYSTEM_ETHERNET_CONTROLLER_DRIVER_RTL8111
+			bool "Realtek RTL8111 (not ready yet)"
+	endchoice
+endmenu
+
+#--------------------------------------------------------------------------------------------------
+# Hard disk
+#--------------------------------------------------------------------------------------------------
+menu "Hard disk"
 	choice
 		prompt "Hard disk driver"
 		default SYSTEM_HARD_DISK_DRIVER_IDE
@@ -73,6 +106,7 @@ menu "System"
 	config SYSTEM_HARD_DISK_DRIVER_SATA_DRIVE_INDEX
 		int "SATA port the hard disk is connected to (from 0 to 31)"
 		default 0
+		depends on SYSTEM_HARD_DISK_DRIVER_SATA
 
 	choice
 		prompt "Logical Block Addressing (LBA) mode"
@@ -85,30 +119,11 @@ menu "System"
 		config SYSTEM_HARD_DISK_LOGICAL_BLOCK_ADDRESSING_MODE_48
 			bool "LBA-48"
 	endchoice
-
-	config SYSTEM_FILE_SYSTEM_MAXIMUM_FILES_LIST_ENTRIES
-		int "File system maximum files count"
-		default 128
-
-	config SYSTEM_FILE_SYSTEM_MAXIMUM_BLOCKS_LIST_ENTRIES
-		int "File system maximum 4096-byte storage blocks"
-		default 2048
-
-	choice
-		prompt "Ethernet controller"
-		default SYSTEM_ETHERNET_CONTROLLER_DRIVER_NONE
-
-		config SYSTEM_ETHERNET_CONTROLLER_DRIVER_NONE
-			bool "Disabled"
-
-		config SYSTEM_ETHERNET_CONTROLLER_DRIVER_82540EM
-			bool "Intel 82540EM"
-
-		config SYSTEM_ETHERNET_CONTROLLER_DRIVER_RTL8111
-			bool "Realtek RTL8111 (not ready yet)"
-	endchoice
 endmenu
 
+#--------------------------------------------------------------------------------------------------
+# Installer
+#--------------------------------------------------------------------------------------------------
 menu "Installer"
 	config INSTALLER_FILES_LIST
 		string "Automatically installed files"
