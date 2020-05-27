@@ -280,11 +280,11 @@ int HardDiskInitialize(void)
 	DEBUG_SECTION_START
 		DEBUG_DISPLAY_CURRENT_FUNCTION_NAME();
 		ScreenWriteString("SATA device index : ");
-		ScreenWriteString(itoa(CONFIGURATION_HARD_DISK_SATA_DRIVE_INDEX));
+		ScreenWriteString(itoa(CONFIGURATION_SYSTEM_HARD_DISK_DRIVER_SATA_DRIVE_INDEX));
 		ScreenWriteCharacter('\n');
 		KeyboardReadCharacter();
 	DEBUG_SECTION_END
-	if (!(Pointer_Generic_Host_Control_Registers->Ports_Implemented & (1 << CONFIGURATION_HARD_DISK_SATA_DRIVE_INDEX)))
+	if (!(Pointer_Generic_Host_Control_Registers->Ports_Implemented & (1 << CONFIGURATION_SYSTEM_HARD_DISK_DRIVER_SATA_DRIVE_INDEX)))
 	{
 		DEBUG_SECTION_START
 			DEBUG_DISPLAY_CURRENT_FUNCTION_NAME();
@@ -295,7 +295,7 @@ int HardDiskInitialize(void)
 	}
 	
 	// Allow access to the drive registers
-	Pointer_Hard_Disk_SATA_Drive_Port_Registers = (THardDiskSATAPortRegisters *) (Device_Configuration_Space_Header.Base_Address_Registers[5] + (0x0100 + (CONFIGURATION_HARD_DISK_SATA_DRIVE_INDEX * 128)));
+	Pointer_Hard_Disk_SATA_Drive_Port_Registers = (THardDiskSATAPortRegisters *) (Device_Configuration_Space_Header.Base_Address_Registers[5] + (0x0100 + (CONFIGURATION_SYSTEM_HARD_DISK_DRIVER_SATA_DRIVE_INDEX * 128)));
 	
 	// Initialize the drive
 	// Is the controller in idle state ?

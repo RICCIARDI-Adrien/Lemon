@@ -40,12 +40,6 @@
 /** Executable program magic number. */
 #define CONFIGURATION_USER_SPACE_PROGRAM_MAGIC_NUMBER 0x78563412
 
-// Drivers
-/** Select which SATA hard disk (from 0 to 31) to use.
- * @note This option is available only when the SATA driver is enabled.
- */
-#define CONFIGURATION_HARD_DISK_SATA_DRIVE_INDEX 0
-
 /** Ethernet receive and transmit buffers size in byte (Intel 82540EM available values are 256 bytes, 512 bytes, 1024 bytes and 2048 bytes as jumbo frames are not enabled). As the equipements default MTU is 1500 bytes, 2048 bytes should be fine). */
 #define CONFIGURATION_ETHERNET_BUFFER_SIZE 2048 // TODO this value does not change the controller value
 

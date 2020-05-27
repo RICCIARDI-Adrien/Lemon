@@ -70,6 +70,10 @@ menu "System"
 			bool "Slave"
 	endchoice
 
+	config SYSTEM_HARD_DISK_DRIVER_SATA_DRIVE_INDEX
+		int "SATA port the hard disk is connected to (from 0 to 31)"
+		default 0
+
 	choice
 		prompt "Logical Block Addressing (LBA) mode"
 		default SYSTEM_HARD_DISK_LOGICAL_BLOCK_ADDRESSING_MODE_28
