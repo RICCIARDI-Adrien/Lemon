@@ -11,7 +11,8 @@
 //-------------------------------------------------------------------------------------------------
 int CommandMainDf(int argc, char __attribute__((unused)) *argv[])
 {
-	unsigned int Block_Size, Total_Files_Count, Free_Files_Count, Used_Files_Count, Total_Storage, Free_Storage, Used_Storage;
+	unsigned int Block_Size, Total_Files_Count, Free_Files_Count, Used_Files_Count, Total_Storage, Free_Storage, Used_Storage, Percentage;
+	unsigned long long Temporary_Quad_Word;
 	
 	// Check parameters
 	if (argc != 1)
@@ -34,9 +35,13 @@ int CommandMainDf(int argc, char __attribute__((unused)) *argv[])
 	LibrariesScreenWriteUnsignedInteger(Used_Files_Count);
 	LibrariesScreenWriteCharacter('/');
 	LibrariesScreenWriteUnsignedInteger(Total_Files_Count);
+	// Compute percentage
+	Temporary_Quad_Word = 100ULL * Used_Files_Count; // Promote computations to 64 bits as the multiplication per 100 can give big results if file system is quite big
+	Percentage = Temporary_Quad_Word / Total_Files_Count;
+	if (Temporary_Quad_Word % Total_Files_Count != 0) Percentage++;
 	// Display the percentage
 	LibrariesScreenWriteString(" (");
-	LibrariesScreenWriteUnsignedInteger((100ULL * Used_Files_Count) / Total_Files_Count); // Promote computations to 64 bits as the multiplication per 100 can give big results if file system is quite big
+	LibrariesScreenWriteUnsignedInteger(Percentage);
 	LibrariesScreenWriteString("%)\n");
 	
 	// Display the remaining storage
@@ -46,9 +51,13 @@ int CommandMainDf(int argc, char __attribute__((unused)) *argv[])
 	LibrariesScreenWriteCharacter('/');
 	LibrariesScreenWriteUnsignedInteger(Total_Storage);
 	LibrariesScreenWriteString(STRING_COMMAND_DF_REMAINING_STORAGE_2);
+	// Compute percentage
+	Temporary_Quad_Word = 100ULL * Used_Storage; // Promote computations to 64 bits as the multiplication per 100 can give big results if file system is quite big
+	Percentage = Temporary_Quad_Word / Total_Storage;
+	if (Temporary_Quad_Word % Total_Storage != 0) Percentage++;
 	// Display the percentage
 	LibrariesScreenWriteString(" (");
-	LibrariesScreenWriteUnsignedInteger((100ULL * Used_Storage) / Total_Storage); // Promote computations to 64 bits as the multiplication per 100 can give big results if file system is quite big
+	LibrariesScreenWriteUnsignedInteger(Percentage);
 	LibrariesScreenWriteString("%)\n");
 	
 	return 0;
