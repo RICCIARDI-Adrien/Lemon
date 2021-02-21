@@ -17,9 +17,9 @@
 // Variables
 //-------------------------------------------------------------------------------------------------
 /** The system IP address. */
-TNetworkIPAddress Network_Base_System_IP_Address;
+extern TNetworkIPAddress Network_Base_System_IP_Address;
 /** The gateway IP address. */
-TNetworkIPAddress Network_Base_Gateway_IP_Address;
+extern TNetworkIPAddress Network_Base_Gateway_IP_Address;
 
 //-------------------------------------------------------------------------------------------------
 // Functions
