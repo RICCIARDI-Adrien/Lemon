@@ -32,6 +32,8 @@
 #define SHELL_COMMAND_COPY_FILE "copy"
 /** Show the system version. */
 #define SHELL_COMMAND_VERSION "version"
+/** Immediately reboot the system. */
+#define SHELL_COMMAND_REBOOT "reboot"
 
 //-------------------------------------------------------------------------------------------------
 // Functions
