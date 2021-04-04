@@ -35,6 +35,7 @@
 	#define STRING_COMMAND_SHORT_DESCRIPTION_GAMES "Comporte plusieurs jeux simples et divertissants."
 	#define STRING_COMMAND_SHORT_DESCRIPTION_HELP "Fournit de l'aide sur les commandes existantes."
 	#define STRING_COMMAND_SHORT_DESCRIPTION_LIST "Liste les fichiers pr\202sents sur le disque dur."
+	#define STRING_COMMAND_SHORT_DESCRIPTION_REBOOT "Red\202marre imm\202diatement le syst\212me."
 	#define STRING_COMMAND_SHORT_DESCRIPTION_RENAME "Renomme un fichier existant."
 	#define STRING_COMMAND_SHORT_DESCRIPTION_SIZE "Affiche la taille d'un fichier en octets."
 	#define STRING_COMMAND_SHORT_DESCRIPTION_SYSTEM "Description du syst\212me lui-m\210me."
