@@ -21,11 +21,8 @@
 //-------------------------------------------------------------------------------------------------
 /** The screen cursor. */
 static volatile unsigned int Screen_Cursor_Row, Screen_Cursor_Column;
-
-//-------------------------------------------------------------------------------------------------
-// Public variables
-//-------------------------------------------------------------------------------------------------
-unsigned char Screen_Color;
+/** The screen color attributes. */
+static unsigned char Screen_Color;
 
 //-------------------------------------------------------------------------------------------------
 // Private functions
@@ -169,6 +166,16 @@ void ScreenSetCursorPosition(unsigned int Row, unsigned int Column)
 		Screen_Cursor_Row = Row;
 		Screen_Cursor_Column = Column;
 	}
+}
+
+unsigned char ScreenGetColor(void)
+{
+	return Screen_Color;
+}
+
+void ScreenSetColor(unsigned char Color_Code)
+{
+	Screen_Color = Color_Code;
 }
 
 void ScreenDisplayBuffer(unsigned char *Pointer_Buffer)

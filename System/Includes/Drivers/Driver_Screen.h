@@ -50,12 +50,6 @@
 #define SCREEN_COLOR_WHITE 0xFF
 
 //-------------------------------------------------------------------------------------------------
-// Variables
-//-------------------------------------------------------------------------------------------------
-/** Direct access to the screen color attributes. */
-extern unsigned char Screen_Color;
-
-//-------------------------------------------------------------------------------------------------
 // Functions
 //-------------------------------------------------------------------------------------------------
 /** Clear the whole screen using the current background color and set cursor location to (0,0). */
@@ -88,18 +82,12 @@ void ScreenSetCursorPosition(unsigned int Row, unsigned int Column);
 /** Get the current text color.
  * @return The current color code.
  */
-static inline unsigned char ScreenGetColor(void)
-{
-	return Screen_Color;
-}
+unsigned char ScreenGetColor(void);
 
 /** Set the text color.
  * @param Color_Code The color code value represented by a SCREEN_COLOR_XXX macro.
  */
-static inline void ScreenSetColor(unsigned char Color_Code)
-{
-	Screen_Color = Color_Code;
-}
+void ScreenSetColor(unsigned char Color_Code);
 
 /** Display a buffer representing the raw video memory data on the screen.
  * @param Pointer_Buffer The userspace-provided buffer.
