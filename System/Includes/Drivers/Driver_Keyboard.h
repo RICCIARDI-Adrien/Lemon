@@ -80,14 +80,6 @@
 #define KEYBOARD_MODIFIER_KEY_BIT_MASK_RIGHT_ALT (1 << 5)
 
 //-------------------------------------------------------------------------------------------------
-// Variables
-//-------------------------------------------------------------------------------------------------
-/** Tell if a valid character has not been read yet. */
-extern volatile int Keyboard_Is_Key_Available;
-/** Gather all modifier keys (shift, alt, ...) state in a bit field. */
-extern unsigned int Keyboard_Modifier_Keys_State;
-
-//-------------------------------------------------------------------------------------------------
 // Functions
 //-------------------------------------------------------------------------------------------------
 /** Set the keyboard at the maximum key typing speed. */
@@ -108,18 +100,12 @@ void KeyboardReadString(char *String, unsigned int Maximum_Characters_Number);
 /** Tell if a key was pressed or not.
  * @return 1 if a key was pressed or 0 if no key was pressed.
  */
-static inline int KeyboardIsKeyAvailable(void)
-{
-	return Keyboard_Is_Key_Available;
-}
+int KeyboardIsKeyAvailable(void);
 
 /** Get the modifier keys bit mask.
  * @return The modifier keys bit mask.
  */
-static inline unsigned int KeyboardReadModifierKeysState(void)
-{
-	return Keyboard_Modifier_Keys_State;
-}
+unsigned int KeyboardReadModifierKeysState(void);
 
 /** Reboot the system by setting low the processor reset pin. */
 void KeyboardRebootSystem(void);

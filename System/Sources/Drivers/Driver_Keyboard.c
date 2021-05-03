@@ -33,6 +33,10 @@
 static unsigned char Keyboard_Led_State = KEYBOARD_LED_NUM_LOCK;
 /** Last received character. */
 static unsigned char Keyboard_ASCII_Code;
+/** Tell if a valid character has not been read yet. */
+static unsigned int Keyboard_Modifier_Keys_State = 0; // Consider all keys released on driver start
+/** Gather all modifier keys (shift, alt, ...) state in a bit field. */
+static volatile int Keyboard_Is_Key_Available = 0;
 
 /** Uppercase keyboard layout, used when Shift or Caps. Lock. key is active. */
 static unsigned char Keyboard_Uppercase_ASCII_Table[] =
@@ -147,12 +151,6 @@ static unsigned char Keyboard_Extended_ASCII_Table[] =
 };
 
 //-------------------------------------------------------------------------------------------------
-// Public variables
-//-------------------------------------------------------------------------------------------------
-unsigned int Keyboard_Modifier_Keys_State = 0; // Consider all keys released on driver start
-volatile int Keyboard_Is_Key_Available = 0;
-
-//-------------------------------------------------------------------------------------------------
 // Private functions
 //-------------------------------------------------------------------------------------------------
 /** Light or turn off keyboard leds according to Keyboard_Led_State value. */
@@ -228,6 +226,16 @@ void KeyboardReadString(char *String, unsigned int Maximum_Characters_Number)
 				ScreenWriteCharacter(Key);
 		}
 	}
+}
+
+int KeyboardIsKeyAvailable(void)
+{
+	return Keyboard_Is_Key_Available;
+}
+
+unsigned int KeyboardReadModifierKeysState(void)
+{
+	return Keyboard_Modifier_Keys_State;
 }
 
 void KeyboardRebootSystem(void)
