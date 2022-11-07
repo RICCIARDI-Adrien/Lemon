@@ -4,6 +4,8 @@
  */
 #include <Libraries.h>
 
+// GCC 12 introduced the infinite-recursion warning, it works fine and detects the wanted infinite recursion done by the function below, so disable this warning for this file
+#pragma GCC diagnostic ignored "-Winfinite-recursion"
 void StackOverflow(void)
 {
 	static unsigned int i = 0, j = 0;
