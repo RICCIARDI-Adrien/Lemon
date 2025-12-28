@@ -1,4 +1,4 @@
-/** @file Shell.c
+/** @file Shell_Installer.c
  * This is the custom Installer program shell.
  * @author Adrien RICCIARDI
  */
@@ -18,13 +18,13 @@
 // Private constants
 //-------------------------------------------------------------------------------------------------------------------------------
 /** The sections title font color. */
-#define SHELL_SECTION_TITLE_COLOR SCREEN_COLOR_LIGHT_BLUE
+#define SHELL_INSTALLER_SECTION_TITLE_COLOR SCREEN_COLOR_LIGHT_BLUE
 
 //-------------------------------------------------------------------------------------------------------------------------------
 // Private functions
 //-------------------------------------------------------------------------------------------------------------------------------
 /** Ask the user to remove installation media and reboot the computer. */
-static void ShellReboot(void)
+static void ShellInstallerReboot(void)
 {
 	ScreenSetColor(SCREEN_COLOR_BLUE);
 	ScreenWriteString(STRING_SHELL_INSTALLER_REBOOT);
@@ -36,7 +36,7 @@ static void ShellReboot(void)
 /** Copy the MBR code and the partition table at the partition starting sector.
  * @param Pointer_Lemon_Partition_Table The partition table to put on the Lemon MBR.
  */
-static void ShellInstallMBR(TFileSystemMasterBootLoaderPartitionTableEntry *Pointer_Lemon_Partition_Table)
+static void ShellInstallerInstallMBR(TFileSystemMasterBootLoaderPartitionTableEntry *Pointer_Lemon_Partition_Table)
 {
 	unsigned char Sector_Temp[FILE_SYSTEM_SECTOR_SIZE_BYTES];
 	
@@ -54,7 +54,7 @@ static void ShellInstallMBR(TFileSystemMasterBootLoaderPartitionTableEntry *Poin
  * @param Pointer_Kernel_File The file entry containing the kernel.
  * @param Starting_Sector Where to start installing the kernel (LBA addressing).
  */
-static void ShellInstallKernel(TEmbeddedFile *Pointer_Kernel_File, unsigned int Starting_Sector)
+static void ShellInstallerInstallKernel(TEmbeddedFile *Pointer_Kernel_File, unsigned int Starting_Sector)
 {
 	unsigned char *Pointer_Data;
 	int i, Sectors_Count;
@@ -72,7 +72,7 @@ static void ShellInstallKernel(TEmbeddedFile *Pointer_Kernel_File, unsigned int 
 }
 
 /** Install all remaining embedded files to the hard disk. */
-static void ShellInstallFiles(void)
+static void ShellInstallerInstallFiles(void)
 {
 	int Embedded_Files_To_Install_Count, i;
 	unsigned int File_Descriptor;
@@ -95,7 +95,7 @@ static void ShellInstallFiles(void)
 		{
 			ScreenSetColor(SCREEN_COLOR_RED);
 			ScreenWriteString(STRING_SHELL_INSTALLER_ERROR_CANT_OPEN_FILE);
-			ShellReboot();
+			ShellInstallerReboot();
 		}
 		
 		// Write the file content
@@ -103,7 +103,7 @@ static void ShellInstallFiles(void)
 		{
 			ScreenSetColor(SCREEN_COLOR_RED);
 			ScreenWriteString(STRING_SHELL_INSTALLER_ERROR_CANT_WRITE_FILE_CONTENT);
-			ShellReboot();
+			ShellInstallerReboot();
 		}
 		
 		FileClose(File_Descriptor);
@@ -114,7 +114,7 @@ static void ShellInstallFiles(void)
  * @param String_Question The question.
  * @return 1 if the user answered "yes" or 0 if he chose "no".
  */
-static int ShellAskYesNoQuestion(char *String_Question)
+static int ShellInstallerAskYesNoQuestion(char *String_Question)
 {
 	char String_User_Answer[2];
 	
@@ -134,7 +134,7 @@ static int ShellAskYesNoQuestion(char *String_Question)
 void ShellInstallerDisplayTitle(char *String_Title)
 {
 	// Display the title in a different color
-	ScreenSetColor(SHELL_SECTION_TITLE_COLOR);
+	ScreenSetColor(SHELL_INSTALLER_SECTION_TITLE_COLOR);
 	ScreenWriteString(String_Title);
 	
 	// Reset default installer color
@@ -158,16 +158,16 @@ void Shell(void)
 	// Ask the user on continuing the installation or not
 	ShellInstallerDisplayTitle(STRING_SHELL_INSTALLER_SECTION_WARNING_TITLE);
 	ScreenWriteString(STRING_SHELL_INSTALLER_SECTION_WARNING_MESSAGE);
-	if (!ShellAskYesNoQuestion(STRING_SHELL_INSTALLER_SECTION_WARNING_QUESTION))
+	if (!ShellInstallerAskYesNoQuestion(STRING_SHELL_INSTALLER_SECTION_WARNING_QUESTION))
 	{
 		ScreenWriteString(STRING_SHELL_INSTALLER_SECTION_WARNING_INSTALLATION_ABORTED);
-		ShellReboot();
+		ShellInstallerReboot();
 	}
 	
 	// Ask the user whether he wants to use the whole disk or not
 	ShellInstallerDisplayTitle(STRING_SHELL_INSTALLER_SECTION_HARD_DISK_TITLE);
 	ScreenWriteString(STRING_SHELL_INSTALLER_SECTION_HARD_DISK_MESSAGE);
-	if (ShellAskYesNoQuestion(STRING_SHELL_INSTALLER_SECTION_HARD_DISK_QUESTION))
+	if (ShellInstallerAskYesNoQuestion(STRING_SHELL_INSTALLER_SECTION_HARD_DISK_QUESTION))
 	{
 		// Fill the default partition table
 		memset(&Default_Lemon_Partition_Table, 0, sizeof(Default_Lemon_Partition_Table)); // Partitions 1 to 3 are not used, so force them to zero
@@ -193,15 +193,15 @@ void Shell(void)
 		case 1:
 			ScreenSetColor(SCREEN_COLOR_RED);
 			ScreenWriteString(STRING_SHELL_INSTALLER_ERROR_BAD_FILE_SYSTEM_PARAMETERS);
-			ShellReboot();
-			break; // ShellReboot() does not return but this makes gcc 7 happy
+			ShellInstallerReboot();
+			break; // ShellInstallerReboot() does not return but this makes gcc 7 happy
 			
 		case 2:
 			ScreenSetColor(SCREEN_COLOR_RED);
 			ScreenWriteString(STRING_SHELL_INSTALLER_ERROR_FILE_SYSTEM_TOO_BIG_FOR_HARD_DISK_1);
 			ScreenWriteString(itoa(HardDiskGetDriveSizeSectors()));
 			ScreenWriteString(STRING_SHELL_INSTALLER_ERROR_FILE_SYSTEM_TOO_BIG_FOR_HARD_DISK_2);
-			ShellReboot();
+			ShellInstallerReboot();
 			break;
 			
 		default:
@@ -210,18 +210,18 @@ void Shell(void)
 	FileSystemInitialize(File_System_Starting_Sector);
 	
 	// Install MBR
-	ShellInstallMBR(Pointer_Lemon_Partition_Table);
+	ShellInstallerInstallMBR(Pointer_Lemon_Partition_Table);
 	
 	// Install kernel
-	ShellInstallKernel(&Embedded_Files[1], Partition_Starting_Sector + 1);
+	ShellInstallerInstallKernel(&Embedded_Files[1], Partition_Starting_Sector + 1);
 	
 	// Install remaining files
 	ScreenWriteString(STRING_SHELL_INSTALLER_INSTALLING_FILES);
-	ShellInstallFiles();
+	ShellInstallerInstallFiles();
 	
 	// Installation has finished
 	ScreenSetColor(SCREEN_COLOR_GREEN);
 	ScreenWriteString(STRING_SHELL_INSTALLER_INSTALLATION_COMPLETED);
 	
-	ShellReboot();
+	ShellInstallerReboot();
 }
