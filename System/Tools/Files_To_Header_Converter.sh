@@ -1,5 +1,8 @@
 #!/bin/sh
 
+# Exit the script as soon as an error is detected
+set -e
+
 # Go to the Lemon tree root to ease path calculation (this script is assumed to be run by the System makefile from Lemon/System directory)
 cd ..
 
