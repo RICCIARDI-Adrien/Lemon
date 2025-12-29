@@ -241,12 +241,16 @@ unsigned char ScreenGetColor(void)
 
 void ScreenSetColor(unsigned char Color_Code)
 {
-	unsigned char *Pointer_Video_Memory = (unsigned char *) (SCREEN_COMPUTE_CURSOR_ADDRESS() + 1); // Add 1 to address the attributes byte of the character
+	unsigned char *Pointer_Video_Memory;
 
 	Screen_Color = Color_Code;
 
 	// Update the character color under the cursor with the currently defined color, otherwise the cursor may be of a color different from the chosen one (due to screen scrolling for example)
-	*Pointer_Video_Memory = Screen_Color;
+	if (Screen_Is_Cursor_Visible)
+	{
+		Pointer_Video_Memory = (unsigned char *) (SCREEN_COMPUTE_CURSOR_ADDRESS() + 1); // Add 1 to address the attributes byte of the character
+		*Pointer_Video_Memory = Screen_Color;
+	}
 }
 
 void ScreenDisplayBuffer(unsigned char *Pointer_Buffer)
