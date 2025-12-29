@@ -173,6 +173,11 @@ static void SystemCallScreenSetCursorPosition(void)
 	ScreenSetCursorPosition(Integer_1, Integer_2);
 }
 
+static void SystemCallScreenSetCursorVisible(void)
+{
+	ScreenSetCursorVisible(Integer_1);
+}
+
 static void SystemCallScreenDisplayBuffer(void)
 {
 	ScreenDisplayBuffer(Pointer_1);
@@ -307,6 +312,7 @@ TSystemCallHandler System_Calls_Handlers[] =
 	SystemCallScreenSetColor, // SYSTEM_CALL_SCREEN_SET_COLOR
 	SystemCallScreenGetCursorPosition, // SYSTEM_CALL_SCREEN_GET_CURSOR_POSITION
 	SystemCallScreenSetCursorPosition, // SYSTEM_CALL_SCREEN_SET_CURSOR_POSITION
+	SystemCallScreenSetCursorVisible, // SYSTEM_CALL_SCREEN_SET_CURSOR_VISIBLE
 	SystemCallScreenDisplayBuffer, // SYSTEM_CALL_SCREEN_DISPLAY_BUFFER
 	SystemCallKeyboardReadCharacter, // SYSTEM_CALL_KEYBOARD_READ_CHARACTER
 	SystemCallKeyboardIsKeyAvailable, // SYSTEM_CALL_KEYBOARD_IS_KEY_AVAILABLE

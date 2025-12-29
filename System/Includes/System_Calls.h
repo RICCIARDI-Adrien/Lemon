@@ -171,6 +171,15 @@ typedef enum
 	 */
 	SYSTEM_CALL_SCREEN_SET_CURSOR_POSITION,
 
+	/** Control the cursor visibility.
+	 * @param ebx = 0 to hide the cursor, 1 to show the cursor.
+	 * @param ecx = don't care
+	 * @param edx = don't care
+	 * @param esi = don't care
+	 * @return Nothing.
+	 */
+	SYSTEM_CALL_SCREEN_SET_CURSOR_VISIBLE,
+
 	/** Display a buffer representing the raw video memory data on the screen.
 	 * @param ebx = don't care
 	 * @param ecx = don't care
