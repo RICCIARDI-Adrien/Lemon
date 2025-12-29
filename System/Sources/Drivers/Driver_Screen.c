@@ -8,6 +8,9 @@
 //-------------------------------------------------------------------------------------------------
 // Private constants and macros
 //-------------------------------------------------------------------------------------------------
+/** Video RAM base address. */
+#define SCREEN_MEMORY_ADDRESS 0xB8000
+
 /** Compute the character address in video memory corresponding to the current cursor location. */
 #define COMPUTE_CURSOR_ADDRESS() (unsigned char *) ((Screen_Cursor_Row * SCREEN_COLUMNS_COUNT + Screen_Cursor_Column) * 2 + SCREEN_MEMORY_ADDRESS)
 

@@ -8,9 +8,6 @@
 //-------------------------------------------------------------------------------------------------
 // Constants
 //-------------------------------------------------------------------------------------------------
-/** Video RAM base address. */
-#define SCREEN_MEMORY_ADDRESS 0xB8000
-
 /** Number of screen columns. */
 #define SCREEN_COLUMNS_COUNT 80
 /** Number of screen rows. */
