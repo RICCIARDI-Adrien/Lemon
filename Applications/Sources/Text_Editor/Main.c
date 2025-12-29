@@ -288,6 +288,7 @@ int main(int argc, char *argv[])
 	}
 	String_File_Name = argv[1];
 	
+	LibrariesScreenSetCursorVisible(0);
 	LibrariesScreenClear();
 	DisplayClear(); // Prepare the display with a blank screen in case it's a new file
 	
