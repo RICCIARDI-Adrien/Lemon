@@ -53,7 +53,7 @@ endef
 
 define GenerateApplicationTemplate =
 .PHONY: Applications/$(1)/compile Applications/$(1)/clean Applications/$(1)/download
-Applications/$(1)/compile: check_configuration
+Applications/$(1)/compile: .check_configuration
 	cd Applications && $(MAKE) $(1)/compile
 
 Applications/$(1)/clean:
@@ -66,10 +66,10 @@ endef
 #--------------------------------------------------------------------------------------------------
 # Rules
 #--------------------------------------------------------------------------------------------------
-.PHONY: all cd check_configuration clean floppy sdk qemu qemu-install
+.PHONY: all .applications cd .check_configuration clean floppy .libraries qemu qemu-install sdk
 
 # Applications must be built before system to allow them to be embedded in a RAM disk
-all: check_configuration clean libraries applications
+all: .check_configuration clean .libraries .applications
 	@# Build system
 	@$(call DisplayTitle,Compiling system)
 	@cd System && $(MAKE) CONFIGURATION_BUILD_INSTALLER=0
@@ -78,7 +78,7 @@ all: check_configuration clean libraries applications
 	@cd System && $(MAKE) CONFIGURATION_BUILD_INSTALLER=1
 
 # Check for configuration file presence
-check_configuration:
+.check_configuration:
 ifeq ($(KCONFIG_VARIABLES),)
 	@printf "\033[31mNo configuration file present. Please run 'make menuconfig' or TODO for default configurations.\033[0m\n"
 	@false
@@ -138,11 +138,11 @@ cd:
 	@-umount /media/ar/CDROM
 	@wodim dev=/dev/sr0 blank=fast Lemon_Installer_CD_Image.iso gracetime=2
 
-applications: check_configuration
+.applications: .check_configuration
 	@$(call DisplayTitle,Compiling applications)
 	@cd Applications && $(MAKE)
 
-libraries: check_configuration
+.libraries: .check_configuration
 	@$(call DisplayTitle,Compiling libraries)
 	@cd Libraries && $(MAKE) -j $(HOST_PROCESSORS_COUNT)
 
