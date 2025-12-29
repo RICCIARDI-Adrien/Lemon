@@ -76,6 +76,11 @@ void ScreenGetCursorPosition(unsigned int *Pointer_Row, unsigned int *Pointer_Co
  */
 void ScreenSetCursorPosition(unsigned int Row, unsigned int Column);
 
+/** Hide or show the text cursor.
+ * @param Is_Visible Set to 0 to hide the cursor, set to 1 to show the cursor.
+ */
+void ScreenSetCursorVisible(int Is_Visible);
+
 /** Get the current text color.
  * @return The current color code.
  */

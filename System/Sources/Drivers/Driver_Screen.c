@@ -19,21 +19,31 @@
 /** The CRTC registers are multiplexed. Reading from or writing to this data register accesses the internal register pointed by SCREEN_VGA_REGISTER_CRTC_ADDRESS. */
 #define SCREEN_VGA_REGISTER_CRTC_DATA 0x03D5
 
+/** The CRTC Cursor Start internal register address. */
+#define SCREEN_VGA_REGISTER_CRTC_INDEX_CURSOR_START 0x0A
 /** The CRTC Cursor Location High internal register address. */
 #define SCREEN_VGA_REGISTER_CRTC_INDEX_CURSOR_LOCATION_HIGH 0x0E
 /** The CRTC Cursor Location Low internal register address. */
 #define SCREEN_VGA_REGISTER_CRTC_INDEX_CURSOR_LOCATION_LOW 0x0F
 
-/** VGA Input Status 1 register containing VRetrace flag. */
+/** The CRTC Cursor Start internal register CD bit mask. */
+#define SCREEN_VGA_REGISTER_CRTC_INDEX_CURSOR_START_BIT_CURSOR_DISABLE 0x20
+
+/** The VGA Input Status 1 register containing VRetrace flag. */
 #define SCREEN_VGA_REGISTER_INPUT_STATUS_1 0x03DA
-/** VGA Input Status 1 register VRetrace bit index. */
+/** The VGA Input Status 1 register VRetrace bit mask. */
 #define SCREEN_VGA_REGISTER_INPUT_STATUS_1_BIT_VRETRACE 0x08
 
 //-------------------------------------------------------------------------------------------------
 // Private variables
 //-------------------------------------------------------------------------------------------------
-/** The screen cursor. */
-static volatile unsigned int Screen_Cursor_Row, Screen_Cursor_Column;
+/** The screen cursor Y position. */
+static volatile unsigned int Screen_Cursor_Row;
+/** The screen cursor X position. */
+static volatile unsigned int Screen_Cursor_Column;
+/** Cache the cursor current visibility state. */
+static int Screen_Is_Cursor_Visible = 0;
+
 /** The screen color attributes. */
 static unsigned char Screen_Color;
 
@@ -173,7 +183,8 @@ void ScreenWriteCharacter(char Character)
 			break;
 	}
 
-	ScreenUpdateHardwareCursorPosition();
+	// Do not put the "if (Screen_Is_Cursor_Visible)" condition into the ScreenUpdateHardwareCursorPosition() function to save some cycles by not calling the function at all
+	if (Screen_Is_Cursor_Visible) ScreenUpdateHardwareCursorPosition();
 }
 
 void ScreenWriteString(char *String)
@@ -199,8 +210,28 @@ void ScreenSetCursorPosition(unsigned int Row, unsigned int Column)
 		Screen_Cursor_Row = Row;
 		Screen_Cursor_Column = Column;
 
-		ScreenUpdateHardwareCursorPosition();
+		// Do not put the "if (Screen_Is_Cursor_Visible)" condition into the ScreenUpdateHardwareCursorPosition() function to save some cycles by not calling the function at all
+		if (Screen_Is_Cursor_Visible) ScreenUpdateHardwareCursorPosition();
 	}
+}
+
+void ScreenSetCursorVisible(int Is_Visible)
+{
+	unsigned char Value;
+
+	// Get the current register value
+	outb(SCREEN_VGA_REGISTER_CRTC_ADDRESS, SCREEN_VGA_REGISTER_CRTC_INDEX_CURSOR_START);
+	Value = inb(SCREEN_VGA_REGISTER_CRTC_DATA);
+
+	// Update the register value accordingly
+	if (Is_Visible) Value &= ~SCREEN_VGA_REGISTER_CRTC_INDEX_CURSOR_START_BIT_CURSOR_DISABLE;
+	else Value |= SCREEN_VGA_REGISTER_CRTC_INDEX_CURSOR_START_BIT_CURSOR_DISABLE;
+
+	// Write back the new register value
+	outb(SCREEN_VGA_REGISTER_CRTC_ADDRESS, SCREEN_VGA_REGISTER_CRTC_INDEX_CURSOR_START); // Just in case the address has been altered in the meanwhile
+	outb(SCREEN_VGA_REGISTER_CRTC_DATA, Value);
+
+	Screen_Is_Cursor_Visible = Is_Visible;
 }
 
 unsigned char ScreenGetColor(void)
@@ -228,10 +259,10 @@ void ScreenDisplayBuffer(unsigned char *Pointer_Buffer)
 	Pointer_Destination = (unsigned int *) SCREEN_MEMORY_ADDRESS;
 	
 	// Wait for the current frame to be entirely displayed
-	while(inb(SCREEN_VGA_REGISTER_INPUT_STATUS_1 & SCREEN_VGA_REGISTER_INPUT_STATUS_1_BIT_VRETRACE));
+	while (inb(SCREEN_VGA_REGISTER_INPUT_STATUS_1 & SCREEN_VGA_REGISTER_INPUT_STATUS_1_BIT_VRETRACE));
 	
 	// Wait for the VSync signal to be triggered
-	while(!(inb(SCREEN_VGA_REGISTER_INPUT_STATUS_1) & SCREEN_VGA_REGISTER_INPUT_STATUS_1_BIT_VRETRACE));
+	while (!(inb(SCREEN_VGA_REGISTER_INPUT_STATUS_1) & SCREEN_VGA_REGISTER_INPUT_STATUS_1_BIT_VRETRACE));
 	
 	// Copy buffer into video memory 4 bytes at a time
 	for (i = 0; i < SCREEN_ROWS_COUNT * SCREEN_COLUMNS_COUNT * 2 / sizeof(unsigned int); i++)
