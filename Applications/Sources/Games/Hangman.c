@@ -213,9 +213,10 @@ static int Play(char *String_Word_To_Find, int Attempts_Count)
 void Hangman(void)
 {	
 	char *String_Current_Word;
-	
+
+	LibrariesScreenSetCursorVisible(0);
 	LibrariesRandomInitialize();
-	
+
 	// Reset the array
 	LibrariesMemorySetAreaValue(Is_Word_Solved, sizeof(Is_Word_Solved), 0);
 	

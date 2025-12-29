@@ -19,7 +19,9 @@ void NoMatchDealer(void)
 {
 	int i, Numbers[NUMBERS_COUNT], j;
 	char Character;
-	
+
+	LibrariesScreenSetCursorVisible(0);
+
 	// Show instructions
 	LibrariesScreenWriteString(STRING_NO_MATCH_DEALER_INSTRUCTIONS);
 	

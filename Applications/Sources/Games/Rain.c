@@ -96,9 +96,10 @@ void Rain(void)
 		default:
 			return;
 	}
-	
+
+	LibrariesScreenSetCursorVisible(0);
 	LibrariesRandomInitialize();
-	
+
 	while (1)
 	{
 		LibrariesScreenSetBackgroundColor(LIBRARIES_SCREEN_COLOR_WHITE);

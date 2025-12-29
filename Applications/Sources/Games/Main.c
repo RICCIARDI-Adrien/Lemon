@@ -54,6 +54,7 @@ int main(void)
 	
 	while (1)
 	{
+		LibrariesScreenSetCursorVisible(1);
 		Selected_Menu_Entry = LibrariesMenuDisplay(&Menu_Main) - 1; // Returned menu entry index starts from 1
 		
 		// Exit program ?

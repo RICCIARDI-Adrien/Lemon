@@ -159,6 +159,7 @@ void GameOfLife(void)
 {
 	int Wait_Time = 2; // 100 ms
 
+	LibrariesScreenSetCursorVisible(0);
 	LibrariesRandomInitialize();
 	CreateNewWorld();
 	DisplayWorld();
