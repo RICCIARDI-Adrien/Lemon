@@ -79,6 +79,11 @@ void LibrariesScreenGetCursorPosition(unsigned int *Pointer_Row, unsigned int *P
  */
 void LibrariesScreenSetCursorPosition(unsigned int Row, unsigned int Column);
 
+/** Hide or show the screen cursor.
+ * @param Is_Visible Set to 0 to hide the cursor, set to 1 to show the cursor.
+ */
+void LibrariesScreenSetCursorVisible(int Is_Visible);
+
 /** Display a single character.
  * @param Character The character to display.
  */
