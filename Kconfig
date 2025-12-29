@@ -38,6 +38,11 @@ menu "System"
 		bool "Enable debugging messages"
 		default false
 
+	# This setting can't be changed by the user, at least for now
+	config SYSTEM_FILE_SYSTEM_KERNEL_RESERVED_SECTORS
+		int
+		default 128
+
 	config SYSTEM_FILE_SYSTEM_MAXIMUM_FILES_LIST_ENTRIES
 		int "File system maximum files count"
 		default 128
