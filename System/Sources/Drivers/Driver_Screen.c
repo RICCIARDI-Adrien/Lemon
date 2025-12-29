@@ -12,7 +12,7 @@
 #define SCREEN_MEMORY_ADDRESS 0xB8000
 
 /** Compute the character address in video memory corresponding to the current cursor location. */
-#define COMPUTE_CURSOR_ADDRESS() (unsigned char *) ((Screen_Cursor_Row * SCREEN_COLUMNS_COUNT + Screen_Cursor_Column) * 2 + SCREEN_MEMORY_ADDRESS)
+#define SCREEN_COMPUTE_CURSOR_ADDRESS() (unsigned char *) ((Screen_Cursor_Row * SCREEN_COLUMNS_COUNT + Screen_Cursor_Column) * 2 + SCREEN_MEMORY_ADDRESS)
 
 /** The CRTC registers are multiplexed. The address register needs to be set with the internal register index (address) to read or write. */
 #define SCREEN_VGA_REGISTER_CRTC_ADDRESS 0x03D4
@@ -70,6 +70,7 @@ static inline __attribute__((always_inline)) void ScreenScrollVertically(void)
 static void ScreenUpdateHardwareCursorPosition(void)
 {
 	unsigned int Cursor_Position = Screen_Cursor_Row * SCREEN_COLUMNS_COUNT + Screen_Cursor_Column;
+	unsigned char *Pointer_Video_Memory = (unsigned char *) (Cursor_Position * 2 + SCREEN_MEMORY_ADDRESS + 1); // Add 1 to address the attributes byte of the character
 
 	// Set the low register
 	outb(SCREEN_VGA_REGISTER_CRTC_ADDRESS, SCREEN_VGA_REGISTER_CRTC_INDEX_CURSOR_LOCATION_LOW);
@@ -78,6 +79,9 @@ static void ScreenUpdateHardwareCursorPosition(void)
 	// Set the high register
 	outb(SCREEN_VGA_REGISTER_CRTC_ADDRESS, SCREEN_VGA_REGISTER_CRTC_INDEX_CURSOR_LOCATION_HIGH);
 	outb(SCREEN_VGA_REGISTER_CRTC_DATA, (unsigned char) (Cursor_Position >> 8));
+
+	// Update the character color under the cursor with the currently defined color, otherwise the cursor may be of a color different from the chosen one (due to screen scrolling for example)
+	*Pointer_Video_Memory = Screen_Color;
 }
 
 //-------------------------------------------------------------------------------------------------
@@ -140,7 +144,7 @@ void ScreenWriteCharacter(char Character)
 			}
 			
 			// Overwrite character with space
-			Pointer_Video_Memory = COMPUTE_CURSOR_ADDRESS();
+			Pointer_Video_Memory = SCREEN_COMPUTE_CURSOR_ADDRESS();
 			*Pointer_Video_Memory = ' ';
 			*(Pointer_Video_Memory + 1) = Screen_Color;
 			break;
@@ -148,7 +152,7 @@ void ScreenWriteCharacter(char Character)
 		// Display other characters
 		default:
 			// Display character
-			Pointer_Video_Memory = COMPUTE_CURSOR_ADDRESS();
+			Pointer_Video_Memory = SCREEN_COMPUTE_CURSOR_ADDRESS();
 			*Pointer_Video_Memory = Character;
 			*(Pointer_Video_Memory + 1) = Screen_Color;
 			
@@ -206,7 +210,12 @@ unsigned char ScreenGetColor(void)
 
 void ScreenSetColor(unsigned char Color_Code)
 {
+	unsigned char *Pointer_Video_Memory = (unsigned char *) (SCREEN_COMPUTE_CURSOR_ADDRESS() + 1); // Add 1 to address the attributes byte of the character
+
 	Screen_Color = Color_Code;
+
+	// Update the character color under the cursor with the currently defined color, otherwise the cursor may be of a color different from the chosen one (due to screen scrolling for example)
+	*Pointer_Video_Memory = Screen_Color;
 }
 
 void ScreenDisplayBuffer(unsigned char *Pointer_Buffer)
