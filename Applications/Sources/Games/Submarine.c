@@ -165,7 +165,7 @@ void Submarine(void)
 			LibrariesScreenWriteCenteredString(STRING_SUBMARINE_PLAYER_LOST);
 			
 			// Display the score string below
-			LibrariesStringConcatenate(String_Score, STRING_SUBMARINE_PLAYER_SCORE);
+			LibrariesStringCopy(STRING_SUBMARINE_PLAYER_SCORE, String_Score);
 			LibrariesStringConvertUnsignedIntegerToString(Score, String_Converted_Score_Value);
 			LibrariesStringConcatenate(String_Score, String_Converted_Score_Value);
 			LibrariesScreenSetCursorPosition((LIBRARIES_SCREEN_ROWS_COUNT / 2) + 1, 0); // The column coordinate will be computed by the LibrariesScreenWriteCenteredString() function
