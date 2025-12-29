@@ -127,10 +127,17 @@ endmenu
 menu "Installer"
 	config INSTALLER_FILES_LIST
 		string "Automatically installed files"
-		default "Applications/Binaries/benchmark;Applications/Binaries/chat;Applications/Binaries/edit;Applications/Binaries/games;Applications/Binaries/help;Applications/Resources/System.cfg;Applications/Binaries/tests;Applications/Binaries/u"
+		default "Applications/Resources/System.cfg"
 		help
-			A semicolon-separated list of files to automatically install during system installation.
-			File paths start from Lemon directory.
+			A semicolon-separated list of files to automatically install during the system installation.
+			File paths must start from the Lemon root directory.
 			This list must not contain any space (nor escaped space with \ or "").
-			
+
+	config INSTALLER_INSTALL_APPLICATIONS
+		bool "Automatically install applications"
+		default y
+
+	if INSTALLER_INSTALL_APPLICATIONS
+		source "Kconfig.Installer"
+	endif
 endmenu

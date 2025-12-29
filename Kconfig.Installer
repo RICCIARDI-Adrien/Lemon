@@ -1,0 +1,79 @@
+# Define a CONFIG_INSTALLER_APPLICATION_PATH_<application name> variable for every enabled application
+# Such variable contains the application executable name as found in the Applications/Binaries directory
+
+# Benchmark
+config INSTALLER_APPLICATION_NAME_BENCHMARK
+	bool "Benchmark"
+	default y
+
+if INSTALLER_APPLICATION_NAME_BENCHMARK
+config INSTALLER_APPLICATION_PATH_BENCHMARK
+	string
+	default "benchmark"
+endif
+
+# Games
+config INSTALLER_APPLICATION_NAME_GAMES
+	bool "Games"
+	default y
+
+if INSTALLER_APPLICATION_NAME_GAMES
+config INSTALLER_APPLICATION_PATH_GAMES
+	string
+	default "games"
+endif
+
+# Help
+config INSTALLER_APPLICATION_NAME_HELP
+	bool "Help"
+	default y
+
+if INSTALLER_APPLICATION_NAME_HELP
+config INSTALLER_APPLICATION_PATH_HELP
+	string
+	default "help"
+endif
+
+# Network chat
+config INSTALLER_APPLICATION_NAME_NETWORK_CHAT
+	bool "Network chat"
+	default y
+
+if INSTALLER_APPLICATION_NAME_NETWORK_CHAT
+config INSTALLER_APPLICATION_PATH_NETWORK_CHAT
+	string
+	default "chat"
+endif
+
+# Tests
+config INSTALLER_APPLICATION_NAME_TESTS
+	bool "Tests"
+	default y
+
+if INSTALLER_APPLICATION_NAME_TESTS
+config INSTALLER_APPLICATION_PATH_TESTS
+	string
+	default "tests"
+endif
+
+# Text Editor
+config INSTALLER_APPLICATION_NAME_TEXT_EDITOR
+	bool "Tests"
+	default y
+
+if INSTALLER_APPLICATION_NAME_TEXT_EDITOR
+config INSTALLER_APPLICATION_PATH_TEXT_EDITOR
+	string
+	default "edit"
+endif
+
+# UNIX commands
+config INSTALLER_APPLICATION_NAME_UNIX_COMMANDS
+	bool "UNIX commands"
+	default y
+
+if INSTALLER_APPLICATION_NAME_UNIX_COMMANDS
+config INSTALLER_APPLICATION_PATH_UNIX_COMMANDS
+	string
+	default "u"
+endif

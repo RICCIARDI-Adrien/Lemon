@@ -121,7 +121,14 @@ ifeq ($(findstring CONFIGURATION_SYSTEM_HARD_DISK_DRIVER_RAM=y,$(KCONFIG_VARIABL
 	@touch $(PATH_OBJECTS)/System_MBR.bin
 	@touch $(PATH_OBJECTS)/System_Kernel.bin
 endif
-	$(PATH_TOOLS)/Files_To_Header_Converter.sh $(patsubst CONFIGURATION_INSTALLER_FILES_LIST=%,%,$(filter CONFIGURATION_INSTALLER_FILES_LIST=%,$(KCONFIG_VARIABLES)))
+	@# Prepare the list of the files to automatically install
+	$(eval INSTALLER_AUTOMATICALLY_INSTALLED_FILES = $(patsubst CONFIGURATION_INSTALLER_FILES_LIST=%,%,$(filter CONFIGURATION_INSTALLER_FILES_LIST=%,$(KCONFIG_VARIABLES))))
+
+	@# Prepare the list of the applications to automatically install
+	@# For that, find all the CONFIGURATION_INSTALLER_APPLICATION_PATH_xxx variables, then add the applications binaries path to each of them
+	$(eval INSTALLER_AUTOMATICALLY_INSTALLED_APPLICATIONS_1 = $(filter CONFIGURATION_INSTALLER_APPLICATION_PATH_%,$(KCONFIG_VARIABLES)))
+	$(eval INSTALLER_AUTOMATICALLY_INSTALLED_APPLICATIONS = $(shell echo $(INSTALLER_AUTOMATICALLY_INSTALLED_APPLICATIONS_1) | sed -e 's#CONFIGURATION_INSTALLER_APPLICATION_PATH_[a-zA-Z0-9_]*=#Applications/Binaries/#g'))
+	$(PATH_TOOLS)/Files_To_Header_Converter.sh $(INSTALLER_AUTOMATICALLY_INSTALLED_FILES) $(INSTALLER_AUTOMATICALLY_INSTALLED_APPLICATIONS)
 
 clean:
 	rm -rf $(PATH_OBJECTS)/ISO_Image_Content
