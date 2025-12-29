@@ -36,6 +36,10 @@ echo "//------------------------------------------------------------------------
 # Command-line provided file names are separated by semicolon character instead of space character because GNU make program is unable to handle space character, so convert semicolons to spaces to create a classic shell-compatible list
 Command_Line_Provided_Files_List=$(echo $1 | sed 's/;/ /g')
 
+# Also take into account any following file name provided as a classic space-separated argument
+shift # Discard the first argument that has already been processed
+Command_Line_Provided_Files_List="${Command_Line_Provided_Files_List} $@"
+
 # Append the MBR and the kernel to the files to embed into the installer list
 Files_List="System/Objects/System_MBR.bin System/Objects/System_Kernel.bin ${Command_Line_Provided_Files_List}"
 
