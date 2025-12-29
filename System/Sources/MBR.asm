@@ -37,7 +37,7 @@ Entry_Point:
 	mov [Boot_Device], dl
 	sti
 
-	; Disable BIOS text cursor
+	; Hide the display text hardware cursor during early boot by locating it out of the screen bounds
 	mov ah, 2
 	xor bh, bh
 	mov dh, 25

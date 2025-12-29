@@ -3,13 +3,23 @@
  * @author Adrien RICCIARDI
  */
 #include <Drivers/Driver_Screen.h>
-#include <Hardware_Functions.h> // Needed by inb() function
+#include <Hardware_Functions.h>
 
 //-------------------------------------------------------------------------------------------------
 // Private constants and macros
 //-------------------------------------------------------------------------------------------------
 /** Compute the character address in video memory corresponding to the current cursor location. */
 #define COMPUTE_CURSOR_ADDRESS() (unsigned char *) ((Screen_Cursor_Row * SCREEN_COLUMNS_COUNT + Screen_Cursor_Column) * 2 + SCREEN_MEMORY_ADDRESS)
+
+/** The CRTC registers are multiplexed. The address register needs to be set with the internal register index (address) to read or write. */
+#define SCREEN_VGA_REGISTER_CRTC_ADDRESS 0x03D4
+/** The CRTC registers are multiplexed. Reading from or writing to this data register accesses the internal register pointed by SCREEN_VGA_REGISTER_CRTC_ADDRESS. */
+#define SCREEN_VGA_REGISTER_CRTC_DATA 0x03D5
+
+/** The CRTC Cursor Location High internal register address. */
+#define SCREEN_VGA_REGISTER_CRTC_INDEX_CURSOR_LOCATION_HIGH 0x0E
+/** The CRTC Cursor Location Low internal register address. */
+#define SCREEN_VGA_REGISTER_CRTC_INDEX_CURSOR_LOCATION_LOW 0x0F
 
 /** VGA Input Status 1 register containing VRetrace flag. */
 #define SCREEN_VGA_REGISTER_INPUT_STATUS_1 0x03DA
@@ -51,6 +61,20 @@ static inline __attribute__((always_inline)) void ScreenScrollVertically(void)
 		*(Pointer_Last_Row + 1) = Screen_Color;
 		Pointer_Last_Row += 2;
 	}
+}
+
+/** Set the location of the VGA hardware cursor. */
+static void ScreenUpdateHardwareCursorPosition(void)
+{
+	unsigned int Cursor_Position = Screen_Cursor_Row * SCREEN_COLUMNS_COUNT + Screen_Cursor_Column;
+
+	// Set the low register
+	outb(SCREEN_VGA_REGISTER_CRTC_ADDRESS, SCREEN_VGA_REGISTER_CRTC_INDEX_CURSOR_LOCATION_LOW);
+	outb(SCREEN_VGA_REGISTER_CRTC_DATA, (unsigned char) Cursor_Position);
+
+	// Set the high register
+	outb(SCREEN_VGA_REGISTER_CRTC_ADDRESS, SCREEN_VGA_REGISTER_CRTC_INDEX_CURSOR_LOCATION_HIGH);
+	outb(SCREEN_VGA_REGISTER_CRTC_DATA, (unsigned char) (Cursor_Position >> 8));
 }
 
 //-------------------------------------------------------------------------------------------------
@@ -141,6 +165,8 @@ void ScreenWriteCharacter(char Character)
 			}
 			break;
 	}
+
+	ScreenUpdateHardwareCursorPosition();
 }
 
 void ScreenWriteString(char *String)
@@ -165,6 +191,8 @@ void ScreenSetCursorPosition(unsigned int Row, unsigned int Column)
 	{
 		Screen_Cursor_Row = Row;
 		Screen_Cursor_Column = Column;
+
+		ScreenUpdateHardwareCursorPosition();
 	}
 }
 
