@@ -163,7 +163,9 @@ void Shell(void)
 {
 	char String_Buffer[SHELL_MAXIMUM_LINE_LENGTH + 1]; // Length of a console line + 1
 	int Result;
-	
+
+	ScreenSetCursorVisible(1);
+
 	// Main loop
 	while (1)
 	{

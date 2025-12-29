@@ -74,6 +74,7 @@ void __attribute__((section(".init"))) KernelEntryPoint(void)
 	// Clear the screen with the default background color
 	ScreenSetColor(SCREEN_COLOR_BLUE);
 	ScreenClear();
+	ScreenSetCursorVisible(1);
 	
 	// Enable the interrupts sooner in debug mode to allow KeyboardReadCharacter() to work (be careful if the not yet initialized devices use interrupts)
 	#ifdef CONFIGURATION_SYSTEM_IS_DEBUG_ENABLED
@@ -229,6 +230,7 @@ TErrorCode KernelStartProgram(void)
 	
 	// Reset normal console color
 	ScreenSetColor(SCREEN_COLOR_BLUE);
+	ScreenSetCursorVisible(1);
 	
 	ArchitectureSwitchToUserSpace();
 	
