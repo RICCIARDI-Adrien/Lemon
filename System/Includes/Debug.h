@@ -27,7 +27,7 @@
 		ScreenWriteCharacter('['); \
 		ScreenWriteString((char *) __func__); \
 		ScreenWriteString("] "); \
-		ScreenSetColor(SCREEN_COLOR_BLUE); \
+		ScreenSetColor(CONFIGURATION_THEME_DEFAULT_SCREEN_COLOR); \
 	}
 #else
 	/** Begin debugging informations. */

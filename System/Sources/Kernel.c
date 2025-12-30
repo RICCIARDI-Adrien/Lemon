@@ -72,7 +72,7 @@ void __attribute__((section(".init"))) KernelEntryPoint(void)
 	TimerInitialize();
 	
 	// Clear the screen with the default background color
-	ScreenSetColor(SCREEN_COLOR_BLUE);
+	ScreenSetColor(CONFIGURATION_THEME_DEFAULT_SCREEN_COLOR);
 	ScreenClear();
 	ScreenSetCursorVisible(1);
 	
@@ -229,7 +229,7 @@ TErrorCode KernelStartProgram(void)
 	FileResetFileDescriptors();
 	
 	// Reset normal console color
-	ScreenSetColor(SCREEN_COLOR_BLUE);
+	ScreenSetColor(CONFIGURATION_THEME_DEFAULT_SCREEN_COLOR);
 	ScreenSetCursorVisible(1);
 	
 	ArchitectureSwitchToUserSpace();

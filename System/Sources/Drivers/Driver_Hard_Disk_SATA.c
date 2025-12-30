@@ -176,7 +176,7 @@ static void HardDiskSATAControllerExecuteCommand(void)
 	{
 		ScreenSetColor(SCREEN_COLOR_RED);
 		ScreenWriteString(STRING_DRIVER_HARD_DISK_SATA_ERROR_INPUT_OUTPUT);
-		ScreenSetColor(SCREEN_COLOR_BLUE);
+		ScreenSetColor(CONFIGURATION_THEME_DEFAULT_SCREEN_COLOR);
 		KeyboardReadCharacter();
 	}
 	

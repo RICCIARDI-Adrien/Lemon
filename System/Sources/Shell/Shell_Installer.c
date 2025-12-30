@@ -26,7 +26,7 @@
 /** Ask the user to remove installation media and reboot the computer. */
 static void ShellInstallerReboot(void)
 {
-	ScreenSetColor(SCREEN_COLOR_BLUE);
+	ScreenSetColor(CONFIGURATION_THEME_DEFAULT_SCREEN_COLOR);
 	ScreenWriteString(STRING_SHELL_INSTALLER_REBOOT);
 	KeyboardReadCharacter();
 	KeyboardRebootSystem();
@@ -138,7 +138,7 @@ void ShellInstallerDisplayTitle(char *String_Title)
 	ScreenWriteString(String_Title);
 	
 	// Reset default installer color
-	ScreenSetColor(SCREEN_COLOR_BLUE);
+	ScreenSetColor(CONFIGURATION_THEME_DEFAULT_SCREEN_COLOR);
 }
 
 /** The installer specific code. */
@@ -152,7 +152,7 @@ void Shell(void)
 	ScreenClear();
 	ScreenWriteString(STRING_SHELL_INSTALLER_TITLE);
 	
-	ScreenSetColor(SCREEN_COLOR_BLUE);
+	ScreenSetColor(CONFIGURATION_THEME_DEFAULT_SCREEN_COLOR);
 	ScreenWriteString(STRING_SHELL_INSTALLER_WELCOME);
 	
 	// Ask the user on continuing the installation or not

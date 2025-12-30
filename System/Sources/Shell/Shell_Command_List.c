@@ -35,7 +35,7 @@ void ShellCommandList(void)
 		{
 			ScreenSetColor(SCREEN_COLOR_LIGHT_BLUE);
 			ScreenWriteString(STRING_SHELL_LIST_WAIT_FOR_USER_INPUT);
-			ScreenSetColor(SCREEN_COLOR_BLUE);
+			ScreenSetColor(CONFIGURATION_THEME_DEFAULT_SCREEN_COLOR);
 			
 			KeyboardReadCharacter();
 			ScreenWriteCharacter('\n');

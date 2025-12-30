@@ -172,7 +172,7 @@ void Shell(void)
 		// Print prompt
 		ScreenSetColor(SCREEN_COLOR_GREEN);
 		ScreenWriteString("-> ");
-		ScreenSetColor(SCREEN_COLOR_BLUE);
+		ScreenSetColor(CONFIGURATION_THEME_DEFAULT_SCREEN_COLOR);
 		
 		// Read the command
 		ShellReadCommandLine(String_Buffer);
@@ -200,7 +200,6 @@ void Shell(void)
 			{
 				ScreenSetColor(SCREEN_COLOR_RED);
 				ScreenWriteString(STRING_SHELL_DELETE_FILE_BAD_PARAMETERS_COUNT);
-				ScreenSetColor(SCREEN_COLOR_BLUE);
 			}
 			else ShellCommandDeleteFile(Command_Line_Arguments.Pointer_Arguments[1]);
 		}
@@ -213,7 +212,6 @@ void Shell(void)
 			{
 				ScreenSetColor(SCREEN_COLOR_RED);
 				ScreenWriteString(STRING_SHELL_COPY_FILE_BAD_PARAMETERS_COUNT);
-				ScreenSetColor(SCREEN_COLOR_BLUE);
 			}
 			else ShellCommandCopyFile(Command_Line_Arguments.Pointer_Arguments[1], Command_Line_Arguments.Pointer_Arguments[2]);
 		}
@@ -226,7 +224,6 @@ void Shell(void)
 			{
 				ScreenSetColor(SCREEN_COLOR_RED);
 				ScreenWriteString(STRING_SHELL_RENAME_FILE_BAD_PARAMETERS_COUNT);
-				ScreenSetColor(SCREEN_COLOR_BLUE);
 			}
 			else ShellCommandRenameFile(Command_Line_Arguments.Pointer_Arguments[1], Command_Line_Arguments.Pointer_Arguments[2]);
 		}
@@ -239,7 +236,6 @@ void Shell(void)
 			{
 				ScreenSetColor(SCREEN_COLOR_RED);
 				ScreenWriteString(STRING_SHELL_FILE_SIZE_BAD_PARAMETERS_COUNT);
-				ScreenSetColor(SCREEN_COLOR_BLUE);
 			}
 			else ShellCommandFileSize(Command_Line_Arguments.Pointer_Arguments[1]);
 		}

@@ -52,7 +52,7 @@ void ShellCommandCopyFile(char *String_File_Name_Source, char *String_File_Name_
 		goto Exit;
 	}
 	
-	ScreenSetColor(SCREEN_COLOR_BLUE);
+	ScreenSetColor(CONFIGURATION_THEME_DEFAULT_SCREEN_COLOR);
 	ScreenWriteString(STRING_SHELL_COPY_FILE_STARTING_COPY);
 	ScreenSetColor(SCREEN_COLOR_RED);
 	

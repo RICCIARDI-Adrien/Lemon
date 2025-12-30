@@ -150,5 +150,4 @@ void ShellCommandDownload(void)
 	// Show download completed message
 	ScreenSetColor(SCREEN_COLOR_GREEN);
 	ScreenWriteString(STRING_SHELL_DOWNLOAD_DOWNLOADING_COMPLETED);
-	ScreenSetColor(SCREEN_COLOR_BLUE);
 }

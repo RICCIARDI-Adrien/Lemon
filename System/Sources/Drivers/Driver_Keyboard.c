@@ -2,6 +2,7 @@
  * See Driver_Keyboard.h for description.
  * @author Adrien RICCIARDI
  */
+#include <Configuration.h>
 #include <Drivers/Driver_Keyboard.h>
 #include <Drivers/Driver_Screen.h> // To have the ScreenClear() function and needed by KeyboardReadString() function
 #include <Hardware_Functions.h> // In order to have the inb() and outb() functions
@@ -300,7 +301,7 @@ void KeyboardInterruptHandler(void)
 		{
 			// Send the End of Interrupt code to the PIC
 			KEYBOARD_ACKNOWLEDGE(); // It is not sent automatically when the interrupt returns because it never returns...
-			ScreenSetColor(SCREEN_COLOR_LIGHT_BLUE); // Force the screen color in case it was altered by the program
+			ScreenSetColor(CONFIGURATION_THEME_DEFAULT_SCREEN_COLOR); // Force the screen color in case it was altered by the program
 			ScreenClear();
 			KernelStartShell();
 		}

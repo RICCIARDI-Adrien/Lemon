@@ -5,6 +5,8 @@
 #ifndef H_CONFIGURATION_H
 #define H_CONFIGURATION_H
 
+#include <Drivers/Driver_Screen.h>
+
 //-------------------------------------------------------------------------------------------------
 // Constants
 //-------------------------------------------------------------------------------------------------
@@ -40,8 +42,13 @@
 /** Executable program magic number. */
 #define CONFIGURATION_USER_SPACE_PROGRAM_MAGIC_NUMBER 0x78563412
 
+// Network
 /** Ethernet receive and transmit buffers size in byte (Intel 82540EM available values are 256 bytes, 512 bytes, 1024 bytes and 2048 bytes as jumbo frames are not enabled). As the equipements default MTU is 1500 bytes, 2048 bytes should be fine). */
 #define CONFIGURATION_ETHERNET_BUFFER_SIZE 2048 // TODO this value does not change the controller value
+
+// System theme
+/** The color to use by default when displaying text. */
+#define CONFIGURATION_THEME_DEFAULT_SCREEN_COLOR SCREEN_COLOR_BLUE
 
 //-------------------------------------------------------------------------------------------------
 // Variables
