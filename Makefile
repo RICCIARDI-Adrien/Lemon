@@ -66,7 +66,7 @@ endef
 #--------------------------------------------------------------------------------------------------
 # Rules
 #--------------------------------------------------------------------------------------------------
-.PHONY: all .applications cd .check_configuration clean floppy .libraries qemu qemu-install sdk
+.PHONY: all .applications cd .check_configuration clean floppy .libraries qemu-install qemu-run sdk
 
 # Applications must be built before system to allow them to be embedded in a RAM disk
 all: .check_configuration clean .libraries .applications
@@ -150,12 +150,12 @@ cd:
 QEMU_Hard_Disk.img:
 	dd if=/dev/zero of=QEMU_Hard_Disk.img bs=1M count=512
 
-qemu: QEMU_Hard_Disk.img
+qemu-run: QEMU_Hard_Disk.img
 	@# Emulated PC configuration : 16 MB of RAM, Intel 82540EM PCI network card, IDE hard disk
 	qemu-system-i386 -m 16M -device e1000 -name Lemon -drive file=QEMU_Hard_Disk.img,media=disk,format=raw $(QEMU_OPTIONS)
 
 qemu-install: QEMU_OPTIONS += -cdrom Lemon_Installer_CD_Image.iso -boot once=d
-qemu-install: qemu
+qemu-install: qemu-run
 
 # Install "kconfig-frontends" Debian package to get "kconfig-mconf" program
 .PHONY: menuconfig
