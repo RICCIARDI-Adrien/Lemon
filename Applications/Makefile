@@ -60,7 +60,7 @@ export ApplicationsLinkProgram
 # @param $(1) The file to send.
 # @param $(2) The name the file will have on the Lemon file system.
 define ApplicationsDownloadFile
-	$(TOOL_SERIAL_PORT_SERVER) /tmp/Lemon_Serial_Port_Pipe $$(1) $$(2)
+	$(TOOL_SERIAL_PORT_SERVER) /tmp/Lemon_Serial_Port_Socket $$(1) $$(2)
 endef
 export ApplicationsDownloadFile
 
