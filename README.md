@@ -1,12 +1,52 @@
 # Lemon
 
-**x86 32-bit minimal operating system**  
+**A x86 32-bit minimal operating system designed and developed from scratch.**  
 *Copyright (C) Adrien RICCIARDI*
 
-## Help
+## Building
 
-* Type `help` to the Lemon prompt shell to get help, commands list and information about system usage.
-* Whole system documentation can be found in repository [Documentation](https://github.com/RICCIARDI-Adrien/Lemon/tree/master/Documentation) directory.
+These instructions have been tested on an AMD64 Debian 13 (Trixie).
+
+### Install the required tools
+```
+sudo apt install build-essential genisoimage kconfig-frontends nasm qemu-system-x86 wodim
+```
+
+### Configure the system
+
+You can configure the system from scratch by using :
+```
+make menuconfig
+```
+Or, you can apply an already existing configuration. If you type :
+```
+make Configuration
+```
+And then press the `Tab` key, you will see all the available configurations.
+
+### Build
+
+You can now build the entire system with the single command :
+```
+make
+```
+
+## Testing
+
+Three system installation images will be generated :
+* `Lemon_Installer_CD_Image.iso` : to burn to a CD-ROM, you can use the `sudo make burn-cdrom-image`.
+* `Lemon_Installer_Floppy_Image.img` : to write to a 1.44MB floppy disk, you can use the `sudo make burn-floppy-image`.
+* `Lemon_Installer_USB_Stick_Image.img` : to write to an USB stick, you can use `sudo dd if=<path/to/Lemon_Installer_USB_Stick_Image.img of=/dev/<path/to/usb_device/device_node>`
+
+You can either test on real hardware, or use a virtual machine.  
+To run the system on a virtual machine, you can use two helper commands :
+* `make qemu-install`: start the system installer on a virtual machine, then reboot into the installed system.
+* `make qemu-run` : start the virtual machine.
+
+## Using the system
+
+* Type `help` to the Lemon prompt shell to get help, commands list and information about the system usage.
+* The whole system documentation can be found in the repository [Documentation](Documentation) directory.
 
 ## Technical documentation
 
