@@ -66,7 +66,7 @@ endef
 #--------------------------------------------------------------------------------------------------
 # Rules
 #--------------------------------------------------------------------------------------------------
-.PHONY: all .applications cd .check_configuration clean floppy .libraries qemu-install qemu-run sdk
+.PHONY: all .applications burn-cdrom-image burn-floppy-image .check_configuration clean .libraries menuconfig qemu-install qemu-run savedefconfig sdk
 
 # Applications must be built before system to allow them to be embedded in a RAM disk
 all: .check_configuration clean .libraries .applications
@@ -119,7 +119,7 @@ sdk:
 	@printf "\033[32mSDK successfully built.\033[0m\n"
 
 # Copy the installation image to the floppy disk
-floppy:
+burn-floppy-image:
 	@if [ ! -e Lemon_Installer_Floppy_Image.img ]; then printf "\033[31mThe installer floppy image has not been generated. Run 'make' before calling 'make floppy'.\033[0m\n"; false; fi
 	@if [ $(shell id -u) != "0" ]; then printf "\033[31mYou must be root to execute this command.\033[0m\n"; false; fi
 	@printf "Writing data to floppy...\n"
@@ -132,7 +132,7 @@ floppy:
 	@printf "\033[32mFloppy image OK.\033[0m\n"
 
 # Burn the installation ISO to a CD
-cd:
+burn-cdrom-image:
 	@if [ ! -e Lemon_Installer_CD_Image.iso ]; then printf "\033[31mThe installer ISO image has not been generated. Run 'make' before calling 'make cd'.\033[0m\n"; false; fi
 	@if [ $(shell id -u) != "0" ]; then printf "\033[31mYou must be root to execute this command.\033[0m\n"; false; fi
 	@-umount /media/ar/CDROM
@@ -158,11 +158,9 @@ qemu-install: QEMU_OPTIONS += -cdrom Lemon_Installer_CD_Image.iso -boot once=d
 qemu-install: qemu-run
 
 # Install "kconfig-frontends" Debian package to get "kconfig-mconf" program
-.PHONY: menuconfig
 menuconfig:
 	kconfig-mconf Kconfig
 
-.PHONY: savedefconfig
 savedefconfig:
 	@if [ ! -e .config ]; then printf "\033[31mNo configuration file found. Please run 'make menuconfig' or 'make Configuration/xxx'.\033[0m\n"; fi
 	kconfig-conf --savedefconfig Default_Configuration.config Kconfig
