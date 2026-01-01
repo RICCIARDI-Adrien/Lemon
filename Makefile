@@ -45,8 +45,8 @@ define DisplayTitle
 endef
 
 define GenerateConfigurationTemplate =
-.PHONY: Configuration/$(1)
-Configuration/$(1):
+.PHONY: Configurations/$(1)
+Configurations/$(1):
 	cp Configurations/$(1) $(PWD)/.config
 	cd $(PWD) && kconfig-conf --olddefconfig Kconfig
 endef

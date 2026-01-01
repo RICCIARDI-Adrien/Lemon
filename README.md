@@ -20,7 +20,7 @@ make menuconfig
 ```
 Or, you can apply an already existing configuration. If you type :
 ```
-make Configuration
+make Configurations
 ```
 And then press the `Tab` key, you will see all the available configurations.
 
@@ -36,7 +36,7 @@ make
 Three system installation images will be generated :
 * `Lemon_Installer_CD_Image.iso` : to burn to a CD-ROM, you can use the `sudo make burn-cdrom-image`.
 * `Lemon_Installer_Floppy_Image.img` : to write to a 1.44MB floppy disk, you can use the `sudo make burn-floppy-image`.
-* `Lemon_Installer_USB_Stick_Image.img` : to write to an USB stick, you can use `sudo dd if=<path/to/Lemon_Installer_USB_Stick_Image.img of=/dev/<path/to/usb_device/device_node>`
+* `Lemon_Installer_USB_Stick_Image.img` : to write to an USB stick, you can use `sudo dd if=<path/to/Lemon_Installer_USB_Stick_Image.img> of=/dev/<path/to/usb_device/device_node>`
 
 You can either test on real hardware, or use a virtual machine.  
 To run the system on a virtual machine, you can use two helper commands :
